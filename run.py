@@ -1,6 +1,7 @@
 import getpass
 from OPxssh import OPxssh
 
+'''
 def ssh_open(host="",userName="",parameter="",password=""):
     command = 'ssh '+userName+'@'+host+' '+parameter
     print(command)
@@ -16,12 +17,13 @@ def ssh_open(host="",userName="",parameter="",password=""):
         conection.sendline(command)
         conection.expect(r"[\#]",timeout=1)
         print(conection.before)
+'''
 
 def ssh_pxssh(host="",userName="",password="",options={},parameter=""):
-    print(options)
-    s = OPxssh(options=options)
+    s = OPxssh()
     s.login(server=host,username=userName,password=password,parameter=parameter)
-    print(s.before)
+    print(s)
+    print(s.match)
     while True:
         command = input("command: ")
         s.sendline(command)

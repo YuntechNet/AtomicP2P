@@ -4,11 +4,11 @@ from pexpect import spawn,TIMEOUT,EOF
 from OExceptionPexpect import OExceptionPexpect
 
 class OPxssh(pxssh):
-    def __init__(self,options):
-        super().__init__(timeout=30, maxread=2000, searchwindowsize=None,logfile=None, cwd=None, env=None, ignore_sighup=True, echo=True,options={}, encoding=None, codec_errors='strict')
+    def __init__(self):
+        super().__init__(timeout=10, maxread=2000, searchwindowsize=None,logfile=None, cwd=None, env=None, ignore_sighup=True, echo=True,options={}, encoding=None, codec_errors='strict')
     def login (self, server, username, password='', terminal_type='ansi',
-                original_prompt=r"[#$]", login_timeout=10, port=None,
-                auto_prompt_reset=True, ssh_key=None, quiet=True,
+                original_prompt=r"[a-zA-Z]" , login_timeout=10, port=None,
+                auto_prompt_reset=False, ssh_key=None, quiet=True,
                 sync_multiplier=1, check_local_ip=True,parameter=None):
 
         ssh_options = ''.join([" -o '%s=%s'" % (o, v) for (o, v) in self.options.items()])
@@ -31,7 +31,8 @@ class OPxssh(pxssh):
         # This does not distinguish between a remote server 'password' prompt
         # and a local ssh 'passphrase' prompt (for unlocking a private key).
         spawn._spawn(self, cmd)
-        i = self.expect(["(?i)are you sure you want to continue connecting", original_prompt, "(?i)(?:password:)|(?:passphrase for key)", "(?i)permission denied", "(?i)terminal type", TIMEOUT, "(?i)connection closed by remote host", EOF], timeout=login_timeout)
+        i = self.expect(["(?i)are you sure you want to continue connecting","(?i)(?:password:)|(?:passphrase for key)",original_prompt, "(?i)permission denied", "(?i)terminal type", TIMEOUT, "(?i)connection closed by remote host", EOF], timeout=login_timeout)
+        print(i,original_prompt)
 
         # First phase
         if i==0:
@@ -39,13 +40,14 @@ class OPxssh(pxssh):
             # This is what you get if SSH does not have the remote host's
             # public key stored in the 'known_hosts' cache.
             self.sendline("yes")
-            i = self.expect(["(?i)are you sure you want to continue connecting", original_prompt, "(?i)(?:password:)|(?:passphrase for key)", "(?i)permission denied", "(?i)terminal type", TIMEOUT])
-        if i==2: # password or passphrase
+            i = self.expect(["(?i)are you sure you want to continue connecting","(?i)(?:password:)|(?:passphrase for key)",  original_prompt,"(?i)permission denied", "(?i)terminal type", TIMEOUT])
+        if i==1: # password or passphrase
             self.sendline(password)
-            i = self.expect(["(?i)are you sure you want to continue connecting", original_prompt, "(?i)(?:password:)|(?:passphrase for key)", "(?i)permission denied", "(?i)terminal type", TIMEOUT])
+            i = self.expect(["(?i)are you sure you want to continue connecting","(?i)(?:password:)|(?:passphrase for key)", original_prompt,  "(?i)permission denied", "(?i)terminal type", TIMEOUT])
+            print(i,original_prompt)
         if i==4:
             self.sendline(terminal_type)
-            i = self.expect(["(?i)are you sure you want to continue connecting", original_prompt, "(?i)(?:password:)|(?:passphrase for key)", "(?i)permission denied", "(?i)terminal type", TIMEOUT])
+            i = self.expect(["(?i)are you sure you want to continue connecting","(?i)(?:password:)|(?:passphrase for key)", original_prompt,  "(?i)permission denied", "(?i)terminal type", TIMEOUT])
         if i==7:
             self.close()
             raise OExceptionPexpect('Could not establish connection to host')
@@ -55,10 +57,10 @@ class OPxssh(pxssh):
             # This is weird. This should not happen twice in a row.
             self.close()
             raise OExceptionPexpect('Weird error. Got "are you sure" prompt twice.')
-        elif i==1: # can occur if you have a public key pair set to authenticate.
+        elif i==2: # can occur if you have a public key pair set to authenticate.
             ### TODO: May NOT be OK if expect() got tricked and matched a false prompt.
             pass
-        elif i==2: # password prompt again
+        elif i==1: # password prompt again
             # For incorrect passwords, some ssh servers will
             # ask for the password again, others return 'denied' right away.
             # If we get the password prompt again then this means
@@ -97,3 +99,11 @@ class OPxssh(pxssh):
                                      '(received: %r, expected: %r).' % (
                                          self.before, self.PROMPT,))
         return True
+    def prompt(self,regular=r'[]',timeout=-1):
+        if timeout == -1:
+            timeout = self.timeout
+        i = self.expect([regular, TIMEOUT], timeout=timeout)
+        if i==1:
+            return False
+        return True
+
