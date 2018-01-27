@@ -2,3 +2,5 @@
 *.swp
 pxssh.py
 *.log
+pws.py
+*.pyc
