@@ -1,5 +1,6 @@
 from ssh_switch import ssh_switch
 from getpass import getpass
+from command import basic_command
 try:
     from pws import host,username,password
 except:
@@ -14,7 +15,7 @@ def interactive_mode(connection):
         result = s.send_command(command)
         print(result.decode('UTF-8'))
 
-
 s = ssh_switch(host=host,username=username,password=password)
 s.login()
-interactive_mode(s)
+#interactive_mode(s)
+b = basic_command(s)

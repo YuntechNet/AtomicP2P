@@ -1,8 +1,8 @@
 import paramiko
 import time
 
-
 class ssh_switch(object):
+
     def __init__(self,host='',username='',password='',port=22):
         self.host=host
         self.username=username
@@ -15,8 +15,7 @@ class ssh_switch(object):
 
         self.ssh=paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh.connect(hostname=self.host, port=22, username=self.username,password=self.password,
-                    look_for_keys=False, allow_agent=False)
+        self.ssh.connect(hostname=self.host, port=22, username=self.username,password=self.password,look_for_keys=False, allow_agent=False)
                 
         self.shell = self.ssh.invoke_shell() #need to setting termial size...etc
 
