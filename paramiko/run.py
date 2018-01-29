@@ -18,4 +18,6 @@ def interactive_mode(connection):
 s = ssh_switch(host=host,username=username,password=password)
 s.login()
 #interactive_mode(s)
-b = basic_command(s)
+b = basic_command(connection=s,switch_mode=1)
+out = b.show_interface()
+print(out.decode('utf-8'))

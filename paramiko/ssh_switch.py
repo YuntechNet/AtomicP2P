@@ -19,9 +19,13 @@ class ssh_switch(object):
                 
         self.shell = self.ssh.invoke_shell() #need to setting termial size...etc
 
-    def send_command(self,command):
-        
-        self.shell.send(str(command)+'\n')
+    def send_command(self,command,wrap=True):
+       
+        if wrap:
+            command = str(command)+'\n'
+        else:
+            command = str(command)
+        self.shell.send(command)
         time.sleep(.5)
         output = self.shell.recv(65535)
         return output
