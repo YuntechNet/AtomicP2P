@@ -1,16 +1,16 @@
 from commands.Command import Command
 from enums.SwitchMode import SwitchMode
 
-class Enable(Command):
+class Disable(Command):
 
-    reg = '^(en){1}(able)?'
+    reg = '^(disa){1}(ble)?'
 
     def __init__(self):
         super().__init__()
-        self.name = 'enable'
+        self.name = 'disable'
 
     def __execute__(self, exe):
-        if exe.mode == SwitchMode.DEFAULT:
-            exe.mode = SwitchMode.ENABLE
+        if exe.mode == SwitchMode.ENABLE:
+            exe.mode = SwitchMode.DEFAULT
         else:
             pass
