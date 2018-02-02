@@ -1,17 +1,16 @@
-from ssh_switch import ssh_switch
 import re 
     
-class basic_command(object):
+class EnMode(object):
 
     def __init__(self,connection=None,switch_mode=0): 
         self.con = connection
         self.switch_mode = switch_mode
-        #0 = user, 1 = Privileged ,2 = Global Configuration,3 = Interface Configuration
+        #0 = user, 1 = Privileged/EnMode ,2 = Global Configuration,3 = Interface Configuration
 
-    
     #Shorthand
     def send(self,command,wrap=True):
         return self.con.send_command(command,wrap)
+    
     #press more to get all informationr 
     def more(self,result_tmp):
 
@@ -20,17 +19,14 @@ class basic_command(object):
         while re.search('ore--',str(result_tmp)):
             result_tmp = self.send(' ',wrap=False)
             result = result + result_tmp 
-
         return result
-        
-
+    
     def enable(self):
         if(self.switch_mode==0):
             self.switch_mode = 1 #enter Privileged 
             return self.send('enable')
         else:
             raise Exception("switch mode not correct,now mode : "+str(self.switch_mode))
-
 
     def configure_terminal(self):
         if(self.switch_mode==1):
@@ -39,13 +35,12 @@ class basic_command(object):
         else:
             raise Exception("switch mode not correct,now mode : "+str(self.switch_mode))
 
-    def interface_Ethernet(self,Ethernet):
+    def config_interface(self,interface):
         if(self.switch_mode==2):
-            command = 'interface '+Ethernet
+            command = 'interface '+ interface
             return self.send(command)
         else:
             raise Exception("switch mode not correct,now mode : "+str(self.switch_mode))
-
 
     #need rearrange   
     def parse_interface_status(self):
@@ -60,7 +55,7 @@ class basic_command(object):
                 ethernet = tmp[0]
 
                 for data in tmp:
-                    if re.search('onnect',data):
+                    if re.search('connect',data):
                         status = data 
 
                     if re.search(r'^[\d]+$',data): 
@@ -82,7 +77,6 @@ class basic_command(object):
             return result 
         else:
             raise Exception("switch mode not correct,now mode : "+str(self.switch_mode))
-
 
     def show_interfaces(self):
         #get all information

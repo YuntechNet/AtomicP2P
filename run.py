@@ -1,27 +1,28 @@
-from ssh_switch import ssh_switch
 from getpass import getpass
-from command import basic_command
-try:
-    from pws import host,username,password
-except:
-    host = input('host: ')
-    username = input('username: ')
-    password = getpass()
+from ssh_class import ssh_switch
+from command_class import EnMode
+
+
 
 def interactive_mode(connection):
-
     while True:
         command = input('command: ')
-        result = s.send_command(command)
-        print(result.decode('UTF-8'))
+        result = connector.send_command(command)
+        print(result)
+        
+host = input('host: ')
+username = input('username: ')
+print('password: ')
+password = getpass()
+connector = ssh_switch(host=host,username=username,password=password)
+connector.login()
+interactive_mode(connector)
 
-s = ssh_switch(host=host,username=username,password=password)
-s.login()
-#interactive_mode(s)
-b = basic_command(connection=s,switch_mode=1)
+#instruction_Mode
+#EnConnector = EnMode(connection=connector,switch_mode=1)
 #out = b.parse_interface_status()
-out = b.configure_terminal()
+#out = EnConnector.configure_terminal()
 
-print(out)
-out= b.interface_Ethernet('Fa0/2')
-print(out)
+#print(out)
+#out= EnConnector.interface_Ethernet('Fa0/2')
+#print(out)
