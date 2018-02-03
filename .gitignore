@@ -5,3 +5,4 @@ pxssh.py
 pws.py
 *.pyc
 __pycache__
+pws
