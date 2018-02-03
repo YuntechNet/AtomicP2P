@@ -10,6 +10,7 @@ class ssh_switch(object):
         self.port=port
         self.ssh = None
         self.shell = None
+        self.output = None
 
     def login(self):
 
@@ -18,6 +19,8 @@ class ssh_switch(object):
         self.ssh.connect(hostname=self.host, port=22, username=self.username,password=self.password,look_for_keys=False, allow_agent=False)
                 
         self.shell = self.ssh.invoke_shell() #need to setting termial size...etc
+        self.output = self.shell.recv(65535)
+        return self
 
     def send_command(self,command,wrap=True,time_sleep=.5):
 
@@ -27,7 +30,7 @@ class ssh_switch(object):
             command = str(command)
         self.shell.send(command)
         time.sleep(time_sleep)
-        output = self.shell.recv(65535)
-        return output.decode('utf-8')
+        self.output = self.shell.recv(65535)
+        return self.output.decode('utf-8')
         
 

@@ -12,7 +12,7 @@ class Exit(Command):
 
     def __execute__(self, exe):
         if exe.mode == SwitchMode.CONTER:
-           exe.mode = SwitchMode.ENALBE
+           exe.mode = SwitchMode.ENABLE
         elif exe.mode == SwitchMode.ENABLE:
            exe.mode = SwitchMode.DEFAULT
         else:

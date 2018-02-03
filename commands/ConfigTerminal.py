@@ -12,6 +12,6 @@ class ConfigTerminal(Command):
 
     def __execute__(self, exe):
         if exe.mode == SwitchMode.ENABLE:
-            exe.mode = SwitchMode.CONFTER
+            exe.mode = SwitchMode.CONTER
         else:
             pass
