@@ -14,7 +14,7 @@ except:
 s = ssh_switch(host=host,username=username,password=password)
 s.login()
 
-cmd = ['enable', 'show interface', 'exit']
+cmd = ['show interface', 'disable', 'exit']
 exp = Explainer()
 exe = Executor(s)
 

@@ -4,6 +4,7 @@ from enums.SwitchMode import SwitchMode
 class Disable(Command):
 
     reg = '^(disa){1}(ble)?'
+    mode = SwitchMode.ENABLE
 
     def __init__(self):
         super().__init__()

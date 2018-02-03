@@ -4,6 +4,7 @@ from enums.SwitchMode import SwitchMode
 class ConfigTerminal(Command):
     
     reg = '^conf{1}(igure)? {1}ter{1}(minal)?'
+    mode = SwitchMode.ENABLE
 
     def __init__(self):
         super().__init__()
