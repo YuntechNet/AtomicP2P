@@ -8,7 +8,7 @@ class LibServer:
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print('Socket created on host: %s' % HOST)
+        print('Socket created on host: %s' % host)
 
         try:
             self.sock.bind((self.host, self.port))
@@ -38,14 +38,3 @@ class LibServer:
     def stop(self):
         self.stopSig = True
 
-HOST = Config.SERVER_HOST
-PORT = Config.SERVER_PORT
-
-for each in sys.argv:
-    if '--HOST=' in each:
-        HOST = str(each[7:])
-    elif '--PORT=' in each:
-        PORT = int(each[7:])
-
-libServer = LibServer(HOST, PORT)
-libServer.loop()
