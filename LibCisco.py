@@ -1,11 +1,11 @@
 import sys
 from Config import Config
-from Server import LibServer
+from server.Server import LibServer
 
 if __name__ == '__main__':
 
-    HOST = Config.SERVER_HOST
-    PORT = Config.SERVER_PORT
+    HOST = Config.LIBSERVER_HOST
+    PORT = Config.LIBSERVER_PORT
     
     for each in sys.argv:
         if '--HOST=' in each:

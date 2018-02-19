@@ -17,13 +17,13 @@ class Command:
     def _execute_(self, executor, short=True, debug=False):
         if self.mode == SwitchMode.EN_CONF or self.mode == executor.mode:
             self.__pre_execute__(executor)
-            executor.con.sendCommand('%s %s' % (self.name, self.args), wrap=True)
-            result = executor.con.shell.recv(65535).decode('utf-8')
+            executor.sshClient.sendCommand('%s %s' % (self.name, self.args), wrap=True)
+            result = executor.sshClient.shell.recv(65535).decode('utf-8')
             while('#' not in result and '>' not in result):
                 if ' --More--' in result:
-                    result = result.replace(' --More-- ', '') + executor.con.send_command('q' if short else ' ', wrap=False)
+                    result = result.replace(' --More-- ', '') + executor.sshClient.send_command('q' if short else ' ', wrap=False)
                 else:
-                    result += executor.con.shell.recv(65535).decode('utf-8')
+                    result += executor.sshClient.shell.recv(65535).decode('utf-8')
         else:
             print('Error switch mode, maybe you need en(enable) or conf ter(configure terminal)?')
         self.__post_execute__(executor)
