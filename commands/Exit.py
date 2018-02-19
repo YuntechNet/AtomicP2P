@@ -10,7 +10,7 @@ class Exit(Command):
         super().__init__()
         self.name = 'exit'
 
-    def __execute__(self, exe):
+    def __pre_execute__(self, exe):
         if exe.mode == SwitchMode.CONTER:
            exe.mode = SwitchMode.ENABLE
         elif exe.mode == SwitchMode.ENABLE:

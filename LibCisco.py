@@ -15,4 +15,3 @@ if __name__ == '__main__':
     
     libServer = LibServer(HOST, PORT)
     libServer.start()
-    libServer.stop()

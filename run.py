@@ -14,17 +14,16 @@ except:
 s = ssh_switch(host=host,username=username,password=password)
 s.login()
 
-cmd = ['enable', 'conf ter', 'exit', 'show interface', 'disable', 'exit']
+#cmd = ['enable', 'conf ter', 'exit', 'show interface', 'disable', 'exit']
+cmd = ['show run', 'conf t', 'exit']
 exp = Explainer()
 exe = Executor(s)
 
 for each in cmd:
     cmdInstance = exp._explain_(each)
-    exe = exe._execute_(cmdInstance)
-    print(str(exe.mode))
-    print()
-
-
+    executed = exe._execute_(cmdInstance, short=False)
+    exe = executed[0]
+    print(executed[1])
 
 ##interactive_mode(s)
 #b = basic_command(connection=s,switch_mode=1)

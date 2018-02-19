@@ -1,12 +1,14 @@
 from Config import Config
-import sys, socket
+import threading, socket, time
 
 
-class LibServer:
+class LibServer(threading.Thread):
 
-    def __init__(self, host, port):
+    def __init__(self, host, port, sleep=0):
+        threading.Thread.__init__(self)
         self.host = host
         self.port = port
+        self.sleep = sleep
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print('Socket created on host: %s' % host)
 
@@ -20,7 +22,7 @@ class LibServer:
 
         self.stopSig = False
 
-    def loop(self):
+    def run(self): # Override
         try:
             conn, addr = self.sock.accept()
             conn.send(bytes("Message"+"\r\n",'UTF-8'))
@@ -30,11 +32,5 @@ class LibServer:
         except socket.error as e:
             self.sock.close()
             print(e)
-        return self.loop() if self.stopSig == False else None
-
-    def start(self):
-        self.loop()
-
-    def stop(self):
-        self.stopSig = True
+        time.sleep(self.sleep)
 
