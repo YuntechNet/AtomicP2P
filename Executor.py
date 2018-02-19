@@ -8,6 +8,6 @@ class Executor:
         self.con = con
         self.mode = SwitchMode.ENABLE if re.compile('#$').search(con.output[2:].decode('utf-8')) else SwitchMode.DEFAULT
 
-    def _execute_(self, cmdInstance):
+    def _execute_(self, cmdInstance, short=True, debug=False):
         print('Mode: %s, Command: %s' % (str(self.mode), cmdInstance))
-        return cmdInstance._execute_(self)
+        return cmdInstance._execute_(self, short=short, debug=debug)

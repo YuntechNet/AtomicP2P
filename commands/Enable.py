@@ -10,7 +10,7 @@ class Enable(Command):
         super().__init__()
         self.name = 'enable'
 
-    def __execute__(self, exe):
+    def __pre_execute__(self, exe):
         if exe.mode == SwitchMode.DEFAULT:
             exe.mode = SwitchMode.ENABLE
         else:
