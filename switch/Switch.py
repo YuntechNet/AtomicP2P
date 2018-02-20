@@ -1,5 +1,5 @@
 from ssh_switch import ssh_switch
-from Executor import Executor
+from utils.Executor import Executor
 from switch.SwitchConfig import SwitchConfig
 
 class Switch:

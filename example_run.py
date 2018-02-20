@@ -1,8 +1,7 @@
 from ssh_switch import ssh_switch
 from getpass import getpass
-from command import basic_command
-from Executor import Executor
-from Explainer import Explainer
+from utils.Executor import Executor
+from utils.Explainer import Explainer
 
 try:
     from pws import host,username,password
