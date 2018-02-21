@@ -1,6 +1,7 @@
 import sys
 from Config import Config
 from server.Server import LibServer
+from switch.SwitchManager import SwitchManager
 
 if __name__ == '__main__':
 
@@ -15,3 +16,6 @@ if __name__ == '__main__':
     
     libServer = LibServer(HOST, PORT)
     libServer.start()
+
+    switchManager = SwitchManager()
+    switchManager.start()

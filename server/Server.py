@@ -1,14 +1,16 @@
 from Config import Config
-import threading, socket, time
-
+from threading import Event
+import threading, socket
 
 class LibServer(threading.Thread):
 
-    def __init__(self, host, port, sleep=0):
+    def __init__(self, host, port, sleep=0.5):
         threading.Thread.__init__(self)
+        self.stopped = Event()
+        self.sleep = sleep
+
         self.host = host
         self.port = port
-        self.sleep = sleep
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print('Socket created on host: %s' % host)
 
@@ -20,17 +22,18 @@ class LibServer(threading.Thread):
         self.sock.listen(10)
         print("Socket Listening on port %d" % self.port)
 
-        self.stopSig = False
 
     def run(self): # Override
-        try:
-            conn, addr = self.sock.accept()
-            conn.send(bytes("Message"+"\r\n",'UTF-8'))
-            print("Message sent")
-            data = conn.recv(1024)
-            print(data.decode(encoding='UTF-8'))
-        except socket.error as e:
-            self.sock.close()
-            print(e)
-        time.sleep(self.sleep)
+        while not self.stopped.wait(self.sleep):
+            try:
+                conn, addr = self.sock.accept()
+                conn.send(bytes("Message"+"\r\n",'UTF-8'))
+                print("Message sent")
+                data = conn.recv(1024)
+                print(data.decode(encoding='UTF-8'))
+            except socket.error as e:
+                self.sock.close()
+                print(e)
 
+    def stop(self):
+        self.stopped.set()

@@ -14,7 +14,6 @@ class SwitchConfig:
 
     def __init__(self, switch):
         self.switch = switch
-        self.loadConfig()
         
     def loadConfig(self, debug=False):
         self.switch.sshClient.login()
