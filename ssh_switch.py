@@ -21,12 +21,15 @@ class ssh_switch(object):
         self.output = self.shell.recv(65535)
         return self
 
+    def logout(self):
+        if self.ssh:
+            self.ssh.close()
+
     def sendCommand(self, command, wrap=True):
         self.shell.send(str(command) + ('\n' if wrap else ''))
 
     def send_command(self, command, wrap=True, time_sleep=.5, debug=False):
         self.sendCommand(command, wrap)
-        #while('#' not in self.output and '>' not in self.output and '--More--' not in self.output):
         time.sleep(time_sleep)
         self.output = self.shell.recv(65535).decode('utf-8')
 

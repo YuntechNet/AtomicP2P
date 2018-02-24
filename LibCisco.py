@@ -1,11 +1,12 @@
 import sys
 from Config import Config
-from Server import LibServer
+from server.Server import LibServer
+from switch.SwitchManager import SwitchManager
 
 if __name__ == '__main__':
 
-    HOST = Config.SERVER_HOST
-    PORT = Config.SERVER_PORT
+    HOST = Config.LIBSERVER_HOST
+    PORT = Config.LIBSERVER_PORT
     
     for each in sys.argv:
         if '--HOST=' in each:
@@ -15,3 +16,6 @@ if __name__ == '__main__':
     
     libServer = LibServer(HOST, PORT)
     libServer.start()
+
+    switchManager = SwitchManager()
+    switchManager.start()
