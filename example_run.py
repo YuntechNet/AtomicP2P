@@ -13,7 +13,7 @@ except:
 s = ssh_switch(host=host,username=username,password=password)
 s.login()
 
-cmd = ['show run', 'exit']
+cmd = ['show run','conf t','hostname test001' ,'exit']
 exp = Explainer()
 exe = Executor(s)
 exe._mode_()
@@ -21,5 +21,8 @@ exe._mode_()
 for each in cmd:
     cmdInstance = exp._explain_(each)
     (exe, result) = exe._execute_(cmdInstance, short=False)
+    if result == '':
+        break
     print(result)
+    print(cmdInstance)
 

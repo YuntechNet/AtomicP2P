@@ -15,6 +15,7 @@ class Command:
         return self
 
     def _execute_(self, executor, short=True, debug=False):
+        result = ''
         if self.mode == SwitchMode.EN_CONF or self.mode == executor.mode:
             self.__pre_execute__(executor)
             executor.sshClient.sendCommand('%s %s' % (self.name, self.args), wrap=True)

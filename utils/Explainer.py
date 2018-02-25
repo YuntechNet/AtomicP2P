@@ -4,11 +4,11 @@ from commands.Disable import Disable
 from commands.ConfigTerminal import ConfigTerminal
 from commands.Show import Show
 from commands.Exit import Exit
-
+from commands.Hostname import Hostname
 class Explainer:
 
     commands = [
-        Enable(), Disable(), ConfigTerminal(), Show(), Exit()
+        Hostname(),Enable(), Disable(), ConfigTerminal(), Show(), Exit()
     ]
 
     def __init__(self):
