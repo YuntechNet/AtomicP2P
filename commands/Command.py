@@ -22,8 +22,10 @@ class Command:
             while('#' not in result and '>' not in result):
                 if ' --More--' in result:
                     result = result.replace(' --More-- ', '') + executor.sshClient.send_command('q' if short else ' ', wrap=False)
-                else:
+                elif executor.sshClient.isActive():
                     result += executor.sshClient.shell.recv(65535).decode('utf-8')
+                else:
+                    break
         else:
             print('Error switch mode, maybe you need en(enable) or conf ter(configure terminal)?')
         self.__post_execute__(executor)

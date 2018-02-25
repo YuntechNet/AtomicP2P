@@ -37,3 +37,5 @@ class ssh_switch(object):
             print(self.output)
         return self.output
     
+    def isActive(self):
+        return self.ssh.get_transport().is_active()

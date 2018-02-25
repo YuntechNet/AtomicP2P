@@ -6,3 +6,4 @@ pws.py
 *.pyc
 __pycache__
 pws
+.vscode/*

@@ -13,7 +13,7 @@ except:
 s = ssh_switch(host=host,username=username,password=password)
 s.login()
 
-cmd = ['show run', 'conf t', 'exit']
+cmd = ['show run', 'exit']
 exp = Explainer()
 exe = Executor(s)
 exe._mode_()
