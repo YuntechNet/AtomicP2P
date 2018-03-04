@@ -1,7 +1,7 @@
 from Config import Config
 from ssh_switch import ssh_switch
 from utils.Executor import Executor
-from switch.SwitchConfig import SwitchConfig
+from switch.Config import SwitchConfig
 
 class Switch:
 

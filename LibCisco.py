@@ -1,21 +1,21 @@
 import sys
 from Config import Config
+from switch.Manager import SwitchManager
 from server.Server import LibServer
-from switch.SwitchManager import SwitchManager
 
 if __name__ == '__main__':
 
-    HOST = Config.LIBSERVER_HOST
-    PORT = Config.LIBSERVER_PORT
-    
-    for each in sys.argv:
-        if '--HOST=' in each:
-            HOST = str(each[7:])
-        elif '--PORT=' in each:
-            PORT = int(each[7:])
-    
-    libServer = LibServer(HOST, PORT)
-    libServer.start()
+    LIB_HOST = Config.LIB_SERVER['HOST']
+    LIB_PORT = Config.LIB_SERVER['PORT']
 
     switchManager = SwitchManager()
     switchManager.start()
+
+    for each in sys.argv:
+        if '--LIB_HOST=' in each:
+            LIB_HOST = str(each[7:])
+        elif '--LIB_PORT=' in each:
+            LIB_PORT = int(each[7:])
+    
+    libServer = LibServer(LIB_HOST, LIB_PORT)
+    libServer.start()
