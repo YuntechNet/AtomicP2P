@@ -23,7 +23,8 @@ class Config:
         # Static record devices to connect,
         #   if none, just set 'STATIC': None,
         'STATIC': [
-            { 'host': 'xxx.xxx.xxx.xxx', 'username': 'username', 'password': 'password' },
+            #{ 'host': 'xxx.xxx.xxx.xxx' },
+            #{ 'host': 'xxx.xxx.xxx.xxx', 'username': 'username', 'password': 'password' },
         ],
         # Dynamically connect to database to load record. 
         #   if none, just set 'DATABASE': None,

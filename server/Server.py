@@ -1,11 +1,12 @@
 from Config import Config
 from threading import Event
-import threading, socket
+import threading, socket, time
 
 class LibServer(threading.Thread):
 
-    def __init__(self, host, port, sleep=0.5):
+    def __init__(self, msgQueue, host, port, sleep=0.5):
         threading.Thread.__init__(self)
+        self.msgQueue = msgQueue
         self.stopped = Event()
         self.sleep = sleep
 
@@ -23,7 +24,7 @@ class LibServer(threading.Thread):
         self.print("Socket Listening on port %d" % self.port)
 
     def print(self, msg):
-        print('[LibServer] %s' % msg)
+        self.msgQueue.put(('[LibServer] %s' % msg, time.time()))
 
     def run(self): # Override
         while not self.stopped.wait(self.sleep):

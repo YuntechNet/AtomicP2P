@@ -5,29 +5,30 @@ from database.Database import RemoteDatabase
 
 class RemoteDBManager(threading.Thread):
 
-    def __init__(self, tempDB, config, sleep=0.5):
+    def __init__(self, msgQueue, tempDB, config, sleep=300):
         threading.Thread.__init__(self)
+        self.msgQueue = msgQueue
         self.stopped = Event()
         self.sleep = sleep
 
         self.tempDB = tempDB
-        self.remoteDB = RemoteDatabase(config)
+        self.remoteDB = RemoteDatabase(self.msgQueue, config)
 
     def print(self, msg):
-        print('[RemoteDBManager] %s' % msg)
+        self.msgQueue.put('[RemoteDBManager] %s' % msg)
 
     def run(self): # Override
         while not self.stopped.wait(self.sleep):
-            self.getDevices()
+            self.syncToLocal()
 
-    def getDevices(self):
+    def syncToLocal(self):
         self.print('Loading devices.')
-        device = []
         if self.remoteDB.type == 'mongodb':
+            from bson.json_util import dumps as bsonDumps
             every = self.remoteDB.switchCol.find({})
             for doc in every:
                 ip = self.remoteDB.ipCol.find_one({ '_id': doc['ipId'] })
-                cmd = 'REPLACE INTO Switch(IPv4, content) VALUES (\'%s\', \'%s\');' % (ip['ipv4'], str(doc).replace('\'', '"'))
+                cmd = 'REPLACE INTO Switch(IPv4, content) VALUES (\'%s\', \'%s\');' % (ip['ipv4'], bsonDumps(doc))
                 self.tempDB.execute(cmd)
             self.tempDB.commit()
         elif self.remoteDB.type == 'mysql':

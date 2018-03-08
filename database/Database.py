@@ -1,8 +1,9 @@
-import sqlite3
+import sqlite3, time
 
 class TempDatabase:
     
-    def __init__(self, config):
+    def __init__(self, msgQueue, config):
+        self.msgQueue = msgQueue
         self.print('Initing.')
         self.conn = sqlite3.connect(config['path'], check_same_thread=False)
         self.cursor = self.conn.cursor()
@@ -11,7 +12,7 @@ class TempDatabase:
         self.print('Inited.')
 
     def print(self, msg):
-        print('[TempDatabase] %s' % msg)
+        self.msgQueue.put(('[TempDatabase] %s' % msg, time.time()))
 
     def commit(self):
         self.conn.commit()
@@ -19,6 +20,7 @@ class TempDatabase:
     def execute(self, cmd):
         self.cursor = self.cursor.execute(cmd)
         self.commit()
+        return self.cursor
 
     def close(self):
         self.conn.close()
@@ -36,7 +38,8 @@ class TempDatabase:
 
 class RemoteDatabase:
 
-    def __init__(self, config):
+    def __init__(self, msgQueue, config):
+        self.msgQueue = msgQueue
         self.print('Initing.')
         self.type = config['type']
         self.conn = None
@@ -56,7 +59,7 @@ class RemoteDatabase:
         self.print('Inited.')
 
     def print(self, msg):
-        print('[RemoteDatabase] %s' % msg)
+        self.msgQueue.put(('[RemoteDatabase] %s' % msg, time.time()))
 
     def close(self):
         if self.type == 'mongodb':
