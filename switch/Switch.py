@@ -5,6 +5,28 @@ from ssh_switch import ssh_switch
 from utils.Executor import Executor
 from switch.Config import SwitchConfig
 
+from commands.Show import Show
+
+class Lock:
+
+    def __init__(self, initState=False):
+        self.lock = initState
+        self.locker = None
+
+    def setLock(self, locker):
+        self.lock = True
+        self.locker = locker
+
+    def unLock(self):
+        self.lock = False
+        self.locker = None
+
+    def isLock(self):
+        return self.lock
+
+    def getLocker(self):
+        return self.locker
+
 class Switch:
 
     def __init__(self, config):
@@ -14,6 +36,46 @@ class Switch:
         self.sshClient = ssh_switch(self.host, self.username, self.password)
         self.executor = Executor(self.sshClient)
         self.config = SwitchConfig(self)
+        self.lock = Lock()
 
-    def initSwitch(self):
-        self.config.loadConfig()
+    def singleExecute(self, operator, singleCommand, short=True, safe=True, timeout=60):
+        if self.lock.isLock():
+            print('Switch is locked, using by: %s' % self.lock.getLocker())
+            return
+
+        if safe:
+            self.lock.setLock(operator)
+
+        self.sshClient.login(timeout=timeout)
+        self.executor._mode_()
+        (self.executor, result) = self.executor._execute_(singleCommand, short)
+        self.sshClient.logout()
+
+        if safe:
+            self.lock.unLock()
+        return result
+
+    def stageExecute(self, operator, listCommand, short=True, safe=True, timeout=60):
+        if self.lock.isLock():
+            print('Switch is locked, using by: %s' % self.lock.getLovkc())
+            return
+
+        if safe:
+            self.lock.setLock(operator)
+
+        self.sshClient.login(timeout=timeout)
+        self.executor._mode_()
+        for singleCommand in listCommand:
+            (self.executor, resultSingle) = self.executor._execute_(singleCommand, short)
+            result += resultSingle
+        self.sshClient.logout()
+
+        if safe:
+            self.lock.unLock()
+        return result
+
+    def initSwitch(self, operator, timeout=60, debug=False):
+        result = self.singleExecute(operator=operator, singleCommand=Show('run'), short=False, timeout=timeout)
+        if debug:
+            print(result)
+        self.config.loadConfig(result, debug)

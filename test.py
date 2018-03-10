@@ -12,5 +12,5 @@ except:
     password = getpass()
 
 # Test switch  
-sw1 = Switch(host, username, password)
-sw1.initSwitch()
+sw1 = Switch({'host': host, 'username': username, 'password': password})
+sw1.initSwitch(operator='system', debug=True)

@@ -1,5 +1,4 @@
 import re
-from commands.Show import Show
 
 class Interface:
     
@@ -15,26 +14,23 @@ class SwitchConfig:
     def __init__(self, switch):
         self.switch = switch
         
-    def loadConfig(self, debug=False):
-        self.switch.sshClient.login()
-        self.switch.executor._mode_()
-        (self.switch.executor, result) = self.switch.executor._execute_(Show('run'), short=False)
-        result = self.__getHostname(result)
-        result = self.__getInterface(result)
+    def loadConfig(self, string, debug=False):
+        (self.hostname, string) = self.__getHostname(string, debug)
+        (self.interface, string) = self.__getInterface(string, debug)
 
-        if debug:
-            print(result)
-        self.switch.sshClient.logout()
-
-    def __getHostname(self, string):
+    def __getHostname(self, string, debug=False):
         section = re.compile('!\\r\\nhostname .*\\r\\n!').search(string).group(0)
-        self.hostname = section[12:-3]
-        return string.replace(section, '!')
+        hostname = section[12:-3]
+        if debug:
+            print(hostname)
+        return (hostname, string.replace(section, '!'))
     
-    def __getInterface(self, string):
-        self.interface = []
+    def __getInterface(self, string, debug=False):
+        interface = []
         section =  re.compile('!\\r\\n!\\r\\n!\\r\\ninterface .*\\r\\n!\\r\\n!\\r\\n!', re.DOTALL).search(string).group(0)
         process = section.replace('!', '!\r\n!')
         for each in re.compile('!\\r\\ninterface .*?\\r\\n!', re.DOTALL).findall(process):
-            self.interface.append(Interface(each))
-        return string.replace(section, '!\r\n!\r\n!')
+            interface.append(Interface(each))
+        if debug:
+            print(interface)
+        return (interface, string.replace(section, '!\r\n!\r\n!'))
