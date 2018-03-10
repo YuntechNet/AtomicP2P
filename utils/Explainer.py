@@ -5,6 +5,11 @@ from commands.ConfigTerminal import ConfigTerminal
 from commands.Show import Show
 from commands.Exit import Exit
 from commands.Hostname import Hostname
+
+# Explainer
+#   Class definition of EVERY exists command's explain.
+#   Responsible to convert string into specific command's RegEx.
+#
 class Explainer:
 
     commands = [

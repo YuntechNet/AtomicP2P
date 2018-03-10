@@ -7,3 +7,4 @@ pws.py
 __pycache__
 pws
 .vscode/*
+*.sqlite
