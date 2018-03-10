@@ -3,29 +3,10 @@ import json
 from Config import Config
 from ssh_switch import ssh_switch
 from utils.Executor import Executor
+from utils.Lock import Lock
 from switch.Config import SwitchConfig
 
 from commands.Show import Show
-
-class Lock:
-
-    def __init__(self, initState=False):
-        self.lock = initState
-        self.locker = None
-
-    def setLock(self, locker):
-        self.lock = True
-        self.locker = locker
-
-    def unLock(self):
-        self.lock = False
-        self.locker = None
-
-    def isLock(self):
-        return self.lock
-
-    def getLocker(self):
-        return self.locker
 
 class Switch:
 

@@ -1,5 +1,5 @@
 import time
-from enums.SwitchMode import SwitchMode
+from utils.Enums import SwitchMode
 
 class Command:
 

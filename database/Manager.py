@@ -3,6 +3,9 @@ from threading import Event
 
 from database.Database import RemoteDatabase
 
+# RemoteDBManager
+#   A thread in SwitchManager for communicate with local database.
+#
 class RemoteDBManager(threading.Thread):
 
     def __init__(self, msgQueue, tempDB, config, sleep=300):

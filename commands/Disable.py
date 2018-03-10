@@ -1,5 +1,5 @@
 from commands.Command import Command
-from enums.SwitchMode import SwitchMode
+from utils.Enums import SwitchMode
 
 class Disable(Command):
 

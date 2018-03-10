@@ -1,5 +1,10 @@
 import sqlite3, time
 
+# TempDatabase
+#   Class definition of local database which store connection data.
+#   Include serveral method to access db data like:
+#     Temporary store of remote switch info, schedules.
+#
 class TempDatabase:
     
     def __init__(self, msgQueue, config):
@@ -36,6 +41,11 @@ class TempDatabase:
         self.execute('SELECT * FROM Switch WHERE `IPv4` == %s' % ipv4)
         return self.cursor
 
+# RemoteDatabase
+#   Class definition of remote database which sotre connection data.
+#   Include serveral method to access db data like:
+#     Switch IP, username, password.
+#
 class RemoteDatabase:
 
     def __init__(self, msgQueue, config):

@@ -7,6 +7,9 @@ from switch.Switch import Switch
 from database.Database import TempDatabase
 from database.Manager import RemoteDBManager
 
+# SwitchManager
+#   A process responsible for arrane switch heart-beat & execute command.
+#
 #class SwitchManager(multiprocessing.Process):
 class SwitchManager(threading.Thread):
 
