@@ -3,7 +3,7 @@ from getpass import getpass
 from Config import Config
 from switch.Switch import Switch
 from utils.Executor import Executor
-
+from script_mode import script_mode
 
 try:
     from pws import host,username,password
@@ -20,10 +20,13 @@ except:
 s = ssh_switch(host=host,username=username,password=password)
 s.login()
 
-cmd = ['show run','conf t','hostname test001' ,'exit']
-exe = Executor(s)
-exe._mode_()
+script = script_mode('./test.json')
+command_list = script.explain_to_list()
+print(command_list)
 
-(exe, result) = exe._executeStr_('show run', short=False)
+exe = Executor(s)
+
+for each in command_list:
+    (exe, result) = exe._executeStr_(each,short=False)
+    print(result)
 s.logout()
-print(result)
