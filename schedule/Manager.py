@@ -17,6 +17,9 @@ class ScheduleManager(threading.Thread):
 
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
 
+    def schedule(self):
+        pass
+
     def run(self):
         while not self.stopped.wait(self.sleep):
             pass

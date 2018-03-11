@@ -3,16 +3,20 @@ from queue import Queue
 from Config import Config
 from switch.Manager import SwitchManager
 from server.Server import LibServer
+from schedule.Manager import ScheduleManager
 
 if __name__ == '__main__':
-
-    LIB_HOST = Config.LIB_SERVER['HOST']
-    LIB_PORT = Config.LIB_SERVER['PORT']
 
     msgQueue = Queue()
 
     switchManager = SwitchManager(msgQueue)
     switchManager.start()
+
+    #scheduleManager = ScheduleManager()
+    #scheduleManager.start()
+
+    LIB_HOST = Config.LIB_SERVER['HOST']
+    LIB_PORT = Config.LIB_SERVER['PORT']
 
     for each in sys.argv:
         if '--LIB_HOST=' in each:
