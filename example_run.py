@@ -24,5 +24,4 @@ for each in cmd:
     if result == '':
         break
     print(result)
-    print(cmdInstance)
 
