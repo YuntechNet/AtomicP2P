@@ -20,8 +20,6 @@ class Executor:
         return cmdInstance._execute_(self, short=short, debug=debug)
 
     def _executeStr_(self, cmdString, short=True, wrap=True, debug=False):
-        if debug:
-            print('Mode: %s' % str(self.mode))
         self.sshClient.sendCommand(cmdString, wrap=wrap)
         result = self.sshClient.shell.recv(65535).decode('utf-8')
         while('#' not in result and '>' not in result):

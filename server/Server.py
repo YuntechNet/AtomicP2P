@@ -1,13 +1,12 @@
+import socket
+
 from Config import Config
-from threading import Event
-import threading, socket, time
+from utils.Manager import ProcessManager
 
-class LibServer(threading.Thread):
+class LibServer(ProcessManager):
 
-    def __init__(self, msgQueue, host, port, sleep=0.5):
-        threading.Thread.__init__(self)
-        self.msgQueue = msgQueue
-        self.stopped = Event()
+    def __init__(self, outputQueue, host, port, sleep=0.5):
+        ProcessManager.__init__(self, 'LibServer', outputQueue)
         self.sleep = sleep
 
         self.host = host
@@ -23,20 +22,15 @@ class LibServer(threading.Thread):
         self.sock.listen(10)
         self.print("Socket Listening on port %d" % self.port)
 
-    def print(self, msg):
-        self.msgQueue.put(('[LibServer] %s' % msg, time.time()))
-
     def run(self): # Override
         while not self.stopped.wait(self.sleep):
+            conn, addr = self.sock.accept()
             try:
-                conn, addr = self.sock.accept()
                 conn.send(bytes("Message"+"\r\n",'UTF-8'))
                 self.print("Message sent")
                 data = conn.recv(1024)
                 self.print(data.decode(encoding='UTF-8'))
             except socket.error as e:
-                self.sock.close()
                 self.print(e)
+            self.conn.close()
 
-    def stop(self):
-        self.stopped.set()
