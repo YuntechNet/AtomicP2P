@@ -1,8 +1,6 @@
-from threading import Event
-import multiprocessing
-import threading, time
 
 from Config import Config
+from utils.Manager import ProcessManager
 from switch.Switch import Switch
 from database.Database import TempDatabase
 from database.Manager import RemoteDBManager
@@ -10,21 +8,16 @@ from database.Manager import RemoteDBManager
 # SwitchManager
 #   A process responsible for arrane switch heart-beat & execute command.
 #
-#class SwitchManager(multiprocessing.Process):
-class SwitchManager(threading.Thread):
+class SwitchManager(ProcessManager):
 
-    def __init__(self, msgQueue, sleep=1):
-        threading.Thread.__init__(self)
-        self.msgQueue = msgQueue
-        self.stopped = Event()
+    def __init__(self, outputQueue, sleep=1):
+        ProcessManager.__init__(self, 'SwitchManager', outputQueue)
         self.sleep = sleep
 
-        if not self.loadConfig() or self.stopped.isSet():
+        if not self.loadConfig() or self.isExit():
             self.stopped.set()
         self.print('Config loaded.')
-
-    def print(self, msg):
-        self.msgQueue.put(('[SwitchManager] %s' % msg, time.time()))
+        self.print('Inited.')
 
     def loadConfig(self):
         self.print('Loading config about SWITCH_MANAGER')
@@ -32,13 +25,13 @@ class SwitchManager(threading.Thread):
             self.device = []
             self.config = Config.SWITCH_MANAGER
             if 'TEMP_DATABASE' in self.config:
-                self.tempDB = TempDatabase(self.msgQueue, self.config['TEMP_DATABASE'])
+                self.tempDB = TempDatabase(self.outputQueue, self.config['TEMP_DATABASE'])
             if 'STATIC' in self.config:
                 for each in self.config['STATIC']:
                     self.device.append(Switch(each))
                 self.print('STATIC devices loaded.')
             if 'DATABASE' in self.config and self.tempDB is not None:
-                self.remoteDBManager = RemoteDBManager(self.msgQueue, self.tempDB, self.config['DATABASE'])
+                self.remoteDBManager = RemoteDBManager(self.outputQueue, self.tempDB, self.config['DATABASE'])
                 self.remoteDBManager.start()
             return True
         else:
@@ -59,3 +52,7 @@ class SwitchManager(threading.Thread):
     def run(self):
         while not self.stopped.wait(self.sleep):
             self.getDeviceFromLocal()
+
+    def exit(self):
+        self.remoteDBManager.exit()
+        super(SwitchManager, self).exit()

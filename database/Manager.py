@@ -1,24 +1,20 @@
 import threading
 from threading import Event
 
+from utils.Manager import ThreadManager
 from database.Database import RemoteDatabase
 
 # RemoteDBManager
 #   A thread in SwitchManager for communicate with local database.
 #
-class RemoteDBManager(threading.Thread):
+class RemoteDBManager(ThreadManager):
 
-    def __init__(self, msgQueue, tempDB, config, sleep=300):
-        threading.Thread.__init__(self)
-        self.msgQueue = msgQueue
-        self.stopped = Event()
+    def __init__(self, outputQueue, tempDB, config, sleep=300):
+        ThreadManager.__init__(self, 'RemoteDBManager', outputQueue)
         self.sleep = sleep
 
         self.tempDB = tempDB
-        self.remoteDB = RemoteDatabase(self.msgQueue, config)
-
-    def print(self, msg):
-        self.msgQueue.put('[RemoteDBManager] %s' % msg)
+        self.remoteDB = RemoteDatabase(self.outputQueue, config)
 
     def run(self): # Override
         while not self.stopped.wait(self.sleep):
