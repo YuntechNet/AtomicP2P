@@ -42,11 +42,10 @@ class SwitchManager(ProcessManager):
         if self.remoteDBManager.remoteDB.type == 'mongodb':
             from bson.json_util import loads as bsonLoads
         self.devices = []
-        exe = self.tempDB.execute('SELECT * FROM `Switch`')
-        result = exe.fetchall()
-        for each in result:
-            config = bsonLoads(each[1])
-            config['host'] = each[0]
+        result = self.tempDB.execute('SELECT * FROM `Switch`').fetchall()
+        for (host, jsonContent) in result:
+            config = bsonLoads(jsonContent)
+            config['host'] = host
             self.devices.append(Switch(config))
 
     def run(self):

@@ -32,5 +32,11 @@ class LibServer(ProcessManager):
                 self.print(data.decode(encoding='UTF-8'))
             except socket.error as e:
                 self.print(e)
-            self.conn.close()
+            self.sock.close()
 
+    # The best way to stop a block-socket server is connect to itself and close
+    # connection to let code keep running to next loop to detect stop signal.
+    def exit(self):
+        super(LibServer, self).exit()
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((self.host, self.port))
+        self.sock.close()

@@ -5,7 +5,7 @@ class Config:
     
     # LIB SERVER: control client side such as JLibCisco-cli to access with which ip and port.
     LIB_SERVER = {
-        'HOST': 'xxx.xxx.xxx.xxx',
+        'HOST': '127.0.0.1',
         'PORT' : 25534
     }
 

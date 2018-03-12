@@ -4,6 +4,7 @@ from Config import Config
 from switch.Switch import Switch
 from utils.Executor import Executor
 from script_mode import script_mode
+from utils.Explainer import ScriptExplainer
 
 try:
     from pws import host,username,password
@@ -17,16 +18,18 @@ except:
 #sw1.initSwitch(operator='system', debug=True)
 
 # Testing send string command
-s = ssh_switch(host=host,username=username,password=password)
-s.login()
+#s = ssh_switch(host=host,username=username,password=password)
+#s.login()
 
-script = script_mode('./test.json')
-command_list = script.explain_to_list()
+#script = script_mode('./test.json')
+#command_list = script.explain_to_list()
+script = ScriptExplainer('./schedule/static/test.json')
+command_list = script.explainToList()
 print(command_list)
 
-exe = Executor(s)
+#exe = Executor(s)
 
-for each in command_list:
-    (exe, result) = exe._executeStr_(each,short=False)
-    print(result)
-s.logout()
+#for each in command_list:
+#    (exe, result) = exe._executeStr_(each,short=False)
+#    print(result)
+#s.logout()

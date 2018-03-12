@@ -17,10 +17,10 @@ class ScheduleManager(ProcessManager):
         self.tempDB = tempDB
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
-        self.loadSchedules()
+        self.getScheduleFromLocal()
         self.print('Inited.')
 
-    def loadSchedules(self):
+    def getScheduleFromLocal(self):
         schedulesInDB = self.tempDB.execute('SELECT * FROM `Schedule`').fetchall()
         for (name, jsonContent) in schedulesInDB:
             self.schedules[name] = json.loads(jsonContent)
