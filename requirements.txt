@@ -1,0 +1,2 @@
+paramiko==2.4.1
+pymongo==3.6.1
