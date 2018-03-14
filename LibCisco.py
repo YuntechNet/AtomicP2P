@@ -16,7 +16,7 @@ class OutputStream(ThreadManager):
     def run(self):
         while not self.stopped.wait(0.1) or not self.outputQueue.empty():
             if not self.outputQueue.empty():
-              print('[%s] %s' % (self.outputQueue.get()))
+              print('[%17f] %s' % (self.outputQueue.get()))
             elif self.inputStream.isExit():
               self.exit()
 
@@ -32,8 +32,10 @@ class InputStream(ThreadManager):
             if self.outputQueue.empty():
                 choice = input('> ')
                 self.outputQueue.put((time.time(), choice))
-                if choice == 'exit':
-                    for (key, values) in instance.items():
+                if '--schedule' in choice:
+                    self.instance['scheduleManager'].command(choice.replace('--schedule', ''))
+                elif choice == 'exit':
+                    for (key, values) in self.instance.items():
                         values.exit()
                     return
 

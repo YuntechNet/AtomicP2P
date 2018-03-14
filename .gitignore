@@ -10,3 +10,4 @@ pws
 *.sqlite
 *.swo
 .*
+venv/*

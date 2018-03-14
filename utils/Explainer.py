@@ -10,7 +10,7 @@ from commands.Hostname import Hostname
 #   Class definition of EVERY exists command's explain.
 #   Responsible to convert string into specific command's RegEx.
 #
-class Explainer:
+class CommandExplainer:
 
     commands = [
         Hostname(),Enable(), Disable(), ConfigTerminal(), Show(), Exit()

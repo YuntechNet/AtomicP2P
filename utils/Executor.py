@@ -1,5 +1,4 @@
 import re
-from utils.Explainer import Explainer
 from utils.Enums import SwitchMode
 
 # Executor

@@ -5,7 +5,7 @@
             "ipv4 = data['ipv4']",
             "ethernet = data['ethernet']",
             "vlan = data['vlan']"
-        ],
+    ],
 	"command": [
             "sw_exec('configure terminal')\n",
             "for each in data:\n",
