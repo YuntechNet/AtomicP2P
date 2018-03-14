@@ -1,18 +1,26 @@
-import threading, time
+import traceback, time
 from threading import Event
 from datetime import datetime, timedelta
 
-class Schedule(threading.Thread):
+from utils.Enums import LogLevel
+from utils.Manager import ThreadManager
 
-    def __init__(self, json):
-        threading.Thread.__init__(self)
-        self.startTime = datetime.fromtimestamp(json['startTime'])
-        self.period = int(json['period'])
-        self.preCommand = json['preCommand']
-        self.command = json['command']
-        self.stopped = Event()
-        self.sleep = 0
-        self.nextSchedule = json['nextSchedule']
+class Schedule(ThreadManager):
+
+    def __init__(self, name, outputQueue, json):
+        ThreadManager.__init__(self, 'Schedule-%s' % name, outputQueue)
+        try:
+            self.startTime = datetime.fromtimestamp(json['startTime'])
+            self.period = int(json['period'])
+            self.preCommand = json['preCommand']
+            self.command = json['command']
+            self.sleep = 0
+            self.nextSchedule = json['nextSchedule']
+        except KeyError as keyErr:
+            self.print('Init schedule failed: KeyError with missing %s' % keyErr, LogLevel.WARNING)
+        except:
+            traceback.print_exc()
+        self.print('Inited.', LogLevel.SUCCESS)
 
     # Method to count sleep time to next trigger point.
     #   formula: period - (now - start) / period = now to next trigger point offset.

@@ -1,5 +1,7 @@
 {
-	"pre_command":[
+    "startTime": 1520870400,
+    "period": 60,
+	"preCommand":[
 		"mac = 'xxxx.xxxx.xxxx'",
 		"mac2 = 'yyyy.yyyy.yyyy'",
 		"vlan = '254'",
@@ -12,5 +14,6 @@
 		"sw_exec('ip source binding %s vlan %s %s interface %s' % (mac2,vlan,ip,interface))\n",
 		"sw_exec('end')\n",
 		"sw_exec('write')\n"
-	]
+	],
+    "nextSchedule": null
 }

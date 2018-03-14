@@ -1,5 +1,6 @@
 
 from Config import Config
+from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
 from switch.Switch import Switch
 from database.Database import TempDatabase
@@ -16,8 +17,8 @@ class SwitchManager(ProcessManager):
 
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
-        self.print('Config loaded.')
-        self.print('Inited.')
+        self.print('Config loaded.', LogLevel.SUCCESS)
+        self.print('Inited.', LogLevel.SUCCESS)
 
     def loadConfig(self):
         self.print('Loading config about SWITCH_MANAGER')
@@ -29,13 +30,13 @@ class SwitchManager(ProcessManager):
             if 'STATIC' in self.config:
                 for each in self.config['STATIC']:
                     self.device.append(Switch(each))
-                self.print('STATIC devices loaded.')
+                self.print('STATIC devices loaded.', LogLevel.SUCCESS)
             if 'DATABASE' in self.config and self.tempDB is not None:
                 self.remoteDBManager = RemoteDBManager(self.outputQueue, self.tempDB, self.config['DATABASE'])
                 self.remoteDBManager.start()
             return True
         else:
-            self.print('Config must contain SWITCH_MANAGER attribute.')
+            self.print('Config must contain SWITCH_MANAGER attribute.', LogLevel.ERROR)
             return False
 
     def getDeviceFromLocal(self):

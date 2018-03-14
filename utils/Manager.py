@@ -1,4 +1,5 @@
 import time, threading, multiprocessing
+from utils.Enums import LogLevel
 
 class Manager:
 
@@ -7,8 +8,8 @@ class Manager:
         self.outputQueue = outputQueue
         self.print('Initing')
 
-    def print(self, msg):
-        self.outputQueue.put((time.time(), '[%s] %s' % (self.name, msg)))
+    def print(self, msg, level=LogLevel.INFO):
+        self.outputQueue.put((time.time(), level.value, '[%s] %s' % (self.name, msg)))
 
     def command(self, command):
         pass

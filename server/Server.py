@@ -1,6 +1,7 @@
 import socket
 
 from Config import Config
+from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
 
 class LibServer(ProcessManager):
