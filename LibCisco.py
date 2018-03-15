@@ -69,9 +69,9 @@ if __name__ == '__main__':
             elif '--LIB_PORT=' in each:
                 LIB_PORT = int(each[7:])
     
-        libServer = LibServer(outputQueue, LIB_HOST, LIB_PORT)
-        libServer.start()
-        instance['libServer'] = libServer
+        #libServer = LibServer(outputQueue, LIB_HOST, LIB_PORT)
+        #libServer.start()
+        #instance['libServer'] = libServer
 
         inputStream = InputStream(instance, outputQueue)
         inputStream.start()

@@ -1,3 +1,5 @@
+import queue
+
 from Config import Config
 from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
@@ -17,13 +19,15 @@ class SwitchManager(ProcessManager):
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
         self.print('Config loaded.', LogLevel.SUCCESS)
+        self._makeQueue_()
         self.print('Inited.', LogLevel.SUCCESS)
 
     def loadConfig(self):
-        self.print('Loading config about SWITCH_MANAGER')
+        self.print('Loading config')
         if hasattr(Config, 'SWITCH_MANAGER'):
             self.device = []
             self.config = Config.SWITCH_MANAGER
+            self.address = self.config['ADDRESS']
             if 'TEMP_DATABASE' in self.config:
                 self.tempDB = TempDatabase(self.outputQueue, self.config['TEMP_DATABASE'])
             if 'STATIC' in self.config:
@@ -47,6 +51,12 @@ class SwitchManager(ProcessManager):
             config = bsonLoads(jsonContent)
             config['host'] = host
             self.devices.append(Switch(config))
+
+    def getDeviceByHost(self, host):
+        for each in self.device:
+            if each.config.host == host:
+                return each
+        return None
 
     def run(self):
         while not self.stopped.wait(self.sleep):

@@ -11,6 +11,8 @@ class Config:
 
     # SWITCH MANAGER: control
     SWITCH_MANAGER = {
+        # Setup for process to open net queue manager.
+        'ADDRESS': ('127.0.0.1', 5000),
         # Temporary database to store the data synced from remote database.
         #   Use sqlite3 to get good IO speed.
         'TEMP_DATABASE': {
@@ -48,4 +50,8 @@ class Config:
             'method': 'POST',
             'content-type': 'application/json'
         }
+    }
+
+    SCHEDULE_MANAGER = {
+        'ADDRESS': ('127.0.0.1', 5001)
     }

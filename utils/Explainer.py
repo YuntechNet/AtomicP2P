@@ -27,11 +27,8 @@ class CommandExplainer:
 
 class ScriptExplainer:
 
-    def __init__(self, scriptFileName):
-        self.scriptFileName = scriptFileName
-        scriptFile = open(self.scriptFileName)
-        self.script = json.loads(scriptFile.read())
-        scriptFile.close()
+    def __init__(self, json):
+        self.script = json
         self.commandList = []
 
     def scriptPreExec(self, preCommandCode):
@@ -39,21 +36,19 @@ class ScriptExplainer:
             exec(each, globals(), locals())
         return locals()
 
-    def scriptExplainer(self, commandCode, local):
-
+    def _explain_(self, commandCode, local):
         def sw_exec(command):
             self.commandList.append(command)
 
-        execCode = ''    
+        excCode = ''
         for each in commandCode:
-            execCode += each
+            excCode += each
 
-        exec(execCode, local, locals())
+        exec(excCode, local, locals())
         return self.commandList
 
     def explainToList(self):
-        resultDict = self.scriptPreExec(self.script['pre_command'])
-        self.commandList = self.scriptExplainer(self.script['command'], resultDict)
+        resultDict = self.scriptPreExec(self.script['preCommand'])
+        self.commandList = self._explain_(self.script['command'], resultDict)
         return self.commandList
         
-

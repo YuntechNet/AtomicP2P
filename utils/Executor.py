@@ -31,3 +31,4 @@ class Executor:
         if debug:
             print(result)
         return (self, result)
+

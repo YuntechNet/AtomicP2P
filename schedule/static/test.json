@@ -1,19 +1,9 @@
 {
     "startTime": 1520870400,
-    "period": 60,
-	"preCommand":[
-		"mac = 'xxxx.xxxx.xxxx'",
-		"mac2 = 'yyyy.yyyy.yyyy'",
-		"vlan = '254'",
-		"ip = '254.254.254.254'",
-		"interface = 'FastEthernet 0/14'"
-	],
+    "period": 10,
+	"preCommand":[],
 	"command":[
-		"sw_exec('conf terminal')\n",
-		"sw_exec('no ip source binding %s vlan %s %s interface %s' % (mac,vlan,ip,interface))\n",
-		"sw_exec('ip source binding %s vlan %s %s interface %s' % (mac2,vlan,ip,interface))\n",
-		"sw_exec('end')\n",
-		"sw_exec('write')\n"
+		"print(str(datetime.now()))\n"
 	],
     "nextSchedule": null
 }
