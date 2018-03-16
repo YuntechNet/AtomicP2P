@@ -52,26 +52,45 @@ if __name__ == '__main__':
         instance = {}
         outputQueue = Queue()
 
-        switchManager = SwitchManager(outputQueue)
-        switchManager.start()
-        instance['switchManager'] = switchManager
-
-        scheduleManager = ScheduleManager(switchManager.tempDB, outputQueue)
-        scheduleManager.start()
-        instance['scheduleManager'] = scheduleManager
-
+        argvLen = len(sys.argv)
         LIB_HOST = Config.LIB_SERVER['HOST']
         LIB_PORT = Config.LIB_SERVER['PORT']
 
-        for each in sys.argv:
-            if '--LIB_HOST=' in each:
-                LIB_HOST = str(each[7:])
-            elif '--LIB_PORT=' in each:
-                LIB_PORT = int(each[7:])
-    
-        #libServer = LibServer(outputQueue, LIB_HOST, LIB_PORT)
-        #libServer.start()
-        #instance['libServer'] = libServer
+        switchEnable = None
+        scheduleEnable = None
+        libEnable = None
+
+        if len(sys.argv) == 1:
+            switchEnable = True
+            scheduleEnable = True
+            libEnable = True
+        else:
+            for each in sys.argv:
+                if '--SwitchManager' in each:
+                    switchEnable = True
+                elif '--ScheduleManager' in each:
+                    scheduleEnable = True
+                elif '--LibServer' in each:
+                    libEnable = True            
+                elif '--LIB_HOST=' in each:
+                    LIB_HOST = str(each[7:])
+                elif '--LIB_PORT=' in each:
+                    LIB_PORT = int(each[7:])
+                    
+
+        if switchEnable:
+            switchManager = SwitchManager(outputQueue)
+            switchManager.start()
+            instance['switchManager'] = switchManager
+        if scheduleEnable:
+            scheduleManager = ScheduleManager(outputQueue)
+            scheduleManager.start()
+            instance['scheduleManager'] = scheduleManager
+        if libEnable:
+            pass 
+            #libServer = LibServer(outputQueue, LIB_HOST, LIB_PORT)
+            #libServer.start()
+            #instance['libServer'] = libServer
 
         inputStream = InputStream(instance, outputQueue)
         inputStream.start()

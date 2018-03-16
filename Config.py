@@ -5,6 +5,7 @@ class Config:
     
     # LIB SERVER: control client side such as JLibCisco-cli to access with which ip and port.
     LIB_SERVER = {
+        'ADDRESS': ('127.0.0.1', 5000),
         'HOST': '127.0.0.1',
         'PORT' : 25534
     }
@@ -12,11 +13,11 @@ class Config:
     # SWITCH MANAGER: control
     SWITCH_MANAGER = {
         # Setup for process to open net queue manager.
-        'ADDRESS': ('127.0.0.1', 5000),
+        'ADDRESS': ('127.0.0.1', 5001),
         # Temporary database to store the data synced from remote database.
         #   Use sqlite3 to get good IO speed.
         'TEMP_DATABASE': {
-            'path': './temp.sqlite',
+            'path': './temp.sqlite'
         },
         # Default login for switch when not username / password can use.
         'DEFAULT_USERNAME' : 'LibServer',
@@ -39,7 +40,7 @@ class Config:
             'port': 27017,
             'dbName': 'YunNMS',
             'switchColName': 'switch',
-            'ipColName': 'ip',
+            'ipColName': 'ip'
         },
         # For any api interface to connect to get device info like RESTful framework.
         #   if none, just set 'API': None
@@ -53,5 +54,8 @@ class Config:
     }
 
     SCHEDULE_MANAGER = {
-        'ADDRESS': ('127.0.0.1', 5001)
+        'ADDRESS': ('127.0.0.1', 5002),
+        'TEMP_DATABASE': {
+            'path': './temp.sqlite'
+        }
     }

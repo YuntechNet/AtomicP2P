@@ -1,6 +1,7 @@
 import json, os
 
 from Config import Config
+from database.Database import TempDatabase
 from schedule.Schedule import Schedule
 from utils.Manager import ProcessManager
 from utils.User import User
@@ -12,7 +13,7 @@ from utils.Enums import UserPriority, LogLevel
 #class ScheduleManager(multiprocessing.Process):
 class ScheduleManager(ProcessManager):
 
-    def __init__(self, tempDB, outputQueue, sleep=60):
+    def __init__(self, outputQueue, sleep=60):
         ProcessManager.__init__(self, 'ScheduleManager', outputQueue)
         self.sleep = sleep
 
@@ -21,7 +22,6 @@ class ScheduleManager(ProcessManager):
         self.print('Config loaded.', LogLevel.SUCCESS)
         self._makeQueue_()
 
-        self.tempDB = tempDB
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
         self.getScheduleFromLocal()
@@ -32,6 +32,8 @@ class ScheduleManager(ProcessManager):
         if hasattr(Config, 'SCHEDULE_MANAGER'):
             self.config = Config.SCHEDULE_MANAGER
             self.address = self.config['ADDRESS']
+            if 'TEMP_DATABASE' in self.config:
+                self.tempDB = TempDatabase(self.outputQueue, self.config['TEMP_DATABASE'])
             return True
         else:
             self.print('Config must contain SWITCH_MANAGER attribute.', LogLevel.ERROR)
