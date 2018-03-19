@@ -1,11 +1,11 @@
-import queue
+import queue, redis
 
 from Config import Config
 from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
 from switch.Switch import Switch
 from database.Database import TempDatabase
-from database.Manager import RemoteDBManager
+from database.Manager import RemoteDBManager, RedisManager
 
 # SwitchManager
 #   A process responsible for arrane switch heart-beat & execute command.
@@ -19,15 +19,19 @@ class SwitchManager(ProcessManager):
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
         self.print('Config loaded.', LogLevel.SUCCESS)
-        self._makeQueue_()
         self.print('Inited.', LogLevel.SUCCESS)
+        
+        self.redisManager = RedisManager('SwitchManager', ['LibCisco'], outputQueue)
+        self.redisManager.start()
+        self.redisManager.pub('LibCisco', 'hello')
+        self.redisManager.pub('SwitchManager', 'hello2')
+
 
     def loadConfig(self):
         self.print('Loading config')
         if hasattr(Config, 'SWITCH_MANAGER'):
             self.device = []
             self.config = Config.SWITCH_MANAGER
-            self.address = self.config['ADDRESS']
             if 'TEMP_DATABASE' in self.config:
                 self.tempDB = TempDatabase(self.outputQueue, self.config['TEMP_DATABASE'])
             if 'STATIC' in self.config:
@@ -64,4 +68,6 @@ class SwitchManager(ProcessManager):
 
     def exit(self):
         self.remoteDBManager.exit()
+        self.redisManager.exit()
         super(SwitchManager, self).exit()
+

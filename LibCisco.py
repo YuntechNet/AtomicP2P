@@ -7,6 +7,7 @@ from server.Server import LibServer
 from schedule.Manager import ScheduleManager
 from utils.Enums import LogLevel
 from utils.Manager import ThreadManager
+from database.Manager import RedisManager
 
 class OutputStream(ThreadManager):
 
@@ -56,17 +57,21 @@ if __name__ == '__main__':
         LIB_HOST = Config.LIB_SERVER['HOST']
         LIB_PORT = Config.LIB_SERVER['PORT']
 
+        coreEnable= None
         switchEnable = None
         scheduleEnable = None
         libEnable = None
 
         if len(sys.argv) == 1:
+            coreEnable = True
             switchEnable = True
             scheduleEnable = True
             libEnable = True
         else:
             for each in sys.argv:
-                if '--SwitchManager' in each:
+                if '--Core' in each:
+                    coreEnable = True
+                elif '--SwitchManager' in each:
                     switchEnable = True
                 elif '--ScheduleManager' in each:
                     scheduleEnable = True
@@ -76,8 +81,11 @@ if __name__ == '__main__':
                     LIB_HOST = str(each[7:])
                 elif '--LIB_PORT=' in each:
                     LIB_PORT = int(each[7:])
-                    
 
+        if coreEnable:
+            redisManager = RedisManager('LibCisco', ['SwitchManager'], outputQueue)
+            redisManager.start()
+            instance['redisManager'] = redisManager
         if switchEnable:
             switchManager = SwitchManager(outputQueue)
             switchManager.start()

@@ -20,7 +20,6 @@ class ScheduleManager(ProcessManager):
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
         self.print('Config loaded.', LogLevel.SUCCESS)
-        self._makeQueue_()
 
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
@@ -31,12 +30,11 @@ class ScheduleManager(ProcessManager):
         self.print('Loading config')
         if hasattr(Config, 'SCHEDULE_MANAGER'):
             self.config = Config.SCHEDULE_MANAGER
-            self.address = self.config['ADDRESS']
             if 'TEMP_DATABASE' in self.config:
                 self.tempDB = TempDatabase(self.outputQueue, self.config['TEMP_DATABASE'])
             return True
         else:
-            self.print('Config must contain SWITCH_MANAGER attribute.', LogLevel.ERROR)
+            self.print('Config must contain SCHEDULE_MANAGER attribute.', LogLevel.ERROR)
             return False
 
     def loadFolder(self, path=None, overwrite=False):
@@ -90,3 +88,4 @@ class ScheduleManager(ProcessManager):
         for (name, instance) in self.schedules.items():
             instance.exit()
         super(ScheduleManager, self).exit()
+

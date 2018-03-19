@@ -31,9 +31,6 @@ class ThreadManager(threading.Thread, Manager):
     def isExit(self):
         return self.stopped.isSet()
 
-class QueueManager(BaseManager):
-    pass
-
 class ProcessManager(Process, Manager):
 
     def __init__(self, name, outputQueue):
@@ -41,21 +38,11 @@ class ProcessManager(Process, Manager):
         BaseManager.__init__(self)
         Manager.__init__(self, name, outputQueue)
         self.stopped = ProcessEvent()
-
-    def _makeQueue_(self):
-        self._jobNetQueue = queue.Queue()
-        self._rtnNetQueue = queue.Queue()
-        QueueManager.register(self.name + '_job', callable=lambda: self._jobNetQueue)
-        QueueManager.register(self.name + '_rtn', callable=lambda: self._rtnNetQueue)
-        self.manager = QueueManager(address=self.address, authkey=self.name.encode('utf-8'))
-        self.manager.start()
-        self.jobQueue = eval('self.manager.' + self.name + '_job()')
-        self.rtnQueue = eval('self.manager.' + self.name + '_rtn()')
+        #self.redis = RedisManager(name)
 
     def exit(self):
         self.print('stop singal recieved & set. PID: %s' % str(self.pid))
         self.stopped.set()
-        self.manager.shutdown()
 
     def isExit(self):
         return self.stopped.is_set()

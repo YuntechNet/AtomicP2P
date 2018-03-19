@@ -1,19 +1,23 @@
+import pws
 
 # This is the global settting for whole service.
 # Setup will seperated into serveral part by sub-service.
 class Config:
     
+    # Redis server for cross-machine process communication.
+    REDIS_SERVER = {
+        #'ADDRESS': ('127.0.0.1', 6379)
+        'ADDRESS': pws.REDIS_SERVER['ADDRESS']
+    }
+
     # LIB SERVER: control client side such as JLibCisco-cli to access with which ip and port.
     LIB_SERVER = {
-        'ADDRESS': ('127.0.0.1', 5000),
         'HOST': '127.0.0.1',
         'PORT' : 25534
     }
 
     # SWITCH MANAGER: control
     SWITCH_MANAGER = {
-        # Setup for process to open net queue manager.
-        'ADDRESS': ('127.0.0.1', 5001),
         # Temporary database to store the data synced from remote database.
         #   Use sqlite3 to get good IO speed.
         'TEMP_DATABASE': {
@@ -54,7 +58,6 @@ class Config:
     }
 
     SCHEDULE_MANAGER = {
-        'ADDRESS': ('127.0.0.1', 5002),
         'TEMP_DATABASE': {
             'path': './temp.sqlite'
         }

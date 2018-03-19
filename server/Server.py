@@ -42,3 +42,4 @@ class LibServer(ProcessManager):
         super(LibServer, self).exit()
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((self.host, self.port))
         self.sock.close()
+
