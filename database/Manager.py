@@ -37,9 +37,10 @@ class RemoteDBManager(ThreadManager):
 
 class RedisManager(ThreadManager):
 
-    def __init__(self, name, subscribeList, outputQueue, sleep=0):
-        ThreadManager.__init__(self, '(Redis)%s' % name, outputQueue)
+    def __init__(self, name, subscribeList, outputQueue, cmdCallback, sleep=0):
+        ThreadManager.__init__(self, '%s-Redis' % name, outputQueue)
         self.sleep = sleep
+        self.cmdCallback = cmdCallback
 
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
@@ -50,24 +51,26 @@ class RedisManager(ThreadManager):
         self.print('Inited', LogLevel.SUCCESS)
 
     def loadConfig(self):
-        self.print('Loading config')
-        if hasattr(Config, 'REDIS_SERVER'):
-            self.config = Config.REDIS_SERVER
+        self.print('Loading config.')
+        if hasattr(Config, 'REDIS_MANAGER'):
+            self.config = Config.REDIS_MANAGER
             self.address = self.config['ADDRESS']
             return True
         else:
-            self.print('Config must contain REDIS_SERVER attribute.', LogLevel.ERROR)
+            self.print('Config must contain REDIS_MANAGER attribute.', LogLevel.ERROR)
             return False
 
     def run(self):
         while not self.stopped.wait(self.sleep):
             for each in self.ps.listen():
                 if each['type'] == 'message':
-                    self.print(each)
+                    self.cmdCallback(each['data'].decode('utf-8'))
                 elif each['type'] == 'subscribe':
-                    self.print('Channel %s subscirbe %s' % (each['channel'].decode('utf-8'), 'SUCCES' if each['data'] == 1 else 'FAILED'), LogLevel.SUCCESS if each['data'] == 1 else LogLevel.WARNING)
+                    self.print('Channel %s subscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']))
                 elif each['type'] == 'unsubscribe':
-                    self.print('Channel %s unsubscirbe %s' % (each['channel'].decode('utf-8'), 'SUCCES' if each['data'] == 0 else 'FAILED'), LogLevel.SUCCESS if each['data'] == 0 else LogLevel.WARNING)
+                    self.print('Channel %s unsubscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']))
+            if self.isExit():
+                self.ps.close()
 
     def pub(self, key, value):
         self.rcon.publish(key, value)

@@ -12,20 +12,20 @@ from database.Manager import RemoteDBManager, RedisManager
 #
 class SwitchManager(ProcessManager):
 
-    def __init__(self, outputQueue, sleep=1):
+    def __init__(self, outputQueue, argv=None, sleep=1):
         ProcessManager.__init__(self, 'SwitchManager', outputQueue)
         self.sleep = sleep
 
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
-        self.print('Config loaded.', LogLevel.SUCCESS)
-        self.print('Inited.', LogLevel.SUCCESS)
-        
-        self.redisManager = RedisManager('SwitchManager', ['LibCisco'], outputQueue)
+        self.print('Config loaded.')
+        self.redisManager = RedisManager('SwitchManager', ['SwitchManager'], outputQueue, self.command)
         self.redisManager.start()
-        self.redisManager.pub('LibCisco', 'hello')
-        self.redisManager.pub('SwitchManager', 'hello2')
+        self.print('Inited.', LogLevel.SUCCESS)
 
+    def command(self, command):
+        if 'heart-beat' in command:
+            self.print('Heart Beat: %s' % command)
 
     def loadConfig(self):
         self.print('Loading config')
@@ -37,7 +37,7 @@ class SwitchManager(ProcessManager):
             if 'STATIC' in self.config:
                 for each in self.config['STATIC']:
                     self.device.append(Switch(each))
-                self.print('STATIC devices loaded.', LogLevel.SUCCESS)
+                self.print('STATIC devices loaded.')
             if 'DATABASE' in self.config and self.tempDB is not None:
                 self.remoteDBManager = RemoteDBManager(self.outputQueue, self.tempDB, self.config['DATABASE'])
                 self.remoteDBManager.start()

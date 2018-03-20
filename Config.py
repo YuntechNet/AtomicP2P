@@ -4,8 +4,8 @@ import pws
 # Setup will seperated into serveral part by sub-service.
 class Config:
     
-    # Redis server for cross-machine process communication.
-    REDIS_SERVER = {
+    # Redis for cross-machine process communication.
+    REDIS_MANAGER = {
         #'ADDRESS': ('127.0.0.1', 6379)
         'ADDRESS': pws.REDIS_SERVER['ADDRESS']
     }

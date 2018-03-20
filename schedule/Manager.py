@@ -2,6 +2,7 @@ import json, os
 
 from Config import Config
 from database.Database import TempDatabase
+from database.Manager import RedisManager
 from schedule.Schedule import Schedule
 from utils.Manager import ProcessManager
 from utils.User import User
@@ -13,13 +14,15 @@ from utils.Enums import UserPriority, LogLevel
 #class ScheduleManager(multiprocessing.Process):
 class ScheduleManager(ProcessManager):
 
-    def __init__(self, outputQueue, sleep=60):
+    def __init__(self, outputQueue, argv=None, sleep=60):
         ProcessManager.__init__(self, 'ScheduleManager', outputQueue)
         self.sleep = sleep
 
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
-        self.print('Config loaded.', LogLevel.SUCCESS)
+        self.print('Config loaded.')
+        self.redisManager = RedisManager('ScheduleManager', ['ScheduleManager'], outputQueue, self.command)
+        self.redisManager.start()
 
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
@@ -70,7 +73,9 @@ class ScheduleManager(ProcessManager):
                 return self.schedules[key]
 
     def command(self, command): #Override
-        if 'ls' in command:
+        if 'heart-beat' in command:
+            self.print('Heart Beat: %s' % command)
+        elif 'ls' in command:
             [self.print('%s %s' % (key, value)) for (key, value) in self.schedules.items()]
         elif 'load-folder' in command:
             [value.exit() for (key, value) in self.schedules.items()]
@@ -79,6 +84,8 @@ class ScheduleManager(ProcessManager):
             [value.start() for (key, value) in self.schedules.items()]
         elif 'stop-all' in command:
             [value.exit() for (key, value) in self.schedules.items()]
+        else:
+            self.print(command)
 
     def run(self):
         while not self.stopped.wait(self.sleep):
@@ -87,5 +94,6 @@ class ScheduleManager(ProcessManager):
     def exit(self):
         for (name, instance) in self.schedules.items():
             instance.exit()
+        self.redisManager.exit()
         super(ScheduleManager, self).exit()
 

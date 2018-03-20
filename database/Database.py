@@ -17,7 +17,7 @@ class TempDatabase(Manager):
         self.cursor = self.cursor.execute('CREATE TABLE IF NOT EXISTS Switch(IPv4 TEXT PRIMARY KEY, content TEXT);')
         self.cursor = self.cursor.execute('CREATE TABLE IF NOT EXISTS Schedule(Name TEXT PRIMARY KEY, content TEXT);')
         self.conn.commit()
-        self.print('Inited.', LogLevel.SUCCESS)
+        self.print('Inited.')
 
     def commit(self):
         self.conn.commit()
@@ -58,7 +58,7 @@ class RemoteDatabase(Manager):
             pass
         else:
             self.print('Cat\'t load database type. must be mongodb or mysql.', LogLevel.ERROR)
-        self.print('Inited.', LogLevel.SUCCESS)
+        self.print('Inited.')
 
     def close(self):
         if self.type == 'mongodb':
