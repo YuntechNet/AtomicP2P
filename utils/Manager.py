@@ -2,6 +2,7 @@ import time, threading, queue
 from multiprocessing import Process
 from multiprocessing import Event as ProcessEvent
 from utils.Enums import LogLevel
+from utils.Task import Task
 
 class Manager:
 
@@ -45,4 +46,13 @@ class ProcessManager(Process, Manager):
         return self.stopped.is_set()
     
     def command(self, command):
-        pass
+        if self.redisManager.name == command._to:
+            if 'heart-beat' == command._content:
+                self.redisManager.pub(command._from, Task(self.redisManager.name, command._from, 'heart-beat-response').to())
+                self.redisManager.print('Heart beat from: %s, to: %s, and responsed.' % (command._from, command._to))
+            elif 'heart-beat-response' == command._content:
+                self.redisManager.print('Heart beat response from: %s, he is good and alive.' % command._from)
+            else:
+                return False
+            return True
+        return False

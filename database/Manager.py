@@ -5,6 +5,7 @@ from Config import Config
 from utils.Manager import ThreadManager
 from database.Database import RemoteDatabase
 from utils.Enums import LogLevel
+from utils.Task import Task
 
 # RemoteDBManager
 #   A thread in SwitchManager for communicate with local database.
@@ -38,7 +39,7 @@ class RemoteDBManager(ThreadManager):
 class RedisManager(ThreadManager):
 
     def __init__(self, name, subscribeList, outputQueue, cmdCallback, sleep=0):
-        ThreadManager.__init__(self, '%s-Redis' % name, outputQueue)
+        ThreadManager.__init__(self, '%s' % name, outputQueue)
         self.sleep = sleep
         self.cmdCallback = cmdCallback
 
@@ -64,7 +65,7 @@ class RedisManager(ThreadManager):
         while not self.stopped.wait(self.sleep):
             for each in self.ps.listen():
                 if each['type'] == 'message':
-                    self.cmdCallback(each['data'].decode('utf-8'))
+                    self.cmdCallback(Task.parse(each['data'].decode('utf-8')))
                 elif each['type'] == 'subscribe':
                     self.print('Channel %s subscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']))
                 elif each['type'] == 'unsubscribe':
@@ -78,3 +79,6 @@ class RedisManager(ThreadManager):
     def exit(self):
         self.ps.unsubscribe()
         super(RedisManager, self).exit()
+
+    def isMine(self, task):
+        return True if self.name == task._to else False

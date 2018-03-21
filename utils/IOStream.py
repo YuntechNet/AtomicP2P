@@ -36,15 +36,18 @@ class InputStream(ThreadManager):
             if self.outputQueue.empty():
                 choice = input('> ')
                 self.print('operator execute command: %s' % choice)
-                if '--schedule' in choice:
-                    task = Task(self.redis.name, 'ScheduleManager', choice.replace('--schedule', ''))
-                    self.redis.pub('ScheduleManager', task.to())
+                if '--libcisco' in choice:
+                    task = Task(self.redis.name, 'LibCisco-Redis', choice.replace('--libcisco ', ''))
+                    self.redis.pub('LibCisco-Redis', task.to())
                 elif '--switch' in choice:
-                    task = Task(self.redis.name, 'SwitchManager', choice.replace('--switch', ''))
-                    self.redis.pub('SwitchManager', task.to())
+                    task = Task(self.redis.name, 'SwitchManager-Redis', choice.replace('--switch ', ''))
+                    self.redis.pub('SwitchManager-Redis', task.to())
+                elif '--schedule' in choice:
+                    task = Task(self.redis.name, 'ScheduleManager-Redis', choice.replace('--schedule ', ''))
+                    self.redis.pub('ScheduleManager-Redis', task.to())
                 elif '--libserver' in choice:
-                    task = Task(self.redis.name, 'LibServer', choice.replace('--libserver', ''))
-                    self.redis.pub('LibServer', task.to())
+                    task = Task(self.redis.name, 'LibServer-Redis', choice.replace('--libserver ', ''))
+                    self.redis.pub('LibServer-Redis', task.to())
                 elif choice == 'exit':
                     for (key, values) in self.instance.items():
                         values.exit()

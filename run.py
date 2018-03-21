@@ -1,7 +1,7 @@
 import sys, traceback
 
 from queue import Queue
-from LibCisco import LibCisco
+from utils.LibCisco import LibCisco
 from switch.Manager import SwitchManager
 from server.Server import LibServer
 from schedule.Manager import ScheduleManager

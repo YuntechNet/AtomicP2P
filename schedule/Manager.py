@@ -21,7 +21,7 @@ class ScheduleManager(ProcessManager):
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
         self.print('Config loaded.')
-        self.redisManager = RedisManager('ScheduleManager', ['ScheduleManager'], outputQueue, self.command)
+        self.redisManager = RedisManager('ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue, self.command)
         self.redisManager.start()
 
         self.schedules = {}
@@ -73,19 +73,18 @@ class ScheduleManager(ProcessManager):
                 return self.schedules[key]
 
     def command(self, command): #Override
-        if 'heart-beat' in command:
-            self.print('Heart Beat: %s' % command)
-        elif 'ls' in command:
-            [self.print('%s %s' % (key, value)) for (key, value) in self.schedules.items()]
-        elif 'load-folder' in command:
-            [value.exit() for (key, value) in self.schedules.items()]
-            self.loadFolder(overwrite='-force' in command)
-        elif 'start-all' in command:
-            [value.start() for (key, value) in self.schedules.items()]
-        elif 'stop-all' in command:
-            [value.exit() for (key, value) in self.schedules.items()]
-        else:
-            self.print(command)
+        if super(ScheduleManager, self).command(command) is False and self.redisManager.isMine(command):
+            if 'ls' in command._content:
+                [self.print('%s %s' % (key, value)) for (key, value) in self.schedules.items()]
+            elif 'load-folder' in command:
+                [value.exit() for (key, value) in self.schedules.items()]
+                self.loadFolder(overwrite='-force' in command._content)
+            elif 'start-all' in command._content:
+                [value.start() for (key, value) in self.schedules.items()]
+            elif 'stop-all' in command._content:
+                [value.exit() for (key, value) in self.schedules.items()]
+            else:
+                self.redisManager.print(command.to())
 
     def run(self):
         while not self.stopped.wait(self.sleep):

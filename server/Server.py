@@ -12,7 +12,7 @@ class LibServer(ProcessManager):
         self.sleep = sleep
         self.loadArgv(argv)
 
-        self.redisManager = RedisManager('LibServer', ['LibServer'], outputQueue, self.command)
+        self.redisManager = RedisManager('LibServer-Redis', ['LibServer-Redis'], outputQueue, self.command)
         self.redisManager.start()
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -50,8 +50,8 @@ class LibServer(ProcessManager):
             self.sock.close()
 
     def command(self, command):
-        if 'heart-beat' in command:
-            self.print('Heart Beat: %s' % command)
+        if super(LibServer, self).command(command) is False and self.redisManager.isMine(command):
+            self.print(command.to())
 
     # The best way to stop a block-socket server is connect to itself and close
     # connection to let code keep running to next loop to detect stop signal.

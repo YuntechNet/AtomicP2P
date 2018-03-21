@@ -19,13 +19,13 @@ class SwitchManager(ProcessManager):
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
         self.print('Config loaded.')
-        self.redisManager = RedisManager('SwitchManager', ['SwitchManager'], outputQueue, self.command)
+        self.redisManager = RedisManager('SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue, self.command)
         self.redisManager.start()
         self.print('Inited.', LogLevel.SUCCESS)
 
     def command(self, command):
-        if 'heart-beat' in command:
-            self.print('Heart Beat: %s' % command)
+        if super(SwitchManager, self).command(command) is False and self.redisManager.isMine(command):
+            self.redisManager.print(command.to())
 
     def loadConfig(self):
         self.print('Loading config')

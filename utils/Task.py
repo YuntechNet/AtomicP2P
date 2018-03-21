@@ -2,15 +2,15 @@ import json
 
 class Task:
 
-    def __init__(self, ask, rtn, content):
-        self.ask = ask
-        self.rtn = rtn
-        self.content = content
+    def __init__(self, _from, _to, _content):
+        self._from = _from
+        self._to = _to
+        self._content = _content
 
     @staticmethod
     def parse(data):
         jsonDict = json.loads(data)
-        return Task(jsonDict['ask'], jsonDict['rtn'], jsonDict['content'])
+        return Task(jsonDict['_from'], jsonDict['_to'], jsonDict['_content'])
 
     def to(self):
-        return { 'ask': self.ask, 'rtn': self.rtn, 'content': self.content }
+        return json.dumps({ '_from': self._from, '_to': self._to, '_content': self._content })

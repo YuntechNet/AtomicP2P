@@ -7,12 +7,12 @@ class LibCisco(ProcessManager):
     def __init__(self, outputQueue, argv=None, sleep=0):
         ProcessManager.__init__(self, 'LibCisco', outputQueue)
         self.outputQueue = outputQueue
-        self.redisManager = RedisManager('LibCisco', ['LibCisco', 'SwitchManager', 'ScheduleManager', 'LibServer'], outputQueue, self.command)
+        self.redisManager = RedisManager('LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue, self.command)
         self.redisManager.start()
     
     def command(self, command):
-        if 'heart-beat' in command:
-            self.print('Heart Beat: %s' % command)
+        if super(LibCisco, self).command(command) is False and self.redisManager.name != command._from:
+            self.redisManager.print(command.to())
 
     def exit(self):
         self.redisManager.exit()
