@@ -1,4 +1,4 @@
-# LibCisco [![Build Status](https://travis-ci.org/jackey8616/LibCisco.svg?branch=master)](https://travis-ci.org/jackey8616/LibCisco)
+# LibCisco [![Build Status](https://travis-ci.org/jackey8616/LibCisco.svg?branch=master)](https://travis-ci.org/jackey8616/LibCisco) [![codecov](https://codecov.io/gh/jackey8616/LibCisco/branch/master/graph/badge.svg)](https://codecov.io/gh/jackey8616/LibCisco)
 A cisco manager service base on Python3.5
 
 ## Notice
