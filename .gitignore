@@ -12,3 +12,4 @@ pws
 .*
 venv2.7/*
 venv3.5/*
+htmlcov/*
