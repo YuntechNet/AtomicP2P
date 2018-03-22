@@ -4,8 +4,8 @@ from switch.Manager import SwitchManager
 
 class LibCisco(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=0):
-        ProcessManager.__init__(self, 'LibCisco', outputQueue)
+    def __init__(self, outputQueue, argv=None, sleep=0, callback=None):
+        ProcessManager.__init__(self, 'LibCisco', outputQueue, callback)
         self.outputQueue = outputQueue
         self.redisManager = RedisManager('LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue, self.command)
         self.redisManager.start()

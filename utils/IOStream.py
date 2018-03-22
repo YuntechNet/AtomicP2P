@@ -24,32 +24,31 @@ class OutputStream(ThreadManager):
 
 class InputStream(ThreadManager):
     
-    def __init__(self, redisManager, instance, outputQueue):
+    def __init__(self, outputQueue):
         ThreadManager.__init__(self, 'InputStream', outputQueue)
-        self.redis = redisManager
-        self.instance = instance
         self.outputQueue = outputQueue
         self.print('Inited.', LogLevel.SUCCESS)
 
+    def mainProcessCallback(self, cmd):
+        self.execute(cmd)
+
     def run(self):
-        while True:
+        while not self.isExit():
             if self.outputQueue.empty():
                 choice = input('> ')
                 self.print('operator execute command: %s' % choice)
-                if '--libcisco' in choice:
-                    task = Task(self.redis.name, 'LibCisco-Redis', choice.replace('--libcisco ', ''))
-                    self.redis.pub('LibCisco-Redis', task.to())
-                elif '--switch' in choice:
-                    task = Task(self.redis.name, 'SwitchManager-Redis', choice.replace('--switch ', ''))
-                    self.redis.pub('SwitchManager-Redis', task.to())
-                elif '--schedule' in choice:
-                    task = Task(self.redis.name, 'ScheduleManager-Redis', choice.replace('--schedule ', ''))
-                    self.redis.pub('ScheduleManager-Redis', task.to())
-                elif '--libserver' in choice:
-                    task = Task(self.redis.name, 'LibServer-Redis', choice.replace('--libserver ', ''))
-                    self.redis.pub('LibServer-Redis', task.to())
-                elif choice == 'exit':
-                    for (key, values) in self.instance.items():
-                        values.exit()
-                    return
+                self.execute(choice)
+
+    def execute(self, choice):
+        if '--libcisco' in choice:
+            self.redis.pub(self.redis.name, 'LibCisco-Redis', choice.replace('--libcisco ', ''))
+        elif '--switch' in choice:
+            self.redis.pub(self.redis.name, 'SwitchManager-Redis', choice.replace('--switch ', ''))
+        elif '--schedule' in choice:
+            self.redis.pub(self.redis.name, 'ScheduleManager-Redis', choice.replace('--schedule ', ''))
+        elif '--libserver' in choice:
+            self.redis.pub(self.redis.name, 'LibServer-Redis', choice.replace('--libserver ', ''))
+        elif choice == 'exit':
+            for (key, values) in self.instance.items():
+                values.exit()
 

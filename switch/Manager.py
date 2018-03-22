@@ -12,8 +12,8 @@ from database.Manager import RemoteDBManager, RedisManager
 #
 class SwitchManager(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=1):
-        ProcessManager.__init__(self, 'SwitchManager', outputQueue)
+    def __init__(self, outputQueue, argv=None, sleep=1, callback=None):
+        ProcessManager.__init__(self, 'SwitchManager', outputQueue, callback)
         self.sleep = sleep
 
         if not self.loadConfig() or self.isExit():

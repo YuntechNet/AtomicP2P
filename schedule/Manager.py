@@ -14,8 +14,8 @@ from utils.Enums import UserPriority, LogLevel
 #class ScheduleManager(multiprocessing.Process):
 class ScheduleManager(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=60):
-        ProcessManager.__init__(self, 'ScheduleManager', outputQueue)
+    def __init__(self, outputQueue, argv=None, sleep=60, callback=None):
+        ProcessManager.__init__(self, 'ScheduleManager', outputQueue, callback)
         self.sleep = sleep
 
         if not self.loadConfig() or self.isExit():

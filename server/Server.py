@@ -7,8 +7,8 @@ from database.Manager import RedisManager
 
 class LibServer(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=0.5):
-        ProcessManager.__init__(self, 'LibServer', outputQueue)
+    def __init__(self, outputQueue, argv=None, sleep=0.5, callback=None):
+        ProcessManager.__init__(self, 'LibServer', outputQueue, callback)
         self.sleep = sleep
         self.loadArgv(argv)
 
@@ -22,7 +22,7 @@ class LibServer(ProcessManager):
         try:
             self.sock.bind((self.host, self.port))
         except socket.error as err:
-            self.print('Bind failed. Error Code : ' .format(err))
+            self.print('Bind failed. Error Code : %s' % err)
 
         self.sock.listen(10)
         self.print("Socket Listening on port %d" % self.port)
