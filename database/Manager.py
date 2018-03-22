@@ -45,7 +45,7 @@ class RedisManager(ThreadManager):
 
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
-        self.rcon = redis.StrictRedis(host=self.address[0], port=self.address[1])
+        self.rcon = redis.StrictRedis(host=self.address[0], port=self.address[1], password=self.password)
         self.ps = self.rcon.pubsub()
         self.ps.subscribe(subscribeList)
         self.print('Subscribing: %s' % str(subscribeList))
@@ -56,6 +56,7 @@ class RedisManager(ThreadManager):
         if hasattr(Config, 'REDIS_MANAGER'):
             self.config = Config.REDIS_MANAGER
             self.address = self.config['ADDRESS']
+            self.password = self.config['PASSWORD']
             return True
         else:
             self.print('Config must contain REDIS_MANAGER attribute.', LogLevel.ERROR)

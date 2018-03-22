@@ -1,4 +1,3 @@
-import pws
 
 # This is the global settting for whole service.
 # Setup will seperated into serveral part by sub-service.
@@ -6,8 +5,8 @@ class Config:
     
     # Redis for cross-machine process communication.
     REDIS_MANAGER = {
-        #'ADDRESS': ('127.0.0.1', 6379)
-        'ADDRESS': pws.REDIS_SERVER['ADDRESS']
+        'ADDRESS': ('redis-15525.c17.us-east-1-4.ec2.cloud.redislabs.com', 15525),
+        'PASSWORD': 'LibCisco'
     }
 
     # LIB SERVER: control client side such as JLibCisco-cli to access with which ip and port.
