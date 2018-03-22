@@ -1,4 +1,4 @@
-import time
+import os, time
 
 from utils.Task import Task
 from utils.Manager import ThreadManager
@@ -17,6 +17,7 @@ class OutputStream(ThreadManager):
                 print('[%17f]%s %s\x1b[0m' % (self.outputQueue.get()))
             elif self.inputStream.isExit():
                 self.exit()
+        os.system('kill %d' % os.getpid())
 
     def exit(self):
         super(OutputStream, self).exit()
