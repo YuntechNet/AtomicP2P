@@ -39,9 +39,8 @@ class Config:
         #      use mysql, need to use table field: 'tabname': '<TABLE_NAME>',
         'DATABASE' : {
             'type': 'mongodb',
-            'host': 'xxx.xxx.xxx.xxx',
-            'port': 27017,
-            'dbName': 'YunNMS',
+            'uri': 'mongodb://libcisco:libcisco@ds155130.mlab.com:55130/libcisco-testmongo',
+            'dbName': 'libcisco-testmongo',
             'switchColName': 'switch',
             'ipColName': 'ip'
         },

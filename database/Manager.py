@@ -38,23 +38,24 @@ class RemoteDBManager(ThreadManager):
 
 class RedisManager(ThreadManager):
 
-    def __init__(self, name, subscribeList, outputQueue, cmdCallback, sleep=0):
+    def __init__(self, name, subscribeList, outputQueue, cmdCallback, sleep=0, config=Config):
         ThreadManager.__init__(self, '%s' % name, outputQueue)
         self.sleep = sleep
         self.cmdCallback = cmdCallback
 
-        if not self.loadConfig() or self.isExit():
+        if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
+            return 
         self.rcon = redis.StrictRedis(host=self.address[0], port=self.address[1], password=self.password)
         self.ps = self.rcon.pubsub()
         self.ps.subscribe(subscribeList)
         self.print('Subscribing: %s' % str(subscribeList))
         self.print('Inited', LogLevel.SUCCESS)
 
-    def loadConfig(self):
+    def loadConfig(self, config):
         self.print('Loading config.')
-        if hasattr(Config, 'REDIS_MANAGER'):
-            self.config = Config.REDIS_MANAGER
+        if hasattr(config, 'REDIS_MANAGER'):
+            self.config = config.REDIS_MANAGER
             self.address = self.config['ADDRESS']
             self.password = self.config['PASSWORD']
             return True

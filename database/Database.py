@@ -48,13 +48,13 @@ class RemoteDatabase(Manager):
  
         if self.type == 'mongodb':
             from pymongo import MongoClient
-            self.conn = MongoClient('%s:%s' % (config['host'], config['port']))
+            self.conn = MongoClient(config['uri'])
             self.db = self.conn[config['dbName']]
             self.switchCol = self.db[config['switchColName']]
             self.ipCol = self.db[config['ipColName']]
         elif self.type == 'mysql':
             # import pymysql
-            self.tabName = config['tabname']
+            #self.tabName = config['tabname']
             pass
         else:
             self.print('Cat\'t load database type. must be mongodb or mysql.', LogLevel.ERROR)
@@ -62,4 +62,5 @@ class RemoteDatabase(Manager):
 
     def close(self):
         if self.type == 'mongodb':
-            self.dbConn.close()
+            self.conn.close()
+        del self.conn
