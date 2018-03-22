@@ -55,7 +55,7 @@ class ProcessManager(Process, Manager):
                 self.redisManager.print('Heart beat from: %s, to: %s, and responsed.' % (command._from, command._to))
             elif 'heart-beat-response' == command._content:
                 self.redisManager.print('Heart beat response from: %s, he is good and alive.' % command._from)
-            elif 'shutdown' == command._content:
+            elif 'shutdown' == command._content and self.mainProcessCallback:
                 self.print('Recieve shutdown signal from %s, proceeding...' % command._from)
                 self.mainProcessCallback('exit')
             else:
