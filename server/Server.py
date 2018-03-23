@@ -12,9 +12,6 @@ class LibServer(ProcessManager):
         self.sleep = sleep
         self.loadArgv(argv)
 
-        self.redisManager = RedisManager('LibServer-Redis', ['LibServer-Redis'], outputQueue, self.command)
-        self.redisManager.start()
-
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.print('Socket created on host: %s' % self.host)
@@ -25,6 +22,9 @@ class LibServer(ProcessManager):
             self.print('Bind failed. Error Code : %s' % err)
 
         self.sock.listen(10)
+
+        self.redisManager = RedisManager('LibServer-Redis', ['LibServer-Redis'], outputQueue, self.command)
+        self.redisManager.start()
         self.print("Socket Listening on port %d" % self.port)
 
     def loadArgv(self, argv):
@@ -32,10 +32,10 @@ class LibServer(ProcessManager):
         self.port = Config.LIB_SERVER['PORT']
         if not argv is None:
             for each in argv:
-                if '--LIB_HOST' in each:
-                    self.host = str(each[7:])
-                elif '--LIB_PORT' in each:
-                    self.port = str(each[7:])
+                if '--LIB_HOST=' in each:
+                    self.host = str(each[11:])
+                elif '--LIB_PORT=' in each:
+                    self.port = int(each[11:])
 
     def run(self): # Override
         while not self.stopped.wait(self.sleep):

@@ -20,6 +20,7 @@ class ScheduleManager(ProcessManager):
 
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
+            return
         self.print('Config loaded.')
         self.redisManager = RedisManager('ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue, self.command)
         self.redisManager.start()
