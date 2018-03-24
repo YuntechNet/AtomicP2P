@@ -1,3 +1,4 @@
+.coverage
 *.un~
 *.swp
 pxssh.py

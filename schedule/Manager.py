@@ -1,17 +1,24 @@
 import json, os
 
 from Config import Config
-from database.Database import TempDatabase
-from database.Manager import RedisManager
+from database.Manager import DatabaseManager, RedisManager
 from schedule.Schedule import Schedule
 from utils.Manager import ProcessManager
 from utils.User import User
 from utils.Enums import UserPriority, LogLevel
 
+class ScheduleDatabaseManager(DatabaseManager):
+
+    def __init__(self, outputQueue, config, sleep=300):
+        DatabaseManager.__init__(self, outputQueue, config, sleep)
+
+    # Override
+    def sync(self):
+        pass
+
 # ScheduleManager
 #   A process responsible for arrange schedule to execute with switch.
 #
-#class ScheduleManager(multiprocessing.Process):
 class ScheduleManager(ProcessManager):
 
     def __init__(self, outputQueue, argv=None, sleep=60, callback=None, config=Config):
@@ -23,19 +30,22 @@ class ScheduleManager(ProcessManager):
             return
         self.print('Config loaded.')
         self.redisManager = RedisManager('ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue, self.command)
-        self.redisManager.start()
 
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
-        self.getScheduleFromLocal()
+        self.toSystem()
         self.print('Inited.', LogLevel.SUCCESS)
+
+    def start(self):
+        self.redisManager.start()
+        self.databaseManager.start()
+        super(ScheduleManager, self).start()
 
     def loadConfig(self, config):
         self.print('Loading config')
         if hasattr(config, 'SCHEDULE_MANAGER'):
             self.config = config.SCHEDULE_MANAGER
-            if 'TEMP_DATABASE' in self.config:
-                self.tempDB = TempDatabase(self.outputQueue, self.config['TEMP_DATABASE'])
+            self.databaseManager = ScheduleDatabaseManager(self.outputQueue, self.config)
             return True
         else:
             self.print('Config must contain SCHEDULE_MANAGER attribute.', LogLevel.ERROR)
@@ -50,11 +60,11 @@ class ScheduleManager(ProcessManager):
 
                 if not filename in self.schedules:
                     self.schedules[filename] = Schedule(filename, self.outputQueue, json.loads(jsonContent))
-                    self.tempDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (filename, jsonContent.replace('\'', '\'\'')))
+                    self.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (filename, jsonContent.replace('\'', '\'\'')))
                     self.print('%s%s New schedule loaded and inserted into database.' % (path, filename))
                 elif overwrite:
                     self.schedules[filename] = Schedule(filename, self.outputQueue, json.loads(jsonContent))
-                    self.tempDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (jsonContent.replace('\'', '\'\''), filename))
+                    self.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (jsonContent.replace('\'', '\'\''), filename))
                     self.print('%s%s Old schedule loaded and updated into database.' % (path, filename))
                 else:
                     self.print('%s%s Schedule is exists, abort. add -force to overwrite.' % (path, filename))
@@ -62,8 +72,8 @@ class ScheduleManager(ProcessManager):
             else:
                 self.print('%s%s folder detected, ignore.' % (path, filename))
 
-    def getScheduleFromLocal(self):
-        schedulesInDB = self.tempDB.execute('SELECT * FROM `Schedule`').fetchall()
+    def toSystem(self):
+        schedulesInDB = self.databaseManager.temporDB.execute('SELECT * FROM `Schedule`').fetchall()
         for (name, jsonContent) in schedulesInDB:
             self.schedules[name] = Schedule(self, name, self.outputQueue, json.loads(jsonContent))
             self.schedules[name].start()
@@ -95,5 +105,6 @@ class ScheduleManager(ProcessManager):
         for (name, instance) in self.schedules.items():
             instance.exit()
         self.redisManager.exit()
+        self.databaseManager.exit()
         super(ScheduleManager, self).exit()
 

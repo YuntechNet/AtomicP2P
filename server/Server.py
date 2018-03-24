@@ -24,8 +24,11 @@ class LibServer(ProcessManager):
         self.sock.listen(10)
 
         self.redisManager = RedisManager('LibServer-Redis', ['LibServer-Redis'], outputQueue, self.command)
-        self.redisManager.start()
         self.print("Socket Listening on port %d" % self.port)
+
+    def start(self):
+        self.redisManager.start()
+        super(LibServer, self).start()
 
     def loadArgv(self, argv):
         self.host = Config.LIB_SERVER['HOST']

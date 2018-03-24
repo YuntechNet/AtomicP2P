@@ -3,12 +3,13 @@ from queue import Queue
 
 from Config import Config
 from database.Database import TempDatabase
-from database.Manager import RemoteDBManager, RedisManager
+from database.Manager import DatabaseManager, RedisManager
 from utils.Task import Task
 
-class TestRemoteDBManager:
+class TestDatabaseManager:
 
-    def test_init(self):
+    #def test_init(self):
+    def init(self):
         config = {'type': 'mongodb', 'uri': 'mongodb://libcisco:libcisco@ds155130.mlab.com:55130/libcisco-testmongo', 'dbName': 'libcisco-testmongo', 'switchColName': 'switch', 'ipColName': 'ip'}
         database = TempDatabase(Queue(), {'path': './temp_unit_test.sqlite'})
         manager = RemoteDBManager(Queue(), database, config)
@@ -25,7 +26,8 @@ class TestRemoteDBManager:
     def test_run(self):
         pass
 
-    def test_syncToLocal(self):
+    #def test_syncToLocal(self):
+    def syncToLocal(self):
         config = {'type': 'mongodb', 'uri': 'mongodb://libcisco:libcisco@ds155130.mlab.com:55130/libcisco-testmongo', 'dbName': 'libcisco-testmongo', 'switchColName': 'switch', 'ipColName': 'ip'}
         database = TempDatabase(Queue(), {'path': './temp_unit_test.sqlite'})
         manager = RemoteDBManager(Queue(), database, config)

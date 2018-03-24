@@ -24,6 +24,9 @@ class ThreadManager(threading.Thread, Manager):
         Manager.__init__(self, name, outputQueue)
         self.stopped = threading.Event()
 
+    def start(self):
+        super(ThreadManager, self).start()
+
     def exit(self):
         self.stopped.set()
         self.print('stop signal recieved & set.')

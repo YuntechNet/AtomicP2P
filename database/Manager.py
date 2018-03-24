@@ -3,39 +3,32 @@ from threading import Event
 
 from Config import Config
 from utils.Manager import ThreadManager
-from database.Database import RemoteDatabase
+from database.Database import TempDatabase, RemoteDatabase
 from utils.Enums import LogLevel
 from utils.Task import Task
 
-# RemoteDBManager
-#   A thread in SwitchManager for communicate with local database.
+# DatabaseManager
+#   A thread in each manager for communication with local and remote database.
 #
-class RemoteDBManager(ThreadManager):
+class DatabaseManager(ThreadManager):
 
-    def __init__(self, outputQueue, tempDB, config, sleep=300):
-        ThreadManager.__init__(self, 'RemoteDBManager', outputQueue)
+    def __init__(self, outputQueue, config, sleep=300):
+        ThreadManager.__init__(self, 'DatabaseManager', outputQueue)
         self.sleep = sleep
 
-        self.tempDB = tempDB
-        self.remoteDB = RemoteDatabase(self.outputQueue, config)
+        if 'TEMP_DATABASE' in config:
+            self.temporDB = TempDatabase(outputQueue, config['TEMP_DATABASE'])
+        if 'DATABASE' in config:
+            self.remoteDB = RemoteDatabase(outputQueue, config['DATABASE'])
+        self.print('inited.', LogLevel.SUCCESS)
 
-    def run(self): # Override
+    def run(self):
         while not self.stopped.wait(self.sleep):
             self.syncToLocal()
 
-    def syncToLocal(self):
-        self.print('Loading devices.')
-        if self.remoteDB.type == 'mongodb':
-            from bson.json_util import dumps as bsonDumps
-            every = self.remoteDB.switchCol.find({})
-            for doc in every:
-                ip = self.remoteDB.ipCol.find_one({ '_id': doc['ipId'] })
-                cmd = 'REPLACE INTO Switch(IPv4, content) VALUES (\'%s\', \'%s\');' % (ip['ipv4'], bsonDumps(doc))
-                self.tempDB.execute(cmd)
-            self.tempDB.commit()
-        elif self.remoteDB.type == 'mysql':
-            pass
-
+    def sync(self):
+        raise NotImplementedError
+       
 class RedisManager(ThreadManager):
 
     def __init__(self, name, subscribeList, outputQueue, cmdCallback, sleep=0, config=Config):
