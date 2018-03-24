@@ -18,7 +18,7 @@ class Schedule(ThreadManager):
                 'preCommand': json['preCommand'],
                 'command': json['command']
             })
-            self.sleep = self.countSleep()
+            self.sleep = int(self.period - (datetime.now() - self.startTime).total_seconds() % self.period)
             self.nextSchedule = manager.getScheduleByName(json['nextSchedule'])
             self.print(str(self.startTime) + '/' +  str(self.sleep) + '/' + str((datetime.now() - self.startTime).total_seconds()))
             self.print('Inited.', LogLevel.SUCCESS)
@@ -26,11 +26,6 @@ class Schedule(ThreadManager):
             self.print('Init schedule failed: KeyError with missing %s' % keyErr, LogLevel.WARNING)
         except:
             traceback.print_exc()
-
-    # Method to count sleep time to next trigger point.
-    #   formula: period - (now - start) / period = now to next trigger point offset.
-    def countSleep(self):
-        return int(self.period - (datetime.now() - self.startTime).total_seconds() % self.period)
 
     def run(self):
         while not self.stopped.wait(self.sleep):

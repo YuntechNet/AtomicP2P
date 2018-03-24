@@ -14,11 +14,11 @@ from utils.Enums import UserPriority, LogLevel
 #class ScheduleManager(multiprocessing.Process):
 class ScheduleManager(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=60, callback=None):
+    def __init__(self, outputQueue, argv=None, sleep=60, callback=None, config=Config):
         ProcessManager.__init__(self, 'ScheduleManager', outputQueue, callback)
         self.sleep = sleep
 
-        if not self.loadConfig() or self.isExit():
+        if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
             return
         self.print('Config loaded.')
@@ -30,10 +30,10 @@ class ScheduleManager(ProcessManager):
         self.getScheduleFromLocal()
         self.print('Inited.', LogLevel.SUCCESS)
 
-    def loadConfig(self):
+    def loadConfig(self, config):
         self.print('Loading config')
-        if hasattr(Config, 'SCHEDULE_MANAGER'):
-            self.config = Config.SCHEDULE_MANAGER
+        if hasattr(config, 'SCHEDULE_MANAGER'):
+            self.config = config.SCHEDULE_MANAGER
             if 'TEMP_DATABASE' in self.config:
                 self.tempDB = TempDatabase(self.outputQueue, self.config['TEMP_DATABASE'])
             return True

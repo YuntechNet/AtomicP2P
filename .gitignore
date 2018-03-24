@@ -2,14 +2,13 @@
 *.swp
 pxssh.py
 *.log
-pws.py
 *.pyc
 __pycache__
-pws
+.pytest_cache/
+pws.py
 .vscode/*
 *.sqlite
 *.swo
-.*
 venv2.7/*
 venv3.5/*
 htmlcov/*
