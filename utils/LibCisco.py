@@ -1,5 +1,5 @@
 from utils.Manager import ProcessManager
-from database.Manager import RedisManager
+from communicate.Manager import RedisManager
 from switch.Manager import SwitchManager
 
 class LibCisco(ProcessManager):

@@ -3,7 +3,7 @@ import socket
 from Config import Config
 from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
-from database.Manager import RedisManager
+from communicate.Manager import RedisManager
 
 class LibServer(ProcessManager):
 

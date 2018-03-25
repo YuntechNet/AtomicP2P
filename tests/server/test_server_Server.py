@@ -2,7 +2,7 @@ import pytest, socket
 
 from queue import Queue
 
-from utils.Task import Task
+from communicate.Command import Command
 from server.Server import LibServer
 
 class TestLibServer:
@@ -19,6 +19,6 @@ class TestLibServer:
         pass
 
     def command(self, s):
-        s.command(Task('A', 'B', 'TestContent'))
-        s.command(Task('A', 'LibServer-Redis', 'TestContent'))
+        s.command(Command('A', 'B', 'TestContent'))
+        s.command(Command('A', 'LibServer-Redis', 'TestContent'))
 

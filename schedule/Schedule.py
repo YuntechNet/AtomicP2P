@@ -27,6 +27,10 @@ class Schedule(ThreadManager):
         except:
             traceback.print_exc()
 
+    def start(self):
+        super(Schedule, self).start()
+        self.print('%s started.' % self.name)
+
     def run(self):
         while not self.stopped.wait(self.sleep):
             for each in self.command:

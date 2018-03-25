@@ -1,6 +1,6 @@
 from queue import Queue
 
-from utils.Task import Task
+from communicate.Command import Command
 from utils.LibCisco import LibCisco
 
 class TestLibCisco:
@@ -14,7 +14,7 @@ class TestLibCisco:
 
     def test_command(self):
         core = LibCisco(Queue())
-        core.command(Task('A', 'B', 'TestContent'))
+        core.command(Command('A', 'B', 'TestContent'))
         core.exit()
         assert core.redisManager.isExit() == True
         assert core.isExit() == True

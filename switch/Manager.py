@@ -4,7 +4,8 @@ from Config import Config
 from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
 from switch.Switch import Switch
-from database.Manager import DatabaseManager, RedisManager
+from database.Manager import DatabaseManager
+from communicate.Manager import RedisManager
 
 class SwitchDatabaseManager(DatabaseManager):
 

@@ -1,7 +1,8 @@
 import json, os
 
 from Config import Config
-from database.Manager import DatabaseManager, RedisManager
+from database.Manager import DatabaseManager
+from communicate.Manager import RedisManager
 from schedule.Schedule import Schedule
 from utils.Manager import ProcessManager
 from utils.User import User
@@ -87,7 +88,7 @@ class ScheduleManager(ProcessManager):
         if super(ScheduleManager, self).command(command) is False and self.redisManager.isMine(command):
             if 'ls' in command._content:
                 [self.print('%s %s' % (key, value)) for (key, value) in self.schedules.items()]
-            elif 'load-folder' in command:
+            elif 'load-folder' in command._content:
                 [value.exit() for (key, value) in self.schedules.items()]
                 self.loadFolder(overwrite='-force' in command._content)
             elif 'start-all' in command._content:

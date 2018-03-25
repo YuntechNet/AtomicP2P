@@ -1,7 +1,7 @@
 from queue import Queue
 
-from database.Manager import RedisManager
-from utils.Task import Task
+from communicate.Manager import RedisManager
+from communicate.Command import Command
 from utils.Manager import Manager, ThreadManager, ProcessManager
 
 class TestManager:
@@ -66,9 +66,9 @@ class TestProcessManager:
     def test_command(self):
         process = ProcessManager('Test', Queue(), self.callbackForTestCommand)
         process.redisManager = RedisManager('Test-Redis', [], Queue(), None)
-        assert process.command(Task('A', 'B', 'TestContent')) == False
-        assert process.command(Task('A', 'Test-Redis', 'online-signal')) == True
-        assert process.command(Task('A', 'Test-Redis', 'heart-beat')) == True
-        assert process.command(Task('A', 'Test-Redis', 'heart-beat-response')) == True
-        assert process.command(Task('A', 'Test-Redis', 'shutdown')) == True
-        assert process.command(Task('A', 'Test-Redis', '(else indent)')) == False
+        assert process.command(Command('A', 'B', 'TestContent')) == False
+        assert process.command(Command('A', 'Test-Redis', 'online-signal')) == True
+        assert process.command(Command('A', 'Test-Redis', 'heart-beat')) == True
+        assert process.command(Command('A', 'Test-Redis', 'heart-beat-response')) == True
+        assert process.command(Command('A', 'Test-Redis', 'shutdown')) == True
+        assert process.command(Command('A', 'Test-Redis', '(else indent)')) == False

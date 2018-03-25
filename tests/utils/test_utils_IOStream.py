@@ -2,7 +2,7 @@ import pytest
 
 from queue import Queue
 
-from database.Manager import RedisManager
+from communicate.Manager import RedisManager
 from utils.IOStream import InputStream, OutputStream
 
 

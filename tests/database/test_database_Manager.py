@@ -3,8 +3,9 @@ from queue import Queue
 
 from Config import Config
 from database.Database import TempDatabase
-from database.Manager import DatabaseManager, RedisManager
-from utils.Task import Task
+from database.Manager import DatabaseManager
+from communicate.Manager import RedisManager
+from communicate.Command import Command
 
 class TestDatabaseManager:
 
@@ -59,8 +60,8 @@ class TestRedisManager:
 
     def test_isMine(self):
         redis = RedisManager('Test', [], Queue(), self.callbackForIsMine, config=None)
-        assert redis.isMine(Task('A', 'B', 'TestContent')) == False
-        assert redis.isMine(Task('A', 'Test', 'TestContent')) == True
+        assert redis.isMine(Command('A', 'B', 'TestContent')) == False
+        assert redis.isMine(Command('A', 'Test', 'TestContent')) == True
 
     def callbackForExit(self):
         pass

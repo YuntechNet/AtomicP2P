@@ -2,7 +2,6 @@ import time, threading, queue
 from multiprocessing import Process
 from multiprocessing import Event as ProcessEvent
 from utils.Enums import LogLevel
-from utils.Task import Task
 
 class Manager:
 
