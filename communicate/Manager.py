@@ -44,8 +44,8 @@ class RedisManager(ThreadManager):
             if self.isExit():
                 self.ps.close()
 
-    def pub(self, _from, _to, value):
-        self.rcon.publish(_to, Command(_from, _to, value).to())
+    def pub(self, _to, value):
+        self.rcon.publish(_to, value)
 
     #def pubAll(self, _from, value):
     #    for each in self.subscribeList:

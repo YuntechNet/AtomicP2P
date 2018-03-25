@@ -4,9 +4,10 @@ from Config import Config
 from database.Manager import DatabaseManager
 from communicate.Manager import RedisManager
 from schedule.Schedule import Schedule
+from schedule.Command import ScheduleCommand
 from utils.Manager import ProcessManager
 from utils.User import User
-from utils.Enums import UserPriority, LogLevel
+from utils.Enums import UserPriority, LogLevel, CommandType
 
 class ScheduleDatabaseManager(DatabaseManager):
 
@@ -30,7 +31,8 @@ class ScheduleManager(ProcessManager):
             self.stopped.set()
             return
         self.print('Config loaded.')
-        self.redisManager = RedisManager('ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue, self.command)
+        self.commander = ScheduleCommand(self)
+        self.redis = RedisManager('ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue, self.commander.process)
 
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
@@ -38,7 +40,7 @@ class ScheduleManager(ProcessManager):
         self.print('Inited.', LogLevel.SUCCESS)
 
     def start(self):
-        self.redisManager.start()
+        self.redis.start()
         self.databaseManager.start()
         super(ScheduleManager, self).start()
 
@@ -60,11 +62,11 @@ class ScheduleManager(ProcessManager):
                 jsonContent = fileConn.read()
 
                 if not filename in self.schedules:
-                    self.schedules[filename] = Schedule(filename, self.outputQueue, json.loads(jsonContent))
+                    self.schedules[filename] = Schedule(self, filename, self.outputQueue, json.loads(jsonContent))
                     self.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (filename, jsonContent.replace('\'', '\'\'')))
                     self.print('%s%s New schedule loaded and inserted into database.' % (path, filename))
                 elif overwrite:
-                    self.schedules[filename] = Schedule(filename, self.outputQueue, json.loads(jsonContent))
+                    self.schedules[filename] = Schedule(self, filename, self.outputQueue, json.loads(jsonContent))
                     self.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (jsonContent.replace('\'', '\'\''), filename))
                     self.print('%s%s Old schedule loaded and updated into database.' % (path, filename))
                 else:
@@ -84,20 +86,6 @@ class ScheduleManager(ProcessManager):
             if value.name == name:
                 return self.schedules[key]
 
-    def command(self, command): #Override
-        if super(ScheduleManager, self).command(command) is False and self.redisManager.isMine(command):
-            if 'ls' in command._content:
-                [self.print('%s %s' % (key, value)) for (key, value) in self.schedules.items()]
-            elif 'load-folder' in command._content:
-                [value.exit() for (key, value) in self.schedules.items()]
-                self.loadFolder(overwrite='-force' in command._content)
-            elif 'start-all' in command._content:
-                [value.start() for (key, value) in self.schedules.items()]
-            elif 'stop-all' in command._content:
-                [value.exit() for (key, value) in self.schedules.items()]
-            else:
-                self.redisManager.print(command.to())
-
     def run(self):
         while not self.stopped.wait(self.sleep):
             pass
@@ -105,7 +93,7 @@ class ScheduleManager(ProcessManager):
     def exit(self):
         for (name, instance) in self.schedules.items():
             instance.exit()
-        self.redisManager.exit()
+        self.redis.exit()
         self.databaseManager.exit()
         super(ScheduleManager, self).exit()
 

@@ -23,3 +23,7 @@ class LogLevel(enum.Enum):
     WARNING = '\x1b[0;33;49m'
     ERROR = '\x1b[0;31;49m'
     SUCCESS = '\x1b[1;32;49m'
+
+class CommandType(enum.IntEnum):
+    RECV = 1
+    SEND = 2

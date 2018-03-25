@@ -4,6 +4,7 @@ from Config import Config
 from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
 from switch.Switch import Switch
+from switch.Command import SwitchCommand
 from database.Manager import DatabaseManager
 from communicate.Manager import RedisManager
 
@@ -38,17 +39,14 @@ class SwitchManager(ProcessManager):
         if not self.loadConfig() or self.isExit():
             self.stopped.set()
         self.print('Config loaded.')
-        self.redisManager = RedisManager('SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue, self.command)
+        self.commander = SwitchCommand(self)
+        self.redis = RedisManager('SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue, self.commander.process)
         self.print('Inited.', LogLevel.SUCCESS)
 
     def start(self):
-        self.redisManager.start()
+        self.redis.start()
         self.databaseManager.start()
         super(SwitchManager, self).start()
-
-    def command(self, command):
-        if super(SwitchManager, self).command(command) is False and self.redisManager.isMine(command):
-            self.redisManager.print(command.to())
 
     def loadConfig(self):
         self.print('Loading config')
@@ -92,6 +90,6 @@ class SwitchManager(ProcessManager):
 
     def exit(self):
         self.databaseManager.exit()
-        self.redisManager.exit()
+        self.redis.exit()
         super(SwitchManager, self).exit()
 

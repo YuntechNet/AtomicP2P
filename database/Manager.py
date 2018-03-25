@@ -21,7 +21,7 @@ class DatabaseManager(ThreadManager):
 
     def run(self):
         while not self.stopped.wait(self.sleep):
-            self.syncToLocal()
+            self.sync()
 
     def sync(self):
         raise NotImplementedError

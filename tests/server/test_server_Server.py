@@ -11,7 +11,7 @@ class TestLibServer:
         with pytest.raises(OverflowError):
             s = LibServer(Queue(), ['--LIB_HOST=255.255.255.255', '--LIB_PORT=65536'])
         s = LibServer(Queue())
-        self.command(s)
+        #self.command(s)
         s.exit()
         assert s.isExit() == True
 

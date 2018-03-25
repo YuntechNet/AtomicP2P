@@ -1,7 +1,12 @@
 import os, time
 
+from communicate.Command import Command
+from core.Command import LibCiscoCommand
+from switch.Command import SwitchCommand
+from schedule.Command import ScheduleCommand
+from server.Command import LibServerCommand
 from utils.Manager import ThreadManager
-from utils.Enums import LogLevel
+from utils.Enums import LogLevel, CommandType
 
 class OutputStream(ThreadManager):
 
@@ -41,13 +46,13 @@ class InputStream(ThreadManager):
 
     def execute(self, choice):
         if '--libcisco' in choice:
-            self.redis.pub(self.redis.name, 'LibCisco-Redis', choice.replace('--libcisco ', ''))
+            LibCiscoCommand.processReq(self.redis, Command(self.redis.name, 'LibCisco-Redis', choice.replace('--libcisco ', '')))
         elif '--switch' in choice:
-            self.redis.pub(self.redis.name, 'SwitchManager-Redis', choice.replace('--switch ', ''))
+            SwitchCommand.processReq(self.redis, Command(self.redis.name, 'SwitchManager-Redis', choice.replace('--switch ', '')))
         elif '--schedule' in choice:
-            self.redis.pub(self.redis.name, 'ScheduleManager-Redis', choice.replace('--schedule ', ''))
+            ScheduleCommand.processReq(self.redis, Command(self.redis.name, 'ScheduleManager-Redis', choice.replace('--schedule ', '')))
         elif '--libserver' in choice:
-            self.redis.pub(self.redis.name, 'LibServer-Redis', choice.replace('--libserver ', ''))
+            LibServerCommand.processReq(self.redis, Command(self.redis.name, 'LibServer-Redis', choice.replace('--libserver ', '')))
         elif choice == 'exit':
             for (key, values) in self.instance.items():
                 values.exit()

@@ -18,7 +18,7 @@ class TestManager:
 
     def test_command(self):
         manager = Manager('Test', Queue())
-        manager.command('command')
+        #manager.command('command')
         pass
 
 class TestThreadManager:
@@ -63,9 +63,9 @@ class TestProcessManager:
     def callbackForTestCommand(self, command):
         assert command == 'exit'
 
-    def test_command(self):
+    def command(self):
         process = ProcessManager('Test', Queue(), self.callbackForTestCommand)
-        process.redisManager = RedisManager('Test-Redis', [], Queue(), None)
+        process.redis = RedisManager('Test-Redis', [], Queue(), None)
         assert process.command(Command('A', 'B', 'TestContent')) == False
         assert process.command(Command('A', 'Test-Redis', 'online-signal')) == True
         assert process.command(Command('A', 'Test-Redis', 'heart-beat')) == True
