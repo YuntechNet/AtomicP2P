@@ -5,21 +5,23 @@ from commands.Command import Command
 class TestCommand:
 
     def test_init(self):
-        command = Command()
-        assert command.name == ''
-        assert command.args == ''
+        c = Command()
+        assert c.name == ''
+        assert c.args == ''
 
     def test_insert(self):
-        command = Command()
-        command._insert_(' args')
-        assert command.args == 'args'
+        c = Command()
+        c._insert_(' args')
+        assert c.args == 'args'
 
-    @pytest.mark.skip(reason="Need switch for unit test")
+    @pytest.mark.skip('L18-35:Need switch for unit test')
     def test_execute(self):
-        command = Command()
+        pass
 
     def test_preExecute(self):
-        pass
+        c = Command()
+        c.__pre_execute__(None)
 
     def test_postExecute(self):
-        pass
+        c = Command()
+        c.__post_execute__(None)

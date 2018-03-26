@@ -1,49 +1,47 @@
 import pytest
-
 from queue import Queue
 
-from communicate.Manager import RedisManager
-from utils.IOStream import InputStream, OutputStream
-
-
-class TestInputStream:
-
-    def callbackForMainProcessCallback(self):
-        pass
-
-    def test_init(self):
-        iStream = InputStream(Queue())        
-        iStream.instance = { 'inputStream': iStream }
-        iStream.redis = RedisManager('Test', [], Queue(), self.callbackForMainProcessCallback)     
-        assert hasattr(iStream, 'outputQueue') == True
-        self.mainProcessCallback(iStream)
-
-    @pytest.mark.skip(reason='run loop can\'t be exit.')
-    def run(self):
-        pass
-
-    def mainProcessCallback(self, iStream):
-        iStream.mainProcessCallback('--libcisco') 
-        iStream.mainProcessCallback('--switch') 
-        iStream.mainProcessCallback('--schedule') 
-        iStream.mainProcessCallback('--libserver') 
-        iStream.mainProcessCallback('exit')
-        assert iStream.isExit() == True 
+from utils.IOStream import OutputStream, InputStream
 
 class TestOutputStream:
 
     def test_init(self):
-        iStream = InputStream(Queue())
-        oStream = OutputStream(iStream, Queue())
-        assert hasattr(oStream, 'inputStream') == True
-        assert hasattr(oStream, 'outputQueue') == True
-        self.exit(oStream)
+        oS = OutputStream(None, Queue())
+        assert oS.inputStream == None
+        assert oS.outputQueue.qsize() == 2
 
-    @pytest.mark.skip(reason='run loop can\'t be exit.')
-    def run(self):
+    @pytest.mark.skip('L19-24:Seaking mock.')
+    def test_run(self):
         pass
 
-    def exit(self, oStream):
-        oStream.exit()
-        assert oStream.isExit() == True
-        
+    def test_exit(self):
+        oS = OutputStream(None, Queue())
+        assert oS.isExit() == False
+        oS.exit()
+        assert oS.isExit() == True
+
+class TestInputStream:
+
+    def test_init(self):
+        iS = InputStream(Queue())
+        assert iS.outputQueue.qsize() == 2
+
+    def test_mainProcessCallback(self):
+        iS = InputStream(Queue())
+        iS.instance = { 'inputStream': iS }
+        iS.mainProcessCallback('exit')
+        assert iS.isExit() == True
+
+    @pytest.mark.skip('L41-45:Seaking mock.')
+    def test_run(sefl):
+        pass
+
+    def test_execute(self):
+        iS = InputStream(Queue())
+        iS.instance = { 'inputStream': iS }
+        #iS.execute('--libcisco')
+        #iS.execute('--switch')
+        #iS.execute('--schedule')
+        #iS.execute('--libserver')
+        iS.execute('exit')
+        assert iS.isExit() == True
