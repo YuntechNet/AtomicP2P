@@ -56,20 +56,21 @@ class ScheduleManager(ProcessManager):
 
     def loadFolder(self, path=None, overwrite=False):
         path = path if path else './schedule/static/'
-        for filename in os.listdir(path if path else './schedule/static/'):
+        for filename in os.listdir(path):
             if os.path.isfile(path + filename):
                 fileConn = open(path + filename)
                 jsonContent = fileConn.read()
+                schedule = Schedule(self, filename, self.outputQueue, json.loads(jsonContent))
 
-                if not filename in self.schedules:
-                    self.schedules[filename] = Schedule(self, filename, self.outputQueue, json.loads(jsonContent))
-                    self.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (filename, jsonContent.replace('\'', '\'\'')))
+                if not filename in self.schedules and schedule:
+                    self.schedules[filename] = schedule
+                    self.databaseManager.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (filename, jsonContent.replace('\'', '\'\'')))
                     self.print('%s%s New schedule loaded and inserted into database.' % (path, filename))
-                elif overwrite:
-                    self.schedules[filename] = Schedule(self, filename, self.outputQueue, json.loads(jsonContent))
+                elif overwrite and schedule:
+                    self.schedules[filename] = schedule
                     self.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (jsonContent.replace('\'', '\'\''), filename))
                     self.print('%s%s Old schedule loaded and updated into database.' % (path, filename))
-                else:
+                elif schedule:
                     self.print('%s%s Schedule is exists, abort. add -force to overwrite.' % (path, filename))
                 fileConn.close()
             else:
@@ -78,8 +79,10 @@ class ScheduleManager(ProcessManager):
     def toSystem(self):
         schedulesInDB = self.databaseManager.temporDB.execute('SELECT * FROM `Schedule`').fetchall()
         for (name, jsonContent) in schedulesInDB:
-            self.schedules[name] = Schedule(self, name, self.outputQueue, json.loads(jsonContent))
-            self.schedules[name].start()
+            schedule = Schedule(self, name, self.outputQueue, json.loads(jsonContent))
+            if not name in self.schedules and schedule:
+                self.schedules[name] = schedule
+                #self.schedules[name].start()
 
     def getScheduleByName(self, name):
         for (key, value) in self.schedules.items():

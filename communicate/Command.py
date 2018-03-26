@@ -33,7 +33,7 @@ class Online(Command):
 
     def res(self, INS):
         self.swap()
-        seld._content = 'I\'m online bitch!'
+        self._content = 'I\'m online bitch!'
         return self
 
 class HeartBeat(Command):
@@ -68,20 +68,20 @@ class Commander:
 
     def process(self, command):
         if 'online' in command._content:
-            Onlin(command).res(self.INS).send(self.INS.redis)
+            Online(command).res(self.INS).send(self.INS.redis)
         elif 'heart-beat' in command._content:
             HeartBeat(command).res(self.INS).send(self.INS.redis)
         elif 'shutdown' in command._content:
             Shutdown(command).res(self.INS).send(self.INS.redis)
         else:
-            return True
-        return False
+            return False
+        return True
 
     @staticmethod
     def processReq(redis, command):
         cmdIns = None
         if 'online' in command._content:
-            cmdIns = Onlin(command)
+            cmdIns = Online(command)
         elif 'heart-beat' in command._content:
             cmdIns = HeartBeat(command)
         elif 'shutdown' in command._content:

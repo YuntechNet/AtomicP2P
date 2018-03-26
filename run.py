@@ -9,8 +9,7 @@ from communicate.Manager import RedisManager
 from communicate.Command import Command
 from utils.IOStream import InputStream, OutputStream
 
-if __name__ == '__main__':
-
+def main(argv, debug=False):
     try:
         instance = {}
         outputQueue = Queue()
@@ -18,33 +17,29 @@ if __name__ == '__main__':
         inputStream = InputStream(outputQueue)
         outputStream = OutputStream(inputStream, outputQueue)
 
-        for each in sys.argv:
-            if '--Core' in each:
-                libCisco = LibCisco(outputQueue, argv=sys.argv, callback=inputStream.mainProcessCallback)
-                libCisco.start()
+        for each in argv:
+            if '--LibCisco' in each:
+                libCisco = LibCisco(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
                 instance['libCisco'] = libCisco
                 inputStream.redis = libCisco.redis
             elif '--SwitchManager' in each:
-                switchManager = SwitchManager(outputQueue, argv=sys.argv, callback=inputStream.mainProcessCallback)
-                switchManager.start()
+                switchManager = SwitchManager(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
                 instance['switchManager'] = switchManager
                 inputStream.redis = switchManager.redis
             elif '--ScheduleManager' in each:
-                scheduleManager = ScheduleManager(outputQueue, argv=sys.argv, callback=inputStream.mainProcessCallback)
-                scheduleManager.start()
+                scheduleManager = ScheduleManager(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
                 instance['scheduleManager'] = scheduleManager
                 inputStream.redis = scheduleManager.redis
             elif '--LibServer' in each:
-                libServer = LibServer(outputQueue, argv=sys.argv, callback=inputStream.mainProcessCallback)
-                libServer.start()
+                libServer = LibServer(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
                 instance['libServer'] = libServer
                 inputStream.redis = libServer.redis
 
         if instance == {}:
-            libCisco = LibCisco(outputQueue, argv=sys.argv, callback=inputStream.mainProcessCallback)
-            switchManager = SwitchManager(outputQueue, argv=sys.argv, callback=inputStream.mainProcessCallback)
-            scheduleManager = ScheduleManager(outputQueue, argv=sys.argv, callback=inputStream.mainProcessCallback)
-            libServer = LibServer(outputQueue, argv=sys.argv, callback=inputStream.mainProcessCallback)
+            libCisco = LibCisco(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
+            switchManager = SwitchManager(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
+            scheduleManager = ScheduleManager(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
+            libServer = LibServer(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
             inputStream.redis = libCisco.redis
             instance = {
                 'libCisco': libCisco,
@@ -52,16 +47,21 @@ if __name__ == '__main__':
                 'scheduleManager': scheduleManager,
                 'libServer': libServer
             }
+        if not debug:
             [ value.start() for (key, value) in instance.items() ]
 
         instance['inputStream'] = inputStream
         inputStream.instance = instance
-        inputStream.start()
 
-        outputStream.start()
+        if not debug:
+            inputStream.start()
+            outputStream.start()
 
         #inputStream.redis.pubAll(inputStream.redis.name, 'online-signal')
-        outputStream.join()
+        return (instance, inputStream, outputStream)
     except:
         traceback.print_exc()
     
+if __name__ == '__main__':
+    instance, inputStream, outputStream = main(sys.argv)
+    outputStream.join()

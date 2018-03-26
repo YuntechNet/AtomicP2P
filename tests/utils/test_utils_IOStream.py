@@ -8,21 +8,21 @@ from utils.IOStream import InputStream, OutputStream
 
 class TestInputStream:
 
-    def test_init(self):
-        iStream = InputStream(Queue())        
-        assert hasattr(iStream, 'outputQueue') == True
-
-    @pytest.mark.skip(reason='run loop can\'t be exit.')
-    def test_run(self):
-        pass
-
     def callbackForMainProcessCallback(self):
         pass
 
-    def test_mainProcessCallback(self):
-        iStream = InputStream(Queue())
-        iStream.redis = RedisManager('Test', [], Queue(), self.callbackForMainProcessCallback)     
+    def test_init(self):
+        iStream = InputStream(Queue())        
         iStream.instance = { 'inputStream': iStream }
+        iStream.redis = RedisManager('Test', [], Queue(), self.callbackForMainProcessCallback)     
+        assert hasattr(iStream, 'outputQueue') == True
+        self.mainProcessCallback(iStream)
+
+    @pytest.mark.skip(reason='run loop can\'t be exit.')
+    def run(self):
+        pass
+
+    def mainProcessCallback(self, iStream):
         iStream.mainProcessCallback('--libcisco') 
         iStream.mainProcessCallback('--switch') 
         iStream.mainProcessCallback('--schedule') 
@@ -37,14 +37,13 @@ class TestOutputStream:
         oStream = OutputStream(iStream, Queue())
         assert hasattr(oStream, 'inputStream') == True
         assert hasattr(oStream, 'outputQueue') == True
+        self.exit(oStream)
 
     @pytest.mark.skip(reason='run loop can\'t be exit.')
-    def test_run(self):
+    def run(self):
         pass
 
-    def test_exit(self):
-        iStream = InputStream(Queue())
-        oStream = OutputStream(iStream, Queue())
+    def exit(self, oStream):
         oStream.exit()
         assert oStream.isExit() == True
         

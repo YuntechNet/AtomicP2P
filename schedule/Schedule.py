@@ -22,8 +22,10 @@ class Schedule(ThreadManager):
             self.nextSchedule = manager.getScheduleByName(json['nextSchedule'])
             self.print(str(self.startTime) + '/' +  str(self.sleep) + '/' + str((datetime.now() - self.startTime).total_seconds()))
             self.print('Inited.', LogLevel.SUCCESS)
+            return self
         except KeyError as keyErr:
             self.print('Init schedule failed: KeyError with missing %s' % keyErr, LogLevel.WARNING)
+            return None
         except:
             traceback.print_exc()
 

@@ -25,8 +25,9 @@ class LoadFolder(Command):
         return self
 
     def res(self, INS):
-        [value.exit() for (key, value) in INS.schedules.items()]
         INS.loadFolder(overwrite='-force' in self._content)
+        self.swap()
+        self._content = 'Done~~~'
         return self
 
 class Start(Command):
@@ -68,8 +69,8 @@ class ScheduleCommand(Commander):
                 Start(command).res(self.INS).send(self.INS.redis)
             elif 'stop' in command._content:
                 Stop(command).res(self.INS).send(self.INS.redis)
-        else:
-            self.INS.redis.print('message from %s: %s' % (command._from, command._content))
+            else:
+                self.INS.redis.print('message from %s: %s' % (command._from, command._content))
 
     @staticmethod
     def processReq(redis, command):

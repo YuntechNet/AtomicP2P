@@ -32,12 +32,13 @@ class SwitchDatabaseManager(DatabaseManager):
 #
 class SwitchManager(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=1, callback=None):
+    def __init__(self, outputQueue, argv=None, sleep=1, callback=None, config=Config):
         ProcessManager.__init__(self, 'SwitchManager', outputQueue, callback)
         self.sleep = sleep
 
-        if not self.loadConfig() or self.isExit():
+        if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
+            return
         self.print('Config loaded.')
         self.commander = SwitchCommand(self)
         self.redis = RedisManager('SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue, self.commander.process)
@@ -48,11 +49,11 @@ class SwitchManager(ProcessManager):
         self.databaseManager.start()
         super(SwitchManager, self).start()
 
-    def loadConfig(self):
+    def loadConfig(self, config):
         self.print('Loading config')
-        if hasattr(Config, 'SWITCH_MANAGER'):
+        if hasattr(config, 'SWITCH_MANAGER'):
             self.device = []
-            self.config = Config.SWITCH_MANAGER
+            self.config = config.SWITCH_MANAGER
             self.databaseManager = SwitchDatabaseManager(self.outputQueue, self.config)
             if 'STATIC' in self.config:
                 for each in self.config['STATIC']:

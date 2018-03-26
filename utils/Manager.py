@@ -38,6 +38,9 @@ class ProcessManager(Process, Manager):
         self.stopped = ProcessEvent()
         self.mainProcessCallback = callback
 
+    def start(self):
+        super(ProcessManager, self).start()
+
     def exit(self):
         self.stopped.set()
         self.print('stop signal recieved & set. PID: %s' % str(self.pid))

@@ -7,8 +7,6 @@ class SwitchCommand(Commander):
 
     def process(self, command):
         if not super(SwitchCommand, self).process(command):
-            pass
-        else:
             self.INS.redis.print('message from %s: %s' % (command._from, command._content))
 
     @staticmethod

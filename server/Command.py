@@ -7,8 +7,6 @@ class LibServerCommand(Commander):
 
     def process(self, command):
         if not super(LibServerCommand, self).process(command):
-            pass
-        else:
             self.INS.redis.print('message from %s: %s' % (command._from, command._content))
 
     @staticmethod
