@@ -1,6 +1,6 @@
 import os, time
 
-from communicate.Command import Command
+from network.Command import Command
 from core.Command import LibCiscoCommand
 from switch.Command import SwitchCommand
 from schedule.Command import ScheduleCommand

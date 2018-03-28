@@ -1,6 +1,6 @@
 from utils.Manager import ProcessManager
 from core.Command import LibCiscoCommand
-from communicate.Manager import RedisManager
+from network.Manager import RedisManager
 from switch.Manager import SwitchManager
 
 class LibCisco(ProcessManager):

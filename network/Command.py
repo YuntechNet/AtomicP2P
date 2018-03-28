@@ -2,18 +2,19 @@ import json
 
 class Command:
 
-    def __init__(self, _from, _to, _content):
+    def __init__(self, _from, _to, _content, _data=None):
         self._from = _from
         self._to = _to
         self._content = _content
+        self._data = _data
     
     @staticmethod
     def parse(data):
         jsonDict = json.loads(data)
-        return Command(jsonDict['_from'], jsonDict['_to'], jsonDict['_content'])
+        return Command(jsonDict['_from'], jsonDict['_to'], jsonDict['_content'], jsonDict['_data'])
 
     def to(self):
-        return json.dumps({ '_from': self._from, '_to': self._to, '_content': self._content })
+        return json.dumps({ '_from': self._from, '_to': self._to, '_content': self._content, '_data': self._data })
     
     def send(self, redis):
         redis.pub(self._to, self.to())

@@ -1,4 +1,17 @@
-from communicate.Command import Command, Commander
+import json
+
+from network.Command import Command, Commander
+
+class ExecuteScript(Command):
+
+    def __init__(self, cmd):
+        Command.__init__(self, cmd._from, cmd._to, cmd._content, cmd._data)
+
+    def req(self):
+        return self
+
+    def res(self, INS):
+        return self
 
 class SwitchCommand(Commander):
 
@@ -12,5 +25,11 @@ class SwitchCommand(Commander):
     @staticmethod
     def processReq(redis, command):
         if not Commander.processReq(redis, command):
-            pass
+            cmdIns = None
+            if 'execute-script' in command._content:
+                cmdIns = ExecuteScript(command)
+
+            if cmdIns:
+                cmdIns.req().send(redis)
+                return True
         return False

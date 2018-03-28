@@ -1,24 +1,24 @@
 import pytest, json
 
-from communicate.Command import Command, Online, HeartBeat, Shutdown, Commander
-from communicate.Manager import RedisManager
+from network.Command import Command, Online, HeartBeat, Shutdown, Commander
+from network.Manager import RedisManager
 
 class TestCommand:
+
     def test_init(self):
         c = Command('A', 'B', 'Test')
         assert c._from == 'A'
         assert c._to == 'B'
         assert c._content == 'Test'
     
-    def test_parse(self):
-        j = json.dumps({'_from': 'A', '_to': 'B', '_content': 'Test'})
-        c = Command.parse(data=j)
+    def test_parse(self, mocker):
+        c = Command.parse(json.dumps({'_from': 'A', '_to': 'B', '_content': 'Test', '_data': None}))
         assert c._from == 'A'
         assert c._to == 'B'
         assert c._content == 'Test'
 
     def test_to(self):
-        j = json.dumps({'_from': 'A', '_to': 'B', '_content': 'Test'})
+        j = json.dumps({'_from': 'A', '_to': 'B', '_content': 'Test', '_data': None})
         jStr = Command('A', 'B', 'Test').to()
         assert jStr == j
         

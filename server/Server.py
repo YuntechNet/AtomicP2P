@@ -4,7 +4,7 @@ from Config import Config
 from server.Command import LibServerCommand
 from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
-from communicate.Manager import RedisManager
+from network.Manager import RedisManager
 
 class LibServer(ProcessManager):
 

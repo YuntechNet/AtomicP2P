@@ -5,8 +5,8 @@ from core.LibCisco import LibCisco
 from switch.Manager import SwitchManager
 from server.Server import LibServer
 from schedule.Manager import ScheduleManager
-from communicate.Manager import RedisManager
-from communicate.Command import Command
+from network.Manager import RedisManager
+from network.Command import Command
 from utils.IOStream import InputStream, OutputStream
 
 def main(argv, debug=False):

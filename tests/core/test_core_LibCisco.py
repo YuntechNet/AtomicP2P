@@ -1,6 +1,6 @@
 from queue import Queue
 
-from communicate.Command import Command
+from network.Command import Command
 from core.LibCisco import LibCisco
 
 class TestLibCisco:

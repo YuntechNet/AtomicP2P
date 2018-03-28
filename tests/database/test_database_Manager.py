@@ -4,8 +4,8 @@ from queue import Queue
 from Config import Config
 from database.Database import TempDatabase
 from database.Manager import DatabaseManager
-from communicate.Manager import RedisManager
-from communicate.Command import Command
+from network.Manager import RedisManager
+from network.Command import Command
 
 class TestDatabaseManager:
 

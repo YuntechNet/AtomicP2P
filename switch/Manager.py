@@ -6,7 +6,7 @@ from utils.Manager import ProcessManager
 from switch.Switch import Switch
 from switch.Command import SwitchCommand
 from database.Manager import DatabaseManager
-from communicate.Manager import RedisManager
+from network.Manager import RedisManager
 
 class SwitchDatabaseManager(DatabaseManager):
 

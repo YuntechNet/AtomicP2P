@@ -6,21 +6,30 @@ from utils.Explainer import ScriptExplainer
 from utils.Enums import LogLevel
 from utils.Manager import ThreadManager
 
+class Type:
+
+    def __int__(self, json):
+        if 'text' in json:
+            self.mode = 'text'
+        elif 'count' in json:
+            self.mode = 'count'
+            self.time = json['count']
+        elif 'cron' in json:
+            self.mode = 'cron'
+            self.time = json['cron']
+
 class Schedule(ThreadManager):
 
     def __init__(self, manager, name, outputQueue, json):
         ThreadManager.__init__(self, 'Schedule-%s' % name, outputQueue)
         try:
+            self.name = json['name']
             self.target = json['target']
-            self.startTime = datetime.fromtimestamp(json['startTime'])
-            self.period = json['period']
-            self.scriptExp = ScriptExplainer({
-                'preCommand': json['preCommand'],
-                'command': json['command']
-            })
-            self.sleep = int(self.period - (datetime.now() - self.startTime).total_seconds() % self.period)
+            self.type = Type(json['type'])
+            self.beforeScript = json['beforeScript']
+            self.script = json['script']
             self.nextSchedule = manager.getScheduleByName(json['nextSchedule'])
-            self.print(str(self.startTime) + '/' +  str(self.sleep) + '/' + str((datetime.now() - self.startTime).total_seconds()))
+            self.sleep = 0
             self.print('Inited.', LogLevel.SUCCESS)
             return self
         except KeyError as keyErr:
@@ -28,16 +37,27 @@ class Schedule(ThreadManager):
             return None
         except:
             traceback.print_exc()
+            return None
+
+    def calSleep(self):
+        if self.type.mode == 'count':
+            return self.type.time
+        elif self.type.mode == 'cron':
+            return (datetime.now() - datetime.strptime('%H:%M:%S', self.type.time)).total_seconds()
 
     def start(self):
+        if self.type.mode == 'text':
+            pass
+        else:
+            self.sleep = self.calSleep()
         super(Schedule, self).start()
+
         self.print('%s started.' % self.name)
 
     def run(self):
         while not self.stopped.wait(self.sleep):
-            for each in self.command:
-                exec(each)
-            self.sleep = self.period
+            pass
+            self.sleep = self.calSleep()
 
 class NextSchedule:
     

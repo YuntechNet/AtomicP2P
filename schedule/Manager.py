@@ -2,7 +2,7 @@ import json, os
 
 from Config import Config
 from database.Manager import DatabaseManager
-from communicate.Manager import RedisManager
+from network.Manager import RedisManager
 from schedule.Schedule import Schedule
 from schedule.Command import ScheduleCommand
 from utils.Manager import ProcessManager

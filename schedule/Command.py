@@ -1,5 +1,5 @@
 
-from communicate.Command import Command, Commander
+from network.Command import Command, Commander
 from utils.Enums import CommandType
 
 class List(Command):

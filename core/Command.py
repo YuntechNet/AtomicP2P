@@ -1,4 +1,4 @@
-from communicate.Command import Command, Commander
+from network.Command import Command, Commander
 
 class LibCiscoCommand(Commander):
 

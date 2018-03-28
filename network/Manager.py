@@ -1,7 +1,7 @@
 import redis
 
 from Config import Config
-from communicate.Command import Command
+from network.Command import Command
 from utils.Manager import ThreadManager
 from utils.Enums import LogLevel
 

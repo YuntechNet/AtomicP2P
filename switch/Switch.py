@@ -55,8 +55,7 @@ class Switch:
             self.lock.unLock()
         return result
 
-    def initSwitch(self, operator, timeout=60, debug=False):
-        result = self.singleExecute(operator=operator, singleCommand=Show('run'), short=False, timeout=timeout)
-        if debug:
-            print(result)
-        self.config.loadConfig(result, debug)
+    def initSwitch(self, debug=False):
+        #self.config.loadConfig(debug)
+        self.config.loadNeighbor(debug)
+

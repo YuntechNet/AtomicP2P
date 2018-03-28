@@ -3,7 +3,7 @@ from getpass import getpass
 from Config import Config
 from switch.Switch import Switch
 from utils.Executor import Executor
-from script_mode import script_mode
+#from script_mode import script_mode
 from utils.Explainer import ScriptExplainer
 
 try:
@@ -14,8 +14,8 @@ except:
     password = getpass()
 
 # Testing switch  
-#sw1 = Switch({'host': host, 'username': username, 'password': password})
-#sw1.initSwitch(operator='system', debug=True)
+sw1 = Switch({'host': host, 'username': username, 'password': password})
+sw1.initSwitch(True)
 
 # Testing send string command
 #s = ssh_switch(host=host,username=username,password=password)
@@ -23,9 +23,9 @@ except:
 
 #script = script_mode('./test.json')
 #command_list = script.explain_to_list()
-script = ScriptExplainer('./schedule/static/test.json')
-command_list = script.explainToList()
-print(command_list)
+#script = ScriptExplainer('./schedule/static/test.json')
+#command_list = script.explainToList()
+#print(command_list)
 
 #exe = Executor(s)
 
