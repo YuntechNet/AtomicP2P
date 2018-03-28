@@ -40,6 +40,8 @@ class Start(Command):
 
     def res(self, INS):
         [value.start() for (key, value) in INS.schedules.items()]
+        self.swap()
+        self._content = 'DONE START'
         return self
 
 class Stop(Command):
@@ -52,6 +54,8 @@ class Stop(Command):
 
     def res(self, INS):
         [value.exit() for (key, value) in INS.schedules.items()]
+        self.swap()
+        self._content = 'DONE STOP'
         return self
 
 class ScheduleCommand(Commander):

@@ -1,9 +1,11 @@
 {
-    "startTime": 1520870400,
-    "period": 10,
-	"preCommand":[],
-	"command":[
-		"print(str(datetime.now()))\n"
-	],
+    "name": "test-count",
+    "target": null,
+    "type": {
+        "startTS": 1522261157,
+        "count": 10
+    },
+	"beforeScript":[],
+	"script":[],
     "nextSchedule": null
 }

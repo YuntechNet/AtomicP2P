@@ -37,6 +37,7 @@ class ScheduleManager(ProcessManager):
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
         self.toSystem()
+        self.scheduleStart()
         self.print('Inited.', LogLevel.SUCCESS)
 
     def start(self):
@@ -58,33 +59,41 @@ class ScheduleManager(ProcessManager):
         path = path if path else './schedule/static/'
         for filename in os.listdir(path):
             if os.path.isfile(path + filename):
-                fileConn = open(path + filename)
-                jsonContent = fileConn.read()
-                schedule = Schedule(self, filename, self.outputQueue, json.loads(jsonContent))
+                with open(path + filename, encoding='utf-8') as fileConn:
+                    jsonStr = fileConn.read()
+                    jsonContent = json.loads(jsonStr)
+                    select = self.databaseManager.temporDB.execute('SELECT * FROM `Schedule` WHERE NAME=\'%s\';' % jsonContent['name']).fetchall()
 
-                if not filename in self.schedules and schedule:
-                    self.schedules[filename] = schedule
-                    self.databaseManager.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (filename, jsonContent.replace('\'', '\'\'')))
-                    self.print('%s%s New schedule loaded and inserted into database.' % (path, filename))
-                elif overwrite and schedule:
-                    self.schedules[filename] = schedule
-                    self.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (jsonContent.replace('\'', '\'\''), filename))
-                    self.print('%s%s Old schedule loaded and updated into database.' % (path, filename))
-                elif schedule:
-                    self.print('%s%s Schedule is exists, abort. add -force to overwrite.' % (path, filename))
-                fileConn.close()
+                    if select == []:
+                        self.databaseManager.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (jsonContent['name'], json.dumps(jsonContent)))
+                        self.print('%s%s New schedule %s loaded and inserted into database.' % (path, filename, jsonContent['name']))
+                    else:
+                        self.databaseManager.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (json.dumps(jsonContent), jsonContent['name']))
+                        self.print('%s%s Old schedule %s loaded and updated into database.' % (path, filename, jsonContent['name']))
             else:
                 self.print('%s%s folder detected, ignore.' % (path, filename))
+        self.toSystem()
 
     def toSystem(self):
         schedulesInDB = self.databaseManager.temporDB.execute('SELECT * FROM `Schedule`').fetchall()
         for (name, jsonContent) in schedulesInDB:
-            schedule = Schedule(self, name, self.outputQueue, json.loads(jsonContent))
-            if not name in self.schedules and schedule:
+            if name in self.schedules:
+                self.schedules[name].update(json.loads(jsonContent))
+            else:
+                schedule = Schedule(self, self.outputQueue, json.loads(jsonContent))
                 self.schedules[name] = schedule
-                #self.schedules[name].start()
+
+    def scheduleStart(self, name=None):
+        if not name:
+            [ value.start() for (key, value) in self.schedules.items() ]
+        else:
+            for (key, value) in self.schedules.items():
+                if key in name:
+                    value.start()
 
     def getScheduleByName(self, name):
+        if not name:
+            return None
         for (key, value) in self.schedules.items():
             if value.name == name:
                 return self.schedules[key]
@@ -94,8 +103,8 @@ class ScheduleManager(ProcessManager):
             pass
 
     def exit(self):
-        for (name, instance) in self.schedules.items():
-            instance.exit()
+        for (name, schedule) in self.schedules.items():
+            schedule.exit()
         self.redis.exit()
         self.databaseManager.exit()
         super(ScheduleManager, self).exit()
