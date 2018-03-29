@@ -73,7 +73,6 @@ class Stop(Command):
             for (key, value) in INS.schedules.copy().items():
                 if key in argv:
                     value.exit()
-                    del INS.schedules[key]
         else:
             [value.exit() for (key, value) in INS.schedules.items()]
             INS.schedules.clear()

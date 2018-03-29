@@ -1,9 +1,7 @@
 {
     "name": "test-count2222",
     "target": null,
-    "type": {
-        "cron": "*/2 * * * *"
-    },
+    "type": "text",
 	"beforeScript":[],
 	"script":[],
     "nextSchedule": null

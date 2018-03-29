@@ -45,6 +45,8 @@ class Schedule(ThreadManager):
             return self.type.time - int((time.time() - self.type.TS) % self.type.time)
         elif self.type.mode == 'cron':
             return (croniter(self.type.time, datetime.now()).get_next(datetime) - datetime.now()).total_seconds()
+        else:
+            return 5
 
     def update(self, json):
         try:
@@ -61,12 +63,13 @@ class Schedule(ThreadManager):
             traceback.print_exc()
 
     def exit(self):
+        del self.manager.schedules[self.name[9:]]
         self.name = '%s(Exited)' % self.name
         super(Schedule, self).exit()
 
     def start(self):
         if self.type.mode == 'text':
-            pass
+            self.sleep = 5
         else:
             self.sleep = self.calSleep()
         super(Schedule, self).start()
@@ -74,9 +77,13 @@ class Schedule(ThreadManager):
 
     def run(self):
         while not self.stopped.wait(self.sleep):
+            if self.isExit():
+                break
             self.lastRun = time.time()
             self.print('TEST')
             self.sleep = self.calSleep()
+            if self.type.mode == 'text':
+                self.exit()
 
     def info(self):
         return "%s ,last run at %d" % (self, self.lastRun)

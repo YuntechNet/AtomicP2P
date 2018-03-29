@@ -112,7 +112,7 @@ class ScheduleManager(ProcessManager):
             pass
 
     def exit(self):
-        for (name, schedule) in self.schedules.items():
+        for (name, schedule) in self.schedules.copy().items():
             schedule.exit()
         self.redis.exit()
         self.databaseManager.exit()
