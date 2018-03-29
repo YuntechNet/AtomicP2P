@@ -1,0 +1,5 @@
+{% for user in users %}
+no ip source binding {{user.mac}} vlan {{user.vlan}} {{user.ip}} interface {{user.interface}}
+ip source binding {{user.mac}} vlan {{user.vlan}} {{user.ip}} interface {{user.interface}}
+{% endfor %}
+

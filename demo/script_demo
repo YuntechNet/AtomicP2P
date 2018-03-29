@@ -1,0 +1,4 @@
+con terminal
+{% extends "lock" %}
+end
+write
