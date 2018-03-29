@@ -55,33 +55,42 @@ class ScheduleManager(ProcessManager):
             self.print('Config must contain SCHEDULE_MANAGER attribute.', LogLevel.ERROR)
             return False
 
-    def loadFolder(self, path=None, overwrite=False):
-        path = path if path else './schedule/static/'
-        for filename in os.listdir(path):
-            if os.path.isfile(path + filename):
-                with open(path + filename, encoding='utf-8') as fileConn:
-                    jsonStr = fileConn.read()
-                    jsonContent = json.loads(jsonStr)
-                    select = self.databaseManager.temporDB.execute('SELECT * FROM `Schedule` WHERE NAME=\'%s\';' % jsonContent['name']).fetchall()
+    def openFile(self, filePath):
+        with open(filePath, encoding='utf-8') as fileConn:
+            jsonStr = fileConn.read()
+            jsonContent = json.loads(jsonStr)
+            select = self.databaseManager.temporDB.execute('SELECT * FROM `Schedule` WHERE NAME=\'%s\';' % jsonContent['name']).fetchall()
 
-                    if select == []:
-                        self.databaseManager.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (jsonContent['name'], json.dumps(jsonContent)))
-                        self.print('%s%s New schedule %s loaded and inserted into database.' % (path, filename, jsonContent['name']))
-                    else:
-                        self.databaseManager.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (json.dumps(jsonContent), jsonContent['name']))
-                        self.print('%s%s Old schedule %s loaded and updated into database.' % (path, filename, jsonContent['name']))
+            if select == []:
+                self.databaseManager.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (jsonContent['name'], json.dumps(jsonContent)))
+                self.print('%s New schedule %s loaded and inserted into database.' % (filePath, jsonContent['name']))
             else:
-                self.print('%s%s folder detected, ignore.' % (path, filename))
-        self.toSystem()
+                self.databaseManager.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (json.dumps(jsonContent), jsonContent['name']))
+                self.print('%s Old schedule %s loaded and updated into database.' % (filePath, jsonContent['name']))
 
-    def toSystem(self):
+    def loadFolder(self, path=None, overwrite=False, immediate=False):
+        path = path if path else './schedule/static/'
+        if os.path.isfile(path):
+            self.openFile(path)
+        else:
+            for filename in os.listdir(path):
+                if os.path.isfile(path + filename):
+                    self.openFile(path + filename)
+                else:
+                    self.print('%s%s folder detected, ignore.' % (path, filename))
+        self.toSystem(immediate=immediate)
+
+    def toSystem(self, immediate=False):
         schedulesInDB = self.databaseManager.temporDB.execute('SELECT * FROM `Schedule`').fetchall()
         for (name, jsonContent) in schedulesInDB:
             if name in self.schedules:
-                self.schedules[name].update(json.loads(jsonContent))
+                if immediate:
+                    self.schedules[name].exit()
+                    self.schedules[name] = Schedule(self, self.outputQueue, json.loads(jsonContent))
+                else:
+                    self.schedules[name].update(json.loads(jsonContent))
             else:
-                schedule = Schedule(self, self.outputQueue, json.loads(jsonContent))
-                self.schedules[name] = schedule
+                self.schedules[name] = Schedule(self, self.outputQueue, json.loads(jsonContent))
 
     def scheduleStart(self, name=None):
         if not name:

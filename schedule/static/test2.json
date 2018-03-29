@@ -1,8 +1,8 @@
 {
-    "name": "test-count",
+    "name": "test-count2222",
     "target": null,
     "type": {
-        "cron": "*/1 * * * *"
+        "cron": "*/2 * * * *"
     },
 	"beforeScript":[],
 	"script":[],

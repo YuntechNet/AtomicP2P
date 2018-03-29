@@ -1,4 +1,5 @@
 import traceback, time
+from croniter import croniter
 from threading import Event
 from datetime import datetime, timedelta
 
@@ -32,6 +33,7 @@ class Schedule(ThreadManager):
             self.script = json['script']
             self.nextSchedule = self.manager.getScheduleByName(json['nextSchedule'])
             self.sleep = 0
+            self.lastRun = 0
             self.print('Inited.', LogLevel.SUCCESS)
         except KeyError as keyErr:
             self.print('Init schedule failed: KeyError with missing %s' % keyErr, LogLevel.WARNING)
@@ -42,7 +44,7 @@ class Schedule(ThreadManager):
         if self.type.mode == 'count':
             return self.type.time - int((time.time() - self.type.TS) % self.type.time)
         elif self.type.mode == 'cron':
-            return (datetime.now() - datetime.strptime('%H:%M:%S', self.type.time)).total_seconds()
+            return (croniter(self.type.time, datetime.now()).get_next(datetime) - datetime.now()).total_seconds()
 
     def update(self, json):
         try:
@@ -58,6 +60,10 @@ class Schedule(ThreadManager):
         except:
             traceback.print_exc()
 
+    def exit(self):
+        self.name = '%s(Exited)' % self.name
+        super(Schedule, self).exit()
+
     def start(self):
         if self.type.mode == 'text':
             pass
@@ -68,8 +74,12 @@ class Schedule(ThreadManager):
 
     def run(self):
         while not self.stopped.wait(self.sleep):
+            self.lastRun = time.time()
             self.print('TEST')
             self.sleep = self.calSleep()
+
+    def info(self):
+        return "%s ,last run at %d" % (self, self.lastRun)
 
 class NextSchedule:
     
