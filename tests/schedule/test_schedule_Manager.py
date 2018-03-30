@@ -9,4 +9,6 @@ class TestScheduleManager:
         manager = ScheduleManager(Queue())
         assert manager.sleep == 60
         assert manager.loadConfig({}) == False
+        manager.exit()
+        assert manager.isExit() == True
         

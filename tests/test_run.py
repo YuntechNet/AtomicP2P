@@ -8,19 +8,19 @@ class TestRun:
 
     def test_switchManager(self):
         instance, inputStream, outputStream = main(['--SwitchManager'], debug=True)
-        inputStream.execute('--switch shutdown')
+        inputStream.execute('exit')
 
     def test_scheduleManager(self):
         instance, inputStream, outputStream = main(['--ScheduleManager'], debug=True)
-        inputStream.execute('--schedule shutdown')
+        inputStream.execute('exit')
 
     def test_libServer(self):
         instance, inputStream, outputStream = main(['--LibServer'], debug=True)
-        inputStream.execute('--libserver shutdown')
+        inputStream.execute('exit')
 
     def test_libCisco(self):
         instance, inputStream, outputStream = main(['--LibCisco'], debug=True)
-        inputStream.execute('--libcisco shutdown')
+        inputStream.execute('exit')
 
     def test_all(self):
         instance, inputStream, outputStream = main([], debug=True)
