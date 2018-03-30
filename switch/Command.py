@@ -1,11 +1,12 @@
 import json
 
-from network.Command import Command, Commander
+from network.commands.Command import Command
+from network.Command import Commander
 
 class ExecuteScript(Command):
 
     def __init__(self, cmd):
-        Command.__init__(self, cmd._from, cmd._to, cmd._content, cmd._data)
+        Command.__init__(self, cmd._from, cmd._to, cmd._command, cmd._data)
 
     def req(self):
         return self
@@ -20,13 +21,13 @@ class SwitchCommand(Commander):
 
     def process(self, command):
         if not super(SwitchCommand, self).process(command):
-            self.INS.redis.print('message from %s: %s' % (command._from, command._content))
+            self.INS.redis.print('message from %s: %s' % (command._from, command._command))
 
     @staticmethod
     def processReq(redis, command):
         if not Commander.processReq(redis, command):
             cmdIns = None
-            if 'execute-script' in command._content:
+            if 'execute-script' in command._command:
                 cmdIns = ExecuteScript(command)
 
             if cmdIns:
