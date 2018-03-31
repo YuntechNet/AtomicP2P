@@ -32,11 +32,10 @@ class ThreadManager(threading.Thread, Manager):
 
 class ProcessManager(Process, Manager):
 
-    def __init__(self, name, outputQueue, callback=None):
+    def __init__(self, name, outputQueue):
         Process.__init__(self)
         Manager.__init__(self, name, outputQueue)
         self.stopped = ProcessEvent()
-        self.mainProcessCallback = callback
 
     def start(self):
         super(ProcessManager, self).start()

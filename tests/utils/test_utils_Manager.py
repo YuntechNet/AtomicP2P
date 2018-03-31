@@ -44,7 +44,6 @@ class TestProcessManager:
     def test_init(self):
         m = ProcessManager('NAME', Queue())
         assert m.stopped.is_set() == False
-        assert m.mainProcessCallback == None
 
     @pytest.mark.skip('L42:Seaking mock.')
     def test_start(self):

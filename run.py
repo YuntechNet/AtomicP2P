@@ -14,26 +14,29 @@ def main(argv, debug=False):
         instance = {}
         outputQueue = Queue()
 
-        inputStream = InputStream(outputQueue)
-        outputStream = OutputStream(inputStream, outputQueue)
-
         for each in argv:
             if '--LibCisco' in each:
-                libCisco = LibCisco(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
+                libCisco = LibCisco(outputQueue, argv=argv)
                 instance['libCisco'] = libCisco
-                inputStream.redis = libCisco.redis
+                redis = RedisManager(libCisco, 'LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
+                instance['redisManager'] = redis
             elif '--SwitchManager' in each:
-                switchManager = SwitchManager(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
+                switchManager = SwitchManager(outputQueue, argv=argv)
                 instance['switchManager'] = switchManager
-                inputStream.redis = switchManager.redis
+                redis = RedisManager(switchManager, 'SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue)
+                instance['redisManager'] = redis
             elif '--ScheduleManager' in each:
-                scheduleManager = ScheduleManager(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
+                scheduleManager = ScheduleManager(outputQueue, argv=argv)
                 instance['scheduleManager'] = scheduleManager
-                inputStream.redis = scheduleManager.redis
+                redis = RedisManager(scheduleManager, 'ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue)
+                instance['redisManager'] = redis
             elif '--LibServer' in each:
-                libServer = LibServer(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
+                libServer = LibServer(outputQueue, argv=argv)
                 instance['libServer'] = libServer
-                inputStream.redis = libServer.redis
+                redis = RedisManager(libServer, 'LibServer-Redis', ['LibServer-Redis'], outputQueue)
+                instance['redisManager'] = redis
+        inputStream = InputStream(outputQueue, redis)
+        outputStream = OutputStream(inputStream, outputQueue)
 
         if instance == {}:
             libCisco = LibCisco(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)

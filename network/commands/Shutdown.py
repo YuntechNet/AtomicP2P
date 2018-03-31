@@ -9,7 +9,7 @@ class Shutdown:
         return None
 
     @staticmethod
-    def res(INS, cmd):
-        INS.redis.print('Shutdown signal from %s.' % cmd._from)
+    def res(redis, cmd):
+        redis.print('Shutdown signal from %s.' % cmd._from)
         return None
         

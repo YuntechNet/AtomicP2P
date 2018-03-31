@@ -1,4 +1,3 @@
-import queue, redis
 
 from Config import Config
 from utils.Enums import LogLevel
@@ -32,20 +31,17 @@ class SwitchDatabaseManager(DatabaseManager):
 #
 class SwitchManager(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=1, callback=None, config=Config):
-        ProcessManager.__init__(self, 'SwitchManager', outputQueue, callback)
+    def __init__(self, outputQueue, argv=None, sleep=1, config=Config):
+        ProcessManager.__init__(self, 'SwitchManager', outputQueue)
         self.sleep = sleep
 
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
             return
         self.print('Config loaded.')
-        self.commander = SwitchCommand(self)
-        self.redis = RedisManager('SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue, self.commander.process)
         self.print('Inited.', LogLevel.SUCCESS)
 
     def start(self):
-        self.redis.start()
         self.databaseManager.start()
         super(SwitchManager, self).start()
 
@@ -91,6 +87,5 @@ class SwitchManager(ProcessManager):
 
     def exit(self):
         self.databaseManager.exit()
-        self.redis.exit()
         super(SwitchManager, self).exit()
 

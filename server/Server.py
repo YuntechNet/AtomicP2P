@@ -1,15 +1,12 @@
 import socket
 
 from Config import Config
-from server.Command import LibServerCommand
-from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
-from network.Manager import RedisManager
 
 class LibServer(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=0.5, callback=None):
-        ProcessManager.__init__(self, 'LibServer', outputQueue, callback)
+    def __init__(self, outputQueue, argv=None, sleep=0.5):
+        ProcessManager.__init__(self, 'LibServer', outputQueue)
         self.sleep = sleep
         self.loadArgv(argv)
 
@@ -24,12 +21,9 @@ class LibServer(ProcessManager):
 
         self.sock.listen(10)
 
-        self.commander = LibServerCommand(self)
-        self.redis = RedisManager('LibServer-Redis', ['LibServer-Redis'], outputQueue, self.commander.process)
         self.print("Socket Listening on port %d" % self.port)
 
     def start(self):
-        self.redis.start()
         super(LibServer, self).start()
 
     def loadArgv(self, argv):
@@ -57,7 +51,6 @@ class LibServer(ProcessManager):
     # The best way to stop a block-socket server is connect to itself and close
     # connection to let code keep running to next loop to detect stop signal.
     def exit(self):
-        self.redis.exit()
         super(LibServer, self).exit()
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((self.host, self.port))
         self.sock.close()

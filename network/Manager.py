@@ -1,16 +1,17 @@
 import redis
 
 from Config import Config
-from network.Command import Command
+from network.Command import Commander
+from network.commands.Command import Command
 from utils.Manager import ThreadManager
 from utils.Enums import LogLevel
 
 class RedisManager(ThreadManager):
 
-    def __init__(self, name, subscribeList, outputQueue, cmdCallback, sleep=0, config=Config):
+    def __init__(self, manager, name, subscribeList, outputQueue, sleep=0, config=Config):
         ThreadManager.__init__(self, '%s' % name, outputQueue)
         self.sleep = sleep
-        self.cmdCallback = cmdCallback
+        self.manager = manager
 
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
@@ -36,7 +37,7 @@ class RedisManager(ThreadManager):
         while not self.stopped.wait(self.sleep):
             for each in self.ps.listen():
                 if each['type'] == 'message':
-                    self.cmdCallback(Command.parse(each['data'].decode('utf-8')))
+                    Commander.processRes(self, Command.parse(each['data'].decode('utf-8')))
                 elif each['type'] == 'subscribe':
                     self.print('Channel %s subscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']))
                 elif each['type'] == 'unsubscribe':
@@ -47,13 +48,10 @@ class RedisManager(ThreadManager):
     def pub(self, _to, value):
         self.rcon.publish(_to, value)
 
-    #def pubAll(self, _from, value):
-    #    for each in self.subscribeList:
-    #        self.rcon.publish(each, Command(_from, each, value).to())
-
     def exit(self):
         self.ps.unsubscribe()
         super(RedisManager, self).exit()
 
     def isMine(self, cmd):
         return True if self.name == cmd._to else False
+

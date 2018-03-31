@@ -9,13 +9,13 @@ class HeartBeat:
         return None
 
     @staticmethod
-    def res(INS, cmd):
+    def res(redis, cmd):
         if not cmd._data:
-            INS.redis.print('Heart beat from %s, responsed.' % cmd._from)
+            redis.print('Heart beat from %s, responsed.' % cmd._from)
             cmd.swap()
             cmd._data = { 'response': 1 }
-            cmd.send(INS.redis)
+            cmd.send(redis)
         else:
-            INS.redis.print('Heart beat feed back from %s, she is alive.' % cmd._from)
+            redis.print('Heart beat feed back from %s, she is alive.' % cmd._from)
         return None
         

@@ -6,39 +6,49 @@ from network.commands.Online import Online
 from network.commands.HeartBeat import HeartBeat
 from network.commands.Shutdown import Shutdown
 
+from core.Command import LibCiscoCommand
+from switch.Command import SwitchCommand
+from schedule.Command import ScheduleCommand
+from server.Command import LibServerCommand
+
 class Commander:
 
-    def __init__(self, instance):
-        self.INS = instance
-
-    def process(self, command):
+    @staticmethod
+    def processRes(redis, command):
         if 'message' in command._command:
-            Message.res(self.INS, command)
+            Message.res(redis, command)
         elif 'online' in command._command:
-            Online.res(self.INS, command)
+            Online.res(redis, command)
         elif 'heart-beat' in command._command:
-            HeartBeat.res(self.INS, command)
+            HeartBeat.res(redis, command)
         elif 'shutdown' in command._command:
-            Shutdown.res(self.INS, command)
-        else:
-            return False
-        return True
+            Shutdown.res(redis, command)
+        elif '--libcisco' in command._command:
+            LibCiscoCommand.processRes(redis, command)
+        elif '--switch' in command._command:
+            SwitchCommand.processRes(redis, command)
+        elif '--schedule' in command._command:
+            ScheduleCommand.processRes(redis, command)
+        elif '--libserver' in command._command:
+            LibServerCommand.processRes(redis, command)
 
     @staticmethod
     def processReq(redis, command):
-        cmdIns = None
         if 'message' in command._command:
-            cmdIns = Message.req(redis, command)
-            return True
+            Message.req(redis, command)
         elif 'online' in command._command:
-            cmdIns = Online.req(redis, command)
-            return True
+            Online.req(redis, command)
         elif 'heart-beat' in command._command:
-            cmdIns = HeartBeat.req(redis, command)
-            return True
+            HeartBeat.req(redis, command)
         elif 'shutdown' in command._command:
-            cmdIns = Shutdown.req(redis, command)
-            return True
+            Shutdown.req(redis, command)
+        elif '--libcisco' in command._command:
+            LibCiscoCommand.processReq(redis, command)
+        elif '--switch' in command._command:
+            SwitchCommand.processReq(redis, command)
+        elif '--schedule' in command._command:
+            ScheduleCommand.processReq(redis, command)
+        elif '--libserver' in command._command:
+            LibServerCommand.processReq(redis, command)
         else:
-            return False
-        return True
+            pass

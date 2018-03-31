@@ -1,10 +1,6 @@
 import os, time
 
-from network.Command import Command
-from core.Command import LibCiscoCommand
-from switch.Command import SwitchCommand
-from schedule.Command import ScheduleCommand
-from server.Command import LibServerCommand
+from network.Command import Command, Commander
 from utils.Manager import ThreadManager
 from utils.Enums import LogLevel, CommandType
 
@@ -29,13 +25,11 @@ class OutputStream(ThreadManager):
 
 class InputStream(ThreadManager):
     
-    def __init__(self, outputQueue):
+    def __init__(self, outputQueue, redis):
         ThreadManager.__init__(self, 'InputStream', outputQueue)
         self.outputQueue = outputQueue
+        self.redis = redis
         self.print('Inited.', LogLevel.SUCCESS)
-
-    def mainProcessCallback(self, cmd):
-        self.execute(cmd)
 
     def run(self):
         while not self.isExit():
@@ -46,13 +40,13 @@ class InputStream(ThreadManager):
 
     def execute(self, choice):
         if '--libcisco' in choice:
-            LibCiscoCommand.processReq(self.redis, Command(self.redis.name, 'LibCisco-Redis', choice.replace('--libcisco ', '')))
+            Commander.processReq(self.redis, Command(self.redis.name, 'LibCisco-Redis', choice))
         elif '--switch' in choice:
-            SwitchCommand.processReq(self.redis, Command(self.redis.name, 'SwitchManager-Redis', choice.replace('--switch ', '')))
+            Commander.processReq(self.redis, Command(self.redis.name, 'SwitchManager-Redis', choice))
         elif '--schedule' in choice:
-            ScheduleCommand.processReq(self.redis, Command(self.redis.name, 'ScheduleManager-Redis', choice.replace('--schedule ', '')))
+            Commander.processReq(self.redis, Command(self.redis.name, 'ScheduleManager-Redis', choice))
         elif '--libserver' in choice:
-            LibServerCommand.processReq(self.redis, Command(self.redis.name, 'LibServer-Redis', choice.replace('--libserver ', '')))
+            Commander.processReq(self.redis, Command(self.redis.name, 'LibServer-Redis', choice))
         elif choice == 'exit':
             for (key, values) in self.instance.items():
                 values.exit()

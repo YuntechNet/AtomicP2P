@@ -23,16 +23,14 @@ class ScheduleDatabaseManager(DatabaseManager):
 #
 class ScheduleManager(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=60, callback=None, config=Config):
-        ProcessManager.__init__(self, 'ScheduleManager', outputQueue, callback)
+    def __init__(self, outputQueue, argv=None, sleep=60, config=Config):
+        ProcessManager.__init__(self, 'ScheduleManager', outputQueue)
         self.sleep = sleep
 
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
             return
         self.print('Config loaded.')
-        self.commander = ScheduleCommand(self)
-        self.redis = RedisManager('ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue, self.commander.process)
 
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
@@ -41,7 +39,6 @@ class ScheduleManager(ProcessManager):
         self.print('Inited.', LogLevel.SUCCESS)
 
     def start(self):
-        self.redis.start()
         self.databaseManager.start()
         super(ScheduleManager, self).start()
 
@@ -114,7 +111,6 @@ class ScheduleManager(ProcessManager):
     def exit(self):
         for (name, schedule) in self.schedules.copy().items():
             schedule.exit()
-        self.redis.exit()
         self.databaseManager.exit()
         super(ScheduleManager, self).exit()
 

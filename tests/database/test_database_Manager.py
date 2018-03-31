@@ -43,14 +43,11 @@ class TestDatabaseManager:
         
 class TestRedisManager:
 
-    def callbackForInit(self, command):
-        pass
-
     def test_init(self):
         pass
 
     def test_loadConfig(self):
-        redis = RedisManager('Test', [], Queue(), self.callbackForInit, config=None)
+        redis = RedisManager(None, 'Test', [], Queue(), config=None)
         assert redis.isExit() == True
         #assert hasattr(redis, 'rcon') == False
         #assert redis.loadConfig(config={}) == False

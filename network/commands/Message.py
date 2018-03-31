@@ -9,6 +9,6 @@ class Message:
         return None
 
     @staticmethod
-    def res(INS, cmd):
-        INS.redis.print('Message from %s : %s' % (cmd._from, cmd._data))
+    def res(redis, cmd):
+        redis.print('Message from %s : %s' % (cmd._from, cmd._data))
         return None

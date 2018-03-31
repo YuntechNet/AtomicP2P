@@ -95,10 +95,6 @@ class TestShutdown:
 
 class TestCommander:
 
-    def test_init(self):
-        c = Commander(None)
-        assert c.INS == None
-
     @pytest.mark.skip('L70-78:Seaking mock.')
     def test_process(self):
         pass

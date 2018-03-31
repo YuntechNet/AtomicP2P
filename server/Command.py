@@ -1,17 +1,13 @@
-from network.Command import Command, Commander
 
-class LibServerCommand(Commander):
+from network.commands.Command import Command
 
-    def __init__(self, instance):
-        Commander.__init__(self, instance)
+class LibServerCommand:
 
-    def process(self, command):
-        if not super(LibServerCommand, self).process(command):
-            self.INS.redis.print('message from %s: %s' % (command._from, command._content))
+    @staticmethod
+    def processRes(redis, command):
+        pass
 
     @staticmethod
     def processReq(redis, command):
-        if not Commander.processReq(redis, command):
-            pass
-        return False
+        pass
 

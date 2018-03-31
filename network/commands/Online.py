@@ -9,6 +9,6 @@ class Online:
         return None
 
     @staticmethod
-    def res(INS, cmd):
-        INS.redis.print('%s is online' % cmd._from)
+    def res(redis, cmd):
+        redis.print('%s is online' % cmd._from)
         return None
