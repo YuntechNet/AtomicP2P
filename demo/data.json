@@ -1,7 +1,0 @@
-{
-	"users":{
-		"0":{"mac":"xxxx.xxxx.xxxx","vlan":"254","ip":"254.254.254.254","interface":"FastEthernet 0/1","status":"lock"},
-		"1":{"mac":"xxxx.xxxx.xxxx","vlan":"254","ip":"254.254.254.254","interface":"FastEthernet 0/1","status":"acitve"},
-		"2":{"mac":"xxxx.xxxx.xxxx","vlan":"254","ip":"254.254.254.254","interface":"FastEthernet 0/1","status":"unregister"}
-	}
-}
