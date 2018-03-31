@@ -56,7 +56,7 @@ class TestRedisManager:
         pass
 
     def test_isMine(self):
-        redis = RedisManager('Test', [], Queue(), self.callbackForIsMine, config=None)
+        redis = RedisManager(None, 'Test', [], Queue(), self.callbackForIsMine, config=None)
         assert redis.isMine(Command('A', 'B', 'TestContent')) == False
         assert redis.isMine(Command('A', 'Test', 'TestContent')) == True
 
@@ -64,7 +64,7 @@ class TestRedisManager:
         pass
 
     def test_exit(self):
-        redis = RedisManager('Test', [], Queue(), self.callbackForExit)
+        redis = RedisManager(None, 'Test', [], Queue(), self.callbackForExit)
         redis.exit()
         assert redis.isExit() == True
 

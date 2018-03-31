@@ -9,7 +9,7 @@ class TestRedisManager:
 
     @pytest.fixture(scope='session')
     def redis(self):
-        r = RedisManager('Test-Redis', [], Queue(), None)
+        r = RedisManager(None, 'Test-Redis', [], Queue(), None)
         return r
 
     def test_loadConfig(self, mocker, redis):

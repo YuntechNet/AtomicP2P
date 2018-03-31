@@ -8,9 +8,8 @@ class TestLibCisco:
     def test_init(self):
         core = LibCisco(Queue())
         assert hasattr(core, 'outputQueue') == True
-        assert core.redis.isExit() == False
         core.exit()
-        assert core.redis.isExit() == True
+        assert core.isExit() == True
 
     def command(self):
         core = LibCisco(Queue())
