@@ -4,8 +4,8 @@ from network.commands.Command import Command
 class Online:
 
     @staticmethod
-    def req(redis, cmd):
-        Command(redis.name, cmd._to, 'online').send(redis)
+    def req(redis, _to, _data=None):
+        Command(redis.name, _to, 'online', _data).send(redis)
         return None
 
     @staticmethod

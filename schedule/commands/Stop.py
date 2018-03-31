@@ -4,8 +4,8 @@ from network.commands.Command import Command
 class Stop:
 
     @staticmethod
-    def req(redis, cmd):
-        Command(redis.name, cmd._to, '--schedule stop').send(redis)
+    def req(redis, _to, _data=None):
+        Command(redis.name, _to, '--schedule stop', _data).send(redis)
         return None
 
     @staticmethod

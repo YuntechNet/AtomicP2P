@@ -10,7 +10,7 @@ class SwitchCommand:
             ExecuteScript.res(redis, command)
 
     @staticmethod
-    def processReq(redis, command):
-        if 'execute-script' in command._command:
-            ExecuteScript.req(redis, command)
+    def processReq(redis, _to, _command, _data):
+        if 'execute-script' in _command:
+            ExecuteScript.req(redis, _to, _data)
 

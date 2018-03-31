@@ -40,13 +40,13 @@ class InputStream(ThreadManager):
 
     def execute(self, choice):
         if '--libcisco' in choice:
-            Commander.processReq(self.redis, Command(self.redis.name, 'LibCisco-Redis', choice))
+            Commander.processReq(self.redis, 'LibCisco-Redis', choice, None, Command(self.redis.name, 'LibCisco-Redis', choice))
         elif '--switch' in choice:
-            Commander.processReq(self.redis, Command(self.redis.name, 'SwitchManager-Redis', choice))
+            Commander.processReq(self.redis, 'SwitchManager-Redis', choice, None, Command(self.redis.name, 'SwitchManager-Redis', choice))
         elif '--schedule' in choice:
-            Commander.processReq(self.redis, Command(self.redis.name, 'ScheduleManager-Redis', choice))
+            Commander.processReq(self.redis, 'ScheduleManager-Redis', choice, None, Command(self.redis.name, 'ScheduleManager-Redis', choice))
         elif '--libserver' in choice:
-            Commander.processReq(self.redis, Command(self.redis.name, 'LibServer-Redis', choice))
+            Commander.processReq(self.redis, 'LibServer-Redis', choice, None, Command(self.redis.name, 'LibServer-Redis', choice))
         elif choice == 'exit':
             for (key, values) in self.instance.items():
                 values.exit()

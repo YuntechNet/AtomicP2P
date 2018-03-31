@@ -23,7 +23,8 @@ class LibServer(ProcessManager):
 
         self.print("Socket Listening on port %d" % self.port)
 
-    def start(self):
+    def start(self, instance):
+        self.instance = instance
         super(LibServer, self).start()
 
     def loadArgv(self, argv):

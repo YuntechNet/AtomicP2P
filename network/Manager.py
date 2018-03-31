@@ -22,6 +22,10 @@ class RedisManager(ThreadManager):
         self.print('Subscribing: %s' % str(subscribeList))
         self.print('Inited', LogLevel.SUCCESS)
 
+    def start(self, instance):
+        self.instance = instance
+        super(RedisManager, self).start()
+
     def loadConfig(self, config):
         self.print('Loading config.')
         if hasattr(config, 'REDIS_MANAGER'):

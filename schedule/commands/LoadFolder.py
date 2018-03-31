@@ -5,8 +5,8 @@ from network.commands.Command import Command
 class LoadFolder:
 
     @staticmethod
-    def req(redis, cmd):
-        Command(redis.name, cmd._to, '--schedule load-folder').send(redis)
+    def req(redis, _to, _data=None):
+        Command(redis.name, _to, '--schedule load-folder', _data).send(redis)
         return None
 
     @staticmethod

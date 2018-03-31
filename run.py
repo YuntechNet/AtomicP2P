@@ -35,26 +35,29 @@ def main(argv, debug=False):
                 instance['libServer'] = libServer
                 redis = RedisManager(libServer, 'LibServer-Redis', ['LibServer-Redis'], outputQueue)
                 instance['redisManager'] = redis
-        inputStream = InputStream(outputQueue, redis)
-        outputStream = OutputStream(inputStream, outputQueue)
 
         if instance == {}:
-            libCisco = LibCisco(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
-            switchManager = SwitchManager(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
-            scheduleManager = ScheduleManager(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
-            libServer = LibServer(outputQueue, argv=argv, callback=inputStream.mainProcessCallback)
-            inputStream.redis = libCisco.redis
+            libCisco = LibCisco(outputQueue, argv=argv)
+            switchManager = SwitchManager(outputQueue, argv=argv)
+            scheduleManager = ScheduleManager(outputQueue, argv=argv)
+            libServer = LibServer(outputQueue, argv=argv)
             instance = {
                 'libCisco': libCisco,
                 'switchManager': switchManager,
                 'scheduleManager': scheduleManager,
                 'libServer': libServer
             }
+            redis = RedisManager(instance, 'LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
+            instance['redisManager'] = redis
         if not debug:
-            [ value.start() for (key, value) in instance.items() ]
+            #[ value.start(instance) for (key, value) in instance.copy().items() ]
+            [ value.start(instance) for (key, value) in instance.items() ]
 
+        inputStream = InputStream(outputQueue, redis)
         instance['inputStream'] = inputStream
         inputStream.instance = instance
+
+        outputStream = OutputStream(inputStream, outputQueue)
 
         if not debug:
             inputStream.start()

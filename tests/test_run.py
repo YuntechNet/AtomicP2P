@@ -23,7 +23,6 @@ class TestRun:
         instance, inputStream, outputStream = main(['--LibCisco'], debug=True)
         inputStream.execute('exit')
 
-    @pytest.mark.skip('No argv run still not code')
     def test_all(self):
         instance, inputStream, outputStream = main([], debug=True)
         inputStream.execute('--switch online')

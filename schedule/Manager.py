@@ -4,7 +4,6 @@ from Config import Config
 from database.Manager import DatabaseManager
 from network.Manager import RedisManager
 from schedule.Schedule import Schedule
-from schedule.Command import ScheduleCommand
 from utils.Manager import ProcessManager
 from utils.User import User
 from utils.Enums import UserPriority, LogLevel, CommandType
@@ -38,7 +37,8 @@ class ScheduleManager(ProcessManager):
         self.scheduleStart()
         self.print('Inited.', LogLevel.SUCCESS)
 
-    def start(self):
+    def start(self, instance):
+        self.instance = instance
         self.databaseManager.start()
         super(ScheduleManager, self).start()
 

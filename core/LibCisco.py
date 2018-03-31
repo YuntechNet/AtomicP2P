@@ -7,7 +7,8 @@ class LibCisco(ProcessManager):
         ProcessManager.__init__(self, 'LibCisco', outputQueue)
         self.outputQueue = outputQueue
 
-    def start(self):
+    def start(self, instance):
+        self.instance = instance
         super(LibCisco, self).start()
     
     def exit(self):

@@ -3,6 +3,7 @@ from croniter import croniter
 from threading import Event
 from datetime import datetime, timedelta
 
+from switch.commands.ExecuteScript import ExecuteScript
 from utils.Explainer import ScriptExplainer
 from utils.Enums import LogLevel
 from utils.Manager import ThreadManager
@@ -80,7 +81,7 @@ class Schedule(ThreadManager):
             if self.isExit():
                 break
             self.lastRun = time.time()
-            self.print('TEST')
+            ExecuteScript.req(self.manager.instance['redisManager'], 'SwitchManager-Redis', { 'target': self.target, 'beforeScript': self.beforeScript, 'script': self.script })
             self.sleep = self.calSleep()
             if self.type.mode == 'text':
                 self.exit()

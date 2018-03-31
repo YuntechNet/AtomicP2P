@@ -1,6 +1,10 @@
 import pytest, json
 
-from network.Command import Command, Online, HeartBeat, Shutdown, Commander
+from network.Command import Commander
+from network.commands.Command import Command
+from network.commands.Online import Online
+from network.commands.HeartBeat import HeartBeat
+from network.commands.Shutdown import Shutdown
 from network.Manager import RedisManager
 
 class TestCommand:

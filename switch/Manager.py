@@ -41,7 +41,8 @@ class SwitchManager(ProcessManager):
         self.print('Config loaded.')
         self.print('Inited.', LogLevel.SUCCESS)
 
-    def start(self):
+    def start(self, instance):
+        self.instance = instance
         self.databaseManager.start()
         super(SwitchManager, self).start()
 

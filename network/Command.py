@@ -33,22 +33,23 @@ class Commander:
             LibServerCommand.processRes(redis, command)
 
     @staticmethod
-    def processReq(redis, command):
-        if 'message' in command._command:
-            Message.req(redis, command)
-        elif 'online' in command._command:
-            Online.req(redis, command)
-        elif 'heart-beat' in command._command:
-            HeartBeat.req(redis, command)
-        elif 'shutdown' in command._command:
-            Shutdown.req(redis, command)
-        elif '--libcisco' in command._command:
-            LibCiscoCommand.processReq(redis, command)
-        elif '--switch' in command._command:
-            SwitchCommand.processReq(redis, command)
-        elif '--schedule' in command._command:
-            ScheduleCommand.processReq(redis, command)
-        elif '--libserver' in command._command:
-            LibServerCommand.processReq(redis, command)
+    def processReq(redis, _to=None, _command=None, _data=None, command=None):
+        if 'message' in _command:
+            Message.req(redis, _to, _command.replace('message ', ''))
+        elif 'online' in _command:
+            Online.req(redis, _to, _data)
+        elif 'heart-beat' in _command:
+            HeartBeat.req(redis, _to, _data)
+        elif 'shutdown' in _command:
+            Shutdown.req(redis, _to, _data)
+
+        elif '--libcisco' in _command:
+            LibCiscoCommand.processReq(redis, _to, _command, _data)
+        elif '--switch' in _command:
+            SwitchCommand.processReq(redis, _to, _command, _data)
+        elif '--schedule' in _command:
+            ScheduleCommand.processReq(redis, _to, _command, _data)
+        elif '--libserver' in _command:
+            LibServerCommand.processReq(redis, _to, _command, _data)
         else:
             pass

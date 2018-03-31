@@ -4,8 +4,8 @@ from network.commands.Command import Command
 class Message:
     
     @staticmethod
-    def req(redis, cmd):
-        Command(redis.name, cmd._to, 'message', cmd._command.replace('message ', '')).send(redis)
+    def req(redis, _to, _data):
+        Command(redis.name, _to, 'message', _data).send(redis)
         return None
 
     @staticmethod

@@ -4,8 +4,8 @@ from network.commands.Command import Command
 class Shutdown:
 
     @staticmethod
-    def req(redis, cmd):
-        Command(redis.name, cmd._to, 'shutdown').send(redis)
+    def req(redis, _to, _data=None):
+        Command(redis.name, _to, 'shutdown', _data).send(redis)
         return None
 
     @staticmethod

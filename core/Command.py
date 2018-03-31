@@ -8,6 +8,6 @@ class LibCiscoCommand:
         pass
 
     @staticmethod
-    def processReq(redis, command):
+    def processReq(redis, _to, _command, _data):
         pass
 

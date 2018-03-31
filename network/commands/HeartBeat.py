@@ -4,8 +4,8 @@ from network.commands.Command import Command
 class HeartBeat:
 
     @staticmethod
-    def req(redis, cmd):
-        Command(redis.name, cmd._to, 'heart-beat').send(redis)
+    def req(redis, _to, _data=None):
+        Command(redis.name, _to, 'heart-beat', _data).send(redis)
         return None
 
     @staticmethod
