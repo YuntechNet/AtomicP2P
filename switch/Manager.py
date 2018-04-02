@@ -38,7 +38,6 @@ class SwitchManager(ProcessManager):
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
             return
-        self.print('Config loaded.')
         self.print('Inited.', LogLevel.SUCCESS)
 
     def start(self, instance):
@@ -46,16 +45,18 @@ class SwitchManager(ProcessManager):
         self.databaseManager.start()
         super(SwitchManager, self).start()
 
-    def loadConfig(self, config):
+    def loadConfig(self, config=Config):
         self.print('Loading config')
         if hasattr(config, 'SWITCH_MANAGER'):
-            self.device = []
+            self.devices = {}
             self.config = config.SWITCH_MANAGER
             self.databaseManager = SwitchDatabaseManager(self.outputQueue, self.config)
             if 'STATIC' in self.config:
                 for each in self.config['STATIC']:
-                    self.device.append(Switch(each))
+                    sw = Switch(each)
+                    self.devices[sw.host] = sw
                 self.print('STATIC devices loaded.')
+            self.print('Config loaded.')
             return True
         else:
             self.print('Config must contain SWITCH_MANAGER attribute.', LogLevel.ERROR)
@@ -63,9 +64,12 @@ class SwitchManager(ProcessManager):
 
 
     def getDeviceByHost(self, host):
-        for each in self.device:
-            if each.config.host == host:
-                return each
+        if host == 'ALL':
+            return [ value for (key, value) in self.devices.items() ]
+        else:
+            for (key, value) in self.devices.items():
+                if value.host == host:
+                    return [ value ]
         return None
 
     def run(self):
@@ -73,14 +77,14 @@ class SwitchManager(ProcessManager):
             self.toSystem()
 
     def toSystem(self):
-        self.devices = []
+        self.devices = {}
         if self.databaseManager.remoteDB.type == 'mongodb':
             from bson.json_util import loads as bsonLoads
             result = self.databaseManager.temporDB.execute('SELECT * FROM `Switch`').fetchall()
             for (host, jsonContent) in result:
-                config = bsonLoads(jsonContent)
-                config['host'] = host
-                self.devices.append(Switch(config))
+                bsonContent = bsonLoads(jsonContent)
+                bsonContent['host'] = host
+                self.devices[host] = Switch(bsonContent)
         elif self.databaseManager.remoteDB.type == 'mysql':
             pass
         else:

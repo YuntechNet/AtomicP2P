@@ -4,6 +4,7 @@ from network.commands.Command import Command
 from network.commands.Message import Message
 from network.commands.Online import Online
 from network.commands.HeartBeat import HeartBeat
+from network.commands.LoadConfig import LoadConfig
 from network.commands.Shutdown import Shutdown
 
 from core.Command import LibCiscoCommand
@@ -21,8 +22,11 @@ class Commander:
             Online.res(redis, command)
         elif 'heart-beat' in command._command:
             HeartBeat.res(redis, command)
+        elif 'load-config' in command._command:
+            LoadConfig.res(redis, command)
         elif 'shutdown' in command._command:
             Shutdown.res(redis, command)
+
         elif '--libcisco' in command._command:
             LibCiscoCommand.processRes(redis, command)
         elif '--switch' in command._command:
@@ -40,6 +44,8 @@ class Commander:
             Online.req(redis, _to, _data)
         elif 'heart-beat' in _command:
             HeartBeat.req(redis, _to, _data)
+        elif 'load-config' in _command:
+            LoadConfig.req(redis, _to, _data)
         elif 'shutdown' in _command:
             Shutdown.req(redis, _to, _data)
 

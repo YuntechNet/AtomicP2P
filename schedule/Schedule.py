@@ -81,7 +81,8 @@ class Schedule(ThreadManager):
             if self.isExit():
                 break
             self.lastRun = time.time()
-            ExecuteScript.req(self.manager.instance['redisManager'], 'SwitchManager-Redis', { 'target': self.target, 'beforeScript': self.beforeScript, 'script': self.script })
+            cmdDict = ScriptExplainer({'target': self.target, 'beforeScript': self.beforeScript, 'script': self.script}).explainToDict()
+            ExecuteScript.req(self.manager.instance['redisManager'], 'SwitchManager-Redis', cmdDict)
             self.sleep = self.calSleep()
             if self.type.mode == 'text':
                 self.exit()

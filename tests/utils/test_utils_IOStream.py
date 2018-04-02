@@ -25,9 +25,9 @@ class TestInputStream:
 
     def test_init(self):
         queue = Queue()
-        redis = RedisManager(None, 'Test', ['Test'], queue)
+        redis = RedisManager('Test', ['Test'], queue)
         iS = InputStream(queue, redis)
-        assert iS.outputQueue.qsize() == 6
+        assert iS.outputQueue.qsize() == 7
 
     @pytest.mark.skip('L41-45:Seaking mock.')
     def test_run(sefl):
@@ -35,7 +35,7 @@ class TestInputStream:
 
     def test_execute(self):
         queue = Queue()
-        redis = RedisManager(None, 'Test', ['Test'], queue)
+        redis = RedisManager('Test', ['Test'], queue)
         iS = InputStream(queue, redis)
         iS.instance = { 'inputStream': iS }
         #iS.execute('--libcisco')

@@ -8,10 +8,9 @@ from utils.Enums import LogLevel
 
 class RedisManager(ThreadManager):
 
-    def __init__(self, manager, name, subscribeList, outputQueue, sleep=0, config=Config):
+    def __init__(self, name, subscribeList, outputQueue, sleep=0, config=Config):
         ThreadManager.__init__(self, '%s' % name, outputQueue)
         self.sleep = sleep
-        self.manager = manager
 
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
@@ -26,12 +25,13 @@ class RedisManager(ThreadManager):
         self.instance = instance
         super(RedisManager, self).start()
 
-    def loadConfig(self, config):
+    def loadConfig(self, config=Config):
         self.print('Loading config.')
         if hasattr(config, 'REDIS_MANAGER'):
             self.config = config.REDIS_MANAGER
             self.address = self.config['ADDRESS']
             self.password = self.config['PASSWORD']
+            self.print('Config loaded.')
             return True
         else:
             self.print('Config must contain REDIS_MANAGER attribute.', LogLevel.ERROR)

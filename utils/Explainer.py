@@ -1,4 +1,6 @@
-import re, json
+import re, json, copy
+from datetime import datetime
+
 from commands.Enable import Enable
 from commands.Disable import Disable
 from commands.ConfigTerminal import ConfigTerminal
@@ -34,7 +36,7 @@ class ScriptExplainer:
     def scriptPreExec(self, preCommandCode):
         for each in preCommandCode:
             exec(each, globals(), locals())
-        return locals()
+        return globals().copy().update(locals())
 
     def _explain_(self, commandCode, local):
         def sw_exec(command):
@@ -42,13 +44,17 @@ class ScriptExplainer:
 
         excCode = ''
         for each in commandCode:
-            excCode += each
+            excCode += '%s\n' % each
 
         exec(excCode, local, locals())
         return self.commandList
 
     def explainToList(self):
-        resultDict = self.scriptPreExec(self.script['preCommand'])
-        self.commandList = self._explain_(self.script['command'], resultDict)
+        resultDict = self.scriptPreExec(self.script['beforeScript'])
+        self.commandList = self._explain_(self.script['script'], resultDict)
         return self.commandList
+
+    def explainToDict(self):
+        return { self.script['target']: self.explainToList() }
+
         

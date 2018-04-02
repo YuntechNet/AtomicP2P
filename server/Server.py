@@ -5,9 +5,13 @@ from utils.Manager import ProcessManager
 
 class LibServer(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=0.5):
+    def __init__(self, outputQueue, argv=None, sleep=0.5, config=Config):
         ProcessManager.__init__(self, 'LibServer', outputQueue)
         self.sleep = sleep
+
+        if not self.loadConfig(config) or self.isExit():
+            self.stopped.set()
+            return
         self.loadArgv(argv)
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -27,9 +31,19 @@ class LibServer(ProcessManager):
         self.instance = instance
         super(LibServer, self).start()
 
+    def loadConfig(self, config=Config):
+        self.print('Loading config')
+        if hasattr(config, 'LIB_SERVER'):
+            self.config = Config.LIB_SERVER
+            self.host = self.config['HOST']
+            self.port = self.config['PORT']
+            self.print('Config loaded.')
+            return True
+        else:
+            self.print('Config must contain LIB_SERVER attribute.', LogLevel.ERROR)
+            return False
+
     def loadArgv(self, argv):
-        self.host = Config.LIB_SERVER['HOST']
-        self.port = Config.LIB_SERVER['PORT']
         if not argv is None:
             for each in argv:
                 if '--LIB_HOST=' in each:

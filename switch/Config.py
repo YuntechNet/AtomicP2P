@@ -47,6 +47,9 @@ class SwitchConfig:
         showCDPStr = self.switch.singleExecute('system', Show('cdp neighbor detail'), False)
         (self.neighbors, showCDPStr) = self.__getNeighbor(showCDPStr, False)
 
+    def info(self):
+        return { 'hostname': self.hostname, 'interfaces': self.interfaces, 'neighbors': self.neighbors }
+
     def __getHostname(self, string, debug=False):
         section = re.compile('!\\r\\nhostname .*\\r\\n!').search(string).group(0)
         hostname = section[12:-3]
@@ -74,3 +77,4 @@ class SwitchConfig:
                 if debug:
                     print(each)
         return (neighbors, '')
+

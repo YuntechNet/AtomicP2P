@@ -1,5 +1,6 @@
 import os, time
 
+from Config import Config
 from network.Command import Command, Commander
 from utils.Manager import ThreadManager
 from utils.Enums import LogLevel, CommandType
@@ -37,6 +38,9 @@ class InputStream(ThreadManager):
                 choice = input('> ')
                 self.print('operator execute command: %s' % choice)
                 self.execute(choice)
+
+    def loadConfig(self, config=Config):
+        pass
 
     def execute(self, choice):
         if '--libcisco' in choice:

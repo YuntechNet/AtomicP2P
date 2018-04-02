@@ -42,7 +42,7 @@ class ScheduleManager(ProcessManager):
         self.databaseManager.start()
         super(ScheduleManager, self).start()
 
-    def loadConfig(self, config):
+    def loadConfig(self, config=Config):
         self.print('Loading config')
         if hasattr(config, 'SCHEDULE_MANAGER'):
             self.config = config.SCHEDULE_MANAGER
@@ -59,10 +59,10 @@ class ScheduleManager(ProcessManager):
             select = self.databaseManager.temporDB.execute('SELECT * FROM `Schedule` WHERE NAME=\'%s\';' % jsonContent['name']).fetchall()
 
             if select == []:
-                self.databaseManager.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (jsonContent['name'], json.dumps(jsonContent)))
+                self.databaseManager.temporDB.execute('INSERT INTO `Schedule`(Name, content) VALUES (\'%s\', \'%s\');' % (jsonContent['name'], json.dumps(jsonContent).replace('\'', '\'\'')))
                 self.print('%s New schedule %s loaded and inserted into database.' % (filePath, jsonContent['name']))
             else:
-                self.databaseManager.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (json.dumps(jsonContent), jsonContent['name']))
+                self.databaseManager.temporDB.execute('UPDATE `Schedule` SET content = \'%s\' WHERE Name = \'%s\';' % (json.dumps(jsonContent).replace('\'', '\'\''), jsonContent['name']))
                 self.print('%s Old schedule %s loaded and updated into database.' % (filePath, jsonContent['name']))
 
     def loadFolder(self, path=None, overwrite=False, immediate=False):

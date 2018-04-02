@@ -1,10 +1,15 @@
 {
     "name": "test-count",
-    "target": null,
+    "target": "ALL",
     "type": {
         "cron": "*/1 * * * *"
     },
 	"beforeScript":[],
-	"script":[],
+	"script":[
+        "sw_exec('conf t')",
+        "sw_exec('hostname DormC4-%s' % datetime.strftime(datetime.now(), '%Y-%m-%d--%H-%M'))",
+        "sw_exec('exit')",
+        "sw_exec('exit')"
+    ],
     "nextSchedule": null
 }

@@ -8,6 +8,9 @@ class Config:
         'ADDRESS': ('redis-15525.c17.us-east-1-4.ec2.cloud.redislabs.com', 15525),
         'PASSWORD': 'LibCisco'
     }
+    
+    # LIB CISCO: control core
+    LIB_CISCO = {}
 
     # LIB SERVER: control client side such as JLibCisco-cli to access with which ip and port.
     LIB_SERVER = {

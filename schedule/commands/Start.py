@@ -12,11 +12,12 @@ class Start:
     def res(redis, cmd):
         argv = cmd._command.replace('start', '').split(' ')
         if not cmd._data:
+            manager = redis.instance['scheduleManager']
             redis.print('Start cmd from %s, responsed' % cmd._from)
             if argv == ['']:
-                [ value.start() for (key, value) in redis.manager.schedules.items() ]
+                [ value.start() for (key, value) in manager.schedules.items() ]
             else:
-                [ value.start() for (key, value) in redis.manager.schedules.items() if key in argv ]
+                [ value.start() for (key, value) in manager.schedules.items() if key in argv ]
             cmd.swap()
             cmd._data = { 'response': 1 }
             cmd.send(redis)

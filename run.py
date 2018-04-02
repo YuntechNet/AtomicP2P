@@ -18,22 +18,22 @@ def main(argv, debug=False):
             if '--LibCisco' in each:
                 libCisco = LibCisco(outputQueue, argv=argv)
                 instance['libCisco'] = libCisco
-                redis = RedisManager(libCisco, 'LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
+                redis = RedisManager('LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
                 instance['redisManager'] = redis
             elif '--SwitchManager' in each:
                 switchManager = SwitchManager(outputQueue, argv=argv)
                 instance['switchManager'] = switchManager
-                redis = RedisManager(switchManager, 'SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue)
+                redis = RedisManager('SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue)
                 instance['redisManager'] = redis
             elif '--ScheduleManager' in each:
                 scheduleManager = ScheduleManager(outputQueue, argv=argv)
                 instance['scheduleManager'] = scheduleManager
-                redis = RedisManager(scheduleManager, 'ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue)
+                redis = RedisManager('ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue)
                 instance['redisManager'] = redis
             elif '--LibServer' in each:
                 libServer = LibServer(outputQueue, argv=argv)
                 instance['libServer'] = libServer
-                redis = RedisManager(libServer, 'LibServer-Redis', ['LibServer-Redis'], outputQueue)
+                redis = RedisManager('LibServer-Redis', ['LibServer-Redis'], outputQueue)
                 instance['redisManager'] = redis
 
         if instance == {}:
@@ -47,7 +47,7 @@ def main(argv, debug=False):
                 'scheduleManager': scheduleManager,
                 'libServer': libServer
             }
-            redis = RedisManager(instance, 'LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
+            redis = RedisManager('LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
             instance['redisManager'] = redis
         if not debug:
             #[ value.start(instance) for (key, value) in instance.copy().items() ]
