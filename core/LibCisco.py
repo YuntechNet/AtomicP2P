@@ -1,7 +1,7 @@
+import logging
 
 from Config import Config
 from utils.Manager import ProcessManager
-from utils.Enums import LogLevel
 
 class LibCisco(ProcessManager):
 
@@ -12,7 +12,7 @@ class LibCisco(ProcessManager):
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
             return
-        self.print('Inited', LogLevel.SUCCESS)
+        self.print('Inited', logging.INFO)
 
     def start(self, instance):
         self.instance = instance
@@ -24,7 +24,7 @@ class LibCisco(ProcessManager):
             self.print('Config loaded.')
             return True
         else:
-            self.print('Config must contain LIB_CISCO attribute.', LogLevel.ERROR)
+            self.print('Config must contain LIB_CISCO attribute.', logging.ERROR)
             return False
     
     def exit(self):

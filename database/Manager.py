@@ -1,8 +1,7 @@
-import threading, redis
+import logging, threading, redis
 
 from utils.Manager import ThreadManager
 from database.Database import TempDatabase, RemoteDatabase
-from utils.Enums import LogLevel
 
 # DatabaseManager
 #   A thread in each manager for communication with local and remote database.
@@ -17,7 +16,7 @@ class DatabaseManager(ThreadManager):
             self.temporDB = TempDatabase(outputQueue, config['TEMP_DATABASE'])
         if 'DATABASE' in config:
             self.remoteDB = RemoteDatabase(outputQueue, config['DATABASE'])
-        self.print('inited.', LogLevel.SUCCESS)
+        self.print('inited.', logging.INFO)
 
     def run(self):
         while not self.stopped.wait(self.sleep):

@@ -1,11 +1,10 @@
-import traceback, time
+import logging, traceback, time
 from croniter import croniter
 from threading import Event
 from datetime import datetime, timedelta
 
 from switch.commands.ExecuteScript import ExecuteScript
 from utils.Explainer import ScriptExplainer
-from utils.Enums import LogLevel
 from utils.Manager import ThreadManager
 
 class Type:
@@ -35,9 +34,9 @@ class Schedule(ThreadManager):
             self.nextSchedule = self.manager.getScheduleByName(json['nextSchedule'])
             self.sleep = 0
             self.lastRun = 0
-            self.print('Inited.', LogLevel.SUCCESS)
+            self.print('Inited.', logging.INFO)
         except KeyError as keyErr:
-            self.print('Init schedule failed: KeyError with missing %s' % keyErr, LogLevel.WARNING)
+            self.print('Init schedule failed: KeyError with missing %s' % keyErr, logging.WARNING)
         except:
             traceback.print_exc()
 
@@ -57,9 +56,9 @@ class Schedule(ThreadManager):
             self.beforeScript = json['beforeScript']
             self.script = json['script']
             self.nextSchedule = self.manager.getScheduleByName(json['nextSchedule'])
-            self.print('Updated.', LogLevel.SUCCESS)
+            self.print('Updated.', logging.INFO)
         except KeyError as keyErr:
-            self.print('Update schedule failed: KeyError with missing %s' % keyErr, LogLevel.WARNING)
+            self.print('Update schedule failed: KeyError with missing %s' % keyErr, logging.WARNING)
         except:
             traceback.print_exc()
 

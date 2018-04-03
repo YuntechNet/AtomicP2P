@@ -1,6 +1,6 @@
+import logging
 
 from Config import Config
-from utils.Enums import LogLevel
 from utils.Manager import ProcessManager
 from switch.Switch import Switch
 from switch.Command import SwitchCommand
@@ -38,7 +38,7 @@ class SwitchManager(ProcessManager):
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
             return
-        self.print('Inited.', LogLevel.SUCCESS)
+        self.print('Inited.', logging.INFO)
 
     def start(self, instance):
         self.instance = instance
@@ -59,7 +59,7 @@ class SwitchManager(ProcessManager):
             self.print('Config loaded.')
             return True
         else:
-            self.print('Config must contain SWITCH_MANAGER attribute.', LogLevel.ERROR)
+            self.print('Config must contain SWITCH_MANAGER attribute.', logging.ERROR)
             return False
 
 

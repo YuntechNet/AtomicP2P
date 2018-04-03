@@ -6,6 +6,7 @@ pxssh.py
 *.pyc
 __pycache__
 .pytest_cache/
+logs*
 pws.py
 .vscode/*
 *.sqlite

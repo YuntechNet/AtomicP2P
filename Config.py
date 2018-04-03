@@ -3,6 +3,23 @@
 # Setup will seperated into serveral part by sub-service.
 class Config:
     
+    #########################################################################
+    #                              THREADES                                 #
+    #########################################################################
+
+    OUTPUT = {
+        'LOG': {
+            'LEVEL': 'DEBUG',
+            'FOLDER': './logs',
+            'SIZE_PER_FILE': 20*1024*1024,
+            'MAX_BACKUP_COUNT': 10
+        }
+    }
+
+    #########################################################################
+    #                              PROCESSES                                #
+    #########################################################################
+
     # Redis for cross-machine process communication.
     REDIS_MANAGER = {
         'ADDRESS': ('redis-15525.c17.us-east-1-4.ec2.cloud.redislabs.com', 15525),

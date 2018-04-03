@@ -1,6 +1,5 @@
-import sqlite3, time
+import sqlite3, time, logging
 
-from utils.Enums import LogLevel
 from utils.Manager import Manager
 
 # TempDatabase
@@ -57,7 +56,7 @@ class RemoteDatabase(Manager):
             #self.tabName = config['tabname']
             pass
         else:
-            self.print('Cat\'t load database type. must be mongodb or mysql.', LogLevel.ERROR)
+            self.print('Cat\'t load database type. must be mongodb or mysql.', logging.ERROR)
         self.print('Inited.')
 
     def close(self):

@@ -18,7 +18,7 @@ class UserPriority(enum.IntEnum):
     USER = 2
 
 # Log Level
-class LogLevel(enum.Enum):
+class LogLevela(enum.Enum):
     INFO = '\x1b[0m'
     WARNING = '\x1b[0;33;49m'
     ERROR = '\x1b[0;31;49m'

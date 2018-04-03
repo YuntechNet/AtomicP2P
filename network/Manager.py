@@ -1,10 +1,9 @@
-import redis
+import logging, redis
 
 from Config import Config
 from network.Command import Commander
 from network.commands.Command import Command
 from utils.Manager import ThreadManager
-from utils.Enums import LogLevel
 
 class RedisManager(ThreadManager):
 
@@ -19,7 +18,7 @@ class RedisManager(ThreadManager):
         self.ps = self.rcon.pubsub()
         self.ps.subscribe(subscribeList)
         self.print('Subscribing: %s' % str(subscribeList))
-        self.print('Inited', LogLevel.SUCCESS)
+        self.print('Inited', logging.INFO)
 
     def start(self, instance):
         self.instance = instance
@@ -34,7 +33,7 @@ class RedisManager(ThreadManager):
             self.print('Config loaded.')
             return True
         else:
-            self.print('Config must contain REDIS_MANAGER attribute.', LogLevel.ERROR)
+            self.print('Config must contain REDIS_MANAGER attribute.', logging.ERROR)
             return False
 
     def run(self):

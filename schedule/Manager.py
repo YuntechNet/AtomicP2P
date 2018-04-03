@@ -1,4 +1,4 @@
-import json, os
+import logging, json, os
 
 from Config import Config
 from database.Manager import DatabaseManager
@@ -6,7 +6,7 @@ from network.Manager import RedisManager
 from schedule.Schedule import Schedule
 from utils.Manager import ProcessManager
 from utils.User import User
-from utils.Enums import UserPriority, LogLevel, CommandType
+from utils.Enums import UserPriority, CommandType
 
 class ScheduleDatabaseManager(DatabaseManager):
 
@@ -35,7 +35,7 @@ class ScheduleManager(ProcessManager):
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
         self.toSystem()
         self.scheduleStart()
-        self.print('Inited.', LogLevel.SUCCESS)
+        self.print('Inited.', logging.INFO)
 
     def start(self, instance):
         self.instance = instance
@@ -49,7 +49,7 @@ class ScheduleManager(ProcessManager):
             self.databaseManager = ScheduleDatabaseManager(self.outputQueue, self.config)
             return True
         else:
-            self.print('Config must contain SCHEDULE_MANAGER attribute.', LogLevel.ERROR)
+            self.print('Config must contain SCHEDULE_MANAGER attribute.', logging.ERROR)
             return False
 
     def openFile(self, filePath):
