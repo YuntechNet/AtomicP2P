@@ -21,9 +21,8 @@ class OutputStream(ThreadManager):
         self.print('Inited.', logging.INFO)
 
     def run(self):
-        while not self.stopped.wait(0.1) or not self.outputQueue.empty():
+        while not self.stopped.wait(0.01) or not self.outputQueue.empty():
             if not self.outputQueue.empty():
-                #print('[%17f]%s %s\x1b[0m' % self.outputQueue.get())
                 msg = self.outputQueue.get()
                 (time, level, process, msg) = (datetime.fromtimestamp(msg[0]).strftime('%Y-%m-%d %H:%M:%S.%f'), msg[1], msg[2], msg[3])
                 self.logger.log(level, msg, extra={'execute_time': time, 'process_name': process})
@@ -45,7 +44,6 @@ class OutputStream(ThreadManager):
     def initLogging(self):
         self.print('Initing Logger.')
         logFormat = logging.Formatter('[%(execute_time)s |%(levelname)8s | %(process_name)s]%(message)s')
-        #fileHwnd = logging.FileHandler(self.logConfig['FOLDER'])
         fileHwnd = RotatingFileHandler(self.logConfig['FOLDER'], mode='a', maxBytes=self.logConfig['SIZE_PER_FILE'], backupCount=self.logConfig['MAX_BACKUP_COUNT'])
         fileHwnd.setFormatter(logFormat)
         fileHwnd.setLevel(getattr(logging, self.logConfig['LEVEL']))
@@ -86,14 +84,15 @@ class InputStream(ThreadManager):
 
     def execute(self, choice):
         if '--libcisco' in choice:
-            Commander.processReq(self.redis, 'LibCisco-Redis', choice, None, Command(self.redis.name, 'LibCisco-Redis', choice))
+            Commander.processReq(self.redis, 'LibCisco-Redis', choice, None)
         elif '--switch' in choice:
-            Commander.processReq(self.redis, 'SwitchManager-Redis', choice, None, Command(self.redis.name, 'SwitchManager-Redis', choice))
+            Commander.processReq(self.redis, 'SwitchManager-Redis', choice, None)
         elif '--schedule' in choice:
-            Commander.processReq(self.redis, 'ScheduleManager-Redis', choice, None, Command(self.redis.name, 'ScheduleManager-Redis', choice))
+            Commander.processReq(self.redis, 'ScheduleManager-Redis', choice, None)
         elif '--libserver' in choice:
-            Commander.processReq(self.redis, 'LibServer-Redis', choice, None, Command(self.redis.name, 'LibServer-Redis', choice))
-        elif choice == 'exit':
-            for (key, values) in self.instance.items():
-                values.exit()
+            Commander.processReq(self.redis, 'LibServer-Redis', choice, None)
+        elif '--broadcast' in choice:
+            Commander.processReq(self.redis, ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], choice, None)
+        else:
+            Commander.processReq(self.redis, None, choice, None)
 

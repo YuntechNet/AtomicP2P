@@ -9,7 +9,6 @@ class TestOutputStream:
     def test_init(self):
         oS = OutputStream(None, Queue())
         assert oS.inputStream == None
-        assert oS.outputQueue.qsize() == 2
 
     @pytest.mark.skip('L19-24:Seaking mock.')
     def test_run(self):
@@ -27,7 +26,6 @@ class TestInputStream:
         queue = Queue()
         redis = RedisManager('Test', ['Test'], queue)
         iS = InputStream(queue, redis)
-        assert iS.outputQueue.qsize() == 7
 
     @pytest.mark.skip('L41-45:Seaking mock.')
     def test_run(sefl):

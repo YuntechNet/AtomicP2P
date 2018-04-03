@@ -5,7 +5,10 @@ class HeartBeat:
 
     @staticmethod
     def req(redis, _to, _data=None):
-        Command(redis.name, _to, 'heart-beat', _data).send(redis)
+        if _to:
+            Command(redis.name, _to, 'heart-beat', _data).send(redis)
+        else:
+            redis.print('You need to specify a process to send.')
         return None
 
     @staticmethod

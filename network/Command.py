@@ -37,7 +37,7 @@ class Commander:
             LibServerCommand.processRes(redis, command)
 
     @staticmethod
-    def processReq(redis, _to=None, _command=None, _data=None, command=None):
+    def processReq(redis, _to=None, _command=None, _data=None):
         if 'message' in _command:
             Message.req(redis, _to, _command.replace('message ', ''))
         elif 'online' in _command:
