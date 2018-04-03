@@ -1,5 +1,5 @@
-{% for user in users %}
-no ip source binding {{user.mac}} vlan {{user.vlan}} {{user.ip}} interface {{user.interface}}
-ip source binding {{user.mac}} vlan {{user.vlan}} {{user.ip}} interface {{user.interface}}
+{% for each in ipTable %}
+no ip source binding {{each.mac}} vlan {{each.vlan}} {{each.ip}} interface {{each.interface}}
+ip source binding {{each.mac}} vlan {{each.vlan}} {{each.ip}} interface {{each.interface}}
 {% endfor %}
 

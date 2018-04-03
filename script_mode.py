@@ -3,40 +3,87 @@ from switch.Switch import Switch
 import re
 import json
 
-command_list = []
+class ScriptExplainer:
 
-def sw_exec(command):
-    command_list.append(command)
+    def __init__(self, json):
+        self.script = json
+        self.commandList = []
 
-class script_mode(object):
+    def scriptPreExec(self, preCommandCode):
+        for each in preCommandCode:
+            exec(each, globals(), locals())
+        return locals()
 
-    def __init__(self,script_file):
-        self.script_file = script_file
-        self.script = json.load(open(script_file))
-        self.command_list = []
+    def _explain_(self, commandCode, local):
+        def sw_exec(command):
+            self.commandList.append(command)
 
-    def sw_exec(self,command):
-        print(command)
+        excCode = ''
+        for each in commandCode:
+            excCode += each
 
-    def script_pre_exec(self,pre_command_code):
-        for each in pre_command_code:
-            exec(each,globals())
+        exec(excCode, local, locals())
+        return self.commandList
 
+    def explainToList(self):
+        resultDict = self.scriptPreExec(self.script['preCommand'])
+        self.commandList = self._explain_(self.script['command'], resultDict)
+        return self.commandList
 
-    def script_exlainer(self,command_code):
-    
-        exec_code =''
-        for each in command_code:
-            exec_code += each
+class FormatExplainer(ScriptExplainer):
 
-        exec(exec_code,globals())
-
-        return command_list
-
-    def explain_to_list(self):
+    def __init__(self,script):
         
-        self.script_pre_exec(self.script['pre_command'])
-        command_list = self.script_exlainer(self.script['command'])
-        return command_list
+        self.script = open(script)
+        self.commandList = []
+        self.preCommand = []
+        self.command = []
+
+    def dataLoad(self,data):
+        self.data = data
+        for each in data:
+            self.preCommand.append('%s = %s'%(each,data[each]))
+
+    def parseScript(self):
+        varPattern = '{{[^{]+}}'
+        blockPattern = '{%.*%}'
+        commentPattern = '{#.*#}'
+        #print(re.findall(varPattern,self.script.read()))
         
+        #print(re.findall(blockPattern,self.script.read()))
+        for line in self.script:
+            line = line.strip('\n')
+            varList = re.findall(varPattern,line)
+            block = re.findall(blockPattern,line) 
+            if varList:
+                line = "'%s'" % line
+                line = self.variable(line,varList)
+                print(line)
+            elif block:
+                pass
+            #code = 'sw_exec(%s)'%line
+            #self.command.append(code)
+        
+    def variable(self,line,varList):
+
+        if len(varList) == 1:
+            line = line.replace(varList[0],"%s")
+            line = "%s %%(%s)"%(line,varList[0].replace('{','').replace('}',''))
+        else:
+            for each in varList:
+                line = line.replace(each,"%s")
+                var = each.replace('{','').replace('}','')
+                if each == varList[0]:
+                    line = "%s %% (%s," %(line,var)
+                elif each == varList[-1]:
+                    line = "%s %s)" % (line,var)
+                else:
+                    line = "%s %s,"%(line,var)
+         
+        return line
+
+    def explainToList(self):
+        resultDict = self.scriptPreExec(self.preCommand)
+        self.commandList = self._explain_(self.command, resultDict)
+        return self.commandList
 

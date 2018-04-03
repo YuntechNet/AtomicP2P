@@ -1,5 +1,5 @@
 {
-	"pre_command":[
+	"preCommand":[
 		"mac = 'xxxx.xxxx.xxxx'",
 		"mac2 = 'yyyy.yyyy.yyyy'",
 		"vlan = '254'",
