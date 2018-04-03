@@ -63,22 +63,37 @@ class FormatExplainer(ScriptExplainer):
                 line = "'%s'" % line
             parseTemp.append(line)
         self.ParseBlock(parseTemp)
-        for each in self.command:
-            print(each)
 
     def ParseBlock(self,parseTemp):
         blockPattern = '{%.*%}'
         flag =False
+        blockSite =[]
         blockList = []
-        for each in parseTemp:
+        for i,each in enumerate(parseTemp):
             if re.search(blockPattern,each): 
                 flag = not flag
+                blockSite.append(i)
             if flag:
                 blockList.append(each)
+            if not flag and not re.search(blockPattern,each): 
+                parseTemp[i] = 'sw_exec(%s)\n'%each
+            elif not flag and re.search(blockPattern,each): 
+                parseTemp[i] = ''
+            
+        for i,each in enumerate(blockList):
+            if re.search(blockPattern,each): 
+                each = each.replace("{%",'').replace("%}",'').strip()+':\n'
+            else:
+                each = '    sw_exec(%s)\n'%each
+            blockList[i] = each
 
-        print(blockList)
-
-
+        j =0
+        for i in range(blockSite[0],blockSite[1]):
+            parseTemp[i] = blockList[j]
+            j = j+1
+            
+        self.command = parseTemp
+        print(self.command) 
     def ParseVariable(self,line,varList):
 
         if len(varList) == 1:
@@ -87,9 +102,9 @@ class FormatExplainer(ScriptExplainer):
         else:
             for each in varList:
                 line = line.replace(each,"%s")
-                var = each.replace('{','').replace('}','')
+                var = each.replace('{','').replace('}','').strip()
                 if re.search(r".*\..*",var): #need improve
-                    var = '%s[%s]'%(var.split('.')[0],var.split('.')[1])
+                    var = "%s['%s']"%(var.split('.')[0],var.split('.')[1])
 
                 if each == varList[0]:
                     line = "%s %% (%s," %(line,var)

@@ -25,7 +25,7 @@ script = FormatExplainer('./demo/script_demo')
 script.dataLoad(json.load(open('./demo/TestIpTable.json')))
 script.dataLoad(json.load(open('./demo/TestSwitchObjectId.json')))
 script.parseScript()
-#print(script.explainToList()
+print(script.explainToList())
 
 #exe = Executor(s)
 

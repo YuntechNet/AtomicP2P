@@ -1,8 +1,7 @@
 con terminal
-{% for each in ipTable %}
-show {{ip}}
-no ip source binding {{each.mac}} vlan {{each.vlan}} {{each.ip}} interface {{each.interface}}
-ip source binding {{each.mac}} vlan {{each.vlan}} {{each.ip}} interface {{each.interface}}
+{% for each in ip %}
+no ip source binding {{each.mac}} vlan {{each.vlan}} {{each.ipv4}} interface 
+ip source binding {{each.mac}} vlan {{each.vlan}} {{each.ipv4}} interface
 {% endfor %}
 end
 write

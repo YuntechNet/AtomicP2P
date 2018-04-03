@@ -1,9 +1,9 @@
 {
 	"ip":[
-		{"ipv4":"127.0.0.1","ipv6":"","managerId":"","switchId":"0","portFrom":"0","status":"lock","userID":"","mac":"000C.2901.9827","optData":""},
-		{"ipv4":"127.0.0.2","ipv6":"","managerId":"","switchId":"1","portFrom":"1","status":"lock","userID":"","mac":"000C.2901.9828","optData":""},
-		{"ipv4":"127.0.0.3","ipv6":"","managerId":"","switchId":"2","portFrom":"2","status":"active","userID":"","mac":"000C.2901.9829","optData":""},
-		{"ipv4":"127.0.0.4","ipv6":"","managerId":"","switchId":"3","portFrom":"3","status":"active","userID":"","mac":"000C.2901.9830","optData":""},
-		{"ipv4":"127.0.0.5","ipv6":"","managerId":"","switchId":"4","portFrom":"4","status":"lock","userID":"","mac":"000C.2901.9831","optData":""}
+		{"ipv4":"127.0.0.1","ipv6":"","managerId":"","switchId":"0","portFrom":"0","status":"lock","userID":"","mac":"000C.2901.9827","optData":"","vlan":"127"},
+		{"ipv4":"127.0.0.2","ipv6":"","managerId":"","switchId":"1","portFrom":"1","status":"lock","userID":"","mac":"000C.2901.9828","optData":"","vlan":"127"},
+		{"ipv4":"127.0.0.3","ipv6":"","managerId":"","switchId":"2","portFrom":"2","status":"active","userID":"","mac":"000C.2901.9829","optData":"","vlan":"127"},
+		{"ipv4":"127.0.0.4","ipv6":"","managerId":"","switchId":"3","portFrom":"3","status":"active","userID":"","mac":"000C.2901.9830","optData":"","vlan":"127"},
+		{"ipv4":"127.0.0.5","ipv6":"","managerId":"","switchId":"4","portFrom":"4","status":"lock","userID":"","mac":"000C.2901.9831","optData":"","vlan":"127"}
 	]
 }
