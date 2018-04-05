@@ -5,7 +5,7 @@ from utils.Manager import ProcessManager
 
 class LibCisco(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=0, config=Config):
+    def __init__(self, outputQueue, argv=[], sleep=0, config=Config):
         ProcessManager.__init__(self, 'LibCisco', outputQueue)
         self.sleep = sleep
 

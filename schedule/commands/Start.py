@@ -10,7 +10,7 @@ class Start:
 
     @staticmethod
     def res(redis, cmd):
-        argv = cmd._command.replace('start', '').split(' ')
+        argv = cmd._command.replace('--schedule start', '').split(' ')
         if not cmd._data:
             manager = redis.instance['scheduleManager']
             redis.print('Start cmd from %s, responsed' % cmd._from)

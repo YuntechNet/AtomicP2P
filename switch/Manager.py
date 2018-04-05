@@ -31,7 +31,7 @@ class SwitchDatabaseManager(DatabaseManager):
 #
 class SwitchManager(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=1, config=Config):
+    def __init__(self, outputQueue, argv=[], sleep=1, config=Config):
         ProcessManager.__init__(self, 'SwitchManager', outputQueue)
         self.sleep = sleep
 

@@ -5,7 +5,7 @@ from utils.Manager import ProcessManager
 
 class LibServer(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=0.5, config=Config):
+    def __init__(self, outputQueue, argv=[], sleep=0.5, config=Config):
         ProcessManager.__init__(self, 'LibServer', outputQueue)
         self.sleep = sleep
 
@@ -44,12 +44,11 @@ class LibServer(ProcessManager):
             return False
 
     def loadArgv(self, argv):
-        if not argv is None:
-            for each in argv:
-                if '--LIB_HOST=' in each:
-                    self.host = str(each[11:])
-                elif '--LIB_PORT=' in each:
-                    self.port = int(each[11:])
+        for each in argv:
+            if '--LIB_HOST=' in each:
+                self.host = str(each[11:])
+            elif '--LIB_PORT=' in each:
+                self.port = int(each[11:])
 
     def run(self): # Override
         while not self.stopped.wait(self.sleep):

@@ -46,7 +46,7 @@ class Commander:
             HeartBeat.req(redis, _to, _data)
         elif 'load-config' in _command:
             LoadConfig.req(redis, _to, _data)
-        elif 'shutdown' in _command:
+        elif 'shutdown' in _command or 'exit' in _command:
             Shutdown.req(redis, _to, _data)
 
         elif '--libcisco' in _command:

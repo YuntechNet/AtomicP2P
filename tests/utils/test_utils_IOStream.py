@@ -31,6 +31,7 @@ class TestInputStream:
     def test_run(sefl):
         pass
 
+    @pytest.mark.skip('L41-45:Seaking mock.')
     def test_execute(self):
         queue = Queue()
         redis = RedisManager('Test', ['Test'], queue)
@@ -40,5 +41,5 @@ class TestInputStream:
         #iS.execute('--switch')
         #iS.execute('--schedule')
         #iS.execute('--libserver')
-        iS.execute('exit')
+        iS.execute('shutdown')
         assert iS.isExit() == True

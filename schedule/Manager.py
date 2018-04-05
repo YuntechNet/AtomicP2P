@@ -22,19 +22,18 @@ class ScheduleDatabaseManager(DatabaseManager):
 #
 class ScheduleManager(ProcessManager):
 
-    def __init__(self, outputQueue, argv=None, sleep=60, config=Config):
+    def __init__(self, outputQueue, argv=[], sleep=60, config=Config):
         ProcessManager.__init__(self, 'ScheduleManager', outputQueue)
         self.sleep = sleep
 
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
             return
-        self.print('Config loaded.')
 
         self.schedules = {}
         self.user = User('system.scheduler', UserPriority.SCHEDULE)
         self.toSystem()
-        self.scheduleStart()
+        self.loadArgv(argv)
         self.print('Inited.', logging.INFO)
 
     def start(self, instance):
@@ -47,10 +46,17 @@ class ScheduleManager(ProcessManager):
         if hasattr(config, 'SCHEDULE_MANAGER'):
             self.config = config.SCHEDULE_MANAGER
             self.databaseManager = ScheduleDatabaseManager(self.outputQueue, self.config)
+            self.print('Config loaded.')
             return True
         else:
             self.print('Config must contain SCHEDULE_MANAGER attribute.', logging.ERROR)
             return False
+
+    def loadArgv(self, argv):
+        self.print('Loading argv')
+        if '--schedule-run' in argv:
+            self.scheduleStart()
+        self.print('Argv loaded.')
 
     def openFile(self, filePath):
         with open(filePath, encoding='utf-8') as fileConn:
