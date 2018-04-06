@@ -46,7 +46,7 @@ class SwitchManager(ProcessManager):
         super(SwitchManager, self).start()
 
     def loadConfig(self, config=Config):
-        self.print('Loading config')
+        self.print('Loading config', logging.DEBUG)
         if hasattr(config, 'SWITCH_MANAGER'):
             self.devices = {}
             self.config = config.SWITCH_MANAGER
@@ -55,8 +55,8 @@ class SwitchManager(ProcessManager):
                 for each in self.config['STATIC']:
                     sw = Switch(each)
                     self.devices[sw.host] = sw
-                self.print('STATIC devices loaded.')
-            self.print('Config loaded.')
+                self.print('STATIC devices loaded.', logging.DEBUG)
+            self.print('Config loaded.', logging.DEBUG)
             return True
         else:
             self.print('Config must contain SWITCH_MANAGER attribute.', logging.ERROR)

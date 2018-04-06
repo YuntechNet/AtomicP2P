@@ -7,7 +7,7 @@ class Manager:
     def __init__(self, name, outputQueue):
         self.name = name
         self.outputQueue = outputQueue
-        self.print('Initing')
+        self.print('Initing', logging.DEBUG)
 
     def print(self, msg, level=logging.INFO):
         self.outputQueue.put((time.time(), level, self.name, msg))

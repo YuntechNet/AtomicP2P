@@ -19,9 +19,9 @@ class LibCisco(ProcessManager):
         super(LibCisco, self).start()
 
     def loadConfig(self, config=Config):
-        self.print('Loading config')
+        self.print('Loading config', logging.DEBUG)
         if hasattr(config, 'LIB_CISCO'):
-            self.print('Config loaded.')
+            self.print('Config loaded.', logging.DEBUG)
             return True
         else:
             self.print('Config must contain LIB_CISCO attribute.', logging.ERROR)

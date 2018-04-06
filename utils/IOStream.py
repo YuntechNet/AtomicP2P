@@ -10,12 +10,13 @@ from utils.Enums import CommandType
 
 class OutputStream(ThreadManager):
 
-    def __init__(self, inputStream, outputQueue, config=Config):
+    def __init__(self, inputStream, outputQueue, argv=[], config=Config):
         ThreadManager.__init__(self, 'OutputStream', outputQueue)
 
         if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
             return
+        self.loadArgv(argv)
         self.initLogging()
         self.inputStream = inputStream
         self.print('Inited.', logging.INFO)
@@ -31,34 +32,51 @@ class OutputStream(ThreadManager):
         os.system('kill %d' % os.getpid())
 
     def loadConfig(self, config=Config):
-        self.print('Loading config')
+        self.print('Loading config', logging.DEBUG)
         if hasattr(config, 'OUTPUT'):
             self.config = config.OUTPUT
             self.logConfig = self.config['LOG']
-            self.print('Config loaded.')
+            self.logLevel = self.logConfig['LEVEL']
+            self.logFolder = self.logConfig['FOLDER']
+            self.logSize = self.logConfig['SIZE_PER_FILE']
+            self.logCount = self.logConfig['MAX_BACKUP_COUNT']
+            self.print('Config loaded.', logging.DEBUG)
             return True
         else:
             self.print('Config must contain OUTPUT attribute.', logging.ERROR)
             return False
+
+    def loadArgv(self, argv):
+        self.print('Loading argv', logging.DEBUG)
+        for each in argv:
+            if '--log-level=' in each:
+                self.logLevel = each[12:]
+            elif '--log-folder=' in each:
+                self.logFolder = each[13:]
+            elif '--log-size=' in each:
+                self.logSize = each[11:]
+            elif '--log-count=' in each:
+                self.logCount = each[12:]
+        self.print('Argv loaded.', logging.DEBUG)
         
     def initLogging(self):
-        self.print('Initing Logger.')
-        logFormat = logging.Formatter('[%(execute_time)s |%(levelname)8s | %(process_name)s]%(message)s')
-        fileHwnd = RotatingFileHandler(self.logConfig['FOLDER'], mode='a', maxBytes=self.logConfig['SIZE_PER_FILE'], backupCount=self.logConfig['MAX_BACKUP_COUNT'])
+        self.print('Initing Logger.', logging.DEBUG)
+        logFormat = logging.Formatter('[%(execute_time)s |%(levelname)8s | %(process_name)s] %(message)s')
+        fileHwnd = RotatingFileHandler(self.logFolder, mode='a', maxBytes=self.logSize, backupCount=self.logCount)
         fileHwnd.setFormatter(logFormat)
-        fileHwnd.setLevel(getattr(logging, self.logConfig['LEVEL']))
+        fileHwnd.setLevel(getattr(logging, self.logLevel))
         
         consoleHwnd = logging.StreamHandler()
         consoleHwnd.setFormatter(logFormat)
-        consoleHwnd.setLevel(getattr(logging, self.logConfig['LEVEL']))
+        consoleHwnd.setLevel(getattr(logging, self.logLevel))
 
         logging.setLoggerClass(LibCiscoLogger)
         appLog = logging.getLogger('LibCisco')
-        appLog.setLevel(getattr(logging, self.logConfig['LEVEL']))
+        appLog.setLevel(getattr(logging, self.logLevel))
         appLog.addHandler(fileHwnd)
         appLog.addHandler(consoleHwnd)
         self.logger = appLog
-        self.print('Logger inited')
+        self.print('Logger inited', logging.DEBUG)
 
     def exit(self):
         super(OutputStream, self).exit()

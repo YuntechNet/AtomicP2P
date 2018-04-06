@@ -42,21 +42,21 @@ class ScheduleManager(ProcessManager):
         super(ScheduleManager, self).start()
 
     def loadConfig(self, config=Config):
-        self.print('Loading config')
+        self.print('Loading config', logging.DEBUG)
         if hasattr(config, 'SCHEDULE_MANAGER'):
             self.config = config.SCHEDULE_MANAGER
             self.databaseManager = ScheduleDatabaseManager(self.outputQueue, self.config)
-            self.print('Config loaded.')
+            self.print('Config loaded.', logging.DEBUG)
             return True
         else:
             self.print('Config must contain SCHEDULE_MANAGER attribute.', logging.ERROR)
             return False
 
     def loadArgv(self, argv):
-        self.print('Loading argv')
+        self.print('Loading argv', logging.DEBUG)
         if '--schedule-run' in argv:
             self.scheduleStart()
-        self.print('Argv loaded.')
+        self.print('Argv loaded.', logging.DEBUG)
 
     def openFile(self, filePath):
         with open(filePath, encoding='utf-8') as fileConn:
