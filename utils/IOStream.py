@@ -102,15 +102,16 @@ class InputStream(ThreadManager):
 
     def execute(self, choice):
         if '--libcisco' in choice:
-            Commander.processReq(self.redis, 'LibCisco-Redis', choice, None)
+            dstList = 'LibCisco-Redis'
         elif '--switch' in choice:
-            Commander.processReq(self.redis, 'SwitchManager-Redis', choice, None)
+            dstList = 'SwitchManager-Redis'
         elif '--schedule' in choice:
-            Commander.processReq(self.redis, 'ScheduleManager-Redis', choice, None)
+            dstList = 'ScheduleManager-Redis'
         elif '--libserver' in choice:
-            Commander.processReq(self.redis, 'LibServer-Redis', choice, None)
-        elif '--broadcast' in choice:
-            Commander.processReq(self.redis, ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], choice, None)
+            dstList = 'LibServer-Redis'
+        elif '--status' in choice:
+            dstList = 'Status'
         else:
-            Commander.processReq(self.redis, None, choice, None)
+            dstList = None
+        Commander.processReq(self.redis, dstList, choice, None)
 

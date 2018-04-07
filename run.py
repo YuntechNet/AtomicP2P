@@ -16,35 +16,35 @@ def main(argv, debug=False):
         outputQueue = Queue()
 
         if '--LibCisco' in argv:
-            redis = RedisManager('LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
+            redis = RedisManager('LibCisco-Redis', ['Status', 'LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
             instance['redisManager'] = redis
             status = StatusManager(outputQueue, argv=argv)
             instance['statusManager'] = status
             libCisco = LibCisco(outputQueue, argv=argv)
             instance['libCisco'] = libCisco
         elif '--SwitchManager' in argv:
-            redis = RedisManager('SwitchManager-Redis', ['SwitchManager-Redis'], outputQueue)
+            redis = RedisManager('SwitchManager-Redis', ['Status', 'SwitchManager-Redis'], outputQueue)
             instance['redisManager'] = redis
             status = StatusManager(outputQueue, argv=argv)
             instance['statusManager'] = status
             switchManager = SwitchManager(outputQueue, argv=argv)
             instance['switchManager'] = switchManager
         elif '--ScheduleManager' in argv:
-            redis = RedisManager('ScheduleManager-Redis', ['ScheduleManager-Redis'], outputQueue)
+            redis = RedisManager('ScheduleManager-Redis', ['Status', 'ScheduleManager-Redis'], outputQueue)
             instance['redisManager'] = redis
             status = StatusManager(outputQueue, argv=argv)
             instance['statusManager'] = status
             scheduleManager = ScheduleManager(outputQueue, argv=argv)
             instance['scheduleManager'] = scheduleManager
         elif '--LibServer' in argv:
-            redis = RedisManager('LibServer-Redis', ['LibServer-Redis'], outputQueue)
+            redis = RedisManager('LibServer-Redis', ['Status', 'LibServer-Redis'], outputQueue)
             instance['redisManager'] = redis
             status = StatusManager(outputQueue, argv=argv)
             instance['statusManager'] = status
             libServer = LibServer(outputQueue, argv=argv)
             instance['libServer'] = libServer
         else: #if instance == {}:
-            redis = RedisManager('LibCisco-Redis', ['LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
+            redis = RedisManager('LibCisco-Redis', ['Status', 'LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
             instance['redisManager'] = redis
             status = StatusManager(outputQueue, argv=argv)
             instance['statusManager'] = status

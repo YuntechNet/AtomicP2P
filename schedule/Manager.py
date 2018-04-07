@@ -1,6 +1,7 @@
 import logging, json, os
 
 from Config import Config
+from status.commands.Online import Online
 from database.Manager import DatabaseManager
 from network.Manager import RedisManager
 from schedule.Schedule import Schedule
@@ -39,6 +40,7 @@ class ScheduleManager(ProcessManager):
     def start(self, instance):
         self.instance = instance
         self.databaseManager.start()
+        Online.req(self.instance['redisManager'])
         super(ScheduleManager, self).start()
 
     def loadConfig(self, config=Config):

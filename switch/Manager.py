@@ -2,6 +2,7 @@ import logging
 
 from Config import Config
 from utils.Manager import ProcessManager
+from status.commands.Online import Online
 from switch.Switch import Switch
 from switch.Command import SwitchCommand
 from database.Manager import DatabaseManager
@@ -43,6 +44,7 @@ class SwitchManager(ProcessManager):
     def start(self, instance):
         self.instance = instance
         self.databaseManager.start()
+#        Online.req(self.instance['redisManager'])
         super(SwitchManager, self).start()
 
     def loadConfig(self, config=Config):
@@ -80,7 +82,7 @@ class SwitchManager(ProcessManager):
         self.devices = {}
         if self.databaseManager.remoteDB.type == 'mongodb':
             from bson.json_util import loads as bsonLoads
-            result = self.databaseManager.temporDB.execute('SELECT * FROM `Switch`').fetchall()
+            result = self.databaseManager.temporDB.execute('SELECT * FROM `Switch`;').fetchall()
             for (host, jsonContent) in result:
                 bsonContent = bsonLoads(jsonContent)
                 bsonContent['host'] = host
