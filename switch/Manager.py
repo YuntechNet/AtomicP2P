@@ -1,58 +1,96 @@
+import logging
 
 from Config import Config
 from utils.Manager import ProcessManager
 from switch.Switch import Switch
-from database.Database import TempDatabase
-from database.Manager import RemoteDBManager
+from switch.Command import SwitchCommand
+from database.Manager import DatabaseManager
+from network.Manager import RedisManager
+
+class SwitchDatabaseManager(DatabaseManager):
+
+    def __init__(self, outputQueue, config, sleep=300):
+        DatabaseManager.__init__(self, outputQueue, config, sleep)
+
+    # Override
+    def sync(self):
+        if self.remoteDB.type == 'mongodb':
+            from bson.json_util import dumps as bsonDumps
+            every = self.remoteDB.switchCol.find({})
+            for doc in every:
+                ip = self.remoteDB.ipCol.find_one({ '_id': doc['ipID'] })
+                cmd = 'REPLACE INTO Switch(IPv4, content) VALUES (\'%s\', \'%s\');' % (ip['ipv4'], bsonDumps(doc))
+                self.temporDB.execute(cmd)
+        elif self.remoteDB.type == 'mysql':
+            pass
+        else:
+            pass        
 
 # SwitchManager
 #   A process responsible for arrane switch heart-beat & execute command.
 #
 class SwitchManager(ProcessManager):
 
-    def __init__(self, outputQueue, sleep=1):
+    def __init__(self, outputQueue, argv=[], sleep=1, config=Config):
         ProcessManager.__init__(self, 'SwitchManager', outputQueue)
         self.sleep = sleep
 
-        if not self.loadConfig() or self.isExit():
+        if not self.loadConfig(config) or self.isExit():
             self.stopped.set()
-        self.print('Config loaded.')
-        self.print('Inited.')
+            return
+        self.print('Inited.', logging.INFO)
 
-    def loadConfig(self):
-        self.print('Loading config about SWITCH_MANAGER')
-        if hasattr(Config, 'SWITCH_MANAGER'):
-            self.device = []
-            self.config = Config.SWITCH_MANAGER
-            if 'TEMP_DATABASE' in self.config:
-                self.tempDB = TempDatabase(self.outputQueue, self.config['TEMP_DATABASE'])
+    def start(self, instance):
+        self.instance = instance
+        self.databaseManager.start()
+        super(SwitchManager, self).start()
+
+    def loadConfig(self, config=Config):
+        self.print('Loading config')
+        if hasattr(config, 'SWITCH_MANAGER'):
+            self.devices = {}
+            self.config = config.SWITCH_MANAGER
+            self.databaseManager = SwitchDatabaseManager(self.outputQueue, self.config)
             if 'STATIC' in self.config:
                 for each in self.config['STATIC']:
-                    self.device.append(Switch(each))
+                    sw = Switch(each)
+                    self.devices[sw.host] = sw
                 self.print('STATIC devices loaded.')
-            if 'DATABASE' in self.config and self.tempDB is not None:
-                self.remoteDBManager = RemoteDBManager(self.outputQueue, self.tempDB, self.config['DATABASE'])
-                self.remoteDBManager.start()
+            self.print('Config loaded.')
             return True
         else:
-            self.print('Config must contain SWITCH_MANAGER attribute.')
+            self.print('Config must contain SWITCH_MANAGER attribute.', logging.ERROR)
             return False
 
-    def getDeviceFromLocal(self):
-        if self.remoteDBManager.remoteDB.type == 'mongodb':
-            from bson.json_util import loads as bsonLoads
-        self.devices = []
-        exe = self.tempDB.execute('SELECT * FROM `Switch`')
-        result = exe.fetchall()
-        for each in result:
-            config = bsonLoads(each[1])
-            config['host'] = each[0]
-            self.devices.append(Switch(config))
+
+    def getDeviceByHost(self, host):
+        if host == 'ALL':
+            return [ value for (key, value) in self.devices.items() ]
+        else:
+            for (key, value) in self.devices.items():
+                if value.host == host:
+                    return [ value ]
+        return None
 
     def run(self):
         while not self.stopped.wait(self.sleep):
-            self.getDeviceFromLocal()
+            self.toSystem()
+
+    def toSystem(self):
+        self.devices = {}
+        if self.databaseManager.remoteDB.type == 'mongodb':
+            from bson.json_util import loads as bsonLoads
+            result = self.databaseManager.temporDB.execute('SELECT * FROM `Switch`').fetchall()
+            for (host, jsonContent) in result:
+                bsonContent = bsonLoads(jsonContent)
+                bsonContent['host'] = host
+                self.devices[host] = Switch(bsonContent)
+        elif self.databaseManager.remoteDB.type == 'mysql':
+            pass
+        else:
+            pass
 
     def exit(self):
-        self.remoteDBManager.exit()
+        self.databaseManager.exit()
         super(SwitchManager, self).exit()
+

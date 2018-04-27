@@ -1,0 +1,8 @@
+{
+    "name": "test-count2222",
+    "target": null,
+    "type": "text",
+	"beforeScript":[],
+	"script":[],
+    "nextSchedule": null
+}

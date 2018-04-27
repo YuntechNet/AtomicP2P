@@ -1,4 +1,6 @@
-import re
+import re, json, copy
+from datetime import datetime
+
 from commands.Enable import Enable
 from commands.Disable import Disable
 from commands.ConfigTerminal import ConfigTerminal
@@ -10,7 +12,7 @@ from commands.Hostname import Hostname
 #   Class definition of EVERY exists command's explain.
 #   Responsible to convert string into specific command's RegEx.
 #
-class Explainer:
+class CommandExplainer:
 
     commands = [
         Hostname(),Enable(), Disable(), ConfigTerminal(), Show(), Exit()
@@ -24,3 +26,35 @@ class Explainer:
             if re.compile(each.reg).match(cmd):
                 return each._insert_(cmd)
         return None
+
+class ScriptExplainer:
+
+    def __init__(self, json):
+        self.script = json
+        self.commandList = []
+
+    def scriptPreExec(self, preCommandCode):
+        for each in preCommandCode:
+            exec(each, globals(), locals())
+        return globals().copy().update(locals())
+
+    def _explain_(self, commandCode, local):
+        def sw_exec(command):
+            self.commandList.append(command)
+
+        excCode = ''
+        for each in commandCode:
+            excCode += '%s\n' % each
+
+        exec(excCode, local, locals())
+        return self.commandList
+
+    def explainToList(self):
+        resultDict = self.scriptPreExec(self.script['beforeScript'])
+        self.commandList = self._explain_(self.script['script'], resultDict)
+        return self.commandList
+
+    def explainToDict(self):
+        return { self.script['target']: self.explainToList() }
+
+        

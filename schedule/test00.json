@@ -1,0 +1,17 @@
+{
+	"pre_command": [
+            "data = {'mac':'0000.0000.0000','ipv4':'254.254.254.254','ethernet':'fa/01','vlan':'207'}",
+            "mac = data['mac']",
+            "ipv4 = data['ipv4']",
+            "ethernet = data['ethernet']",
+            "vlan = data['vlan']"
+    ],
+	"command": [
+            "sw_exec('configure terminal')\n",
+            "for each in data:\n",
+            "    sw_exec('ip source binding %s vlan%s %s' % (mac,vlan,ipv4))\n",
+            "    sw_exec('interface %s'% (ethernet))\n",
+            "sw_exec('end')\n",
+            "sw_exec('write')\n"
+	]
+}
