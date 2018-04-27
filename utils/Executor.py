@@ -1,5 +1,4 @@
 import re
-from utils.Explainer import Explainer
 from utils.Enums import SwitchMode
 
 # Executor
@@ -32,3 +31,4 @@ class Executor:
         if debug:
             print(result)
         return (self, result)
+

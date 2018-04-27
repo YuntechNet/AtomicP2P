@@ -29,7 +29,10 @@ class Switch:
 
         self.sshClient.login(timeout=timeout)
         self.executor._mode_()
-        (self.executor, result) = self.executor._execute_(singleCommand, short)
+        if isinstance(singelCommand, str):
+            (self.executor, result) = self.executor._executeStr_(singleCommand, short)
+        else:
+            (self.executor, result) = self.executor._execute_(singleCommand, short)
         self.sshClient.logout()
 
         if safe:
@@ -44,10 +47,14 @@ class Switch:
         if safe:
             self.lock.setLock(operator)
 
+        result = ''
         self.sshClient.login(timeout=timeout)
         self.executor._mode_()
         for singleCommand in listCommand:
-            (self.executor, resultSingle) = self.executor._execute_(singleCommand, short)
+            if isinstance(singleCommand, str):
+                (self.executor, resultSingle) = self.executor._executeStr_(singleCommand, short)
+            else:
+                (self.executor, resultSingle) = self.executor._execute_(singleCommand, short)
             result += resultSingle
         self.sshClient.logout()
 
@@ -55,8 +62,9 @@ class Switch:
             self.lock.unLock()
         return result
 
-    def initSwitch(self, operator, timeout=60, debug=False):
-        result = self.singleExecute(operator=operator, singleCommand=Show('run'), short=False, timeout=timeout)
-        if debug:
-            print(result)
-        self.config.loadConfig(result, debug)
+    def initSwitch(self, debug=False):
+        self.config.loadConfig(debug)
+        self.config.loadNeighbor(debug)
+
+    def info(self):
+        return self.config.info()

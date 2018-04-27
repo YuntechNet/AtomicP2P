@@ -3,9 +3,35 @@
 # Setup will seperated into serveral part by sub-service.
 class Config:
     
+    #########################################################################
+    #                              THREADES                                 #
+    #########################################################################
+
+    OUTPUT = {
+        'LOG': {
+            'LEVEL': 'DEBUG',
+            'FOLDER': './logs',
+            'SIZE_PER_FILE': 20*1024*1024,
+            'MAX_BACKUP_COUNT': 10
+        }
+    }
+
+    #########################################################################
+    #                              PROCESSES                                #
+    #########################################################################
+
+    # Redis for cross-machine process communication.
+    REDIS_MANAGER = {
+        'ADDRESS': ('redis-15525.c17.us-east-1-4.ec2.cloud.redislabs.com', 15525),
+        'PASSWORD': 'LibCisco'
+    }
+    
+    # LIB CISCO: control core
+    LIB_CISCO = {}
+
     # LIB SERVER: control client side such as JLibCisco-cli to access with which ip and port.
     LIB_SERVER = {
-        'HOST': 'xxx.xxx.xxx.xxx',
+        'HOST': '127.0.0.1',
         'PORT' : 25534
     }
 
@@ -14,7 +40,7 @@ class Config:
         # Temporary database to store the data synced from remote database.
         #   Use sqlite3 to get good IO speed.
         'TEMP_DATABASE': {
-            'path': './temp.sqlite',
+            'path': './temp.sqlite'
         },
         # Default login for switch when not username / password can use.
         'DEFAULT_USERNAME' : 'LibServer',
@@ -33,11 +59,10 @@ class Config:
         #      use mysql, need to use table field: 'tabname': '<TABLE_NAME>',
         'DATABASE' : {
             'type': 'mongodb',
-            'host': 'xxx.xxx.xxx.xxx',
-            'port': 27017,
-            'dbName': 'YunNMS',
+            'uri': 'mongodb://libcisco:libcisco@ds155130.mlab.com:55130/libcisco-testmongo',
+            'dbName': 'libcisco-testmongo',
             'switchColName': 'switch',
-            'ipColName': 'ip',
+            'ipColName': 'ip'
         },
         # For any api interface to connect to get device info like RESTful framework.
         #   if none, just set 'API': None
@@ -47,5 +72,11 @@ class Config:
             'url': 'http://<host>:<port>/api/switch/',
             'method': 'POST',
             'content-type': 'application/json'
+        }
+    }
+
+    SCHEDULE_MANAGER = {
+        'TEMP_DATABASE': {
+            'path': './temp.sqlite'
         }
     }

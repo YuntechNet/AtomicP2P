@@ -1,7 +1,7 @@
 from ssh_switch import ssh_switch
 from getpass import getpass
 from utils.Executor import Executor
-from utils.Explainer import Explainer
+from utils.Explainer import CommandExplainer
 
 try:
     from pws import host,username,password
@@ -14,7 +14,7 @@ s = ssh_switch(host=host,username=username,password=password)
 s.login()
 
 cmd = ['show run','conf t','hostname test001' ,'exit']
-exp = Explainer()
+exp = CommandExplainer()
 exe = Executor(s)
 exe._mode_()
 

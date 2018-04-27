@@ -1,0 +1,15 @@
+language: python
+
+python: 
+  - "3.5"
+  - "pypy3.5"
+  
+install:
+  - pip install codecov
+  - pip install -r requirements.txt
+  
+script:
+  - python -m pytest --cov=./ --cov-report term-missing --cov-config=.coveragerc ./tests
+
+after_success:
+  - codecov
