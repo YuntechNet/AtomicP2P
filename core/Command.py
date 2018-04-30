@@ -1,7 +1,7 @@
 
 from network.commands.Command import Command
 
-class LibCiscoCommand:
+class LibreCiscoCommand:
 
     @staticmethod
     def processRes(redis, command):

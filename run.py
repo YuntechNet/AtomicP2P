@@ -1,7 +1,7 @@
 import sys, traceback
 
 from queue import Queue
-from core.LibCisco import LibCisco
+from core.LibreCisco import LibreCisco
 from switch.Manager import SwitchManager
 from server.Server import LibServer
 from schedule.Manager import ScheduleManager
@@ -15,13 +15,13 @@ def main(argv, debug=False):
         instance = {}
         outputQueue = Queue()
 
-        if '--LibCisco' in argv:
-            redis = RedisManager('LibCisco-Redis', ['Status', 'LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
+        if '--LibreCisco' in argv:
+            redis = RedisManager('LibreCisco-Redis', ['Status', 'LibreCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
             instance['redisManager'] = redis
             status = StatusManager(outputQueue, argv=argv)
             instance['statusManager'] = status
-            libCisco = LibCisco(outputQueue, argv=argv)
-            instance['libCisco'] = libCisco
+            libreCisco = LibreCisco(outputQueue, argv=argv)
+            instance['libreCisco'] = libreCisco
         elif '--SwitchManager' in argv:
             redis = RedisManager('SwitchManager-Redis', ['Status', 'SwitchManager-Redis'], outputQueue)
             instance['redisManager'] = redis
@@ -44,12 +44,12 @@ def main(argv, debug=False):
             libServer = LibServer(outputQueue, argv=argv)
             instance['libServer'] = libServer
         else: #if instance == {}:
-            redis = RedisManager('LibCisco-Redis', ['Status', 'LibCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
+            redis = RedisManager('LibreCisco-Redis', ['Status', 'LibreCisco-Redis', 'SwitchManager-Redis', 'ScheduleManager-Redis', 'LibServer-Redis'], outputQueue)
             instance['redisManager'] = redis
             status = StatusManager(outputQueue, argv=argv)
             instance['statusManager'] = status
-            libCisco = LibCisco(outputQueue, argv=argv)
-            instance['libCisco'] = libCisco
+            libreCisco = LibreCisco(outputQueue, argv=argv)
+            instance['libreCisco'] = libreCisco
             switchManager = SwitchManager(outputQueue, argv=argv)
             instance['switchManager'] = switchManager
             scheduleManager = ScheduleManager(outputQueue, argv=argv)

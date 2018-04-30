@@ -101,8 +101,8 @@ class InputStream(ThreadManager):
         pass
 
     def execute(self, choice):
-        if '--libcisco' in choice:
-            dstList = 'LibCisco-Redis'
+        if '--librecisco' in choice:
+            dstList = 'LibreCisco-Redis'
         elif '--switch' in choice:
             dstList = 'SwitchManager-Redis'
         elif '--schedule' in choice:

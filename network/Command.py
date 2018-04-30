@@ -6,7 +6,7 @@ from network.commands.LoadConfig import LoadConfig
 from network.commands.Shutdown import Shutdown
 
 from status.Command import StatusCommand
-from core.Command import LibCiscoCommand
+from core.Command import LibreCiscoCommand
 from switch.Command import SwitchCommand
 from schedule.Command import ScheduleCommand
 from server.Command import LibServerCommand
@@ -25,8 +25,8 @@ class Commander:
         elif StatusCommand.processCheck(command._command):
             StatusCommand.processRes(redis, command)
 
-        elif '--libcisco' in command._command:
-            LibCiscoCommand.processRes(redis, command)
+        elif '--librecisco' in command._command:
+            LibreCiscoCommand.processRes(redis, command)
         elif '--switch' in command._command:
             SwitchCommand.processRes(redis, command)
         elif '--schedule' in command._command:
@@ -46,8 +46,8 @@ class Commander:
         elif StatusCommand.processCheck(_command):
             StatusCommand.processReq(redis, _to, _command, _data)
 
-        elif '--libcisco' in _command:
-            LibCiscoCommand.processReq(redis, _to, _command, _data)
+        elif '--librecisco' in _command:
+            LibreCiscoCommand.processReq(redis, _to, _command, _data)
         elif '--switch' in _command:
             SwitchCommand.processReq(redis, _to, _command, _data)
         elif '--schedule' in _command:

@@ -3,10 +3,10 @@ import logging
 from Config import Config
 from utils.Manager import ProcessManager
 
-class LibCisco(ProcessManager):
+class LibreCisco(ProcessManager):
 
     def __init__(self, outputQueue, argv=[], sleep=0, config=Config):
-        ProcessManager.__init__(self, 'LibCisco', outputQueue)
+        ProcessManager.__init__(self, 'LibreCisco', outputQueue)
         self.sleep = sleep
 
         if not self.loadConfig(config) or self.isExit():
@@ -16,7 +16,7 @@ class LibCisco(ProcessManager):
 
     def start(self, instance):
         self.instance = instance
-        super(LibCisco, self).start()
+        super(LibreCisco, self).start()
 
     def loadConfig(self, config=Config):
         self.print('Loading config', logging.DEBUG)
@@ -28,5 +28,5 @@ class LibCisco(ProcessManager):
             return False
     
     def exit(self):
-        super(LibCisco, self).exit()
+        super(LibreCisco, self).exit()
 

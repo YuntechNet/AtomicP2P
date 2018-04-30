@@ -40,7 +40,11 @@ class RedisManager(ThreadManager):
         while not self.stopped.wait(self.sleep):
             for each in self.ps.listen():
                 if each['type'] == 'message':
-                    Commander.processRes(self, Command.parse(each['data'].decode('utf-8')))
+                    cmd = Command.parse(each['data'].decode('utf-8'))
+                    if self.isMine(cmd):
+                        Commander.processRes(self, Command.parse(each['data'].decode('utf-8')))
+                    else:
+                        self.print(each['data'].decode('utf-8'))
                 elif each['type'] == 'subscribe':
                     self.print('Channel %s subscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']), logging.DEBUG)
                 elif each['type'] == 'unsubscribe':
