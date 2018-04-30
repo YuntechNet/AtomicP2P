@@ -2,6 +2,7 @@ import logging
 
 from Config import Config
 from utils.Manager import ProcessManager
+from status.commands.Online import Online
 from switch.Switch import Switch
 from switch.Command import SwitchCommand
 from database.Manager import DatabaseManager
@@ -43,10 +44,11 @@ class SwitchManager(ProcessManager):
     def start(self, instance):
         self.instance = instance
         self.databaseManager.start()
+#        Online.req(self.instance['redisManager'])
         super(SwitchManager, self).start()
 
     def loadConfig(self, config=Config):
-        self.print('Loading config')
+        self.print('Loading config', logging.DEBUG)
         if hasattr(config, 'SWITCH_MANAGER'):
             self.devices = {}
             self.config = config.SWITCH_MANAGER
@@ -55,8 +57,8 @@ class SwitchManager(ProcessManager):
                 for each in self.config['STATIC']:
                     sw = Switch(each)
                     self.devices[sw.host] = sw
-                self.print('STATIC devices loaded.')
-            self.print('Config loaded.')
+                self.print('STATIC devices loaded.', logging.DEBUG)
+            self.print('Config loaded.', logging.DEBUG)
             return True
         else:
             self.print('Config must contain SWITCH_MANAGER attribute.', logging.ERROR)
@@ -80,7 +82,7 @@ class SwitchManager(ProcessManager):
         self.devices = {}
         if self.databaseManager.remoteDB.type == 'mongodb':
             from bson.json_util import loads as bsonLoads
-            result = self.databaseManager.temporDB.execute('SELECT * FROM `Switch`').fetchall()
+            result = self.databaseManager.temporDB.execute('SELECT * FROM `Switch`;').fetchall()
             for (host, jsonContent) in result:
                 bsonContent = bsonLoads(jsonContent)
                 bsonContent['host'] = host

@@ -16,7 +16,7 @@ class DatabaseManager(ThreadManager):
             self.temporDB = TempDatabase(outputQueue, config['TEMP_DATABASE'])
         if 'DATABASE' in config:
             self.remoteDB = RemoteDatabase(outputQueue, config['DATABASE'])
-        self.print('inited.', logging.INFO)
+        self.print('Inited.', logging.INFO)
 
     def run(self):
         while not self.stopped.wait(self.sleep):

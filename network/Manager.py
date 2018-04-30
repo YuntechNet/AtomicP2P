@@ -17,7 +17,7 @@ class RedisManager(ThreadManager):
         self.rcon = redis.StrictRedis(host=self.address[0], port=self.address[1], password=self.password)
         self.ps = self.rcon.pubsub()
         self.ps.subscribe(subscribeList)
-        self.print('Subscribing: %s' % str(subscribeList))
+        self.print('Subscribing: %s' % str(subscribeList), logging.DEBUG)
         self.print('Inited', logging.INFO)
 
     def start(self, instance):
@@ -25,12 +25,12 @@ class RedisManager(ThreadManager):
         super(RedisManager, self).start()
 
     def loadConfig(self, config=Config):
-        self.print('Loading config.')
+        self.print('Loading config.', logging.DEBUG)
         if hasattr(config, 'REDIS_MANAGER'):
             self.config = config.REDIS_MANAGER
             self.address = self.config['ADDRESS']
             self.password = self.config['PASSWORD']
-            self.print('Config loaded.')
+            self.print('Config loaded.', logging.DEBUG)
             return True
         else:
             self.print('Config must contain REDIS_MANAGER attribute.', logging.ERROR)
@@ -42,9 +42,9 @@ class RedisManager(ThreadManager):
                 if each['type'] == 'message':
                     Commander.processRes(self, Command.parse(each['data'].decode('utf-8')))
                 elif each['type'] == 'subscribe':
-                    self.print('Channel %s subscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']))
+                    self.print('Channel %s subscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']), logging.DEBUG)
                 elif each['type'] == 'unsubscribe':
-                    self.print('Channel %s unsubscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']))
+                    self.print('Channel %s unsubscribed, listening count %d.' % (each['channel'].decode('utf-8'), each['data']), logging.DEBUG)
             if self.isExit():
                 self.ps.close()
 

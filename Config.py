@@ -9,12 +9,14 @@ class Config:
 
     OUTPUT = {
         'LOG': {
-            'LEVEL': 'DEBUG',
+            'LEVEL': 'INFO',
             'FOLDER': './logs',
             'SIZE_PER_FILE': 20*1024*1024,
             'MAX_BACKUP_COUNT': 10
         }
     }
+
+    STATUS_MANAGER = {}
 
     #########################################################################
     #                              PROCESSES                                #
