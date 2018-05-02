@@ -1,8 +1,5 @@
-# LibCisco [![Build Status](https://travis-ci.org/jackey8616/LibCisco.svg?branch=master)](https://travis-ci.org/jackey8616/LibCisco) [![codecov](https://codecov.io/gh/jackey8616/LibCisco/branch/master/graph/badge.svg)](https://codecov.io/gh/jackey8616/LibCisco) [![Maintainability](https://api.codeclimate.com/v1/badges/7be9b87532eac7425493/maintainability)](https://codeclimate.com/github/jackey8616/LibCisco/maintainability)    
+# LibreCisco [![Build Status](https://travis-ci.org/YuntechNet/LibreCisco.svg?branch=master)](https://travis-ci.org/YuntechNet/LibreCisco) [![codecov](https://codecov.io/gh/YuntechNet/LibreCisco/branch/master/graph/badge.svg)](https://codecov.io/gh/YuntechNet/LibreCisco) [![Maintainability](https://api.codeclimate.com/v1/badges/354307fe29feac3d46ad/maintainability)](https://codeclimate.com/github/YuntechNet/LibreCisco/maintainability)    
 A cisco manager service base on Python3.5
-
-## Notice
-This is the developinge fork, master branch is in [YuntechNet/LibCisco](https://github.com/YuntechNet/LibCisco) for final publish.
 
 ## Feature
 
