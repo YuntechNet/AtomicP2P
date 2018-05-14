@@ -1,4 +1,4 @@
-# LibreCisco [![Build Status](https://travis-ci.org/YuntechNet/LibreCisco.svg?branch=master)](https://travis-ci.org/YuntechNet/LibreCisco) [![codecov](https://codecov.io/gh/YuntechNet/LibreCisco/branch/master/graph/badge.svg)](https://codecov.io/gh/YuntechNet/LibreCisco) [![Maintainability](https://api.codeclimate.com/v1/badges/354307fe29feac3d46ad/maintainability)](https://codeclimate.com/github/YuntechNet/LibreCisco/maintainability)    
+# LibreCisco [![Build Status](https://travis-ci.org/YuntechNet/LibreCisco.svg?branch=master)](https://travis-ci.org/YuntechNet/LibreCisco) [![codecov](https://codecov.io/gh/YuntechNet/LibreCisco/branch/master/graph/badge.svg)](https://codecov.io/gh/YuntechNet/LibreCisco) [![Maintainability](https://api.codeclimate.com/v1/badges/354307fe29feac3d46ad/maintainability)](https://codeclimate.com/github/YuntechNet/LibreCisco/maintainability) [![Gitter chat](https://badges.gitter.im/LibreCisco/Lobby.png)](https://gitter.im/LibreCisco/Lobby)   
 A cisco manager service base on Python3.5
 
 ## Feature
