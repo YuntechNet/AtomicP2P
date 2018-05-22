@@ -1,7 +1,15 @@
 from Server import Server
 from Client import Client
+import sys
+
+def main(argv):
+    if len(sys.argv) < 2:
+        print (sys.argv[0])
+    else:
+        print (sys.argv[2])
 
 if __name__ == '__main__' :
+    main()
     IP_dictionary = {'MyIP':'0.0.0.0', 'switch maneger':'192.168.43.53'}
     s = Server('0.0.0.0',8000)
     s.start()
@@ -17,3 +25,5 @@ if __name__ == '__main__' :
             print('I send to',ip,pt)
             Sendcmd = Client(ip, pt, cmd)
             Sendcmd.start()
+
+
