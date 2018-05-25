@@ -2,17 +2,12 @@ from Server import Server
 from Client import Client
 import sys
 
-def main(argv):
-    if len(sys.argv) < 2:
-        print (sys.argv[0])
-    else:
-        print (sys.argv[2])
-
-if __name__ == '__main__' :
-    main()
-    IP_dictionary = {'MyIP':'0.0.0.0', 'switch maneger':'192.168.43.53'}
-    s = Server('0.0.0.0',8000)
-    s.start()
+def main():
+    if len(sys.argv) >= 5:
+        s = Server(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])      
+    elif ( len(sys.argv) >= 3 and len(sys.argv) < 5):
+        s = Server(sys.argv[1], sys.argv[2], "", "")
+    s.start()   
 
     while True:
         cmd = input('imput what do you want to do:')
@@ -23,7 +18,9 @@ if __name__ == '__main__' :
             pt = int(input ('what the port do you use:'))
             cmd = input('imput is your command:')
             print('I send to',ip,pt)
-            Sendcmd = Client(ip, pt, cmd)
+            Sendcmd = Client(ip, pt, 'command', cmd)
             Sendcmd.start()
 
 
+if __name__ == '__main__' :
+    main()
