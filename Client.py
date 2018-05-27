@@ -3,7 +3,7 @@ import time
 import socket
 
 class Client(threading.Thread):
-    def __init__(self, HOST,PORT,SendType,Message):
+    def __init__(self, HOST,PORT,SendType,Message=''):
         threading.Thread.__init__(self)
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((HOST, PORT))
@@ -16,7 +16,7 @@ class Client(threading.Thread):
             self.client.send(self.sendtype.encode('ascii'))
             dataT = self.client.recv(1024)
             print (dataT.decode('ascii'))   
-            self.client.send(self.message.encode('ascii'))
+            self.client.send(self.message)
             data = self.client.recv(1024)
             print (data.decode('ascii'))            
             if (dataT == (b"server know what's type you may send.") and data == (b"server received you message.") ):
