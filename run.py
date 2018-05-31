@@ -29,13 +29,13 @@ def main(argv):
     peer.start()
 
     if linkaddr:
-        peer.JoinNetWork(linkaddr.split(':')[0], int(linkaddr.split(':')[1]), name)
+        peer.Sendmessage("join", linkaddr.split(':')[0], int(linkaddr.split(':')[1]), [name, peer.Listenport ] )
     else:
         print('you should enter your link peer (if you are not first)')
         linkip= input('IP of link peer:')
         linkpt= input('port of link peer:')
         if linkip!='' and linkpt!='':
-            peer.JoinNetWork(linkip, int(linkpt), name)
+            peer.Sendmessage("join", linkip, int(linkpt), [name, peer.Listenport ] )
         else:
             print('you are first peer')
 
@@ -49,7 +49,9 @@ def main(argv):
             pt = int(input ('what the port do you use:'))
             cmd = input('imput is your command:')
             print('I send to',ip,pt)
-            peer.command(ip,pt,cmd)
+            peer.Sendmessage("command", ip, pt, cmd)
+        elif cmd=='exit':
+            peer.Sendmessage("exit",None, 0, peer.connectlist)
 
 if __name__ == '__main__' :
     main(sys.argv)

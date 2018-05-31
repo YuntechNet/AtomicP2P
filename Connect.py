@@ -2,7 +2,7 @@ import threading
 import time
 import socket
 
-class Client(threading.Thread):
+class Connect(threading.Thread):
     def __init__(self, HOST,PORT,SendType,Message=''):
         threading.Thread.__init__(self)
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
