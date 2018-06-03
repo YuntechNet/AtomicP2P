@@ -1,4 +1,4 @@
-from Peer import Peer
+from PeerLink.Peer import Peer
 import sys
 
 def main(argv): 
@@ -29,13 +29,13 @@ def main(argv):
     peer.start()
 
     if linkaddr:
-        peer.Sendmessage("join", linkaddr.split(':')[0], int(linkaddr.split(':')[1]), [name, peer.Listenport ] )
+        peer.Sendmessage("join", linkaddr.split(':')[0], int(linkaddr.split(':')[1]), [name, peer.listenport ] )
     else:
         print('you should enter your link peer (if you are not first)')
         linkip= input('IP of link peer:')
         linkpt= input('port of link peer:')
         if linkip!='' and linkpt!='':
-            peer.Sendmessage("join", linkip, int(linkpt), [name, peer.Listenport ] )
+            peer.Sendmessage("join", linkip, int(linkpt), [name, peer.listenport ] )
         else:
             print('you are first peer')
 
@@ -50,6 +50,8 @@ def main(argv):
             cmd = input('imput is your command:')
             print('I send to',ip,pt)
             peer.Sendmessage("command", ip, pt, cmd)
+        elif cmd=='list':
+            print(peer.connectlist)
         elif cmd=='exit':
             peer.Sendmessage("exit",None, 0, peer.connectlist)
 
