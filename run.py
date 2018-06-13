@@ -1,4 +1,4 @@
-from PeerLink.Peer import Peer
+from peer.peer import Peer
 import sys
 
 def main(argv): 
@@ -26,18 +26,12 @@ def main(argv):
         peer = Peer(addr.split(':')[0], int(addr.split(':')[1]) )        
     else:
         peer = Peer() 
-    peer.start()
+        peer.start()
 
     if linkaddr:
-        peer.Sendmessage("join", linkaddr.split(':')[0], int(linkaddr.split(':')[1]), [name, peer.listenport ] )
+        peer.sendMessage( linkaddr.split(':')[0], int(linkaddr.split(':')[1]), "join", [name, peer.listenPort ] )
     else:
-        print('you should enter your link peer (if you are not first)')
-        linkip= input('IP of link peer:')
-        linkpt= input('port of link peer:')
-        if linkip!='' and linkpt!='':
-            peer.Sendmessage("join", linkip, int(linkpt), [name, peer.listenport ] )
-        else:
-            print('you are first peer')
+        print('you are first peer')
 
 
     while True:
@@ -45,15 +39,15 @@ def main(argv):
         if cmd=='help':
             print('S: send your message to aim.')
         elif cmd == 'S':
-            ip = str(input ('what the host do you want to send:'))
-            pt = int(input ('what the port do you use:'))
-            cmd = input('imput is your command:')
-            print('I send to',ip,pt)
-            peer.Sendmessage("command", ip, pt, cmd)
+            ip = str(input ('host:'))
+            pt = int(input ('port:'))
+            cmd = input('command:')
+            print('send to',ip,pt)
+            peer.sendMessage( ip, pt,"command", cmd)
         elif cmd=='list':
             print(peer.connectlist)
         elif cmd=='exit':
-            peer.Sendmessage("exit",None, 0, peer.connectlist)
+            peer.sendMessage(None, 0, "exit", peer.connectlist)
 
 if __name__ == '__main__' :
     main(sys.argv)
