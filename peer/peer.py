@@ -10,6 +10,7 @@ class Peer(threading.Thread):
         threading.Thread.__init__(self)  
         self.setServer(ip, port)
         self.connectlist=[]
+        self.connectnum=0
         self.lock = threading.Lock()
 
     def run(self):
@@ -31,9 +32,29 @@ class Peer(threading.Thread):
         print('get link from',addr,'.')
         data = (pickle.loads(conn.recv(1024)))
         print ("server get:", data)
+        conn.send(b'get message.')
     
+        if data[0] == 'join':
+            self.addConnectlist(data[1],addr[0])
     
     #send
     def sendMessage(self, ip, port, sendType, message):
         sender = PeerConnection( ip, port, sendType, message)
         sender.start()
+
+    #list
+    def addConnectlist(self, member, ip):
+        check=True
+        for listmember in self.connectlist:
+            if self.connectlist != []:
+                if member[1] == listmember[1]:
+                    check = False
+                    break
+                pass       
+        if check == True:
+            member.append(ip)
+            self.connectlist.append(member)
+            self.connectnum += 1
+            
+    def removeConnectlist(self):
+        pass
