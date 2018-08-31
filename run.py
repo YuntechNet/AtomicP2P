@@ -23,7 +23,7 @@ def main(argv):
             name= arguments[7:]
 
     if addr:
-        peer = Peer(addr.split(':')[0], int(addr.split(':')[1]) )        
+        peer = Peer(addr.split(':')[0], int(addr.split(':')[1]), name )        
     else:
         peer = Peer() 
     peer.start()

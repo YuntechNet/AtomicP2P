@@ -6,12 +6,13 @@ import sys
 from peer.connection import PeerConnection
 
 class Peer(threading.Thread):
-    def __init__(self, ip='0.0.0.0', port=8000):
+    def __init__(self, ip='0.0.0.0', port=8000, name='none'):
         threading.Thread.__init__(self)  
         self.setServer(ip, port)
         self.connectlist=[]
         self.connectnum=0
         self.lock = threading.Lock()
+        self.name = name
 
     def run(self):
         while True:
@@ -34,7 +35,16 @@ class Peer(threading.Thread):
         print ("server get:", data)
         conn.send(b'get message.')
     
+        #join event
         if data[0] == 'join':
+            for member in self.connectlist:
+                self.sendMessage(member[2],member[1],'joindata',[data[1], addr[0]])
+            self.addConnectlist(data[1],addr[0])
+            self.sendMessage(addr[0],data[1][1],'checkjoin',[self.name, self.listenPort])
+        elif data[0] == 'joindata':
+            self.addConnectlist(data[1][0],data[1][1])
+            self.sendMessage(data[1][1],data[1][0][1],'checkjoin',[self.name, self.listenPort])
+        elif data[0] == 'checkjoin':
             self.addConnectlist(data[1],addr[0])
     
     #send
@@ -50,7 +60,8 @@ class Peer(threading.Thread):
                 if member[1] == listmember[1]:
                     check = False
                     break
-                pass       
+        if member[1]==self.listenPort:
+            check = False  
         if check == True:
             member.append(ip)
             self.connectlist.append(member)
