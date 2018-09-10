@@ -27,26 +27,33 @@ class Peer(threading.Thread):
         self.server.bind(( listenIp , int(listenPort) ))
         self.server.listen(5)
         self.listenPort = listenPort
-        print("server has prepared~")
+        print("server prepared")
 
     def acceptHandle(self,conn, addr):
-        print('get link from',addr,'.')
         data = (pickle.loads(conn.recv(1024)))
-        print ("server get:", data)
-        conn.send(b'get message.')
-    
+
         #join event
         if data[0] == 'join':
+            print('new member join')
             for member in self.connectlist:
-                self.sendMessage(member[2],member[1],'joindata',[data[1], addr[0]])
+                self.sendMessage(member[2],member[1],'newmember',[data[1], addr[0]])
             self.addConnectlist(data[1],addr[0])
             self.sendMessage(addr[0],data[1][1],'checkjoin',[self.name, self.listenPort])
-        elif data[0] == 'joindata':
+            conn.send(b'join successful.')
+        elif data[0] == 'newmember':
+            print('new member join')
             self.addConnectlist(data[1][0],data[1][1])
             self.sendMessage(data[1][1],data[1][0][1],'checkjoin',[self.name, self.listenPort])
+            conn.send(b'')        
         elif data[0] == 'checkjoin':
             self.addConnectlist(data[1],addr[0])
-    
+            conn.send(b'')
+
+        #message event
+        elif data[0] == 'message':
+            print (data[0] +": '"+ data[1] + "' from " + addr[0])
+            conn.send(b'')
+
     #send
     def sendMessage(self, ip, port, sendType, message):
         sender = PeerConnection( ip, port, sendType, message)

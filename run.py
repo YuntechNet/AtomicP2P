@@ -33,25 +33,25 @@ def main(argv):
     else:
         print('you are first peer')
 
-    helptips="S: sned your message to aim.\n" + "list: show the connectlist this peer have.\n"
+    helptips="Send: send message .\n" + "list: show the connectlist .\n"
     print(helptips)
     
     while True:
         cmd = input()
         if cmd=='help':
             print(helptips)
-        elif cmd == 'S':
+        elif cmd == 'Send':
             ip = str(input ('host:'))
-            pt = int(input ('port:'))
-            cmd = input('command:')
-            print('send to',ip,pt)
-            peer.sendMessage( ip, pt,"command", cmd)
+            port = int(input ('port:'))
+            mes = input('message:')
+            print('send to',ip,port)
+            peer.sendMessage( ip, port,"message", mes)
         elif cmd=='list':
             print(peer.connectlist)
         elif cmd=='exit':
             pass
         else:
-            print('no this command, you can input "help" to check.')
+            print('command error , input "help" to check the function.')
 
 if __name__ == '__main__' :
     main(sys.argv)

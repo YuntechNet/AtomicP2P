@@ -16,4 +16,6 @@ class PeerConnection(threading.Thread):
     def connection(self, data):
         self.client.send(data)
         Data = self.client.recv(1024)
-        print ("the server say", Data.decode('ascii'))   
+        data = Data.decode('ascii')
+        if data != '':
+            print ("the server say", data)   
