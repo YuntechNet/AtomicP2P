@@ -3,22 +3,33 @@ import time
 import socket
 import pickle
 import sys
+
+
+from threading import Event
+
 from peer.connection import PeerConnection
 
 class Peer(threading.Thread):
-    def __init__(self, ip='0.0.0.0', port=8000, name='none'):
-        threading.Thread.__init__(self)  
+    def __init__(self, ip='0.0.0.0', port=8000, name='none', role='core', loopDelay = 1 ):
+        threading.Thread.__init__(self)
+        self.stopped = Event()
+        self.loopDelay = loopDelay
+
         self.setServer(ip, port)
         self.connectlist=[]
         self.connectnum=0
         self.lock = threading.Lock()
         self.name = name
+        self.role = role
 
     def run(self):
-        while True:
+        while not self.stopped.wait(self.loopDelay):
             (conn,addr) = self.server.accept()           
             accepthandle = threading.Thread(target=self.acceptHandle,args=(conn,addr))
             accepthandle.start()   
+
+    def stop(self):
+        self.stopped.set()
 
     #accept
     def setServer(self,listenIp,listenPort):
@@ -53,6 +64,12 @@ class Peer(threading.Thread):
         elif data[0] == 'message':
             print (data[0] +": '"+ data[1] + "' from " + addr[0])
             conn.send(b'')
+            
+        #broadcast event
+        elif data[0] == 'broadcast':
+            if data[1][1] == self.role or data[1][1] == 'all':
+                print("get broadcast from '"+ data[1][0] + "': " + data[1][2]) 
+
 
     #send
     def sendMessage(self, ip, port, sendType, message):

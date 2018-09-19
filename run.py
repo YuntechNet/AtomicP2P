@@ -1,38 +1,25 @@
 from peer.peer import Peer
 import sys
+import click
 
-def main(argv): 
-    '''
-    輸入方式: python --addr=0.0.0.0:8000 --link=192.168.43.53:8000 --name=XX
-    '''
-    addr = None
-    linkaddr = None
-    name = None
-    for arguments in argv:
-        if '--addr=' in arguments:
-            if ':' in arguments:
-                addr = arguments[7:]
-            else:
-                addr = arguments[7:] + ':8000'
 
-        if '--link=' in arguments:
-            if ':' in arguments:
-                linkaddr = arguments[7:]            
-       
-        if '--name' in arguments:
-            name= arguments[7:]
+@click.command()
+@click.option('--role' , default='core' , help='role of peer.')
+@click.option('--addr' , default='0.0.0.0:8000' , help='self addresss.')
+@click.option('--target' , default='0.0.0.0:8000' , help='target addresss.')
+@click.option('--name' , default='core' , help='peer name.')
+def main(role, addr, target, name): 
+    """LibreCisco Test Version"""
+   
+    peer = Peer(addr.split(':')[0], int(addr.split(':')[1]), name ,role)        
+    
+    peer.start()  
 
-    if addr:
-        peer = Peer(addr.split(':')[0], int(addr.split(':')[1]), name )        
-    else:
-        peer = Peer() 
-    peer.start()
-
-    if linkaddr:
-        peer.sendMessage( linkaddr.split(':')[0], int(linkaddr.split(':')[1]), "join", [name, peer.listenPort ] )
+    if ( target != '0.0.0.0:8000' ):
+        peer.sendMessage( target.split(':')[0], int(target.split(':')[1]), "join", [name, peer.listenPort ] )
     else:
         print('you are first peer')
-
+   
     helptips="Send: send message .\n" + "list: show the connectlist .\n"
     print(helptips)
     
@@ -41,17 +28,30 @@ def main(argv):
         if cmd=='help':
             print(helptips)
         elif cmd == 'Send':
-            ip = str(input ('host:'))
-            port = int(input ('port:'))
+            try:
+                ip = str(input ('host:'))
+                port = int(input ('port:'))
+                mes = input('message:')
+                print('send to',ip,port)
+                peer.sendMessage( ip, port,"message", mes)
+       
+            except ValueError:
+                print ("wrong input\n")  
+
+        elif cmd == 'broadcast':
+            broadType = input('input aim of broadcast:')
             mes = input('message:')
-            print('send to',ip,port)
-            peer.sendMessage( ip, port,"message", mes)
+            for member in peer.connectlist:
+                peer.sendMessage(member[2], member[1], 'broadcast', [peer.name, broadType, mes])
+                
         elif cmd=='list':
             print(peer.connectlist)
         elif cmd=='exit':
-            pass
+            peer.stop()
+            break
         else:
             print('command error , input "help" to check the function.')
+    print('disconnect successful')
 
 if __name__ == '__main__' :
-    main(sys.argv)
+    main()
