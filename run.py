@@ -16,9 +16,9 @@ def main(role, addr, target, name):
     peer.start()  
 
     if ( target != '0.0.0.0:8000' ):
-        peer.sendMessage( target.split(':')[0], int(target.split(':')[1]), "join", [name, peer.listenPort ] )
+        peer.sendMessage( target.split(':')[0], int(target.split(':')[1]), "join", [peer.name, peer.listenPort, peer.role] )
     else:
-        print('you are first peer')
+        print('you are first peer \n')
    
     helptips="Send: send message .\n" + "list: show the connectlist .\n"
     print(helptips)
@@ -49,6 +49,15 @@ def main(role, addr, target, name):
         elif cmd=='exit':
             peer.stop()
             break
+
+        elif cmd=='test':
+            mes=input()
+            if mes == 'role':
+                print(peer.role)
+            if mes == 'port':
+                print(peer.listenPort)
+            if mes == 'name':
+                print(peer.name)
         else:
             print('command error , input "help" to check the function.')
     print('disconnect successful')

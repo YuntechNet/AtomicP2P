@@ -27,7 +27,6 @@ class Peer(threading.Thread):
             (conn,addr) = self.server.accept()           
             accepthandle = threading.Thread(target=self.acceptHandle,args=(conn,addr))
             accepthandle.start()   
-
     def stop(self):
         self.stopped.set()
 
@@ -42,19 +41,18 @@ class Peer(threading.Thread):
 
     def acceptHandle(self,conn, addr):
         data = (pickle.loads(conn.recv(1024)))
-
         #join event
         if data[0] == 'join':
             print('new member join')
             for member in self.connectlist:
                 self.sendMessage(member[2],member[1],'newmember',[data[1], addr[0]])
             self.addConnectlist(data[1],addr[0])
-            self.sendMessage(addr[0],data[1][1],'checkjoin',[self.name, self.listenPort])
+            self.sendMessage(addr[0],data[1][1],'checkjoin',[self.name, self.listenPort, self.role])
             conn.send(b'join successful.')
         elif data[0] == 'newmember':
             print('new member join')
             self.addConnectlist(data[1][0],data[1][1])
-            self.sendMessage(data[1][1],data[1][0][1],'checkjoin',[self.name, self.listenPort])
+            self.sendMessage(data[1][1],data[1][0][1],'checkjoin',[self.name, self.listenPort, self.role])
             conn.send(b'')        
         elif data[0] == 'checkjoin':
             self.addConnectlist(data[1],addr[0])
@@ -87,7 +85,7 @@ class Peer(threading.Thread):
         if member[1]==self.listenPort:
             check = False  
         if check == True:
-            member.append(ip)
+            member.insert(2,ip)
             self.connectlist.append(member)
             self.connectnum += 1
             
