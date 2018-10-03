@@ -1,4 +1,4 @@
-from peer.peer import Peer
+from peer import Peer
 import sys
 import click
 
