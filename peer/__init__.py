@@ -23,11 +23,14 @@ class Peer(threading.Thread):
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
-            (conn,addr) = self.server.accept()           
+            (conn,addr) = self.server.accept()
+            
             accepthandle = threading.Thread(target=self.acceptHandle,args=(conn,addr))
             accepthandle.start()   
     def stop(self):
         self.stopped.set()
+        self.sendMessage('127.0.0.1',self.listenPort,'message','disconnect successful.')
+        self.server.close()
 
     #accept
     def setServer(self,listenIp,listenPort):

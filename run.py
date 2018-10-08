@@ -60,7 +60,7 @@ def main(role, addr, target, name):
                 print(peer.name)
         else:
             print('command error , input "help" to check the function.')
-    print('disconnect successful')
+
 
 if __name__ == '__main__' :
     main()
