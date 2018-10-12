@@ -12,8 +12,8 @@ def node():
     for (key, value) in nodes.items():
         value.start()
 
-    nodes['sw_1'].sendMessage('127.0.0.1', 8000, 'join', ['switch01', 8010, 'sw'])
-    nodes['sw_2'].sendMessage('127.0.0.1', 8000, 'join', ['switch02', 8011, 'sw'])
+    nodes['sw_1'].sendMessage('127.0.0.1', 8000, 'join', '{} {} {}'.format('switch01', 8010, 'sw'))
+    nodes['sw_2'].sendMessage('127.0.0.1', 8000, 'join', '{} {} {}'.format('switch02', 8011, 'sw'))
 
     time.sleep(5)
     yield nodes

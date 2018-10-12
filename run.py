@@ -16,7 +16,7 @@ def main(role, addr, target, name):
     peer.start()  
 
     if ( target != '0.0.0.0:8000' ):
-        peer.sendMessage( target.split(':')[0], int(target.split(':')[1]), "join", [peer.name, peer.listenPort, peer.role] )
+        peer.sendMessage( target.split(':')[0], int(target.split(':')[1]), "join", "{} {} {}".format(peer.name, peer.listenPort, peer.role))
     else:
         print('you are first peer \n')
    
@@ -42,10 +42,11 @@ def main(role, addr, target, name):
             broadType = input('input aim of broadcast:')
             mes = input('message:')
             for member in peer.connectlist:
-                peer.sendMessage(member[2], member[1], 'broadcast', [peer.name, broadType, mes])
+                peer.sendMessage(member.host[0], member.host[1], 'broadcast', '{} {} {}'.format(peer.name, broadType, mes))
                 
         elif cmd=='list':
-            print(peer.connectlist)
+            for each in peer.connectlist:
+                print(each)
         elif cmd=='exit':
             peer.stop()
             break
