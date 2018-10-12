@@ -24,7 +24,7 @@ class PeerConnection(threading.Thread):
 
     def connection(self, data):
         if type(data) == Message:
-            self.client.send(str.encode(Message.send(data)))
+            self.client.send(Message.send(data))
         else:
             self.client.send(data)
         Data = self.client.recv(1024)

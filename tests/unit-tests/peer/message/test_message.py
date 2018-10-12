@@ -18,7 +18,8 @@ def test_toDict(message):
     }
 
 def test_send(message):
-    data = json.loads(Message.send(message))
+    send_data = str(Message.send(message), encoding='utf-8')
+    data = json.loads(send_data)
     assert data['ip']['host'] == message._ip[0]
     assert data['ip']['port'] == int(message._ip[1])
     assert data['type'] == message._type

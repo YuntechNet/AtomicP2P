@@ -20,13 +20,13 @@ class Message(object):
 
     @staticmethod
     def recv(data):
-        data = json.loads(data)
+        data = json.loads(str(data, encoding='utf-8'))
         return Message((data['ip']['host'], data['ip']['port']), data['type'], data['data'])
 
     @staticmethod
     def send(data):
         data = json.dumps(data.toDict())
-        return data
+        return bytes(data, encoding='utf-8')
 
 class Handler(object):
 
