@@ -1,10 +1,11 @@
 
-def test_contains(peer_info):
-    a = []
-    a.append(peer_info)
-    assert peer_info in a
-    a = []
-    assert not peer_info in a
+from peer.peer_info import PeerInfo
+
+def test_eq(peer_info):
+    p = PeerInfo(peer_info.name, peer_info.role, peer_info.host)
+    assert p == peer_info
+    p = PeerInfo(peer_info.name + '1', peer_info.role, peer_info.host)
+    assert p != peer_info
 
 def test_str(peer_info):
     name = peer_info.name

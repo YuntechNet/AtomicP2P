@@ -9,11 +9,12 @@ class MessageHandler(Handler):
         data = {
             'message': msg
         }
-        return Message(_ip=target, _type='message', _data=data)
+        return Message(_host=target, _type='message', _data=data)
 
     def onRecv(self, src, data):
-        message = data['message']
-        print('Message from {}: {}'.format(str(src), message))
+        message = 'Message from {}: {}'.format(str(src), data['message'])
+        self.peer.last_output = message
+        print(message)
 
 class BroadcastHandler(Handler):
 
@@ -26,11 +27,13 @@ class BroadcastHandler(Handler):
             'role': role,
             'msg': msg
         }
-        return Message(_ip=target, _type='broadcast', _data=data)
+        return Message(_host=target, _type='broadcast', _data=data)
 
     def onRecv(self, src, data):
         from_name = data['from_name']
         role = data['role']
         msg = data['msg']
         if self.peer.role == role or 'all' == role:
-            print('Broadcast Mmessage from: {}: {}'.format(from_name, msg))
+            message = 'Broadcast Mmessage from: {}: {}'.format(from_name, msg)
+            self.peer.last_output = message
+            print(message)

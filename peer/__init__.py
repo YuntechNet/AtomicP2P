@@ -32,6 +32,7 @@ class Peer(threading.Thread):
             'message': MessageHandler(self),
             'broadcast': BroadcastHandler(self)
         }
+        self.last_output = ''
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):

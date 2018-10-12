@@ -12,7 +12,7 @@ class JoinHandler(Handler):
            'listen_port': int(self.peer.listenPort),
            'role': self.peer.role  
         }
-        return Message(_ip=target, _type='join', _data=data)
+        return Message(_host=target, _type='join', _data=data)
     
     def onRecv(self, src, data):
         name = data['name']
@@ -36,7 +36,7 @@ class CheckJoinHandler(Handler):
             'listen_port': int(self.peer.listenPort),
             'role': self.peer.role
         }
-        return Message(_ip=target, _type='checkjoin', _data=data)
+        return Message(_host=target, _type='checkjoin', _data=data)
 
     def onRecv(self, src, data):
         name = data['name']
@@ -56,7 +56,7 @@ class NewMemberHandler(Handler):
             'listen_port': int(peer_info.host[1]),
             'role': peer_info.role
         }
-        return Message(_ip=target, _type='newmember', _data=data)
+        return Message(_host=target, _type='newmember', _data=data)
 
     def onRecv(self, src, data):
         name = data['name']

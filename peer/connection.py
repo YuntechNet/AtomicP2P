@@ -10,7 +10,7 @@ class PeerConnection(threading.Thread):
         super(PeerConnection, self).__init__()
         self.message = message
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect(self.message._ip)
+        self.client.connect(self.message._host)
 
     def run(self):
         self.connection(data=self.message)
