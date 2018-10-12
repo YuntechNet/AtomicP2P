@@ -4,7 +4,10 @@ import json
 class Message(object):
 
     def __init__(self, _ip, _type, _data):
-        self._ip = _ip
+        if type(_ip[1]) != int:
+            self._ip = (_ip[0], int(_ip[1]))
+        else:
+            self._ip = _ip
         self._type = _type
         self. _data = _data
 
@@ -31,7 +34,7 @@ class Message(object):
 class Handler(object):
 
     def __init__(self, peer):
-        self._peer = peer
+        self.peer = peer
 
     def onSend(self, **kwargs):
         raise NotImplementedError

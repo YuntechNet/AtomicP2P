@@ -16,7 +16,7 @@ def main(role, addr, target, name):
     peer.start()  
 
     if ( target != '0.0.0.0:8000' ):
-        peer.sendMessage( target.split(':')[0], int(target.split(':')[1]), "join", "{} {} {}".format(peer.name, peer.listenPort, peer.role))
+        peer.sendMessage((target.split(':')[0], target.split(':')[1]), 'join')
     else:
         print('you are first peer \n')
    
@@ -30,19 +30,21 @@ def main(role, addr, target, name):
         elif cmd == 'Send':
             try:
                 ip = str(input ('host:'))
-                port = int(input ('port:'))
-                mes = input('message:')
+                port = input ('port:')
+                mes = {'msg': input('message:')}
                 print('send to',ip,port)
-                peer.sendMessage( ip, port,"message", mes)
+                peer.sendMessage((ip, port),'message', **mes)
        
             except ValueError:
                 print ("wrong input\n")  
 
         elif cmd == 'broadcast':
-            broadType = input('input aim of broadcast:')
-            mes = input('message:')
+            data = {
+                'role': input('input aim of broadcast:'),
+                'msg': input('message:')
+            }
             for member in peer.connectlist:
-                peer.sendMessage(member.host[0], member.host[1], 'broadcast', '{} {} {}'.format(peer.name, broadType, mes))
+                peer.sendMessage((member.host[0], member.host[1]), 'broadcast', **data)
                 
         elif cmd=='list':
             for each in peer.connectlist:
