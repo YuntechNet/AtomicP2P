@@ -1,6 +1,6 @@
 import pytest
 
-from peer.message import Message, Handler
+from utils.message import Message, Handler
 
 @pytest.fixture(scope='class')
 def message():

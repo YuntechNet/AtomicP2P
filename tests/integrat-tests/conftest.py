@@ -4,21 +4,21 @@ from peer import Peer
 
 @pytest.yield_fixture(scope='module')
 def core1():
-    core = Peer(role='core', name='core01', ip='0.0.0.0', port=8000)
+    core = Peer(role='core', name='core01', host=('0.0.0.0', 8000))
     core.start()
     yield core
     core.stop()
 
 @pytest.yield_fixture(scope='module')
 def switch1():
-    switch = Peer(role='sw', name='switch01', ip='0.0.0.0', port=8010)
+    switch = Peer(role='sw', name='switch01', host=('0.0.0.0', 8010))
     switch.start()
     yield switch
     switch.stop()
 
 @pytest.yield_fixture(scope='module')
 def switch2():
-    switch = Peer(role='sw', name='switch02', ip='0.0.0.0', port=8011)
+    switch = Peer(role='sw', name='switch02', host=('0.0.0.0', 8011))
     switch.start()
     yield switch
     switch.stop()

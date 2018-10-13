@@ -1,24 +1,27 @@
 import threading
-import time
 import socket
-import pickle
-import sys
 
 from threading import Event
 
 from peer.peer_info import PeerInfo
 from peer.connection import PeerConnection
-from peer.message import Message
+from peer.command import SendCmd, BroadcastCmd, ListCmd
 from peer.message.join import JoinHandler, CheckJoinHandler, NewMemberHandler
 from peer.message.msg import MessageHandler, BroadcastHandler
 
-class Peer(threading.Thread):
-    def __init__(self, ip='0.0.0.0', port=8000, name='none', role='core', loopDelay=1):
+from utils import printText
+from utils.command import Command
+from utils.message import Message
+
+class Peer(threading.Thread, Command):
+
+    def __init__(self, host, name, role, loopDelay=1, output_field=None):
         super(Peer, self).__init__()
         self.stopped = Event()
         self.loopDelay = loopDelay
+        self.output_field = output_field
 
-        self.setServer(ip, port)
+        self.setServer(host)
         self.connectlist = []
         self.connectnum = 0
         self.lock = threading.Lock()
@@ -33,6 +36,18 @@ class Peer(threading.Thread):
             'broadcast': BroadcastHandler(self)
         }
         self.last_output = ''
+        self.commands = {
+            'send': SendCmd(self),
+            'broadcast': BroadcastCmd(self),
+            'list': ListCmd(self)
+        }
+
+    def onProcess(self, msg_arr, **kwargs):
+        msg_key = msg_arr[0]
+        msg_arr = msg_arr[1:]
+        if msg_key in self.commands:
+            return self.commands[msg_key].onProcess(msg_arr)
+        return ''
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
@@ -47,13 +62,13 @@ class Peer(threading.Thread):
         self.server.close()
 
     #accept
-    def setServer(self,listenIp,listenPort):
+    def setServer(self, host):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.server.bind((listenIp , int(listenPort)))
+        self.server.bind((host[0] , int(host[1])))
         self.server.listen(5)
-        self.listenPort = listenPort
-        print("server prepared")
+        self.listenPort = host[1]
+        printText("server prepared")
 
     def acceptHandle(self,conn, addr):
         data = Message.recv(conn.recv(1024))
@@ -65,10 +80,10 @@ class Peer(threading.Thread):
     def sendMessage(self, host, sendType, **kwargs):
         if sendType in self.handler:
             message = self.handler[sendType].onSend(target=host, **kwargs)
-            sender = PeerConnection(message)
+            sender = PeerConnection(message=message, output_field=self.output_field)
             sender.start()
         else:
-            print('No such type.')
+            printText('No such type.')
 
     #list
     def addConnectlist(self, peer_info):
