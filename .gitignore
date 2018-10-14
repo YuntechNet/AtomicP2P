@@ -14,5 +14,8 @@ htmlcov/
 *.sqlite
 *.log
 *log*
+*.pem
+*.key
 
-pws.py
+!test.pem
+!test.key

@@ -1,3 +1,5 @@
+import os
+from os.path import join
 import click
 from prompt_toolkit.application import Application
 from prompt_toolkit.document import Document
@@ -10,6 +12,7 @@ from prompt_toolkit.widgets import TextArea
 
 from LibreCisco.peer import Peer
 from LibreCisco.utils import printText
+from LibreCisco.utils.create_x509_cert import create_self_signed_cert
 
 
 @click.command()
@@ -17,8 +20,11 @@ from LibreCisco.utils import printText
 @click.option('--addr' , default='0.0.0.0:8000' , help='self addresss.')
 @click.option('--target' , default='0.0.0.0:8000' , help='target addresss.')
 @click.option('--name' , default='core' , help='peer name.')
-def main(role, addr, target, name): 
+@click.option('--cert', default='data/libre_cisco.pem', help='Certificate file path.')
+def main(role, addr, target, name, cert):
     """LibreCisco Test Version"""
+
+    cert_file, key_file = create_self_signed_cert(os.getcwd(), cert, cert.replace('pem', 'key'))
 
     dashboard_text = '==================== Dashboard ====================\n'
     peer_text      = '====================    Peer   ====================\n'
@@ -30,7 +36,7 @@ def main(role, addr, target, name):
 
     addr = addr.split(':')
     services = {
-        'peer': Peer(host=addr, name=name, role=role, output_field=[dashboard_field, peer_field]),
+        'peer': Peer(host=addr, name=name, role=role, cert=(cert_file, key_file), output_field=[dashboard_field, peer_field]),
         'watch_dog': None
     }
     peer = services['peer']

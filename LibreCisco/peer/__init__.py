@@ -1,5 +1,6 @@
 import threading
 import socket
+import ssl
 
 from threading import Event
 
@@ -15,13 +16,14 @@ from LibreCisco.utils.message import Message
 
 class Peer(threading.Thread, Command):
 
-    def __init__(self, host, name, role, loopDelay=1, output_field=None):
+    def __init__(self, host, name, role, cert, loopDelay=1, output_field=None):
         super(Peer, self).__init__()
         self.stopped = Event()
         self.loopDelay = loopDelay
         self.output_field = output_field
 
-        self.setServer(host)
+        self.cert = cert
+        self.setServer(host, cert)
         self.connectlist = []
         self.connectnum = 0
         self.lock = threading.Lock()
@@ -60,26 +62,28 @@ class Peer(threading.Thread, Command):
         self.server.close()
 
     #accept
-    def setServer(self, host):
-        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.server.bind((host[0] , int(host[1])))
-        self.server.listen(5)
+    def setServer(self, host, cert):
+        unwrap_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        unwrap_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        unwrap_socket.bind((host[0] , int(host[1])))
+        unwrap_socket.listen(5)
+        self.server = ssl.wrap_socket(unwrap_socket, certfile=cert[0], keyfile=cert[1], server_side=True)
         self.listenPort = host[1]
-        printText("server prepared")
+        printText('Peer prepared')
+        printText('This peer is running with certificate at path {}'.format(cert[0]))
+        printText('Please make sure other peers have same certicate to connect to this peer.')
 
     def acceptHandle(self,conn, addr):
         data = Message.recv(conn.recv(1024))
         if data._type in self.handler:
             self.handler[data._type].onRecv(addr, data._data)
-            conn.send(b'')
 
     #send
     def sendMessage(self, host, sendType, **kwargs):
         if sendType in self.handler:
             messages = self.handler[sendType].onSend(target=host, **kwargs)
             for each in messages:
-                sender = PeerConnection(message=each, output_field=self.output_field)
+                sender = PeerConnection(message=each, cert_pem=self.cert[0], output_field=self.output_field)
                 sender.start()
         else:
             printText('No such type.')
