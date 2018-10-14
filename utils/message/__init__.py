@@ -36,8 +36,20 @@ class Message(object):
 
 class Handler(object):
 
-    def __init__(self, peer):
+    def __init__(self, peer, can_broadcast=False):
         self.peer = peer
+        self.can_broadcast = can_broadcast
+
+    # Wrap if it is a broadcast packet.
+    def wrap_packet(self, target, _type, _data, **kwargs):
+        arr = []
+        if self.can_broadcast and target[0] == 'broadcast':
+            for each in self.peer.connectlist:
+                if target[1] == 'all' or each.role == target[1]:
+                    arr.append(Message(_host=each.host, _type=_type, _data=_data))
+        else:
+            arr.append(Message(_host=target, _type=_type, _data=_data))
+        return arr
 
     def onSend(self, **kwargs):
         raise NotImplementedError

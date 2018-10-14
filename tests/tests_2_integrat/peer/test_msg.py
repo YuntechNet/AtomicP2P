@@ -12,7 +12,7 @@ def test_broadcast(core1, switch1, switch2):
     switch2.sendMessage(('127.0.0.1', core1.listenPort), 'join')
     time.sleep(3)
 
-    core1.onProcess(['broadcast', 'sw', 'ttt'])
+    core1.onProcess(['send', 'broadcast:sw', 'ttt'])
     time.sleep(3)
     assert 'ttt' in switch1.last_output
     assert 'ttt' in switch2.last_output

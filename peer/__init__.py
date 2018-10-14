@@ -5,9 +5,9 @@ from threading import Event
 
 from peer.peer_info import PeerInfo
 from peer.connection import PeerConnection
-from peer.command import SendCmd, BroadcastCmd, ListCmd
+from peer.command import SendCmd, ListCmd
 from peer.message.join import JoinHandler, CheckJoinHandler, NewMemberHandler
-from peer.message.msg import MessageHandler, BroadcastHandler
+from peer.message.msg import MessageHandler
 
 from utils import printText
 from utils.command import Command
@@ -32,13 +32,11 @@ class Peer(threading.Thread, Command):
             'join': JoinHandler(self),
             'checkjoin': CheckJoinHandler(self),
             'newmember': NewMemberHandler(self),
-            'message': MessageHandler(self),
-            'broadcast': BroadcastHandler(self)
+            'message': MessageHandler(self)
         }
         self.last_output = ''
         self.commands = {
             'send': SendCmd(self),
-            'broadcast': BroadcastCmd(self),
             'list': ListCmd(self)
         }
 
@@ -79,9 +77,10 @@ class Peer(threading.Thread, Command):
     #send
     def sendMessage(self, host, sendType, **kwargs):
         if sendType in self.handler:
-            message = self.handler[sendType].onSend(target=host, **kwargs)
-            sender = PeerConnection(message=message, output_field=self.output_field)
-            sender.start()
+            messages = self.handler[sendType].onSend(target=host, **kwargs)
+            for each in messages:
+                sender = PeerConnection(message=each, output_field=self.output_field)
+                sender.start()
         else:
             printText('No such type.')
 
