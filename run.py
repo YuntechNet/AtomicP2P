@@ -72,7 +72,14 @@ def main(role, addr, target, name):
         if cmd[0] in services:
             services[cmd[0]].onProcess(cmd[1:])
         elif cmd[0] == 'help':
-            printText(helptips, ouptut=dashboard_field)
+            helptips = '''
+peer [cmd]
+    - send [ip:port] [msg]           send a msg to host.
+    - broadcast [role/all] [msg]     send a broadcast msg to role.
+    - list                           list all peer.
+exit
+'''
+            printText(helptips, output=dashboard_field)
         elif cmd[0] == 'exit':
             peer.stop()
             event.app.exit()
