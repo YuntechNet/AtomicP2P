@@ -1,6 +1,6 @@
 import time
 import pytest
-from peer import Peer
+from LibreCisco.peer import Peer
 
 @pytest.yield_fixture(scope='module')
 def default_peer():

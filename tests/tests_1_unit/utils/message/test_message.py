@@ -1,5 +1,5 @@
 import json
-from utils.message import Message
+from LibreCisco.utils.message import Message
 
 def test_init(message):
     assert message._host == ('0.0.0.0', 9000)

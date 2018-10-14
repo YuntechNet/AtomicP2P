@@ -1,6 +1,6 @@
 import pytest
 
-from peer.peer_info import PeerInfo
+from LibreCisco.peer.peer_info import PeerInfo
 
 @pytest.fixture(scope='class')
 def peer_info():

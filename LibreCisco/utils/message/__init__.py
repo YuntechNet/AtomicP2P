@@ -1,6 +1,5 @@
 import json
 
-
 class Message(object):
 
     def __init__(self, _host, _type, _data):

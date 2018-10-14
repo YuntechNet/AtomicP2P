@@ -1,6 +1,6 @@
-from utils import printText
-from utils.message import Message, Handler
-from peer.peer_info import PeerInfo
+from LibreCisco.utils import printText
+from LibreCisco.utils.message import Message, Handler
+from LibreCisco.peer.peer_info import PeerInfo
 
 class JoinHandler(Handler):
 

@@ -1,6 +1,6 @@
 import traceback
 import time
-from peer.peer_info import PeerInfo
+from LibreCisco.peer.peer_info import PeerInfo
 
 def test_two_link(core1, switch1):
     switch1.sendMessage(('127.0.0.1', core1.listenPort), 'join')

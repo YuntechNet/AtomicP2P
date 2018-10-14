@@ -1,7 +1,7 @@
 import threading
 import socket
-from utils import printText
-from utils.message import Message
+from LibreCisco.utils import printText
+from LibreCisco.utils.message import Message
 
 class PeerConnection(threading.Thread):
 

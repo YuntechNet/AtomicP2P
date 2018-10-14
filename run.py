@@ -8,8 +8,8 @@ from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea
 
-from peer import Peer
-from utils import printText
+from LibreCisco.peer import Peer
+from LibreCisco.utils import printText
 
 
 @click.command()

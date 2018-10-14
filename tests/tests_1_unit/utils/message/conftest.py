@@ -1,6 +1,6 @@
 import pytest
 
-from utils.message import Message, Handler
+from LibreCisco.utils.message import Message, Handler
 
 @pytest.fixture(scope='class')
 def message():

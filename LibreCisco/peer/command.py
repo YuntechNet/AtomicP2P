@@ -1,6 +1,6 @@
 
-from utils import printText
-from utils.command import Command
+from LibreCisco.utils import printText
+from LibreCisco.utils.command import Command
 
 class SendCmd(Command):
 

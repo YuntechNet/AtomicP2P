@@ -3,15 +3,15 @@ import socket
 
 from threading import Event
 
-from peer.peer_info import PeerInfo
-from peer.connection import PeerConnection
-from peer.command import SendCmd, ListCmd
-from peer.message.join import JoinHandler, CheckJoinHandler, NewMemberHandler
-from peer.message.msg import MessageHandler
+from LibreCisco.peer.peer_info import PeerInfo
+from LibreCisco.peer.connection import PeerConnection
+from LibreCisco.peer.command import SendCmd, ListCmd
+from LibreCisco.peer.message.join import JoinHandler, CheckJoinHandler, NewMemberHandler
+from LibreCisco.peer.message.msg import MessageHandler
 
-from utils import printText
-from utils.command import Command
-from utils.message import Message
+from LibreCisco.utils import printText
+from LibreCisco.utils.command import Command
+from LibreCisco.utils.message import Message
 
 class Peer(threading.Thread, Command):
 
