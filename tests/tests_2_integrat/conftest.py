@@ -14,6 +14,14 @@ def cert():
     return create_self_signed_cert(os.getcwd(), 'data/test.pem', 'data/test.key')
 
 @pytest.yield_fixture(scope='session')
+def malware_peer(cert):
+    malware_hash = sh(join(os.getcwd(), 'LibreCisco', 'peer'))
+    mp = Peer(role='sw', name='switch_malware', host=('0.0.0.0', 8012), cert=cert, _hash=malware_hash)
+    mp.start()
+    yield mp
+    mp.stop()
+
+@pytest.yield_fixture(scope='session')
 def core1(cert, self_hash):
     core = Peer(role='core', name='core01', host=('0.0.0.0', 8000), cert=cert, _hash=self_hash)
     core.start()

@@ -11,6 +11,24 @@ def test_init(message, default_peer, self_hash):
 def test_str(message):
     assert str(message) == 'Message<>'
 
+def test_set_reject(message):
+    assert not 'reject' in message._data
+    message.set_reject('123')
+    assert message._data == {'reject': '123'}
+    message._data = {
+        'test': 'exists'
+    }
+    message.set_reject('456', maintain_data=True)
+    assert message._data == {
+        'test': 'exists',
+        'reject': '456'
+    }
+
+def test_is_reject(message):
+    assert message.is_reject() == False
+    message.set_reject('123')
+    assert message.is_reject() == True
+
 def test_toDict(message, default_peer):
     assert message.toDict() == {
         'to': {

@@ -28,7 +28,7 @@ class Message(object):
         return 'reject' in self._data
 
     def toDict(self):
-        data= {
+        return {
             'to': {
                 'ip': self._to[0],
                 'port': self._to[1]
@@ -41,13 +41,11 @@ class Message(object):
             'type': self._type,
             'data': self._data
         }
-        return data
 
 
     @staticmethod
     def recv(data):
         data = json.loads(str(data, encoding='utf-8'))
-        reject = data['reject'] if 'reject' in data else None
         return Message(_to=(data['to']['ip'], data['to']['port']), \
                        _from=(data['from']['ip'], data['from']['port']),
                        _hash=data['hash'], _type=data['type'], \

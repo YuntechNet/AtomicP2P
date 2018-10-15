@@ -7,3 +7,6 @@ def test_onProcess(default_peer):
     rtn = default_peer.onProcess(['test', 'test2'])
     assert rtn == ''
 
+def test_sendMessage(default_peer):
+    default_peer.sendMessage(None, 'None')
+
