@@ -1,8 +1,8 @@
-#!/usr/bin/env python
-
+import hashlib
+from os import listdir, getcwd
+from os.path import join, isfile, isdir
 from OpenSSL import crypto
 from os.path import exists, join
-
 
 def create_self_signed_cert(cert_dir, cert_file='myapp.crt', key_file='myapp.key'):
     """
@@ -37,4 +37,14 @@ def create_self_signed_cert(cert_dir, cert_file='myapp.crt', key_file='myapp.key
         with open(join(cert_dir, key_file), "wb") as f:
             f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, k))
     return cert_file, key_file
+
+def self_hash(path):
+    hash_str = ''
+    for each in listdir(path):
+        if isdir(join(path, each)):
+            hash_str += self_hash(join(path, each))
+        elif isfile(join(path, each)):
+            with open(join(path, each), 'rb') as f:
+                hash_str += hashlib.sha256(f.read()).hexdigest()
+    return hashlib.sha256(bytes(hash_str, encoding='utf-8')).hexdigest()
 

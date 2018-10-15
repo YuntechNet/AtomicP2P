@@ -1,12 +1,12 @@
 import json
 from LibreCisco.utils.message import Message
 
-def test_init(message):
+def test_init(message, self_hash):
     assert message._host == ('0.0.0.0', 9000)
     assert message._type == 'a'
     assert message._data == 'test text'
 
-    assert Message(_host=('0.0.0.0', '9000'), _type=None, _data=None)._host == ('0.0.0.0', 9000)
+    assert Message(_host=('0.0.0.0', '9000'), _hash=self_hash, _type=None, _data=None)._host == ('0.0.0.0', 9000)
 
 def test_str(message):
     assert str(message) == 'Message<>'
@@ -17,6 +17,7 @@ def test_toDict(message):
             'ip': message._host[0],
             'port': int(message._host[1])
         },
+        'hash': message._hash,
         'type': message._type,
         'data': message._data
     }

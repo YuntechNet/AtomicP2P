@@ -16,13 +16,16 @@ from LibreCisco.utils.message import Message
 
 class Peer(threading.Thread, Command):
 
-    def __init__(self, host, name, role, cert, loopDelay=1, output_field=None):
+    def __init__(self, host, name, role, cert, _hash, 
+                 loopDelay=1, output_field=None):
         super(Peer, self).__init__()
         self.stopped = Event()
         self.loopDelay = loopDelay
         self.output_field = output_field
 
         self.cert = cert
+        self._hash = _hash
+        printText('Program hash: {{{}...{}}}'.format(_hash[:6], _hash[-6:]))
         self.setServer(host, cert)
         self.connectlist = []
         self.connectnum = 0
@@ -53,12 +56,14 @@ class Peer(threading.Thread, Command):
         while not self.stopped.wait(self.loopDelay):
             (conn,addr) = self.server.accept()
             
-            accepthandle = threading.Thread(target=self.acceptHandle,args=(conn,addr))
+            accepthandle = threading.Thread(target=self.acceptHandle,
+                                            args=(conn,addr))
             accepthandle.start()   
 
     def stop(self):
         self.stopped.set()
-        self.sendMessage(('127.0.0.1',self.listenPort),'message', **{'msg': 'disconnect successful.'})
+        self.sendMessage(('127.0.0.1',self.listenPort),'message', 
+                         **{'msg': 'disconnect successful.'})
         self.server.close()
 
     #accept
@@ -67,15 +72,23 @@ class Peer(threading.Thread, Command):
         unwrap_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         unwrap_socket.bind((host[0] , int(host[1])))
         unwrap_socket.listen(5)
-        self.server = ssl.wrap_socket(unwrap_socket, certfile=cert[0], keyfile=cert[1], server_side=True)
+        self.server = ssl.wrap_socket(unwrap_socket, certfile=cert[0], 
+                                      keyfile=cert[1], server_side=True)
         self.listenPort = host[1]
         printText('Peer prepared')
-        printText('This peer is running with certificate at path {}'.format(cert[0]))
-        printText('Please make sure other peers have same certicate to connect to this peer.')
+        printText('This peer is running with certificate at path {}'.format(
+                    cert[0]))
+        printText('Please make sure other peers have same certicate.')
 
     def acceptHandle(self,conn, addr):
         data = Message.recv(conn.recv(1024))
-        if data._type in self.handler:
+        if data._hash != self._hash:
+            printText('Illegal peer {} with unmatch hash {{{}...{}}} trying to\
+                        connect to Net.'.format(addr, 
+                                                data._hash[:6],
+                                                data._hash[-6:]))
+            # Here send reject packet
+        elif data._type in self.handler:
             self.handler[data._type].onRecv(addr, data._data)
 
     #send
@@ -83,7 +96,8 @@ class Peer(threading.Thread, Command):
         if sendType in self.handler:
             messages = self.handler[sendType].onSend(target=host, **kwargs)
             for each in messages:
-                sender = PeerConnection(message=each, cert_pem=self.cert[0], output_field=self.output_field)
+                sender = PeerConnection(message=each, cert_pem=self.cert[0], 
+                                        output_field=self.output_field)
                 sender.start()
         else:
             printText('No such type.')

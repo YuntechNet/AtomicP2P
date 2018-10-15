@@ -2,11 +2,12 @@ import json
 
 class Message(object):
 
-    def __init__(self, _host, _type, _data):
+    def __init__(self, _host, _hash, _type, _data):
         if type(_host[1]) != int:
             self._host = (_host[0], int(_host[1]))
         else:
             self._host = _host
+        self._hash = _hash
         self._type = _type
         self._data = _data
 
@@ -19,6 +20,7 @@ class Message(object):
                 'ip': self._host[0],
                 'port': int(self._host[1])
             },
+            'hash': self._hash,
             'type': self._type,
             'data': self._data
         }
@@ -26,7 +28,9 @@ class Message(object):
     @staticmethod
     def recv(data):
         data = json.loads(str(data, encoding='utf-8'))
-        return Message((data['host']['ip'], data['host']['port']), data['type'], data['data'])
+        return Message(_host=(data['host']['ip'], data['host']['port']), \
+                       _hash=data['hash'], _type=data['type'], \
+                       _data=data['data'])
 
     @staticmethod
     def send(data):
@@ -45,9 +49,11 @@ class Handler(object):
         if self.can_broadcast and target[0] == 'broadcast':
             for each in self.peer.connectlist:
                 if target[1] == 'all' or each.role == target[1]:
-                    arr.append(Message(_host=each.host, _type=_type, _data=_data))
+                    arr.append(Message(_host=each.host, _hash=self.peer._hash, \
+                                       _type=_type, _data=_data))
         else:
-            arr.append(Message(_host=target, _type=_type, _data=_data))
+            arr.append(Message(_host=target, _hash=self.peer._hash, \
+                               _type=_type, _data=_data))
         return arr
 
     def onSend(self, **kwargs):

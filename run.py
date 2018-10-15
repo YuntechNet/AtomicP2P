@@ -12,7 +12,7 @@ from prompt_toolkit.widgets import TextArea
 
 from LibreCisco.peer import Peer
 from LibreCisco.utils import printText
-from LibreCisco.utils.create_x509_cert import create_self_signed_cert
+from LibreCisco.utils.security import create_self_signed_cert, self_hash
 
 
 @click.command()
@@ -25,6 +25,7 @@ def main(role, addr, target, name, cert):
     """LibreCisco Test Version"""
 
     cert_file, key_file = create_self_signed_cert(os.getcwd(), cert, cert.replace('pem', 'key'))
+    hash_str = self_hash(path=join(os.getcwd(), 'LibreCisco'))
 
     dashboard_text = '==================== Dashboard ====================\n'
     peer_text      = '====================    Peer   ====================\n'
@@ -36,7 +37,9 @@ def main(role, addr, target, name, cert):
 
     addr = addr.split(':')
     services = {
-        'peer': Peer(host=addr, name=name, role=role, cert=(cert_file, key_file), output_field=[dashboard_field, peer_field]),
+        'peer': Peer(host=addr, name=name, role=role, \
+                     cert=(cert_file, key_file), _hash=hash_str, \
+                     output_field=[dashboard_field, peer_field]),
         'watch_dog': None
     }
     peer = services['peer']
