@@ -7,7 +7,7 @@ from threading import Event
 from LibreCisco.peer.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
 from LibreCisco.peer.command import SendCmd, ListCmd
-from LibreCisco.peer.message.join import JoinHandler, CheckJoinHandler, NewMemberHandler
+from LibreCisco.peer.message import JoinHandler, CheckJoinHandler, NewMemberHandler
 from LibreCisco.peer.message.msg import MessageHandler
 
 from LibreCisco.utils import printText
@@ -24,6 +24,7 @@ class Peer(threading.Thread, Command):
         self.output_field = output_field
 
         self.cert = cert
+        self.host = host
         self._hash = _hash
         printText('Program hash: {{{}...{}}}'.format(_hash[:6], _hash[-6:]))
         self.setServer(host, cert)
@@ -80,16 +81,18 @@ class Peer(threading.Thread, Command):
                     cert[0]))
         printText('Please make sure other peers have same certicate.')
 
-    def acceptHandle(self,conn, addr):
+    def acceptHandle(self, conn, addr):
         data = Message.recv(conn.recv(1024))
-        if data._hash != self._hash:
-            printText('Illegal peer {} with unmatch hash {{{}...{}}} trying to\
-                        connect to Net.'.format(addr, 
-                                                data._hash[:6],
-                                                data._hash[-6:]))
-            # Here send reject packet
-        elif data._type in self.handler:
-            self.handler[data._type].onRecv(addr, data._data)
+        if data._type in self.handler:
+            if data._hash != self._hash and not data.is_reject():
+                printText('Illegal peer {} with unmatch hash {{{}...{}}} tryin'\
+                          'g to connect to net.'.format(
+                                addr, data._hash[:6],data._hash[-6:]))
+                self.sendMessage(data._from, data._type, reject='Unmatching peer hash.')
+            else:
+                self.handler[data._type].onRecv(addr, data._data)
+        else:
+            printText('Unknown packet tpye: {}'.format(data._type))
 
     #send
     def sendMessage(self, host, sendType, **kwargs):

@@ -13,7 +13,7 @@ class PeerConnection(threading.Thread):
         self.output_field = output_field
         unwrap_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client = ssl.wrap_socket(unwrap_socket, cert_reqs=ssl.CERT_REQUIRED, ca_certs=cert_pem)
-        self.client.connect(self.message._host)
+        self.client.connect(self.message._to)
 
     def run(self):
         self.connection(data=self.message)
