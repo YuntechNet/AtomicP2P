@@ -1,3 +1,5 @@
+import os
+from os.path import join
 import click
 from prompt_toolkit.application import Application
 from prompt_toolkit.document import Document
@@ -8,8 +10,10 @@ from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea
 
-from peer import Peer
-from utils import printText
+from LibreCisco.peer import Peer
+from LibreCisco.utils import printText
+from LibreCisco.utils.security import create_self_signed_cert, self_hash
+from LibreCisco.watchdog import Watchdog
 
 
 @click.command()
@@ -17,8 +21,12 @@ from utils import printText
 @click.option('--addr' , default='0.0.0.0:8000' , help='self addresss.')
 @click.option('--target' , default='0.0.0.0:8000' , help='target addresss.')
 @click.option('--name' , default='core' , help='peer name.')
-def main(role, addr, target, name): 
+@click.option('--cert', default='data/libre_cisco.pem', help='Certificate file path.')
+def main(role, addr, target, name, cert):
     """LibreCisco Test Version"""
+
+    cert_file, key_file = create_self_signed_cert(os.getcwd(), cert, cert.replace('pem', 'key'))
+    hash_str = self_hash(path=join(os.getcwd(), 'LibreCisco'))
 
     dashboard_text = '==================== Dashboard ====================\n'
     peer_text      = '====================    Peer   ====================\n'
@@ -30,13 +38,16 @@ def main(role, addr, target, name):
 
     addr = addr.split(':')
     services = {
-        'peer': Peer(host=addr, name=name, role=role, output_field=[dashboard_field, peer_field]),
+        'peer': Peer(host=addr, name=name, role=role, \
+                     cert=(cert_file, key_file), _hash=hash_str, \
+                     output_field=[dashboard_field, peer_field]),
         'watch_dog': None
     }
     peer = services['peer']
-    watch_dog = services['watch_dog']
+    watch_dog = Watchdog(peer)
     
     peer.start()  
+    watch_dog.start()
 
     if (target != '0.0.0.0:8000'):
         peer.sendMessage((target.split(':')[0], target.split(':')[1]), 'join')
@@ -60,6 +71,7 @@ def main(role, addr, target, name):
     @kb.add('c-q')
     def _(event):
         peer.stop()
+        watch_dog.stop()
         event.app.exit()
 
     @kb.add('c-c')
@@ -82,6 +94,7 @@ exit
             printText(helptips, output=dashboard_field)
         elif cmd[0] == 'exit':
             peer.stop()
+            watch_dog.stop()
             event.app.exit()
         else:
             printText('command error , input "help" to check the function.', output=dashboard_field)

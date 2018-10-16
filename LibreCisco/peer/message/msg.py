@@ -1,5 +1,5 @@
-from utils import printText
-from utils.message import Message, Handler
+from LibreCisco.utils import printText
+from LibreCisco.utils.message import Message, Handler
 
 class MessageHandler(Handler):
 

@@ -1,23 +1,28 @@
-from utils import printText
-from utils.message import Message, Handler
-from peer.peer_info import PeerInfo
+from LibreCisco.utils import printText
+from LibreCisco.utils.message import Message, Handler
+from LibreCisco.peer.peer_info import PeerInfo
 
 class JoinHandler(Handler):
 
     def __init__(self, peer):
-        super(JoinHandler, self).__init__(peer)
+        super(JoinHandler, self).__init__(peer, can_reject=True)
         self.output_field = peer.output_field
 
-    def onSend(self, target, **kwargs):
+    def onSendPkt(self, target, **kwargs):
         printText('Joining net to:{}'.format(str(target)))
         data = {
            'name': self.peer.name,
            'listen_port': int(self.peer.listenPort),
-           'role': self.peer.role  
+           'role': self.peer.role
         }
-        return [Message(_host=target, _type='join', _data=data)]
-    
-    def onRecv(self, src, data):
+        return [Message(_to=target, _from=self.peer.host, _hash=self.peer._hash, _type='join', _data=data)]
+
+    def onSendReject(self, target, reason, **kwargs):
+        message = Message(_to=target, _from=self.peer.host, _hash=None, _type='join', _data={})
+        message.set_reject(reason)
+        return [message]
+
+    def onRecvPkt(self, src, data, **kwargs):
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
@@ -29,21 +34,25 @@ class JoinHandler(Handler):
         self.peer.addConnectlist(peer_info)
         self.peer.sendMessage((src[0], listen_port), 'checkjoin')
 
+    def onRecvReject(self, src, data, **kwargs):
+        reject = data['reject']
+        printText('Rejected by {}, reason: {}'.format(src, reject))
+
 class CheckJoinHandler(Handler):
 
     def __init__(self, peer):
         super(CheckJoinHandler, self).__init__(peer)
         self.output_field = peer.output_field
 
-    def onSend(self, target, **kwargs):
+    def onSendPkt(self, target, **kwargs):
         data = {
             'name': self.peer.name,
             'listen_port': int(self.peer.listenPort),
             'role': self.peer.role
         }
-        return [Message(_host=target, _type='checkjoin', _data=data)]
+        return [Message(_to=target, _from=self.peer.host, _hash=self.peer._hash, _type='checkjoin', _data=data)]
 
-    def onRecv(self, src, data):
+    def onRecvPkt(self, src, data):
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
@@ -57,15 +66,15 @@ class NewMemberHandler(Handler):
         super(NewMemberHandler, self).__init__(peer)
         self.output_field = peer.output_field
 
-    def onSend(self, target, peer_info, **kwargs):
+    def onSendPkt(self, target, peer_info, **kwargs):
         data = {
             'name': peer_info.name,
             'listen_port': int(peer_info.host[1]),
             'role': peer_info.role
         }
-        return [Message(_host=target, _type='newmember', _data=data)]
+        return [Message(_to=target, _from=self.peer.host, _hash=self.peer._hash, _type='newmember', _data=data)]
 
-    def onRecv(self, src, data):
+    def onRecvPkt(self, src, data):
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']

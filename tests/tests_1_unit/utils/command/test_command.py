@@ -1,5 +1,5 @@
 import pytest
-from utils.command import Command
+from LibreCisco.utils.command import Command
 
 def test_init(command):
     assert command.cmd == None

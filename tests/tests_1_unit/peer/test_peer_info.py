@@ -1,5 +1,5 @@
 
-from peer.peer_info import PeerInfo
+from LibreCisco.peer.peer_info import PeerInfo
 
 def test_eq(peer_info):
     p = PeerInfo(peer_info.name, peer_info.role, peer_info.host)
