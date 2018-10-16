@@ -4,7 +4,9 @@ from os.path import join, isfile, isdir
 from OpenSSL import crypto
 from os.path import exists, join
 
-def create_self_signed_cert(cert_dir, cert_file='myapp.crt', key_file='myapp.key'):
+
+def create_self_signed_cert(cert_dir, cert_file='myapp.crt',
+                            key_file='myapp.key'):
     """
     If datacard.crt and datacard.key don't exist in cert_dir, create a new
     self-signed cert and keypair and write them into that directory.
@@ -18,13 +20,14 @@ def create_self_signed_cert(cert_dir, cert_file='myapp.crt', key_file='myapp.key
 
         # create a self-signed cert
         cert = crypto.X509()
-        cert.get_subject().C = "US"
-        cert.get_subject().ST = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        cert.get_subject().L = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-        cert.get_subject().O = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+        subject = cert.get_subject()
+        setattr(subject, 'C', 'US')
+        setattr(subject, 'ST', 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+        setattr(subject, 'L', 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
+        setattr(subject, 'O', 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC')
         # XD
-        cert.get_subject().OU = "bunny corp"
-        cert.get_subject().CN = "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+        setattr(subject, 'OU', 'bunny corp')
+        setattr(subject, 'CN', 'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD')
         cert.set_serial_number(1000)
         cert.gmtime_adj_notBefore(0)
         cert.gmtime_adj_notAfter(10 * 365 * 24 * 60 * 60)
@@ -38,6 +41,7 @@ def create_self_signed_cert(cert_dir, cert_file='myapp.crt', key_file='myapp.key
             f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, k))
     return cert_file, key_file
 
+
 def self_hash(path):
     hash_str = ''
     for each in listdir(path):
@@ -47,4 +51,3 @@ def self_hash(path):
             with open(join(path, each), 'rb') as f:
                 hash_str += hashlib.sha256(f.read()).hexdigest()
     return hashlib.sha256(bytes(hash_str, encoding='utf-8')).hexdigest()
-

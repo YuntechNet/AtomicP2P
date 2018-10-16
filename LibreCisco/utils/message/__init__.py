@@ -1,5 +1,6 @@
 import json
 
+
 class Message(object):
 
     def __init__(self, _to, _from, _hash, _type, _data):
@@ -42,19 +43,19 @@ class Message(object):
             'data': self._data
         }
 
-
     @staticmethod
     def recv(data):
         data = json.loads(str(data, encoding='utf-8'))
-        return Message(_to=(data['to']['ip'], data['to']['port']), \
+        return Message(_to=(data['to']['ip'], data['to']['port']),
                        _from=(data['from']['ip'], data['from']['port']),
-                       _hash=data['hash'], _type=data['type'], \
+                       _hash=data['hash'], _type=data['type'],
                        _data=data['data'])
 
     @staticmethod
     def send(data):
         data = json.dumps(data.toDict())
         return bytes(data, encoding='utf-8')
+
 
 class Handler(object):
 
@@ -69,18 +70,19 @@ class Handler(object):
         if self.can_broadcast and target[0] == 'broadcast':
             for each in self.peer.connectlist:
                 if target[1] == 'all' or each.role == target[1]:
-                    arr.append(Message(_to=each.host, _from=self.peer.host, \
-                                       _hash=self.peer._hash, _type=_type,  \
+                    arr.append(Message(_to=each.host, _from=self.peer.host,
+                                       _hash=self.peer._hash, _type=_type,
                                        _data=_data))
         else:
-            arr.append(Message(_to=target, _from=self.peer.host,  \
-                               _hash=self.peer._hash, _type=_type,\
-                                _data=_data))
+            arr.append(Message(_to=target, _from=self.peer.host,
+                               _hash=self.peer._hash, _type=_type,
+                               _data=_data))
         return arr
 
     def onSend(self, target, **kwargs):
         if self.can_reject and 'reject' in locals()['kwargs']:
-            return self.onSendReject(target=target, reason=kwargs['reject'], **kwargs)
+            return self.onSendReject(target=target,
+                                     reason=kwargs['reject'], **kwargs)
         else:
             return self.onSendPkt(target=target, **kwargs)
 
@@ -101,5 +103,3 @@ class Handler(object):
 
     def onRecvPkt(self, src, data, **kwargs):
         raise NotImplementedError
-
-

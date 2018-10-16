@@ -11,6 +11,7 @@ pathlib2==2.3.2
 pluggy==0.7.1
 prompt-toolkit==2.0.6
 py==1.6.0
+pycodestyle==2.4.0
 pycparser==2.19
 pyOpenSSL==18.0.0
 pytest==3.8.2

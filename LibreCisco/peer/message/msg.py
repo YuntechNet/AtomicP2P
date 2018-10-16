@@ -1,6 +1,7 @@
 from LibreCisco.utils import printText
 from LibreCisco.utils.message import Message, Handler
 
+
 class MessageHandler(Handler):
 
     def __init__(self, peer):
@@ -17,4 +18,3 @@ class MessageHandler(Handler):
         message = 'Message from {}: {}'.format(str(src), data['message'])
         self.peer.last_output = message
         printText(message)
-

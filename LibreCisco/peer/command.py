@@ -2,6 +2,7 @@
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 
+
 class SendCmd(Command):
 
     def __init__(self, peer, **kwargs):
@@ -13,7 +14,8 @@ class SendCmd(Command):
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
         mes = {'msg': msg_arr}
-        self.peer.sendMessage((addr[0], addr[1]),'message', **mes)
+        self.peer.sendMessage((addr[0], addr[1]), 'message', **mes)
+
 
 class ListCmd(Command):
 
@@ -25,4 +27,3 @@ class ListCmd(Command):
     def onProcess(self, msg_arr, **kwargs):
         for each in self.peer.connectlist:
             printText(each)
-
