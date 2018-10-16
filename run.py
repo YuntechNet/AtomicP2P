@@ -34,9 +34,10 @@ def main(role, addr, target, name):
         'watch_dog': None
     }
     peer = services['peer']
-    watch_dog = services['watch_dog']
+    watch_dog = Watchdog(peer)
     
     peer.start()  
+    watch_dog.start()
 
     if (target != '0.0.0.0:8000'):
         peer.sendMessage((target.split(':')[0], target.split(':')[1]), 'join')
@@ -60,6 +61,7 @@ def main(role, addr, target, name):
     @kb.add('c-q')
     def _(event):
         peer.stop()
+        watch_dog.stop()
         event.app.exit()
 
     @kb.add('c-c')
@@ -82,6 +84,7 @@ exit
             printText(helptips, output=dashboard_field)
         elif cmd[0] == 'exit':
             peer.stop()
+            watch_dog.stop()
             event.app.exit()
         else:
             printText('command error , input "help" to check the function.', output=dashboard_field)
