@@ -1,10 +1,7 @@
 import threading
 from threading import Event
-from peer import Peer
-from utils import printText
-
-
-
+from LibreCisco.peer import Peer
+from LibreCisco.utils import printText
 
 
 class Watchdog(threading.Thread):
@@ -15,7 +12,7 @@ class Watchdog(threading.Thread):
         self.loopDelay = loopDelay
         self.peer=peer
         self.connectlist=peer.connectlist
-
+        self.output_field = peer.output_field
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
@@ -27,17 +24,10 @@ class Watchdog(threading.Thread):
                     self.peer.sendMessage((addr,port),'message',**mes)
                 except IOError:
                     printText("離線")
+
     def Test(self):
         pass
 
-
     def stop(self):
         self.stopped.set()
-        
-        
-        
-        
-
-
-            
            
