@@ -16,7 +16,8 @@ class PeerConnection(threading.Thread):
         self.client = ssl.wrap_socket(unwrap_socket,
                                       cert_reqs=ssl.CERT_REQUIRED,
                                       ca_certs=cert_pem)
-        self.client.connect(self.message._to)
+        addr = (self.message._to[0], int(self.message._to[1]))
+        self.client.connect(addr)
 
     def run(self):
         self.connection(data=self.message)

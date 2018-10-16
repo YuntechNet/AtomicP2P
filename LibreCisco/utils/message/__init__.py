@@ -4,18 +4,17 @@ import json
 class Message(object):
 
     def __init__(self, _to, _from, _hash, _type, _data):
-        if type(_to[1]) != int or type(_from[1]) != int:
-            self._to = (_to[0], int(_to[1]))
-            self._from = (_from[0], int(_from[1]))
-        else:
-            self._to = _to
-            self._from = _from
+        self._to = _to
+        self._from = _from
         self._hash = _hash
         self._type = _type
         self._data = _data
 
     def __str__(self):
-        return 'Message<>'
+        return 'Message<Type={}, To={}>'.format(self._type, self._to)
+
+    def copy(self):
+        return Message.recv(data=self.toDict())
 
     def set_reject(self, reject, maintain_data=False):
         if maintain_data:
@@ -27,6 +26,9 @@ class Message(object):
 
     def is_reject(self):
         return 'reject' in self._data
+
+    def is_broadcast(self):
+        return self._to[0] == 'broadcast'
 
     def toDict(self):
         return {
@@ -45,7 +47,8 @@ class Message(object):
 
     @staticmethod
     def recv(data):
-        data = json.loads(str(data, encoding='utf-8'))
+        if type(data) is not dict:
+            data = json.loads(str(data, encoding='utf-8'))
         return Message(_to=(data['to']['ip'], data['to']['port']),
                        _from=(data['from']['ip'], data['from']['port']),
                        _hash=data['hash'], _type=data['type'],
@@ -65,26 +68,29 @@ class Handler(object):
         self.can_reject = can_reject
 
     # Wrap if it is a broadcast packet.
-    def wrap_packet(self, target, _type, _data, **kwargs):
+    def wrap_packet(self, message, **kwargs):
         arr = []
-        if self.can_broadcast and target[0] == 'broadcast':
+        if self.can_broadcast and message.is_broadcast():
+            role = message._to[1]
             for each in self.peer.connectlist:
-                if target[1] == 'all' or each.role == target[1]:
-                    arr.append(Message(_to=each.host, _from=self.peer.host,
-                                       _hash=self.peer._hash, _type=_type,
-                                       _data=_data))
+                if role == 'all' or each.role == role:
+                    message._to = each.host
+                    arr.append(message.copy())
         else:
-            arr.append(Message(_to=target, _from=self.peer.host,
-                               _hash=self.peer._hash, _type=_type,
-                               _data=_data))
+            arr.append(message)
         return arr
 
     def onSend(self, target, **kwargs):
         if self.can_reject and 'reject' in locals()['kwargs']:
-            return self.onSendReject(target=target,
-                                     reason=kwargs['reject'], **kwargs)
+            message = self.onSendReject(target=target,
+                                        reason=kwargs['reject'], **kwargs)
+            if type(message) is list:
+                return message
+            else:
+                return [message]
         else:
-            return self.onSendPkt(target=target, **kwargs)
+            message = self.onSendPkt(target=target, **kwargs)
+            return self.wrap_packet(message=message, **kwargs)
 
     def onSendReject(self, target, reason, **kwargs):
         raise NotImplementedError

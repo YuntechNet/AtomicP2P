@@ -1,18 +1,25 @@
 import json
 from LibreCisco.utils.message import Message
 
+
 def test_init(message, default_peer, self_hash):
     assert message._to == ('0.0.0.0', 9000)
     assert message._type == 'a'
     assert message._data == 'test text'
 
-    assert Message(_to=('0.0.0.0', '9000'), _from=default_peer.host, _hash=self_hash, _type=None, _data=None)._to == ('0.0.0.0', 9000)
+    assert Message(_to=('0.0.0.0', '9000'), _from=default_peer.host,
+                   _hash=self_hash, _type=None,
+                   _data=None)._to == ('0.0.0.0', '9000')
+
 
 def test_str(message):
-    assert str(message) == 'Message<>'
+    assert str(message) == 'Message<Type={}, To={}>'.format(
+                                                        message._type,
+                                                        message._to)
+
 
 def test_set_reject(message):
-    assert not 'reject' in message._data
+    assert 'reject' not in message._data
     message.set_reject('123')
     assert message._data == {'reject': '123'}
     message._data = {
@@ -24,10 +31,12 @@ def test_set_reject(message):
         'reject': '456'
     }
 
+
 def test_is_reject(message):
-    assert message.is_reject() == False
+    assert message.is_reject() is False
     message.set_reject('123')
-    assert message.is_reject() == True
+    assert message.is_reject() is True
+
 
 def test_toDict(message, default_peer):
     assert message.toDict() == {
@@ -44,6 +53,7 @@ def test_toDict(message, default_peer):
         'data': message._data
     }
 
+
 def test_send(message):
     send_data = str(Message.send(message), encoding='utf-8')
     data = json.loads(send_data)
@@ -52,11 +62,10 @@ def test_send(message):
     assert data['type'] == message._type
     assert data['data'] == message._data
 
+
 def test_recv(message):
     dict_data = message.send(message)
     data = Message.recv(dict_data)
     assert data._to == ('0.0.0.0', 9000)
     assert data._type == 'a'
     assert data._data == 'test text'
-
-        

@@ -1,7 +1,6 @@
-import threading
-import socket
 import ssl
-
+import socket
+import threading
 from threading import Event
 
 from LibreCisco.peer.peer_info import PeerInfo
