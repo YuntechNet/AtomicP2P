@@ -9,6 +9,7 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea
 
 from peer import Peer
+from watchdog import Watchdog
 from utils import printText
 
 
