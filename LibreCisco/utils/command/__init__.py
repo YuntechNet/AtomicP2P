@@ -1,4 +1,5 @@
 
+
 class Command(object):
 
     def __init__(self, cmd, **kwargs):
@@ -6,4 +7,3 @@ class Command(object):
 
     def onProcess(self, msg_arr, **kwargs):
         raise NotImplementedError
-

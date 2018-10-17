@@ -2,6 +2,7 @@
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 
+
 class SendCmd(Command):
 
     def __init__(self, peer, **kwargs):
@@ -13,7 +14,8 @@ class SendCmd(Command):
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
         mes = {'msg': msg_arr}
-        self.peer.sendMessage((addr[0], addr[1]),'message', **mes)
+        self.peer.sendMessage((addr[0], addr[1]), 'message', **mes)
+
 
 class ListCmd(Command):
 
@@ -23,6 +25,10 @@ class ListCmd(Command):
         self.output_field = peer.output_field
 
     def onProcess(self, msg_arr, **kwargs):
-        for each in self.peer.connectlist:
-            printText(each)
+        if len(self.peer.connectlist) == 0:
+            printText('There is no peers in current net.')
+        else:
+            printText('There is the list of peers in current net:')
+            for each in self.peer.connectlist:
+                printText('    ' + each)
 
