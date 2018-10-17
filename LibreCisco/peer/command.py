@@ -30,5 +30,5 @@ class ListCmd(Command):
         else:
             printText('There is the list of peers in current net:')
             for each in self.peer.connectlist:
-                printText('    ' + each)
+                printText('    ' + str(each))
 
