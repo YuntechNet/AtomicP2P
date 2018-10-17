@@ -84,10 +84,7 @@ class Handler(object):
         if self.can_reject and 'reject' in locals()['kwargs']:
             message = self.onSendReject(target=target,
                                         reason=kwargs['reject'], **kwargs)
-            if type(message) is list:
-                return message
-            else:
-                return [message]
+            return [message] if type(message) is list else message
         else:
             message = self.onSendPkt(target=target, **kwargs)
             return self.wrap_packet(message=message, **kwargs)

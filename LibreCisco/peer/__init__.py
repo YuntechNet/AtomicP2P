@@ -41,14 +41,22 @@ class Peer(threading.Thread, Command):
             'newmember': NewMemberHandler(self),
             'message': MessageHandler(self)
         }
+        self.registerHandler()
         self.last_output = ''
         self.commands = {
             'send': SendCmd(self),
             'list': ListCmd(self)
         }
+        self.registerCommand()
+
+    def registerHandler(self):
+        pass
+
+    def registerCommand(self):
+        pass
 
     def onProcess(self, msg_arr, **kwargs):
-        msg_key = msg_arr[0]
+        msg_key = msg_arr[0].lower()
         msg_arr = msg_arr[1:]
         if msg_key in self.commands:
             return self.commands[msg_key].onProcess(msg_arr)
@@ -86,7 +94,7 @@ class Peer(threading.Thread, Command):
         if data._type in self.handler:
             if data._hash != self._hash and not data.is_reject():
                 printText(('Illegal peer {} with unmatch hash {{{}...{}}} tryi'
-                          'ng to connect to net.').format(
+                           'ng to connect to net.').format(
                                 addr, data._hash[:6], data._hash[-6:]))
                 self.sendMessage(data._from,
                                  data._type,
@@ -113,5 +121,10 @@ class Peer(threading.Thread, Command):
             self.connectlist.append(peer_info)
             self.connectnum += 1
 
-    def removeConnectlist(self):
-        pass
+    def removeConnectlist(self, peer_info):
+        try:
+            self.connectlist.remove(peer_info)
+            self.connectnum -= 1
+            return True
+        except ValueError:
+            return False

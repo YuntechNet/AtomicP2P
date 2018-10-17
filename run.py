@@ -82,18 +82,19 @@ def main(role, addr, target, name, cert):
     @kb.add('enter')
     def _(event):
         cmd = input_field.text.split(' ')
-        if cmd[0] in services:
-            services[cmd[0]].onProcess(cmd[1:])
-        elif cmd[0] == 'help':
+        service_key = cmd[0].lower()
+        if service_key in services:
+            services[service_key].onProcess(cmd[1:])
+        elif service_key == 'help':
             helptips = '''
 peer [cmd]
     - send [ip:port] [msg]           send a msg to host.
     - broadcast [role/all] [msg]     send a broadcast msg to role.
     - list                           list all peer.
-exit
+exit/stop                            exit the whole program.
 '''
             printText(helptips, output=dashboard_field)
-        elif cmd[0] == 'exit':
+        elif service_key == 'exit' or service_key == 'stop':
             peer.stop()
             watch_dog.stop()
             event.app.exit()

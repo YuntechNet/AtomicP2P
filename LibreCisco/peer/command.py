@@ -25,5 +25,10 @@ class ListCmd(Command):
         self.output_field = peer.output_field
 
     def onProcess(self, msg_arr, **kwargs):
-        for each in self.peer.connectlist:
-            printText(each)
+        if len(self.peer.connectlist) == 0:
+            printText('There is no peers in current net.')
+        else:
+            printText('There is the list of peers in current net:')
+            for each in self.peer.connectlist:
+                printText('    ' + each)
+
