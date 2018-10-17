@@ -13,6 +13,7 @@ from LibreCisco.peer.message import (
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 from LibreCisco.utils.message import Message
+from LibreCisco.watchdog import Watchdog
 
 
 class Peer(threading.Thread, Command):
@@ -34,6 +35,7 @@ class Peer(threading.Thread, Command):
         self.lock = threading.Lock()
         self.name = name
         self.role = role
+        self.watchdog = Watchdog(self)
 
         self.handler = {
             'join': JoinHandler(self),
@@ -62,14 +64,23 @@ class Peer(threading.Thread, Command):
             return self.commands[msg_key].onProcess(msg_arr)
         return ''
 
+    def start(self):
+        super(Peer, self).start()
+        self.watchdog.start()
+
+    
+
     def run(self):
+        
         while not self.stopped.wait(self.loopDelay):
             (conn, addr) = self.server.accept()
             accepthandle = threading.Thread(target=self.acceptHandle,
                                             args=(conn, addr))
             accepthandle.start()
+            
 
     def stop(self):
+        self.watchdog.stop()
         self.stopped.set()
         self.sendMessage(('127.0.0.1', self.listenPort), 'message',
                          **{'msg': 'disconnect successful.'})

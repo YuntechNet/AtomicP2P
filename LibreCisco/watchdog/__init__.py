@@ -1,6 +1,6 @@
 import threading
 from threading import Event
-from LibreCisco.peer import Peer
+
 from LibreCisco.utils import printText
 
 
