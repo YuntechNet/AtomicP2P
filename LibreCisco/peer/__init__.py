@@ -1,7 +1,6 @@
 import ssl
 import socket
 import threading
-from threading import Event
 
 from LibreCisco.peer.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
@@ -9,22 +8,20 @@ from LibreCisco.peer.command import SendCmd, ListCmd
 from LibreCisco.peer.message import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
-
 from LibreCisco.utils import printText
+from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils.command import Command
 from LibreCisco.utils.message import Message
 from LibreCisco.watchdog import Watchdog
 
 
-class Peer(threading.Thread, Command):
+class Peer(ThreadManager):
 
     def __init__(self, host, name, role, cert, _hash,
                  loopDelay=1, output_field=None):
-        super(Peer, self).__init__()
-        self.stopped = Event()
-        self.loopDelay = loopDelay
-        self.output_field = output_field
-
+        super(Peer, self).__init__(loopDelay=loopDelay,
+                                   output_field=output_field,
+                                   auto_register=True)
         self.cert = cert
         self.host = host
         self._hash = _hash
@@ -32,18 +29,20 @@ class Peer(threading.Thread, Command):
         self.setServer(host, cert)
         self.connectlist = []
         self.connectnum = 0
-        self.lock = threading.Lock()
         self.name = name
         self.role = role
         self.watchdog = Watchdog(self)
+        self.last_output = ''
 
+    def registerHandler(self):
         self.handler = {
             'join': JoinHandler(self),
             'checkjoin': CheckJoinHandler(self),
             'newmember': NewMemberHandler(self),
             'message': MessageHandler(self)
         }
-        self.last_output = ''
+
+    def registerCommand(self):
         self.commands = {
             'send': SendCmd(self),
             'list': ListCmd(self)
