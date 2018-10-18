@@ -10,5 +10,10 @@ def test_onProcess(default_peer):
     assert rtn == ''
 
 
+def test_selectHandler(default_peer):
+    assert default_peer.selectHandler('join') is not None
+    assert default_peer.selectHandler('this must be none') is None
+
+
 def test_sendMessage(default_peer):
     default_peer.sendMessage(None, 'None')

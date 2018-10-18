@@ -43,19 +43,11 @@ class Peer(threading.Thread, Command):
             'newmember': NewMemberHandler(self),
             'message': MessageHandler(self)
         }
-        self.registerHandler()
         self.last_output = ''
         self.commands = {
             'send': SendCmd(self),
             'list': ListCmd(self)
         }
-        self.registerCommand()
-
-    def registerHandler(self):
-        pass
-
-    def registerCommand(self):
-        pass
 
     def onProcess(self, msg_arr, **kwargs):
         msg_key = msg_arr[0].lower()
@@ -68,17 +60,13 @@ class Peer(threading.Thread, Command):
         super(Peer, self).start()
         self.watchdog.start()
 
-    
-
     def run(self):
-        
         while not self.stopped.wait(self.loopDelay):
             (conn, addr) = self.server.accept()
             accepthandle = threading.Thread(target=self.acceptHandle,
                                             args=(conn, addr))
             accepthandle.start()
             
-
     def stop(self):
         self.watchdog.stop()
         self.stopped.set()
@@ -100,9 +88,17 @@ class Peer(threading.Thread, Command):
                     cert[0]))
         printText('Please make sure other peers have same certicate.')
 
+    def selectHandler(self, _type):
+        if _type in self.handler:
+            return self.handler[_type]
+        # elif _type in another_handler_dict
+        else:
+            return None
+
     def acceptHandle(self, conn, addr):
         data = Message.recv(conn.recv(1024))
-        if data._type in self.handler:
+        handler = self.selectHandler(data._type)
+        if handler:
             if data._hash != self._hash and not data.is_reject():
                 printText(('Illegal peer {} with unmatch hash {{{}...{}}} tryi'
                            'ng to connect to net.').format(
@@ -111,14 +107,15 @@ class Peer(threading.Thread, Command):
                                  data._type,
                                  reject='Unmatching peer hash.')
             else:
-                self.handler[data._type].onRecv(addr, data._data)
+                handler.onRecv(addr, data._data)
         else:
             printText('Unknown packet tpye: {}'.format(data._type))
 
     # send
     def sendMessage(self, host, sendType, **kwargs):
-        if sendType in self.handler:
-            messages = self.handler[sendType].onSend(target=host, **kwargs)
+        handler = self.selectHandler(sendType)
+        if handler:
+            messages = handler.onSend(target=host, **kwargs)
             for each in messages:
                 sender = PeerConnection(message=each, cert_pem=self.cert[0],
                                         output_field=self.output_field)

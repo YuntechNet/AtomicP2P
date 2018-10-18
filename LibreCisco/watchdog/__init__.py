@@ -21,7 +21,8 @@ class Watchdog(threading.Thread):
                 port=each.host[1]
                 mes={'msg':123}
                 try:
-                    self.peer.sendMessage((addr,port),'message',**mes)
+                    # self.peer.sendMessage((addr,port),'message',**mes)
+                    pass
                 except IOError:
                     printText("離線")
 
