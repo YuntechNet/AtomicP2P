@@ -1,7 +1,6 @@
 import ssl
 import socket
 import threading
-from threading import Event
 
 from LibreCisco.peer.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
@@ -9,41 +8,39 @@ from LibreCisco.peer.command import SendCmd, ListCmd
 from LibreCisco.peer.message import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
-
 from LibreCisco.utils import printText
+from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils.command import Command
 from LibreCisco.utils.message import Message
 from LibreCisco.watchdog import Watchdog
 
 
-class Peer(threading.Thread, Command):
+class Peer(ThreadManager):
 
     def __init__(self, host, name, role, cert, _hash,
                  loopDelay=1, output_field=None):
-        super(Peer, self).__init__()
-        self.stopped = Event()
-        self.loopDelay = loopDelay
-        self.output_field = output_field
-
-        self.cert = cert
-        self.host = host
+        super(Peer, self).__init__(loopDelay=loopDelay,
+                                   output_field=output_field,
+                                   auto_register=True)
+        self.peer_info = PeerInfo(name=name, role=role, host=host)
         self._hash = _hash
         printText('Program hash: {{{}...{}}}'.format(_hash[:6], _hash[-6:]))
-        self.setServer(host, cert)
+        self.cert = cert
+        self.setServer(cert)
         self.connectlist = []
         self.connectnum = 0
-        self.lock = threading.Lock()
-        self.name = name
-        self.role = role
         self.watchdog = Watchdog(self)
+        self.last_output = ''
 
+    def registerHandler(self):
         self.handler = {
             'join': JoinHandler(self),
             'checkjoin': CheckJoinHandler(self),
             'newmember': NewMemberHandler(self),
             'message': MessageHandler(self)
         }
-        self.last_output = ''
+
+    def registerCommand(self):
         self.commands = {
             'send': SendCmd(self),
             'list': ListCmd(self)
@@ -70,19 +67,18 @@ class Peer(threading.Thread, Command):
     def stop(self):
         self.watchdog.stop()
         self.stopped.set()
-        self.sendMessage(('127.0.0.1', self.listenPort), 'message',
+        self.sendMessage(('127.0.0.1', self.peer_info.host[1]), 'message',
                          **{'msg': 'disconnect successful.'})
         self.server.close()
 
     # accept
-    def setServer(self, host, cert):
+    def setServer(self, cert):
         unwrap_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         unwrap_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        unwrap_socket.bind((host[0], int(host[1])))
+        unwrap_socket.bind(self.peer_info.host)
         unwrap_socket.listen(5)
         self.server = ssl.wrap_socket(unwrap_socket, certfile=cert[0],
                                       keyfile=cert[1], server_side=True)
-        self.listenPort = host[1]
         printText('Peer prepared')
         printText('This peer is running with certificate at path {}'.format(
                     cert[0]))

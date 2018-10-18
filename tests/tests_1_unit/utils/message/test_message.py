@@ -7,7 +7,7 @@ def test_init(message, default_peer, self_hash):
     assert message._type == 'a'
     assert message._data == 'test text'
 
-    assert Message(_to=('0.0.0.0', '9000'), _from=default_peer.host,
+    assert Message(_to=('0.0.0.0', '9000'), _from=default_peer.peer_info.host,
                    _hash=self_hash, _type=None,
                    _data=None)._to == ('0.0.0.0', '9000')
 
@@ -45,8 +45,8 @@ def test_toDict(message, default_peer):
             'port': int(message._to[1])
         },
         'from': {
-            'ip': default_peer.host[0],
-            'port': int(default_peer.host[1])
+            'ip': default_peer.peer_info.host[0],
+            'port': int(default_peer.peer_info.host[1])
         },
         'hash': message._hash,
         'type': message._type,
