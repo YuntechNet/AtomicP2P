@@ -13,14 +13,14 @@ class JoinHandler(Handler):
         printText('Joining net to:{}'.format(str(target)))
         data = {
            'name': self.peer.name,
-           'listen_port': int(self.peer.listenPort),
-           'role': self.peer.role
+           'listen_port': int(self.peer.peer_info.host[1]),
+           'role': self.peer.peer_info.role
         }
-        return Message(_to=target, _from=self.peer.host,
+        return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type='join', _data=data)
 
     def onSendReject(self, target, reason, **kwargs):
-        message = Message(_to=target, _from=self.peer.host,
+        message = Message(_to=target, _from=self.peer.peer_info.host,
                           _hash=None, _type='join', _data={})
         message.set_reject(reason)
         return message
@@ -53,10 +53,10 @@ class CheckJoinHandler(Handler):
     def onSendPkt(self, target, **kwargs):
         data = {
             'name': self.peer.name,
-            'listen_port': int(self.peer.listenPort),
-            'role': self.peer.role
+            'listen_port': int(self.peer.peer_info.host[1]),
+            'role': self.peer.peer_info.role
         }
-        return Message(_to=target, _from=self.peer.host,
+        return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type='checkjoin', _data=data)
 
     def onRecvPkt(self, src, data):
@@ -80,7 +80,7 @@ class NewMemberHandler(Handler):
             'listen_port': int(peer_info.host[1]),
             'role': peer_info.role
         }
-        return Message(_to=target, _from=self.peer.host,
+        return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type='newmember', _data=data)
 
     def onRecvPkt(self, src, data):

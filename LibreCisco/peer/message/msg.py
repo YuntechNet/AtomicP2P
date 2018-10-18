@@ -12,7 +12,7 @@ class MessageHandler(Handler):
         data = {
             'message': msg
         }
-        return Message(_to=target, _from=self.peer.host, _hash=self.peer._hash,
+        return Message(_to=target, _from=self.peer.peer_info.host, _hash=self.peer._hash,
                        _type='message', _data=data)
 
     def onRecv(self, src, data):

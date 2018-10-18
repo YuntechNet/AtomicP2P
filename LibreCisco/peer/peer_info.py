@@ -5,7 +5,7 @@ class PeerInfo(object):
     def __init__(self, name, role, host):
         self.name = name
         self.role = role
-        self.host = host
+        self.host = (host[0], int(host[1]))
 
     def __eq__(self, other):
         return self.name == other.name \

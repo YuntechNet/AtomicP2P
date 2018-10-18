@@ -22,15 +22,13 @@ class Peer(ThreadManager):
         super(Peer, self).__init__(loopDelay=loopDelay,
                                    output_field=output_field,
                                    auto_register=True)
-        self.cert = cert
-        self.host = host
+        self.peer_info = PeerInfo(name=name, role=role, host=host)
         self._hash = _hash
         printText('Program hash: {{{}...{}}}'.format(_hash[:6], _hash[-6:]))
-        self.setServer(host, cert)
+        self.cert = cert
+        self.setServer(cert)
         self.connectlist = []
         self.connectnum = 0
-        self.name = name
-        self.role = role
         self.watchdog = Watchdog(self)
         self.last_output = ''
 
@@ -69,19 +67,18 @@ class Peer(ThreadManager):
     def stop(self):
         self.watchdog.stop()
         self.stopped.set()
-        self.sendMessage(('127.0.0.1', self.listenPort), 'message',
+        self.sendMessage(('127.0.0.1', self.peer_info.host[1]), 'message',
                          **{'msg': 'disconnect successful.'})
         self.server.close()
 
     # accept
-    def setServer(self, host, cert):
+    def setServer(self, cert):
         unwrap_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         unwrap_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        unwrap_socket.bind((host[0], int(host[1])))
+        unwrap_socket.bind(self.peer_info.host)
         unwrap_socket.listen(5)
         self.server = ssl.wrap_socket(unwrap_socket, certfile=cert[0],
                                       keyfile=cert[1], server_side=True)
-        self.listenPort = host[1]
         printText('Peer prepared')
         printText('This peer is running with certificate at path {}'.format(
                     cert[0]))
