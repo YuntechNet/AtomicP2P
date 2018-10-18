@@ -5,26 +5,42 @@ from paramiko import SSHClient, AutoAddPolicy
 
 class TelnetConnection(object):
 
-    def __init__(self, manager, host, password):
+    def __init__(self, manager, host, username, password, debug_level=0):
         self.manager = manager
         self.host = host
+        self.username = username
         self.password = password
+        self.debug_level = debug_level
 
-    def login(self, debug_level=2):
+    def login(self, debug_level=None):
+        debug_level = debug_level if debug_level else self.debug_level
         self.client = telnetlib.Telnet(self.host)
         self.client.set_debuglevel(debug_level)
-        self.client.read_until(bytes('Password: ', encoding='utf-8'))
+        if self.username:
+            self.client.read_until(bytes('login: ', encoding='utf-8'))
+            self.client.write(bytes(self.username + '\n', encoding='utf-8'))
+        self.client.read_until(bytes('Password ', encoding='utf-8'))
         self.client.write(bytes(self.password + '\n', encoding='utf-8'))
         return self
 
     def sendCommand(self, command, wrap=True):
         self.client.write(bytes(command + ('\n' if wrap else ''),
                                 encoding='utf-8'))
-        print(self.client.read_all())
 
     def logout(self):
         if self.client:
             self.client.close()
+
+    def is_active(self):
+        try:
+            if self.client.sock:
+                self.client.sock.send(telnetlib.IAC + telnetlib.NOP)
+                self.client.sock.send(telnetlib.IAC + telnetlib.NOP)
+                self.client.sock.send(telnetlib.IAC + telnetlib.NOP)
+                return True
+        except Exception as e:
+            pass
+        return False
 
 
 class SSHConnection(object):
@@ -55,7 +71,7 @@ class SSHConnection(object):
             self.client.close()
 
     def sendCommand(self, command, wrap=True):
-        self.client.send(str(command) + ('\n' if wrap else ''))
+        self.shell.send(str(command) + ('\n' if wrap else ''))
 
     def send_command(self, command, wrap=True, time_sleep=0.5):
         self.sendCommand(command, wrap)
@@ -64,4 +80,6 @@ class SSHConnection(object):
         return self.output
 
     def is_active(self):
-        return self.client.get_transport().is_active()
+        if self.client and self.client.get_transport():
+            return self.client.get_transport().is_active()
+        return False

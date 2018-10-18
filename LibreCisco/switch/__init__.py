@@ -1,5 +1,5 @@
 
-from utils.manager import ProcManager
+from LibreCisco.utils.manager import ProcManager
 
 
 class SwitchManager(ProcManager):
