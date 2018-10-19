@@ -93,20 +93,32 @@ class Peer(ThreadManager):
             return None
 
     def acceptHandle(self, conn, addr):
+        in_net = False
         data = Message.recv(conn.recv(1024))
-        handler = self.selectHandler(data._type)
-        if handler:
-            if data._hash != self._hash and not data.is_reject():
-                printText(('Illegal peer {} with unmatch hash {{{}...{}}} tryi'
-                           'ng to connect to net.').format(
-                                addr, data._hash[:6], data._hash[-6:]))
-                self.sendMessage(data._from,
-                                 data._type,
-                                 reject='Unmatching peer hash.')
-            else:
-                handler.onRecv(addr, data._data)
+        if data._type == 'join' or data._type == 'checkjoin':
+            in_net = True
         else:
-            printText('Unknown packet tpye: {}'.format(data._type))
+            for checkexist in self.connectlist:
+                if checkexist.host[0] == addr[0]:
+                    in_net = True
+                    break
+
+        if in_net == True:
+            handler = self.selectHandler(data._type)
+            if handler:
+                if data._hash != self._hash and not data.is_reject():
+                    printText(('Illegal peer {} with unmatch hash {{{}...{}}} tryi'
+                                'ng to connect to net.').format(
+                                addr, data._hash[:6], data._hash[-6:]))
+                    self.sendMessage(data._from,
+                                     data._type,
+                                     reject='Unmatching peer hash.')
+                else:
+                    handler.onRecv(addr, data._data)
+            else:
+                printText('Unknown packet tpye: {}'.format(data._type))
+        else:
+            printText('A peer not in net try to send packets.')
 
     # send
     def sendMessage(self, host, sendType, **kwargs):

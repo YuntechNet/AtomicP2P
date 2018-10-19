@@ -27,3 +27,11 @@ def printText(text, output=None, end='\n'):
             each.buffer.document = Document(
                 text=new_text, cursor_position=len(new_text)
             )
+
+def checkNet(self):
+    try:
+        urllib.request.urlopen('https://www.google.com.tw')
+        return True
+    except Exception as e:
+        pass
+    return False
