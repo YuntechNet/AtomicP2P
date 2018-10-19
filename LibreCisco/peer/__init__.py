@@ -12,7 +12,7 @@ from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils.command import Command
 from LibreCisco.utils.message import Message
-from LibreCisco.watchdog import Watchdog
+from LibreCisco.peer.watchdog import Watchdog
 
 
 class Peer(ThreadManager):
