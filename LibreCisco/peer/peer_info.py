@@ -12,6 +12,9 @@ class PeerInfo(object):
                and self.role == other.role \
                and self.host == other.host
 
+    def __contains__(self, item):
+        return self.__eq__(item)
+
     def __str__(self):
         return 'PeerInfo<name={0}, role={1}, host={2}>'.format(self.name,
                                                                self.role,

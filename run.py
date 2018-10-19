@@ -3,13 +3,14 @@ from os import getcwd
 from os.path import join
 import click
 from prompt_toolkit.application import Application
-from prompt_toolkit.document import Document
 from prompt_toolkit.filters import has_focus
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout.containers import HSplit, VSplit, Window
 from prompt_toolkit.layout.layout import Layout
+from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea
+from prompt_toolkit.formatted_text import ANSI
 
 from LibreCisco.peer import Peer
 from LibreCisco.utils import printText
@@ -35,16 +36,15 @@ def main(role, addr, target, name, cert):
     dashboard_text = '==================== Dashboard ====================\n'
     peer_text = '====================    Peer   ====================\n'
 
-    dashboard_field = TextArea(text=dashboard_text)
-    peer_field = TextArea(text=peer_text, height=10)
+    dashboard_field = FormattedTextControl(ANSI(dashboard_text))
+    peer_field = FormattedTextControl(ANSI(peer_text))
     input_field = TextArea(height=1, prompt=' > ', style='class:input-field')
 
     addr = addr.split(':')
     services = {
         'peer': Peer(host=addr, name=name, role=role,
                      cert=(cert_file, key_file), _hash=hash_str,
-                     output_field=[dashboard_field, peer_field]),
-        'watch_dog': None
+                     output_field=[dashboard_field, peer_field])
     }
     peer = services['peer']
     
@@ -55,12 +55,12 @@ def main(role, addr, target, name, cert):
     if (target != '0.0.0.0:8000'):
         peer.sendMessage((target.split(':')[0], target.split(':')[1]), 'join')
     else:
-        printText('you are first peer.', output=[dashboard_field, peer_field])
+        printText('\x1b[1;33;40myou are first peer.\x1b[0m', output=[dashboard_field, peer_field])
 
     left_split = HSplit([
-        peer_field,
+        Window(height=10, content=peer_field),
         Window(height=1, char='-', style='class:line'),
-        dashboard_field,
+        Window(dashboard_field),
         Window(height=1, char='-', style='class:line'),
         input_field
     ])
@@ -102,7 +102,7 @@ exit/stop                            exit the whole program.
                       output=dashboard_field)
         input_field.text = ''
 
-    style = Style([
+    prompt_style = Style([
         ('input_field', 'bg:#000000 #ffffff'),
         ('line', '#004400')
     ])
@@ -110,7 +110,7 @@ exit/stop                            exit the whole program.
     application = Application(
         layout=Layout(container, focused_element=input_field),
         key_bindings=kb,
-        style=style,
+        style=prompt_style,
         full_screen=True
     )
     application.run()

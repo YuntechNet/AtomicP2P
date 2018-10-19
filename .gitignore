@@ -4,6 +4,7 @@ venv*/
 .vscode/
 __pycache__/
 htmlcov/
+prompt_test/
 
 
 .coverage
