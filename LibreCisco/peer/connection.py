@@ -1,3 +1,4 @@
+import traceback
 import threading
 import socket
 import ssl
@@ -16,15 +17,17 @@ class PeerConnection(threading.Thread):
         self.client = ssl.wrap_socket(unwrap_socket,
                                       cert_reqs=ssl.CERT_REQUIRED,
                                       ca_certs=cert_pem)
-        addr = (self.message._to[0], int(self.message._to[1]))
-        self.client.connect(addr)
+        self.addr = (self.message._to[0], int(self.message._to[1]))
 
     def run(self):
-        self.connection(data=self.message)
-
-    def connection(self, data):
-        self.client.send(Message.send(data))
-        self.client.close()
+        try:
+            data = self.message
+            self.client.connect(self.addr)
+            self.client.send(Message.send(data))
+        except Exception as e:
+            printText(traceback.format_exc())
+        finally:
+            self.client.close()
 #        Data = self.client.recv(1024)
 #        data = Data.decode('ascii')
 #        if data != '':
