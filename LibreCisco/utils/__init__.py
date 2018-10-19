@@ -1,5 +1,6 @@
 import sys
 from prompt_toolkit.document import Document
+from prompt_toolkit.formatted_text import ANSI, merge_formatted_text
 
 
 def printText(text, output=None, end='\n'):
@@ -23,10 +24,7 @@ def printText(text, output=None, end='\n'):
         if type(output) != list:
             output = [output]
         for each in output:
-            new_text = each.text + str(text) + end
-            each.buffer.document = Document(
-                text=new_text, cursor_position=len(new_text)
-            )
+            each.text = merge_formatted_text([each.text, ANSI(str(text) + end)])
 
 def checkNet(self):
     try:

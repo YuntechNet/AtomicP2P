@@ -8,11 +8,12 @@ class JoinHandler(Handler):
     def __init__(self, peer):
         super(JoinHandler, self).__init__(peer, can_reject=True)
         self.output_field = peer.output_field
+        self.last_join_host = None
 
     def onSendPkt(self, target, **kwargs):
         printText('Joining net to:{}'.format(str(target)))
         data = {
-           'name': self.peer.name,
+           'name': self.peer.peer_info.name,
            'listen_port': int(self.peer.peer_info.host[1]),
            'role': self.peer.peer_info.role
         }
@@ -30,6 +31,7 @@ class JoinHandler(Handler):
         listen_port = int(data['listen_port'])
         role = data['role']
         peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
+        self.last_join_host = peer_info.host
         send_data = {'peer_info': peer_info}
         for each in self.peer.connectlist:
             self.peer.sendMessage((each.host[0], each.host[1]),
@@ -52,7 +54,7 @@ class CheckJoinHandler(Handler):
 
     def onSendPkt(self, target, **kwargs):
         data = {
-            'name': self.peer.name,
+            'name': self.peer.peer_info.name,
             'listen_port': int(self.peer.peer_info.host[1]),
             'role': self.peer.peer_info.role
         }

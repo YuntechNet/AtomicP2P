@@ -30,5 +30,17 @@ class ListCmd(Command):
         else:
             printText('There is the list of peers in current net:')
             for each in self.peer.connectlist:
-                printText('    ' + str(each))
+                printText(' - ' + str(each))
+            printText('[---End of list---]')
 
+
+class LeaveNetCmd(Command):
+
+    def __init__(self, peer):
+        super(LeaveNetCmd, self).__init__('leavenet')
+        self.peer = peer
+        self.output_field = peer.output_field
+
+    def onProcess(self, msg_arr):
+        # self.peer.sendMessage(('broadcast', 'all'), 'leavenet')
+        printText('You left net.')
