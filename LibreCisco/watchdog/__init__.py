@@ -1,18 +1,18 @@
-import threading
-from threading import Event
 
+from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils import printText
 
 
-class Watchdog(threading.Thread):
+class Watchdog(ThreadManager):
 
     def __init__(self,peer,loopDelay=10):
-        super(Watchdog, self).__init__()
-        self.stopped = Event()
-        self.loopDelay = loopDelay
+        super(Watchdog, self).__init__(loopDelay=loopDelay,
+                                   output_field=peer.output_field,
+                                   auto_register=True)
+        
         self.peer=peer
         self.connectlist=peer.connectlist
-        self.output_field = peer.output_field
+        
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
@@ -31,4 +31,18 @@ class Watchdog(threading.Thread):
 
     def stop(self):
         self.stopped.set()
+
+    def registerHandler(self):
+        self.handler = {
+            
+        }
+
+    def registerCommand(self):
+        self.commands = {
+          
+        }
+
+    def onProcess(self, msg_arr, **kwargs):
+        
+        return ''
            
