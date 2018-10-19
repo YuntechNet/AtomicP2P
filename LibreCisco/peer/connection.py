@@ -4,7 +4,7 @@ import socket
 import ssl
 
 from LibreCisco.utils import printText
-from LibreCisco.utils.message import Message
+from LibreCisco.utils.communication import Message
 
 
 class PeerConnection(threading.Thread):

@@ -5,13 +5,13 @@ import threading
 from LibreCisco.peer.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
 from LibreCisco.peer.command import SendCmd, ListCmd, LeaveNetCmd
-from LibreCisco.peer.message import (
+from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
 from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils.command import Command
-from LibreCisco.utils.message import Message
+from LibreCisco.utils.communication import Message
 from LibreCisco.peer.watchdog import Watchdog
 
 
@@ -64,7 +64,7 @@ class Peer(ThreadManager):
             accepthandle = threading.Thread(target=self.acceptHandle,
                                             args=(conn, addr))
             accepthandle.start()
-            
+
     def stop(self):
         self.watchdog.stop()
         self.stopped.set()
@@ -104,12 +104,12 @@ class Peer(ThreadManager):
                     in_net = True
                     break
 
-        if in_net == True:
+        if in_net is True:
             handler = self.selectHandler(data._type)
             if handler:
                 if data._hash != self._hash and not data.is_reject():
-                    printText(('Illegal peer {} with unmatch hash {{{}...{}}} tryi'
-                                'ng to connect to net.').format(
+                    printText(('Illegal peer {} with unmatch hash {{{}...{}}} '
+                               'trying to connect to net.').format(
                                 addr, data._hash[:6], data._hash[-6:]))
                     self.sendMessage(data._from,
                                      data._type,

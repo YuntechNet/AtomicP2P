@@ -1,5 +1,5 @@
 import json
-from LibreCisco.utils.message import Message
+from LibreCisco.utils.communication import Message
 
 
 def test_init(message, default_peer, self_hash):

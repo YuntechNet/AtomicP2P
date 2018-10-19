@@ -1,6 +1,10 @@
 import sys
+import urllib
+import urllib.request
 from prompt_toolkit.document import Document
-from prompt_toolkit.formatted_text import ANSI, merge_formatted_text
+from prompt_toolkit.formatted_text import (
+    ANSI, merge_formatted_text as mft
+)
 
 
 def printText(text, output=None, end='\n'):
@@ -24,11 +28,12 @@ def printText(text, output=None, end='\n'):
         if type(output) != list:
             output = [output]
         for each in output:
-            each.text = merge_formatted_text([each.text, ANSI(str(text) + end)])
+            each.text = mft([each.text, ANSI(str(text) + end)])
 
-def checkNet(self):
+
+def checkNet(url='https://www.google.com.tw'):
     try:
-        urllib.request.urlopen('https://www.google.com.tw')
+        urllib.request.urlopen(url)
         return True
     except Exception as e:
         pass

@@ -1,5 +1,5 @@
 from LibreCisco.utils import printText
-from LibreCisco.utils.message import Message, Handler
+from LibreCisco.utils.communication import Message, Handler
 from LibreCisco.peer.peer_info import PeerInfo
 
 
@@ -10,7 +10,7 @@ class JoinHandler(Handler):
         self.output_field = peer.output_field
         self.last_join_host = None
 
-    def onSendPkt(self, target, **kwargs):
+    def onSendPkt(self, target):
         printText('Joining net to:{}'.format(str(target)))
         data = {
            'name': self.peer.peer_info.name,
@@ -20,13 +20,13 @@ class JoinHandler(Handler):
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type='join', _data=data)
 
-    def onSendReject(self, target, reason, **kwargs):
+    def onSendReject(self, target, reason):
         message = Message(_to=target, _from=self.peer.peer_info.host,
                           _hash=None, _type='join', _data={})
         message.set_reject(reason)
         return message
 
-    def onRecvPkt(self, src, data, **kwargs):
+    def onRecvPkt(self, src, data):
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
@@ -41,7 +41,7 @@ class JoinHandler(Handler):
         self.peer.addConnectlist(peer_info)
         self.peer.sendMessage((src[0], listen_port), 'checkjoin')
 
-    def onRecvReject(self, src, data, **kwargs):
+    def onRecvReject(self, src, data):
         reject = data['reject']
         printText('Rejected by {}, reason: {}'.format(src, reject))
 
@@ -52,7 +52,7 @@ class CheckJoinHandler(Handler):
         super(CheckJoinHandler, self).__init__(peer)
         self.output_field = peer.output_field
 
-    def onSendPkt(self, target, **kwargs):
+    def onSendPkt(self, target):
         data = {
             'name': self.peer.peer_info.name,
             'listen_port': int(self.peer.peer_info.host[1]),
@@ -76,7 +76,7 @@ class NewMemberHandler(Handler):
         super(NewMemberHandler, self).__init__(peer)
         self.output_field = peer.output_field
 
-    def onSendPkt(self, target, peer_info, **kwargs):
+    def onSendPkt(self, target, peer_info):
         data = {
             'name': peer_info.name,
             'listen_port': int(peer_info.host[1]),
