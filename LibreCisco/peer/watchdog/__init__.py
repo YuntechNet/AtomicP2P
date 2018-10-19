@@ -1,16 +1,19 @@
 
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils import printText
+from LibreCisco.peer.watchdog.check import CheckHandler 
+from LibreCisco.peer.peer_info import PeerInfo
+
 
 
 class Watchdog(ThreadManager):
 
-    def __init__(self,peer,loopDelay=10):
+    def __init__(self,peer,loopDelay=5):
+        
+        self.peer=peer
         super(Watchdog, self).__init__(loopDelay=loopDelay,
                                    output_field=peer.output_field,
                                    auto_register=True)
-        
-        self.peer=peer
         self.connectlist=peer.connectlist
         
 
@@ -21,7 +24,7 @@ class Watchdog(ThreadManager):
                 port=each.host[1]
                 mes={'msg':123}
                 try:
-                    # self.peer.sendMessage((addr,port),'message',**mes)
+                    self.peer.sendMessage((addr,port),'watchdog_check',**mes)
                     pass
                 except IOError:
                     printText("離線")
@@ -34,7 +37,8 @@ class Watchdog(ThreadManager):
 
     def registerHandler(self):
         self.handler = {
-            
+            'watchdog_check':CheckHandler(self.peer)
+    
         }
 
     def registerCommand(self):

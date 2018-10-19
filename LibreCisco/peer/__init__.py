@@ -87,7 +87,8 @@ class Peer(ThreadManager):
     def selectHandler(self, _type):
         if _type in self.handler:
             return self.handler[_type]
-        # elif _type in another_handler_dict
+        elif _type in self.watchdog.handler:
+            return self.watchdog.handler[_type]
         else:
             return None
 
