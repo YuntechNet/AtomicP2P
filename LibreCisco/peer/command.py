@@ -80,7 +80,6 @@ class ListCmd(Command):
         else:
             printText('There is the connection list of peers in current net:')
             for each in self.peer.connectlist:
-<<<<<<< HEAD
                 printText(' - ' + str(each))
             printText('[---End of list---]')
 
@@ -101,6 +100,3 @@ class LeaveNetCmd(Command):
         self.peer.connectlist.clear()
         self.peer.monitor.monitorlist.clear()
         printText('You left net.')
-=======
-                printText('    ' + str(each))
->>>>>>> Create process/thread base manager
