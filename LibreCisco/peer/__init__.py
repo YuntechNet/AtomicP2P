@@ -128,7 +128,8 @@ class Peer(ThreadManager):
         if handler:
             messages = handler.onSend(target=host, **kwargs)
             for each in messages:
-                sender = PeerConnection(peer=self, message=each, cert_pem=self.cert[0],
+                sender = PeerConnection(peer=self, message=each,
+                                        cert_pem=self.cert[0],
                                         output_field=self.output_field)
                 sender.start()
         else:

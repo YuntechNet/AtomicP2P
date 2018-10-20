@@ -28,7 +28,11 @@ def printText(text, output=None, end='\n'):
         if type(output) != list:
             output = [output]
         for each in output:
-            each.text = mft([each.text, ANSI(str(text) + end)])
+            new_text = each.text + str(text) + end
+            each.buffer.document = Document(
+                text=new_text, cursor_position=len(new_text)
+            )
+#            each.text = mft([each.text, ANSI(str(text) + end)])
 
 
 def checkNet(url='https://www.google.com.tw'):
@@ -38,3 +42,10 @@ def checkNet(url='https://www.google.com.tw'):
     except Exception as e:
         pass
     return False
+
+
+def getExternalIP():
+    try:
+        return urllib.request.urlopen('http://ip.42.pl/raw').read()
+    except Exception as e:
+        return None

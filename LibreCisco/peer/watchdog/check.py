@@ -9,16 +9,13 @@ class CheckHandler(Handler):
                                            can_broadcast=True)
         self.output_field = peer.output_field
 
-    def onSendPkt(self, target, msg, **kwargs):
-        data = {
-            'message': msg
-        }
+    def onSendPkt(self, target, status):
+        data = status.toDict()
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type='watchdog_check',
                        _data=data)
 
     def onRecvPkt(self, src, data):
-        message = 'WatchDog check from {}: {}'.format(str(src),
-                                                      data['message'])
-        # self.peer.last_output = message
+        message = 'WatchDog check from {}: send ts {}'.format(str(src),
+                                                              data['send_ts'])
         printText(message)

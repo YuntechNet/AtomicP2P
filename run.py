@@ -3,6 +3,7 @@ from os import getcwd
 from os.path import join
 import click
 from prompt_toolkit.application import Application
+from prompt_toolkit.document import Document
 from prompt_toolkit.filters import has_focus
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout.containers import HSplit, VSplit, Window
@@ -36,8 +37,10 @@ def main(role, addr, target, name, cert):
     dashboard_text = '==================== Dashboard ====================\n'
     peer_text = '====================    Peer   ====================\n'
 
-    dashboard_field = FormattedTextControl(ANSI(dashboard_text))
-    peer_field = FormattedTextControl(ANSI(peer_text))
+    #dashboard_field = FormattedTextControl(ANSI(dashboard_text))
+    dashboard_field = TextArea(text=dashboard_text)
+    #peer_field = FormattedTextControl(ANSI(peer_text))
+    peer_field = TextArea(text=peer_text)
     input_field = TextArea(height=1, prompt=' > ', style='class:input-field')
 
     addr = addr.split(':')
@@ -55,12 +58,15 @@ def main(role, addr, target, name, cert):
     if (target != '0.0.0.0:8000'):
         peer.sendMessage((target.split(':')[0], target.split(':')[1]), 'join')
     else:
-        printText('\x1b[1;33;40myou are first peer.\x1b[0m', output=[dashboard_field, peer_field])
+        # printText('\x1b[1;33;40myou are first peer.\x1b[0m', output=[dashboard_field, peer_field])
+        printText('you are first peer.', output=[dashboard_field, peer_field])
 
     left_split = HSplit([
-        Window(height=10, content=peer_field),
+        #Window(height=10, content=peer_field),
+        peer_field,
         Window(height=1, char='-', style='class:line'),
-        Window(dashboard_field),
+        #Window(dashboard_field),
+        dashboard_field,
         Window(height=1, char='-', style='class:line'),
         input_field
     ])
