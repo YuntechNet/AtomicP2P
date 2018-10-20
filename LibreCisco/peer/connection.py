@@ -9,8 +9,9 @@ from LibreCisco.utils.communication import Message
 
 class PeerConnection(threading.Thread):
 
-    def __init__(self, message, cert_pem, output_field):
+    def __init__(self, peer, message, cert_pem, output_field):
         super(PeerConnection, self).__init__()
+        self.peer = peer
         self.message = message
         self.output_field = output_field
         unwrap_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -22,10 +23,12 @@ class PeerConnection(threading.Thread):
     def run(self):
         try:
             data = self.message
+            self.peer.watchdog.addStatusByHost(data._to)
             self.client.connect(self.addr)
             self.client.send(Message.send(data))
         except Exception as e:
-            printText(traceback.format_exc())
+            print(traceback.format_exc())
+            self.peer.watchdog.removeStatusByHost(data._to)
         finally:
             self.client.close()
 #        Data = self.client.recv(1024)

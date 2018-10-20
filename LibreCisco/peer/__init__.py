@@ -115,6 +115,7 @@ class Peer(ThreadManager):
                                      data._type,
                                      reject='Unmatching peer hash.')
                 else:
+                    self.watchdog.onRecvPkt(data, addr)
                     handler.onRecv(addr, data._data)
             else:
                 printText('Unknown packet tpye: {}'.format(data._type))
@@ -127,13 +128,19 @@ class Peer(ThreadManager):
         if handler:
             messages = handler.onSend(target=host, **kwargs)
             for each in messages:
-                sender = PeerConnection(message=each, cert_pem=self.cert[0],
+                sender = PeerConnection(peer=self, message=each, cert_pem=self.cert[0],
                                         output_field=self.output_field)
                 sender.start()
         else:
             printText('No such type.')
 
     # list
+    def getConnectByHost(self, host):
+        for each in self.connectlist:
+            if each.host[0] == host[0]:
+                return each
+        return None
+
     def addConnectlist(self, peer_info):
         if peer_info not in self.connectlist:
             self.connectlist.append(peer_info)
