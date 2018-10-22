@@ -11,7 +11,7 @@ class CheckHandler(Handler):
 
     def onSendPkt(self, target, msg, **kwargs):
         data = {
-            'message': msg
+            'message': msg 
         }
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type='watchdog_check',

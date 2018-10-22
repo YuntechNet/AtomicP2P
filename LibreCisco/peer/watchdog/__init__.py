@@ -18,7 +18,7 @@ class Watchdog(ThreadManager):
             for each in self.watchdoglist:
                 addr = each.peer_info.host[0]
                 port = each.peer_info.host[1]
-                mes = {'msg': 123}
+                mes = {'msg': each.nowTime()}
                 self.peer.sendMessage((addr, port), 'watchdog_check',
                                       **mes)
 
