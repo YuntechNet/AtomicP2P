@@ -1,5 +1,5 @@
 import pytest
-from LibreCisco.switch.connection import SSHConnection, TelnetConnection
+from LibreCisco.device.connection import SSHConnection, TelnetConnection
 
 
 @pytest.fixture(scope='session')
@@ -15,7 +15,7 @@ def ssh(request):
 @pytest.fixture(scope='session')
 def telnet(request):
     config = request.config
-    host = config.getoption('--telnet-test-host').split(':')
+    host = config.getoption('--telnet-test-host')
     account = config.getoption('--telnet-account')
     passwd = config.getoption('--telnet-passwd')
     return TelnetConnection(manager=None, host=host, username=account,

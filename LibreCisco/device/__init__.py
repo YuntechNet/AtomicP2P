@@ -2,7 +2,7 @@
 from LibreCisco.utils.manager import ProcManager
 
 
-class SwitchManager(ProcManager):
+class DeviceManager(ProcManager):
 
     def __init__(self, peer, loopDelay=1, output_field=None):
         super(SwitchManager, self).__init__(loopDelay=loopDelay,
