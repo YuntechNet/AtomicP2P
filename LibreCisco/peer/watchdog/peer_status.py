@@ -1,20 +1,23 @@
-import datetime
+import time
 
-class Peerstatus(object):
 
-    def __init__(self,peer_info):
+class PeerStatus(object):
+
+    def __init__(self, peer_info):
         self.peer_info = peer_info
-        self.lastResponseTime=" "
-
-    
+        self.last_update_ts = time.time()
+        self.no_response_count = 0
 
     def __eq__(self, other):
-        return self.peer_info == other.peer_info 
-    
-    def __str__(self):
-        return str(self.peer_info)
+        return self.peer_info == other.peer_info
 
-    def nowTime(self):
-        now = datetime.datetime.now()
-        self.lastResponseTime = now.strftime("%Y/%m/%d %H:%M:%S")
-        return self.lastResponseTime
+    def __str__(self):
+        return 'PeerStatus<host={}>'.format(str(self.peer_info.host))
+
+    def toDict(self):
+        return {
+            'send_ts': self.last_update_ts
+        }
+
+    def update(self):
+        self.last_update_ts = time.time()

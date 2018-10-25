@@ -43,4 +43,6 @@ class LeaveNetCmd(Command):
 
     def onProcess(self, msg_arr):
         # self.peer.sendMessage(('broadcast', 'all'), 'leavenet')
+        self.peer.connectlist.clear()
+        self.peer.watchdog.watchdoglist.clear()
         printText('You left net.')

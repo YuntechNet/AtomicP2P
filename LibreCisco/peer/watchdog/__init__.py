@@ -2,25 +2,31 @@ import traceback
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils import printText
 from LibreCisco.peer.watchdog.check import CheckHandler
-from LibreCisco.peer.watchdog.peer_status import Peerstatus
+from LibreCisco.peer.watchdog.peer_status import PeerStatus
+
 
 class Watchdog(ThreadManager):
 
-    def __init__(self, peer, loopDelay=2):
+    def __init__(self, peer, loopDelay=2, max_no_response_count=5):
         self.peer = peer
         super(Watchdog, self).__init__(loopDelay=loopDelay,
                                        output_field=peer.output_field,
                                        auto_register=True)
-        self.watchdoglist = []                               
-        
+
+        self.max_no_response_count = max_no_response_count
+        self.watchdoglist = []
+
     def run(self):
         while not self.stopped.wait(self.loopDelay):
+            no_response_list = []
             for each in self.watchdoglist:
                 addr = each.peer_info.host[0]
                 port = each.peer_info.host[1]
-                mes = {'msg': each.nowTime()}
-                self.peer.sendMessage((addr, port), 'watchdog_check',
-                                      **mes)
+                data = {'status': each}
+                self.peer.sendMessage((addr, port), 'watchdog_check', **data)
+                if each.no_response_count >= self.max_no_response_count:
+                    no_response_list.append(each)
+            self.removeWatchdoglist(no_response_list)
 
     def registerHandler(self):
         self.handler = {
@@ -33,15 +39,24 @@ class Watchdog(ThreadManager):
     def onRecvPkt(self, pkt, addr):
         for each in self.peer.connectlist:
             if each.host[0] == addr[0]:
-                self.addWatchdoglist(Peerstatus(each))
+                self.addWatchdoglist(PeerStatus(each))
 
-    def addStatusByHost(self, host):
+    def getStatusByHost(self, host):
         peer_info = self.peer.getConnectByHost(host=host)
         if peer_info:
             for each in self.watchdoglist:
                 if each.peer_info == peer_info:
-                    return False
-            return self.addWatchdoglist(Peerstatus(peer_info))
+                    return each, peer_info
+        return None, peer_info
+
+    def updateStatusByHost(self, host):
+        status, peer_info = self.getStatusByHost(host=host)
+        if peer_info:
+            if status:
+                status.update()
+                return False
+            else:
+                return self.addWatchdoglist(PeerStatus(peer_info))
         return None
 
     def addWatchdoglist(self, peer_status):
@@ -58,8 +73,8 @@ class Watchdog(ThreadManager):
         self.removeWatchdoglist(missing)
 
     def removeWatchdoglist(self, missing):
-        try:
-            for each in missing:
-                self.watchdoglist.remove(each)            
-        except ValueError:
-            traceback.print_exc()
+        for each in missing:
+            try:
+                self.watchdoglist.remove(each)
+            except Exception as e:
+                traceback.print_exc()
