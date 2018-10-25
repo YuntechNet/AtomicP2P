@@ -1,6 +1,9 @@
 import traceback
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils import printText
+from LibreCisco.peer.watchdog.command import (
+    PauseCmd, PeriodCmd, ListCmd, ResetCmd
+)
 from LibreCisco.peer.watchdog.check import CheckHandler
 from LibreCisco.peer.watchdog.peer_status import PeerStatus
 
@@ -13,20 +16,23 @@ class Watchdog(ThreadManager):
                                        output_field=peer.output_field,
                                        auto_register=True)
 
+        self.pause = False
         self.max_no_response_count = max_no_response_count
         self.watchdoglist = []
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
-            no_response_list = []
-            for each in self.watchdoglist:
-                addr = each.peer_info.host[0]
-                port = each.peer_info.host[1]
-                data = {'status': each}
-                self.peer.sendMessage((addr, port), 'watchdog_check', **data)
-                if each.no_response_count >= self.max_no_response_count:
-                    no_response_list.append(each)
-            self.removeWatchdoglist(no_response_list)
+            if not self.pause:
+                no_response_list = []
+                for each in self.watchdoglist:
+                    addr = each.peer_info.host[0]
+                    port = each.peer_info.host[1]
+                    data = {'status': each}
+                    self.peer.sendMessage((addr, port), 'watchdog_check',
+                                          **data)
+                    if each.no_response_count >= self.max_no_response_count:
+                        no_response_list.append(each)
+                self.removeWatchdoglist(no_response_list)
 
     def registerHandler(self):
         self.handler = {
@@ -34,7 +40,19 @@ class Watchdog(ThreadManager):
         }
 
     def registerCommand(self):
-        self.commands = {}
+        self.commands = {
+            'pause': PauseCmd(self),
+            'period': PeriodCmd(self),
+            'list': ListCmd(self),
+            'reset': ResetCmd(self)
+        }
+
+    def onProcess(self, msg_arr):
+        msg_key = msg_arr[0].lower()
+        msg_arr = msg_arr[1:]
+        if msg_key in self.commands:
+            return self.commands[msg_key].onProcess(msg_arr)
+        return ''
 
     def onRecvPkt(self, pkt, addr):
         for each in self.peer.connectlist:

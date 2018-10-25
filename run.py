@@ -47,10 +47,12 @@ def main(role, addr, target, name, cert):
     services = {
         'peer': Peer(host=addr, name=name, role=role,
                      cert=(cert_file, key_file), _hash=hash_str,
-                     output_field=[dashboard_field, peer_field])
+                     output_field=[dashboard_field, peer_field]),
+        'watchdog': None
     }
     peer = services['peer']
-    
+    services['watchdog'] = peer.watchdog
+
 
     peer.start()
     
