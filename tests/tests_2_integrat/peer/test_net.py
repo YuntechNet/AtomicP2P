@@ -30,14 +30,16 @@ def test_three_link(core1, switch1, switch2):
             host=('127.0.0.1', core1.peer_info.host[1])) in switch1.connectlist
     assert PeerInfo(
             name=switch2.peer_info.name, role=switch2.peer_info.role,
-            host=('127.0.0.1', switch2.peer_info.host[1])) in switch1.connectlist
+            host=('127.0.0.1', switch2.peer_info.host[1])
+           ) in switch1.connectlist
 
     assert PeerInfo(
             name=core1.peer_info.name, role=core1.peer_info.role,
             host=('127.0.0.1', core1.peer_info.host[1])) in switch2.connectlist
     assert PeerInfo(
             name=switch1.peer_info.name, role=switch1.peer_info.role,
-            host=('127.0.0.1', switch1.peer_info.host[1])) in switch2.connectlist
+            host=('127.0.0.1', switch1.peer_info.host[1])
+           ) in switch2.connectlist
 
 
 def test_mal_two_link(core1, malware_peer):

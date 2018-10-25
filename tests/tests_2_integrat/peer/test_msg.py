@@ -4,7 +4,8 @@ import time
 def test_send(core1, switch1):
     switch1.sendMessage(('127.0.0.1', core1.peer_info.host[1]), 'join')
     time.sleep(3)
-    switch1.onProcess(['send', '127.0.0.1:{}'.format(core1.peer_info.host[1]), '123'])
+    switch1.onProcess(['send', '127.0.0.1:{}'.format(core1.peer_info.host[1]),
+                       '123'])
     time.sleep(5)
     assert '123' in core1.last_output
 

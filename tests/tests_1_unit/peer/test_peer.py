@@ -7,7 +7,7 @@ def test_init(default_peer):
 
 
 def test_onProcess(default_peer):
-    #assert default_peer.onProcess(['send']) == ''
+    # assert default_peer.onProcess(['send']) == ''
     assert default_peer.onProcess(['test', 'test2']) == ''
 
 
@@ -30,7 +30,7 @@ def test_addConnectlist(default_peer, peer_info):
 
 def test_getConnectByHost(default_peer, peer_info):
     assert default_peer.getConnectByHost(peer_info.host) == peer_info
-    assert default_peer.getConnectByHost('fakehost:1111') == None
+    assert default_peer.getConnectByHost('fakehost:1111') is None
 
 
 def test_removeConnectlist(default_peer, peer_info):
