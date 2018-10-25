@@ -5,9 +5,10 @@ from LibreCisco.device.command import AddCmd, RemoveCmd
 class DeviceManager(ProcManager):
 
     def __init__(self, peer, loopDelay=1, output_field=None):
-        super(SwitchManager, self).__init__(loopDelay=loopDelay,
-                                            ouput_field=output_field)
+        super(DeviceManager, self).__init__(loopDelay=loopDelay,
+                                            output_field=output_field)
         self.peer = peer
+        self.devices = {}
 
     def registerHandler(self):
         pass

@@ -14,6 +14,7 @@ class AddCmd(Command):
     def onProcess(self, msg_arr):
         pass
 
+
 class RemoveCmd(Command):
     """
         Command to remove a device.
@@ -25,4 +26,4 @@ class RemoveCmd(Command):
         self.device = device
 
     def onProcess(self, msg_arr):
-        pass 
+        pass

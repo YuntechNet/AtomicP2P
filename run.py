@@ -14,6 +14,8 @@ from prompt_toolkit.widgets import TextArea
 from prompt_toolkit.formatted_text import ANSI
 
 from LibreCisco.peer import Peer
+from LibreCisco.peer.watchdog import Watchdog
+from LibreCisco.device import DeviceManager as Device
 from LibreCisco.utils import printText
 from LibreCisco.utils.security import (
     create_self_signed_cert as cssc, self_hash
@@ -34,14 +36,17 @@ def main(role, addr, target, name, cert):
 
     dashboard_text = '==================== Dashboard ====================\n'
     peer_text = '====================    Peer   ====================\n'
+    device_text = '====================   Device   ====================\n'
 
     #dashboard_field = FormattedTextControl(ANSI(dashboard_text))
     dashboard_field = TextArea(text=dashboard_text)
     #peer_field = FormattedTextControl(ANSI(peer_text))
     peer_field = TextArea(text=peer_text)
+    device_field = TextArea(text=device_text)
     input_field = TextArea(height=1, prompt=' > ', style='class:input-field')
 
     addr = addr.split(':')
+<<<<<<< HEAD
     services = {
         'peer': Peer(host=addr, name=name, role=role,
                      cert=(cert_file, key_file), _hash=hash_str,
@@ -52,6 +57,19 @@ def main(role, addr, target, name, cert):
     services['monitor'] = peer.monitor
 
     peer.start()
+=======
+    service = {
+        'peer': None,
+        'device': None
+    }
+    service['peer'] = Peer(host=addr, name=name, role=role,
+                           cert=(cert_file, key_file), _hash=hash_str,
+                           output_field=[dashboard_field, peer_field])
+    service['device'] = Device(peer=service['peer'],
+                               output_field=[dashboard_field, device_field])
+    service['peer'].start()
+    service['device'].start()
+>>>>>>> Modified run.py
 
     if (target):
         peer.onProcess(['join', target])
@@ -68,15 +86,17 @@ def main(role, addr, target, name, cert):
         Window(height=1, char='-', style='class:line'),
         input_field
     ])
-    # right_split = HSplit([
-    # ])
+    right_split = HSplit([
+        device_field
+    ])
 
-    container = VSplit([left_split])  # , right_split])
+    container = VSplit([left_split, right_split])
     kb = KeyBindings()
 
     @kb.add('c-q')
     def _(event):
-        peer.stop()        
+        for each in service:
+            service[each].stop()
         event.app.exit()
 
     @kb.add('c-c')
@@ -87,15 +107,16 @@ def main(role, addr, target, name, cert):
     def _(event):
         cmd = input_field.text.split(' ')
         service_key = cmd[0].lower()
-        if service_key in services:
-            services[service_key].onProcess(cmd[1:])
+        if service_key in service:
+            service[service_key].onProcess(cmd[1:])
         elif service_key == 'help':
             helptips = "peer help            - See peer's help\n"\
                        "monitor help        - See monitor's help\n"\
                        "exit/stop            - exit the whole program.\n"
             printText(helptips, output=dashboard_field)
         elif service_key == 'exit' or service_key == 'stop':
-            peer.stop()            
+            for each in service:
+                service[each].stop()
             event.app.exit()
         else:
             printText('command error , input "help" to check the function.',
