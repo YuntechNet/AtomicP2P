@@ -17,8 +17,8 @@ from LibreCisco.peer.watchdog import Watchdog
 
 class Peer(ThreadManager):
 
-    def __init__(self, host, name, role, cert, _hash,
-                 loopDelay=1, output_field=None):
+    def __init__(self, host, name, role, cert, _hash, loopDelay=1,
+                 output_field=None):
         super(Peer, self).__init__(loopDelay=loopDelay,
                                    output_field=output_field,
                                    auto_register=True)
