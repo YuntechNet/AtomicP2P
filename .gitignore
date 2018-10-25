@@ -7,7 +7,7 @@ htmlcov/
 prompt_test/
 
 
-.coverage
+.coverage*
 *.pyc
 *.swp
 *.swo

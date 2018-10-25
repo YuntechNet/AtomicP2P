@@ -1,3 +1,4 @@
+import pytest
 
 
 def test_init(default_peer):
@@ -6,14 +7,35 @@ def test_init(default_peer):
 
 
 def test_onProcess(default_peer):
-    rtn = default_peer.onProcess(['test', 'test2'])
-    assert rtn == ''
+    #assert default_peer.onProcess(['send']) == ''
+    assert default_peer.onProcess(['test', 'test2']) == ''
 
 
 def test_selectHandler(default_peer):
-    assert default_peer.selectHandler('join') is not None
+    for (key, value) in default_peer.handler.items():
+        assert default_peer.selectHandler(key) == value
+    assert default_peer.selectHandler('watchdog_check') is not None
     assert default_peer.selectHandler('this must be none') is None
 
 
 def test_sendMessage(default_peer):
     default_peer.sendMessage(None, 'None')
+
+
+def test_addConnectlist(default_peer, peer_info):
+    assert default_peer.connectlist == []
+    default_peer.addConnectlist(peer_info)
+    assert peer_info in default_peer.connectlist
+
+
+def test_getConnectByHost(default_peer, peer_info):
+    assert default_peer.getConnectByHost(peer_info.host) == peer_info
+    assert default_peer.getConnectByHost('fakehost:1111') == None
+
+
+def test_removeConnectlist(default_peer, peer_info):
+    assert peer_info in default_peer.connectlist
+    assert default_peer.removeConnectlist(peer_info) is True
+    assert peer_info not in default_peer.connectlist
+    assert default_peer.removeConnectlist(peer_info) is False
+    assert peer_info not in default_peer.connectlist
