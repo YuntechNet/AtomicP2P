@@ -2,9 +2,9 @@ import traceback
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils import printText
 from LibreCisco.peer.watchdog.command import (
-    PauseCmd, PeriodCmd, ListCmd, ResetCmd
+    HelpCmd, PauseCmd, PeriodCmd, ListCmd, ResetCmd
 )
-from LibreCisco.peer.watchdog.check import CheckHandler
+from LibreCisco.peer.watchdog.communication import CheckHandler
 from LibreCisco.peer.watchdog.peer_status import PeerStatus
 
 
@@ -41,6 +41,7 @@ class Watchdog(ThreadManager):
 
     def registerCommand(self):
         self.commands = {
+            'help': HelpCmd(self),
             'pause': PauseCmd(self),
             'period': PeriodCmd(self),
             'list': ListCmd(self),

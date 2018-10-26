@@ -4,7 +4,9 @@ import threading
 
 from LibreCisco.peer.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
-from LibreCisco.peer.command import SendCmd, ListCmd, LeaveNetCmd
+from LibreCisco.peer.command import (
+    HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
+)
 from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
@@ -42,6 +44,8 @@ class Peer(ThreadManager):
 
     def registerCommand(self):
         self.commands = {
+            'help': HelpCmd(self),
+            'join': JoinCmd(self),
             'send': SendCmd(self),
             'list': ListCmd(self),
             'leavenet': LeaveNetCmd(self)

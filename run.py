@@ -29,7 +29,6 @@ from LibreCisco.peer.watchdog import Watchdog
 @click.option('--name', default='core', help='peer name.')
 @click.option('--cert', default='data/libre_cisco.pem', help='Cert path.')
 def main(role, addr, target, name, cert):
-    """LibreCisco Test Version"""
 
     cert_file, key_file = cssc(getcwd(), cert, cert.replace('pem', 'key'))
     hash_str = self_hash(path=join(getcwd(), 'LibreCisco'))
@@ -53,12 +52,10 @@ def main(role, addr, target, name, cert):
     peer = services['peer']
     services['watchdog'] = peer.watchdog
 
-
     peer.start()
-    
 
     if (target != '0.0.0.0:8000'):
-        peer.sendMessage((target.split(':')[0], target.split(':')[1]), 'join')
+        peer.onProcess(['join', target])
     else:
         # printText('\x1b[1;33;40myou are first peer.\x1b[0m', output=[dashboard_field, peer_field])
         printText('you are first peer.', output=[dashboard_field, peer_field])
@@ -94,13 +91,9 @@ def main(role, addr, target, name, cert):
         if service_key in services:
             services[service_key].onProcess(cmd[1:])
         elif service_key == 'help':
-            helptips = '''
-peer [cmd]
-    - send [ip:port] [msg]           send a msg to host.
-    - broadcast [role/all] [msg]     send a broadcast msg to role.
-    - list                           list all peer.
-exit/stop                            exit the whole program.
-'''
+            helptips = "peer help            - See peer's help\n"\
+                       "watchdog help        - See watchdog's help\n"\
+                       "exit/stop            - exit the whole program.\n"
             printText(helptips, output=dashboard_field)
         elif service_key == 'exit' or service_key == 'stop':
             peer.stop()            

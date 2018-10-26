@@ -1,5 +1,34 @@
+from LibreCisco.peer.watchdog.peer_status import StatusType
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
+
+
+class HelpCmd(Command):
+    """HelpCmd
+        show the help for watchdog.
+        Usage in prompt: watchdog help [cmd]
+    """
+
+    def __init__(self, watchdog):
+        super(HelpCmd, self).__init__('help')
+        self.watchdog = watchdog
+        self.peer = watchdog.peer
+        self.output_field = self.peer.output_field
+
+    def onProcess(self, msg_arr):
+        if msg_arr != [] and msg_arr[0] in self.watchdog.commands:
+            printText(self.watchdog.commands[msg_arr[0]].__doc__)
+        else:
+            printText("watchdog [cmd] <options>\n"
+                      " - pause                                          "
+                      "pause watchdog's main loop thread.\n"
+                      " - period [seconds]                               "
+                      "change watchdog's loop period to another second.\n"
+                      " - list                                           "
+                      "list each statuses in list.\n"
+                      " - reset [peer name/role/all]                     "
+                      "reset all or specific name or role's peer status t"
+                      "o PENDING.")
 
 
 class PauseCmd(Command):
@@ -74,4 +103,8 @@ class ResetCmd(Command):
         self.peer = watchdog.peer
 
     def onProcess(self, msg_arr):
-        pass
+        if msg_arr == []:
+            for each in self.watchdog.watchdoglist:
+                each.update(status_type=StatusType.PENDING)
+        else:
+            pass
