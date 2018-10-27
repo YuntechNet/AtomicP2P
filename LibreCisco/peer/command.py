@@ -78,7 +78,7 @@ class ListCmd(Command):
         if len(self.peer.connectlist) == 0:
             printText('There is no peers in current net.')
         else:
-            printText('There is the list of peers in current net:')
+            printText('There is the connection list of peers in current net:')
             for each in self.peer.connectlist:
                 printText(' - ' + str(each))
             printText('[---End of list---]')

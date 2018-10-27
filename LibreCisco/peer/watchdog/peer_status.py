@@ -21,7 +21,8 @@ class PeerStatus(object):
         return self.peer_info == other.peer_info
 
     def __str__(self):
-        return 'PeerStatus<host={}>'.format(str(self.peer_info.host))
+        return 'PeerStatus<host={}, status={}>'.format(
+                    str(self.peer_info.host), self.status)
 
     def toDict(self):
         return {

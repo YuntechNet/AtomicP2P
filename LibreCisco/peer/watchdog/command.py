@@ -86,6 +86,7 @@ class ListCmd(Command):
         if len(self.watchdog.watchdoglist) == 0:
             printText('There is no peer\'s info in current list')
         else:
+            printText('There is the status list of peers in current net:')
             for each in self.watchdog.watchdoglist:
                 printText(' - ' + str(each))
             printText('[---End of list---]')
@@ -108,3 +109,21 @@ class ResetCmd(Command):
                 each.update(status_type=StatusType.PENDING)
         else:
             pass
+
+
+class VerboseCmd(Command):
+    """VerboseCmd
+        toggle verbose flag in watchdog to output more detail or not.
+        Usage in prompt: watchdog verbose
+    """
+
+    def __init__(self, watchdog):
+        super(VerboseCmd, self).__init__('verbose')
+        self.watchdog = watchdog
+        self.peer = watchdog.peer
+        self.output_field = self.peer.output_field
+
+    def onProcess(self, msg_arr):
+        self.watchdog.verbose = not self.watchdog.verbose
+        printText('Watchdog verbose toggle to: {}'.format(
+                        self.watchdog.verbose))

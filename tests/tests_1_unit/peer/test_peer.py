@@ -33,6 +33,11 @@ def test_getConnectByHost(default_peer, peer_info):
     assert default_peer.getConnectByHost('fakehost:1111') is None
 
 
+def test_getConnectByName(default_peer, peer_info):
+    assert default_peer.getConnectByName('this must be none') is None
+    assert default_peer.getConnectByName(peer_info.name) == peer_info
+
+
 def test_removeConnectlist(default_peer, peer_info):
     assert peer_info in default_peer.connectlist
     assert default_peer.removeConnectlist(peer_info) is True

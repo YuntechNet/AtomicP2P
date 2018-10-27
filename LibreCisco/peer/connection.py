@@ -29,15 +29,14 @@ class PeerConnection(threading.Thread):
             self.peer.watchdog.updateStatusByHost(data._to)
         except Exception as e:
             # print(traceback.format_exc())
-            # self.peer.watchdog.removeStatusByHost(data._to)
+
             status, peer_info = self.peer.watchdog.getStatusByHost(data._to)
             if status:
                 status.update(status_type=StatusType.PENDING)
-                printText(status.no_response_count)
-            elif peer_info:
-                status = PeerStatus(peer_info=peer_info,
-                                    status=StatusType.PENDING)
-                self.peer.watchdog.addWatchdoglist(peer_status=status)
+            #elif peer_info:
+            #    status = PeerStatus(peer_info=peer_info,
+            #                        status=StatusType.PENDING)
+            #    self.peer.watchdog.addWatchdoglist(peer_status=status)
         finally:
             self.client.close()
 #        Data = self.client.recv(1024)
