@@ -59,9 +59,12 @@ class Watchdog(ThreadManager):
         return ''
 
     def onRecvPkt(self, pkt, addr):
-        for each in self.peer.connectlist:
-            if each.host[0] == addr[0]:
-                self.addWatchdoglist(PeerStatus(each))
+        if not pkt.is_reject():
+            status, peer_info = self.getStatusByHost(host=addr)
+            if status is None and peer_info is not None:
+                self.addWatchdoglist(PeerStatus(peer_info=peer_info))
+            else:
+                self.updateStatusByHost(addr)
 
     def getStatusByHost(self, host):
         peer_info = self.peer.getConnectByHost(host=host)

@@ -107,23 +107,26 @@ class Peer(ThreadManager):
                     in_net = True
                     break
 
-        if in_net is True:
-            handler = self.selectHandler(data._type)
-            if handler:
-                if data._hash != self._hash and not data.is_reject():
-                    printText(('Illegal peer {} with unmatch hash {{{}...{}}} '
-                               'trying to connect to net.').format(
-                                addr, data._hash[:6], data._hash[-6:]))
-                    self.sendMessage(data._from,
-                                     data._type,
-                                     reject='Unmatching peer hash.')
-                else:
-                    self.watchdog.onRecvPkt(data, addr)
-                    handler.onRecv(addr, data._data)
+#        if in_net is True:
+        handler = self.selectHandler(data._type)
+        if handler:
+            if data._hash != self._hash and not data.is_reject():
+                printText(('Illegal peer {} with unmatch hash {{{}...{}}} '
+                           'trying to connect to net.').format(
+                            addr, data._hash[:6], data._hash[-6:]))
+                self.sendMessage(data._from, data._type,
+                                 **{'reject_reason': 'Unmatching peer hash.'})
             else:
-                printText('Unknown packet tpye: {}'.format(data._type))
+                if in_net:
+                    handler.onRecv(addr, data._data)
+                    self.watchdog.onRecvPkt(data, addr)
+                else:
+                    self.sendMessage(data._from, data._type,
+                                     **{'reject_reason': 'not in current net'})
         else:
-            printText('A peer not in net try to send packets.')
+            printText('Unknown packet tpye: {}'.format(data._type))
+#        else:
+#            printText('A peer not in net try to send packets.')
 
     # send
     def sendMessage(self, host, sendType, **kwargs):
