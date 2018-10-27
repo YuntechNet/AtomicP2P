@@ -4,7 +4,9 @@ import threading
 
 from LibreCisco.peer.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
-from LibreCisco.peer.command import SendCmd, ListCmd, LeaveNetCmd
+from LibreCisco.peer.command import (
+    HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
+)
 from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
@@ -28,7 +30,6 @@ class Peer(ThreadManager):
         self.cert = cert
         self.setServer(cert)
         self.connectlist = []
-        self.connectnum = 0
         self.watchdog = Watchdog(self)
         self.last_output = ''
 
@@ -42,6 +43,8 @@ class Peer(ThreadManager):
 
     def registerCommand(self):
         self.commands = {
+            'help': HelpCmd(self),
+            'join': JoinCmd(self),
             'send': SendCmd(self),
             'list': ListCmd(self),
             'leavenet': LeaveNetCmd(self)
@@ -142,15 +145,19 @@ class Peer(ThreadManager):
                 return each
         return None
 
+    def getConnectByName(self, name):
+        for each in self.connectlist:
+            if each.name == name:
+                return each
+        return None
+
     def addConnectlist(self, peer_info):
         if peer_info not in self.connectlist:
             self.connectlist.append(peer_info)
-            self.connectnum += 1
 
     def removeConnectlist(self, peer_info):
         try:
             self.connectlist.remove(peer_info)
-            self.connectnum -= 1
             return True
         except ValueError:
             return False

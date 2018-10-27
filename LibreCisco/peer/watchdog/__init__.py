@@ -1,40 +1,62 @@
 import traceback
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils import printText
-from LibreCisco.peer.watchdog.check import CheckHandler
+from LibreCisco.peer.watchdog.command import (
+    HelpCmd, PauseCmd, PeriodCmd, ListCmd, ResetCmd, VerboseCmd
+)
+from LibreCisco.peer.watchdog.communication import CheckHandler
 from LibreCisco.peer.watchdog.peer_status import PeerStatus
 
 
 class Watchdog(ThreadManager):
 
-    def __init__(self, peer, loopDelay=2, max_no_response_count=5):
+    def __init__(self, peer, loopDelay=2, verbose=False,
+                 max_no_response_count=5):
         self.peer = peer
         super(Watchdog, self).__init__(loopDelay=loopDelay,
                                        output_field=peer.output_field,
                                        auto_register=True)
 
+        self.verbose = False
+        self.pause = False
         self.max_no_response_count = max_no_response_count
         self.watchdoglist = []
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
-            no_response_list = []
-            for each in self.watchdoglist:
-                addr = each.peer_info.host[0]
-                port = each.peer_info.host[1]
-                data = {'status': each}
-                self.peer.sendMessage((addr, port), 'watchdog_check', **data)
-                if each.no_response_count >= self.max_no_response_count:
-                    no_response_list.append(each)
-            self.removeWatchdoglist(no_response_list)
+            if not self.pause:
+                no_response_list = []
+                for each in self.watchdoglist:
+                    addr = each.peer_info.host[0]
+                    port = each.peer_info.host[1]
+                    data = {'status': each}
+                    self.peer.sendMessage((addr, port), 'watchdog_check',
+                                          **data)
+                    if each.no_response_count >= self.max_no_response_count:
+                        no_response_list.append(each)
+                self.removeWatchdoglist(no_response_list)
 
     def registerHandler(self):
         self.handler = {
-            'watchdog_check': CheckHandler(self.peer)
+            'watchdog_check': CheckHandler(self)
         }
 
     def registerCommand(self):
-        self.commands = {}
+        self.commands = {
+            'help': HelpCmd(self),
+            'pause': PauseCmd(self),
+            'period': PeriodCmd(self),
+            'list': ListCmd(self),
+            'reset': ResetCmd(self),
+            'verbose': VerboseCmd(self)
+        }
+
+    def onProcess(self, msg_arr):
+        msg_key = msg_arr[0].lower()
+        msg_arr = msg_arr[1:]
+        if msg_key in self.commands:
+            return self.commands[msg_key].onProcess(msg_arr)
+        return ''
 
     def onRecvPkt(self, pkt, addr):
         for each in self.peer.connectlist:
@@ -76,5 +98,6 @@ class Watchdog(ThreadManager):
         for each in missing:
             try:
                 self.watchdoglist.remove(each)
+                printText('{} has been remove from status list.'.format(each))
             except Exception as e:
-                traceback.print_exc()
+                printText(traceback.format_exc())
