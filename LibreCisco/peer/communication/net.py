@@ -20,10 +20,10 @@ class JoinHandler(Handler):
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type='join', _data=data)
 
-    def onSendReject(self, target, reason):
+    def onSendReject(self, target, reject_reason):
         message = Message(_to=target, _from=self.peer.peer_info.host,
                           _hash=None, _type='join', _data={})
-        message.set_reject(reason)
+        message.set_reject(reject_reason)
         return message
 
     def onRecvPkt(self, src, data):

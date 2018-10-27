@@ -81,15 +81,14 @@ class Handler(object):
         return arr
 
     def onSend(self, target, **kwargs):
-        if self.can_reject and 'reject' in locals()['kwargs']:
-            message = self.onSendReject(target=target,
-                                        reason=kwargs['reject'], **kwargs)
-            return [message] if type(message) is list else message
+        if self.can_reject and 'reject_reason' in locals()['kwargs']:
+            message = self.onSendReject(target=target, **kwargs)
+            return message if type(message) is list else [message]
         else:
             message = self.onSendPkt(target=target, **kwargs)
             return self.wrap_packet(message=message, **kwargs)
 
-    def onSendReject(self, target, reason, **kwargs):
+    def onSendReject(self, target, reject_reason, **kwargs):
         raise NotImplementedError
 
     def onSendPkt(self, target, **kwargs):
