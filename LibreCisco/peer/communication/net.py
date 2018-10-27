@@ -6,7 +6,7 @@ from LibreCisco.peer.peer_info import PeerInfo
 class JoinHandler(Handler):
 
     def __init__(self, peer):
-        super(JoinHandler, self).__init__(peer, can_reject=True)
+        super(JoinHandler, self).__init__(pkt_type='join', peer=peer)
         self.output_field = peer.output_field
         self.last_join_host = None
 
@@ -18,13 +18,7 @@ class JoinHandler(Handler):
            'role': self.peer.peer_info.role
         }
         return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type='join', _data=data)
-
-    def onSendReject(self, target, reject_reason):
-        message = Message(_to=target, _from=self.peer.peer_info.host,
-                          _hash=None, _type='join', _data={})
-        message.set_reject(reject_reason)
-        return message
+                       _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
     def onRecvPkt(self, src, data):
         name = data['name']
@@ -41,15 +35,12 @@ class JoinHandler(Handler):
         self.peer.addConnectlist(peer_info)
         self.peer.sendMessage((src[0], listen_port), 'checkjoin')
 
-    def onRecvReject(self, src, data):
-        reject = data['reject']
-        printText('Rejected by {}, reason: {}'.format(src, reject))
-
 
 class CheckJoinHandler(Handler):
 
     def __init__(self, peer):
-        super(CheckJoinHandler, self).__init__(peer)
+        super(CheckJoinHandler, self).__init__(pkt_type='checkjoin',
+                                               peer=peer)
         self.output_field = peer.output_field
 
     def onSendPkt(self, target):
@@ -59,7 +50,7 @@ class CheckJoinHandler(Handler):
             'role': self.peer.peer_info.role
         }
         return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type='checkjoin', _data=data)
+                       _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
     def onRecvPkt(self, src, data):
         name = data['name']
@@ -73,7 +64,7 @@ class CheckJoinHandler(Handler):
 class NewMemberHandler(Handler):
 
     def __init__(self, peer):
-        super(NewMemberHandler, self).__init__(peer)
+        super(NewMemberHandler, self).__init__(pkt_type='newmember', peer=peer)
         self.output_field = peer.output_field
 
     def onSendPkt(self, target, peer_info):
@@ -83,7 +74,7 @@ class NewMemberHandler(Handler):
             'role': peer_info.role
         }
         return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type='newmember', _data=data)
+                       _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
     def onRecvPkt(self, src, data):
         name = data['name']

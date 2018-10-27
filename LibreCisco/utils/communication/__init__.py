@@ -1,4 +1,5 @@
 import json
+from LibreCisco.utils import printText
 
 
 class Message(object):
@@ -62,10 +63,10 @@ class Message(object):
 
 class Handler(object):
 
-    def __init__(self, peer, can_broadcast=False, can_reject=True):
+    def __init__(self, pkt_type, peer, can_broadcast=False):
+        self.pkt_type = pkt_type
         self.peer = peer
         self.can_broadcast = can_broadcast
-        self.can_reject = can_reject
 
     # Wrap if it is a broadcast packet.
     def wrap_packet(self, message, **kwargs):
@@ -81,7 +82,7 @@ class Handler(object):
         return arr
 
     def onSend(self, target, **kwargs):
-        if self.can_reject and 'reject_reason' in locals()['kwargs']:
+        if 'reject_reason' in locals()['kwargs']:
             message = self.onSendReject(target=target, **kwargs)
             return message if type(message) is list else [message]
         else:
@@ -89,19 +90,23 @@ class Handler(object):
             return self.wrap_packet(message=message, **kwargs)
 
     def onSendReject(self, target, reject_reason, **kwargs):
-        raise NotImplementedError
+        message = Message(_to=target, _from=self.peer.peer_info.host,
+                          _hash=None, _type=self.pkt_type, _data={})
+        message.set_reject(reject_reason)
+        return message
 
     def onSendPkt(self, target, **kwargs):
         raise NotImplementedError
 
     def onRecv(self, src, data, **kwargs):
-        if self.can_reject and 'reject' in data:
+        if 'reject' in data:
             self.onRecvReject(src=src, data=data, **kwargs)
         else:
             self.onRecvPkt(src=src, data=data, **kwargs)
 
     def onRecvReject(self, src, data, **kwargs):
-        raise NotImplementedError
+        reject = data['reject']
+        printText('Rejected by {}, reason: {}'.format(src, reject))
 
     def onRecvPkt(self, src, data, **kwargs):
         raise NotImplementedError

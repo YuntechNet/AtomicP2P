@@ -118,8 +118,8 @@ class Peer(ThreadManager):
                                  **{'reject_reason': 'Unmatching peer hash.'})
             else:
                 if in_net:
-                    self.watchdog.onRecvPkt(data, addr)
                     handler.onRecv(addr, data._data)
+                    self.watchdog.onRecvPkt(data, addr)
                 else:
                     self.sendMessage(data._from, data._type,
                                      **{'reject_reason': 'not in current net'})

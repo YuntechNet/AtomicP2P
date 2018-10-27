@@ -1,8 +1,8 @@
 import pytest
 
 
-def test_init(handler):
-    assert handler.peer is None
+def test_init(handler, default_peer):
+    assert handler.peer == default_peer
 
 
 def onSend(handler):
@@ -11,8 +11,9 @@ def onSend(handler):
 
 
 def test_onSendReject(handler):
-    with pytest.raises(NotImplementedError):
-        handler.onSendReject(None, None)
+    message = handler.onSendReject('1.2.3.4:5678', 'test reason')
+    assert message._data['reject'] == 'test reason'
+    assert message._to == '1.2.3.4:5678'
 
 
 def test_onSendPkt(handler):
@@ -21,8 +22,7 @@ def test_onSendPkt(handler):
 
 
 def test_onRecvReject(handler):
-    with pytest.raises(NotImplementedError):
-        handler.onRecvReject(None, None)
+    handler.onRecvReject('1.2.3.4:5678', {'reject': 'test reason'})
 
 
 def test_onRecvPkt(handler):

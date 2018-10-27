@@ -10,5 +10,5 @@ def message(default_peer, self_hash):
 
 
 @pytest.fixture(scope='class')
-def handler():
-    return Handler(None)
+def handler(default_peer):
+    return Handler(None, default_peer)
