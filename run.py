@@ -46,33 +46,22 @@ def main(role, addr, target, name, cert):
     input_field = TextArea(height=1, prompt=' > ', style='class:input-field')
 
     addr = addr.split(':')
-<<<<<<< HEAD
-    services = {
-        'peer': Peer(host=addr, name=name, role=role,
-                     cert=(cert_file, key_file), _hash=hash_str,
-                     output_field=[dashboard_field, peer_field]),
-        'monitor': None
-    }
-    peer = services['peer']
-    services['monitor'] = peer.monitor
-
-    peer.start()
-=======
     service = {
         'peer': None,
+        'monitor': None,
         'device': None
     }
     service['peer'] = Peer(host=addr, name=name, role=role,
                            cert=(cert_file, key_file), _hash=hash_str,
                            output_field=[dashboard_field, peer_field])
+    service['monitor'] = service['peer'].monitor
     service['device'] = Device(peer=service['peer'],
                                output_field=[dashboard_field, device_field])
     service['peer'].start()
     service['device'].start()
->>>>>>> Modified run.py
 
     if (target):
-        peer.onProcess(['join', target])
+        service['peer'].onProcess(['join', target])
     else:
         # printText('\x1b[1;33;40myou are first peer.\x1b[0m', output=[dashboard_field, peer_field])
         printText('you are first peer.', output=[dashboard_field, peer_field])
