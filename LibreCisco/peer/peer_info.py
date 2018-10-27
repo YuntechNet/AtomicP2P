@@ -8,8 +8,8 @@ class PeerInfo(object):
         self.host = (host[0], int(host[1]))
 
     def __eq__(self, other):
-        return self.name == other.name and self.role == other.role \
-               and self.host == other.host
+        return other is not None and self.name == other.name and \
+               self.role == other.role and self.host == other.host
 
     def __contains__(self, item):
         return self.__eq__(item)

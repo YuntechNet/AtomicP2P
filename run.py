@@ -24,8 +24,8 @@ from LibreCisco.peer.watchdog import Watchdog
 @click.command()
 
 @click.option('--role', default='core', help='role of peer.')
-@click.option('--addr', default='0.0.0.0:8000', help='self addresss.')
-@click.option('--target', default='0.0.0.0:8000', help='target addresss.')
+@click.option('--addr', default='127.0.0.1:8000', help='self addresss.')
+@click.option('--target', default=None, help='target addresss.')
 @click.option('--name', default='core', help='peer name.')
 @click.option('--cert', default='data/libre_cisco.pem', help='Cert path.')
 def main(role, addr, target, name, cert):
@@ -54,7 +54,7 @@ def main(role, addr, target, name, cert):
 
     peer.start()
 
-    if (target != '0.0.0.0:8000'):
+    if (target):
         peer.onProcess(['join', target])
     else:
         # printText('\x1b[1;33;40myou are first peer.\x1b[0m', output=[dashboard_field, peer_field])

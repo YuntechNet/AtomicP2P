@@ -127,3 +127,22 @@ class VerboseCmd(Command):
         self.watchdog.verbose = not self.watchdog.verbose
         printText('Watchdog verbose toggle to: {}'.format(
                         self.watchdog.verbose))
+
+
+class ManualCmd(Command):
+    """ManualCmd
+        manually to send a check pkt to specific peer.
+        Usage in prompt: watchdog manuadl [ip:port]
+    """
+
+    def __init__(self, watchdog):
+        super(ManualCmd, self).__init__('manual')
+        self.watchdog = watchdog
+        self.peer = watchdog.peer
+        self.output_field = self.peer.output_field
+
+    def onProcess(self, msg_arr):
+        host = msg_arr[0].split(':')
+        self.peer.sendMessage((host[0], host[1]), 'watchdog_check')
+        if self.watchdog.verbose:
+            printText('Sended a watchdog check to: {}'.format(host))

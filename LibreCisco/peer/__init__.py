@@ -108,7 +108,6 @@ class Peer(ThreadManager):
                     in_net = True
                     break
 
-#        if in_net is True:
         handler = self.selectHandler(pkt._type)
         if handler:
             if pkt._hash != self._hash and not pkt.is_reject():
@@ -119,15 +118,13 @@ class Peer(ThreadManager):
                                  **{'reject_reason': 'Unmatching peer hash.'})
             else:
                 if in_net:
-                    handler.onRecv(addr, pkt)
-                    self.watchdog.onRecvPkt(pkt, addr)
+                    handler.onRecv(src=addr, pkt=pkt)
+                    self.watchdog.onRecvPkt(addr=pkt._from, pkt=pkt)
                 else:
                     self.sendMessage(pkt._from, pkt._type,
                                      **{'reject_reason': 'not in current net'})
         else:
             printText('Unknown packet tpye: {}'.format(pkt._type))
-#        else:
-#            printText('A peer not in net try to send packets.')
 
     # send
     def sendMessage(self, host, sendType, **kwargs):
@@ -145,7 +142,7 @@ class Peer(ThreadManager):
     # list
     def getConnectByHost(self, host):
         for each in self.connectlist:
-            if each.host[0] == host[0]:
+            if each.host == host:
                 return each
         return None
 

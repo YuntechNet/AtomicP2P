@@ -1,3 +1,4 @@
+import time
 from LibreCisco.peer.watchdog.peer_status import StatusType
 from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message, Handler
@@ -12,8 +13,8 @@ class CheckHandler(Handler):
         self.watchdog = watchdog
         self.output_field = self.peer.output_field
 
-    def onSendPkt(self, target, status):
-        data = status.toDict()
+    def onSendPkt(self, target):
+        data = {'send_ts': time.time()}
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
@@ -27,6 +28,6 @@ class CheckHandler(Handler):
     def onRecvReject(self, src, pkt):
         if self.watchdog.verbose:
             super(CheckHandler, self).onRecvReject(src, pkt)
-        status, peer_info = self.watchdog.getStatusByHost(src)
+        status, peer_info = self.watchdog.getStatusByHost(pkt._from)
         if status:
             status.update(status_type=StatusType.PENDING)

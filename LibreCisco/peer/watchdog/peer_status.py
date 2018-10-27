@@ -18,7 +18,7 @@ class PeerStatus(object):
         self.status = status
 
     def __eq__(self, other):
-        return self.peer_info == other.peer_info
+        return other is not None and self.peer_info == other.peer_info
 
     def __str__(self):
         return 'PeerStatus<host={}, status={}>'.format(
