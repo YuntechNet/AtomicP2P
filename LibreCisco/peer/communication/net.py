@@ -20,7 +20,8 @@ class JoinHandler(Handler):
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
-    def onRecvPkt(self, src, data):
+    def onRecvPkt(self, src, pkt):
+        data = pkt._data
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
@@ -52,7 +53,8 @@ class CheckJoinHandler(Handler):
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
-    def onRecvPkt(self, src, data):
+    def onRecvPkt(self, src, pkt):
+        data = pkt._data
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
@@ -76,7 +78,8 @@ class NewMemberHandler(Handler):
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
-    def onRecvPkt(self, src, data):
+    def onRecvPkt(self, src, pkt):
+        data = pkt._data
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']

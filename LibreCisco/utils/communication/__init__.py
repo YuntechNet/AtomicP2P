@@ -98,15 +98,15 @@ class Handler(object):
     def onSendPkt(self, target, **kwargs):
         raise NotImplementedError
 
-    def onRecv(self, src, data, **kwargs):
-        if 'reject' in data:
-            self.onRecvReject(src=src, data=data, **kwargs)
+    def onRecv(self, src, pkt, **kwargs):
+        if pkt.is_reject():
+            self.onRecvReject(src=src, pkt=pkt, **kwargs)
         else:
-            self.onRecvPkt(src=src, data=data, **kwargs)
+            self.onRecvPkt(src=src, pkt=pkt, **kwargs)
 
-    def onRecvReject(self, src, data, **kwargs):
-        reject = data['reject']
-        printText('Rejected by {}, reason: {}'.format(src, reject))
+    def onRecvReject(self, src, pkt, **kwargs):
+        reject = pkt._data['reject']
+        printText('Rejected by {}, reason: {}'.format(pkt._from, reject))
 
-    def onRecvPkt(self, src, data, **kwargs):
+    def onRecvPkt(self, src, pkt, **kwargs):
         raise NotImplementedError

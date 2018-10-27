@@ -17,15 +17,16 @@ class CheckHandler(Handler):
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
-    def onRecvPkt(self, src, data):
-        message = 'WatchDog check from {}: send ts {}'.format(str(src),
+    def onRecvPkt(self, src, pkt):
+        data = pkt._data
+        message = 'WatchDog check from {}: send ts {}'.format(pkt._from,
                                                               data['send_ts'])
         if self.watchdog.verbose:
             printText(message)
 
-    def onRecvReject(self, src, data):
+    def onRecvReject(self, src, pkt):
         if self.watchdog.verbose:
-            super(CheckHandler, self).onRecvReject(src, data)
+            super(CheckHandler, self).onRecvReject(src, pkt)
         status, peer_info = self.watchdog.getStatusByHost(src)
         if status:
             status.update(status_type=StatusType.PENDING)

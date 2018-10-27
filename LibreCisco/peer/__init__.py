@@ -10,11 +10,12 @@ from LibreCisco.peer.command import (
 from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
+from LibreCisco.peer.watchdog.peer_status import PeerStatus, StatusType
+from LibreCisco.peer.watchdog import Watchdog
 from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils.command import Command
 from LibreCisco.utils.communication import Message
-from LibreCisco.peer.watchdog import Watchdog
 
 
 class Peer(ThreadManager):
@@ -98,8 +99,8 @@ class Peer(ThreadManager):
 
     def acceptHandle(self, conn, addr):
         in_net = False
-        data = Message.recv(conn.recv(1024))
-        if data._type == 'join' or data._type == 'checkjoin':
+        pkt = Message.recv(conn.recv(1024))
+        if pkt._type == 'join' or pkt._type == 'checkjoin':
             in_net = True
         else:
             for checkexist in self.connectlist:
@@ -108,23 +109,23 @@ class Peer(ThreadManager):
                     break
 
 #        if in_net is True:
-        handler = self.selectHandler(data._type)
+        handler = self.selectHandler(pkt._type)
         if handler:
-            if data._hash != self._hash and not data.is_reject():
+            if pkt._hash != self._hash and not pkt.is_reject():
                 printText(('Illegal peer {} with unmatch hash {{{}...{}}} '
                            'trying to connect to net.').format(
-                            addr, data._hash[:6], data._hash[-6:]))
-                self.sendMessage(data._from, data._type,
+                            addr, pkt._hash[:6], pkt._hash[-6:]))
+                self.sendMessage(pkt._from, pkt._type,
                                  **{'reject_reason': 'Unmatching peer hash.'})
             else:
                 if in_net:
-                    handler.onRecv(addr, data._data)
-                    self.watchdog.onRecvPkt(data, addr)
+                    handler.onRecv(addr, pkt)
+                    self.watchdog.onRecvPkt(pkt, addr)
                 else:
-                    self.sendMessage(data._from, data._type,
+                    self.sendMessage(pkt._from, pkt._type,
                                      **{'reject_reason': 'not in current net'})
         else:
-            printText('Unknown packet tpye: {}'.format(data._type))
+            printText('Unknown packet tpye: {}'.format(pkt._type))
 #        else:
 #            printText('A peer not in net try to send packets.')
 
@@ -157,6 +158,7 @@ class Peer(ThreadManager):
     def addConnectlist(self, peer_info):
         if peer_info not in self.connectlist:
             self.connectlist.append(peer_info)
+            self.watchdog.addWatchdoglist(PeerStatus(peer_info))
 
     def removeConnectlist(self, peer_info):
         try:
