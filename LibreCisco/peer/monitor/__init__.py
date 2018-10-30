@@ -14,8 +14,8 @@ class Monitor(ThreadManager):
                  max_no_response_count=5):
         self.peer = peer
         super(Monitor, self).__init__(loopDelay=loopDelay,
-                                       output_field=peer.output_field,
-                                       auto_register=True)
+                                      output_field=peer.output_field,
+                                      auto_register=True)
 
         self.verbose = False
         self.pause = False

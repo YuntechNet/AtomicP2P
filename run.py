@@ -18,7 +18,6 @@ from LibreCisco.utils import printText
 from LibreCisco.utils.security import (
     create_self_signed_cert as cssc, self_hash
 )
-from LibreCisco.peer.monitor import Watchdog
 
 
 @click.command()

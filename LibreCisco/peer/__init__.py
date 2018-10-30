@@ -98,31 +98,24 @@ class Peer(ThreadManager):
             return None
 
     def acceptHandle(self, conn, addr):
-        in_net = False
         pkt = Message.recv(conn.recv(1024))
-        if pkt._type == 'join' or pkt._type == 'checkjoin':
-            in_net = True
-        else:
-            for checkexist in self.connectlist:
-                if checkexist.host[0] == addr[0]:
-                    in_net = True
-                    break
-
+        in_net = self.containsInConnectlist(addr[0])
+        hash_match = self._hash == pkt._hash
         handler = self.selectHandler(pkt._type)
+
         if handler:
-            if pkt._hash != self._hash and not pkt.is_reject():
+            if hash_match is False and pkt.is_reject() is False:
                 printText(('Illegal peer {} with unmatch hash {{{}...{}}} '
                            'trying to connect to net.').format(
                             addr, pkt._hash[:6], pkt._hash[-6:]))
                 self.sendMessage(pkt._from, pkt._type,
                                  **{'reject_reason': 'Unmatching peer hash.'})
+            elif in_net is True or pkt._type in ['join', 'checkjoin']:
+                handler.onRecv(src=addr, pkt=pkt)
+                self.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
             else:
-                if in_net:
-                    handler.onRecv(src=addr, pkt=pkt)
-                    self.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
-                else:
-                    self.sendMessage(pkt._from, pkt._type,
-                                     **{'reject_reason': 'not in current net'})
+                self.sendMessage(pkt._from, pkt._type,
+                                 **{'reject_reason': 'not in current net'})
         else:
             printText('Unknown packet tpye: {}'.format(pkt._type))
 
@@ -140,6 +133,12 @@ class Peer(ThreadManager):
             printText('No such type.')
 
     # list
+    def containsInConnectlist(self, host):
+        for each in self.connectlist:
+            if each.host[0] == host:
+                return True
+        return False
+
     def getConnectByHost(self, host):
         for each in self.connectlist:
             if each.host == host:
