@@ -86,7 +86,7 @@ class ListCmd(Command):
 
 class LeaveNetCmd(Command):
     """LeaveNetCmd
-        leave the current net, this will clear watchdog list and peer list.
+        leave the current net, this will clear monitor list and peer list.
         Usage in prompt: peer leavenet
     """
 
@@ -98,5 +98,5 @@ class LeaveNetCmd(Command):
     def onProcess(self, msg_arr):
         # self.peer.sendMessage(('broadcast', 'all'), 'leavenet')
         self.peer.connectlist.clear()
-        self.peer.watchdog.watchdoglist.clear()
+        self.peer.monitor.monitorlist.clear()
         printText('You left net.')

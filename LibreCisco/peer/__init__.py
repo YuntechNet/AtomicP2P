@@ -10,8 +10,8 @@ from LibreCisco.peer.command import (
 from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
-from LibreCisco.peer.watchdog.peer_status import PeerStatus, StatusType
-from LibreCisco.peer.watchdog import Watchdog
+from LibreCisco.peer.monitor.peer_status import PeerStatus, StatusType
+from LibreCisco.peer.monitor import Monitor
 from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils.command import Command
@@ -31,7 +31,7 @@ class Peer(ThreadManager):
         self.cert = cert
         self.setServer(cert)
         self.connectlist = []
-        self.watchdog = Watchdog(self)
+        self.monitor = Monitor(self)
         self.last_output = ''
 
     def registerHandler(self):
@@ -60,7 +60,7 @@ class Peer(ThreadManager):
 
     def start(self):
         super(Peer, self).start()
-        self.watchdog.start()
+        self.monitor.start()
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
@@ -70,7 +70,7 @@ class Peer(ThreadManager):
             accepthandle.start()
 
     def stop(self):
-        self.watchdog.stop()
+        self.monitor.stop()
         self.stopped.set()
         self.sendMessage(('127.0.0.1', self.peer_info.host[1]), 'message',
                          **{'msg': 'disconnect successful.'})
@@ -92,8 +92,8 @@ class Peer(ThreadManager):
     def selectHandler(self, _type):
         if _type in self.handler:
             return self.handler[_type]
-        elif _type in self.watchdog.handler:
-            return self.watchdog.handler[_type]
+        elif _type in self.monitor.handler:
+            return self.monitor.handler[_type]
         else:
             return None
 
@@ -119,7 +119,7 @@ class Peer(ThreadManager):
             else:
                 if in_net:
                     handler.onRecv(src=addr, pkt=pkt)
-                    self.watchdog.onRecvPkt(addr=pkt._from, pkt=pkt)
+                    self.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
                 else:
                     self.sendMessage(pkt._from, pkt._type,
                                      **{'reject_reason': 'not in current net'})
@@ -155,7 +155,7 @@ class Peer(ThreadManager):
     def addConnectlist(self, peer_info):
         if peer_info not in self.connectlist:
             self.connectlist.append(peer_info)
-            self.watchdog.addWatchdoglist(PeerStatus(peer_info))
+            self.monitor.addMonitorlist(PeerStatus(peer_info))
 
     def removeConnectlist(self, peer_info):
         try:

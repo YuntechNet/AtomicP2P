@@ -1,29 +1,29 @@
-from LibreCisco.peer.watchdog.peer_status import StatusType
+from LibreCisco.peer.monitor.peer_status import StatusType
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 
 
 class HelpCmd(Command):
     """HelpCmd
-        show the help for watchdog.
-        Usage in prompt: watchdog help [cmd]
+        show the help for monitor.
+        Usage in prompt: monitor help [cmd]
     """
 
-    def __init__(self, watchdog):
+    def __init__(self, monitor):
         super(HelpCmd, self).__init__('help')
-        self.watchdog = watchdog
-        self.peer = watchdog.peer
+        self.monitor = monitor
+        self.peer = monitor.peer
         self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
-        if msg_arr != [] and msg_arr[0] in self.watchdog.commands:
-            printText(self.watchdog.commands[msg_arr[0]].__doc__)
+        if msg_arr != [] and msg_arr[0] in self.monitor.commands:
+            printText(self.monitor.commands[msg_arr[0]].__doc__)
         else:
-            printText("watchdog [cmd] <options>\n"
+            printText("monitor [cmd] <options>\n"
                       " - pause                                          "
-                      "pause watchdog's main loop thread.\n"
+                      "pause monitor's main loop thread.\n"
                       " - period [seconds]                               "
-                      "change watchdog's loop period to another second.\n"
+                      "change monitor's loop period to another second.\n"
                       " - list                                           "
                       "list each statuses in list.\n"
                       " - reset [peer name/role/all]                     "
@@ -33,38 +33,38 @@ class HelpCmd(Command):
 
 class PauseCmd(Command):
     """PauseCmd
-        pause watchdog keep checking peers.
-        Usage in prompt: watchdog pause
+        pause monitor keep checking peers.
+        Usage in prompt: monitor pause
     """
 
-    def __init__(self, watchdog):
+    def __init__(self, monitor):
         super(PauseCmd, self).__init__('pause')
-        self.watchdog = watchdog
-        self.peer = watchdog.peer
+        self.monitor = monitor
+        self.peer = monitor.peer
         self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
-        self.watchdog.pause = not self.watchdog.pause
-        printText('Watchdog pause: {}'.format(self.watchdog.pause))
+        self.monitor.pause = not self.monitor.pause
+        printText('Monitor pause: {}'.format(self.monitor.pause))
 
 
 class PeriodCmd(Command):
     """PeriodCmd
-        adjust watchdog's checking delay in seconds.
-        Usage in prompt: watchdog period [seconds]
+        adjust monitor's checking delay in seconds.
+        Usage in prompt: monitor period [seconds]
     """
 
-    def __init__(self, watchdog):
+    def __init__(self, monitor):
         super(PeriodCmd, self).__init__('period')
-        self.watchdog = watchdog
-        self.peer = watchdog.peer
+        self.monitor = monitor
+        self.peer = monitor.peer
         self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
         try:
             period = int(msg_arr[0])
-            self.watchdog.loopDelay = period
-            printText('Watchdog check sending period \
+            self.monitor.loopDelay = period
+            printText('Monitor check sending period \
                        change to: {} seconds.'.format(period))
         except ValueError:
             printText('Please input a integer: {}'.format(msg_arr[0]))
@@ -75,39 +75,39 @@ class PeriodCmd(Command):
 class ListCmd(Command):
     """ListCmd
         list all peer status in list
-        Usage in prompt: watchdog list
+        Usage in prompt: monitor list
     """
 
-    def __init__(self, watchdog):
+    def __init__(self, monitor):
         super(ListCmd, self).__init__('list')
-        self.watchdog = watchdog
-        self.peer = watchdog.peer
+        self.monitor = monitor
+        self.peer = monitor.peer
         self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
-        if len(self.watchdog.watchdoglist) == 0:
+        if len(self.monitor.monitorlist) == 0:
             printText('There is no peer\'s info in current list')
         else:
             printText('There is the status list of peers in current net:')
-            for each in self.watchdog.watchdoglist:
+            for each in self.monitor.monitorlist:
                 printText(' - ' + str(each))
             printText('[---End of list---]')
 
 
 class ResetCmd(Command):
     """ResetCmd
-        reset specific or every peer's status in watchdog's list.
-        Usage in prompt: watchdog reset all
+        reset specific or every peer's status in monitor's list.
+        Usage in prompt: monitor reset all
     """
 
-    def __init__(self, watchdog):
+    def __init__(self, monitor):
         super(ResetCmd, self).__init__('reset')
-        self.watchdog = watchdog
-        self.peer = watchdog.peer
+        self.monitor = monitor
+        self.peer = monitor.peer
 
     def onProcess(self, msg_arr):
         if msg_arr == []:
-            for each in self.watchdog.watchdoglist:
+            for each in self.monitor.monitorlist:
                 each.update(status_type=StatusType.PENDING)
         else:
             pass
@@ -115,36 +115,36 @@ class ResetCmd(Command):
 
 class VerboseCmd(Command):
     """VerboseCmd
-        toggle verbose flag in watchdog to output more detail or not.
-        Usage in prompt: watchdog verbose
+        toggle verbose flag in monitor to output more detail or not.
+        Usage in prompt: monitor verbose
     """
 
-    def __init__(self, watchdog):
+    def __init__(self, monitor):
         super(VerboseCmd, self).__init__('verbose')
-        self.watchdog = watchdog
-        self.peer = watchdog.peer
+        self.monitor = monitor
+        self.peer = monitor.peer
         self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
-        self.watchdog.verbose = not self.watchdog.verbose
-        printText('Watchdog verbose toggle to: {}'.format(
-                        self.watchdog.verbose))
+        self.monitor.verbose = not self.monitor.verbose
+        printText('Monitor verbose toggle to: {}'.format(
+                        self.monitor.verbose))
 
 
 class ManualCmd(Command):
     """ManualCmd
         manually to send a check pkt to specific peer.
-        Usage in prompt: watchdog manuadl [ip:port]
+        Usage in prompt: monitor manuadl [ip:port]
     """
 
-    def __init__(self, watchdog):
+    def __init__(self, monitor):
         super(ManualCmd, self).__init__('manual')
-        self.watchdog = watchdog
-        self.peer = watchdog.peer
+        self.monitor = monitor
+        self.peer = monitor.peer
         self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
         host = msg_arr[0].split(':')
-        self.peer.sendMessage((host[0], host[1]), 'watchdog_check')
-        if self.watchdog.verbose:
-            printText('Sended a watchdog check to: {}'.format(host))
+        self.peer.sendMessage((host[0], host[1]), 'monitor_check')
+        if self.monitor.verbose:
+            printText('Sended a monitor check to: {}'.format(host))
