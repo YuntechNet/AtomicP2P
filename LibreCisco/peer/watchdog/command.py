@@ -66,6 +66,8 @@ class PeriodCmd(Command):
             self.watchdog.loopDelay = period
             printText('Watchdog check sending period \
                        change to: {} seconds.'.format(period))
+        except ValueError:
+            printText('Please input a integer: {}'.format(msg_arr[0]))
         except Exception as e:
             printText(e)
 
