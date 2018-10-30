@@ -3,7 +3,7 @@ import threading
 import socket
 import ssl
 
-from LibreCisco.peer.watchdog.peer_status import StatusType
+from LibreCisco.peer.monitor.peer_status import StatusType
 from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message
 
@@ -29,7 +29,7 @@ class PeerConnection(threading.Thread):
         except Exception as e:
             # print(traceback.format_exc())
 
-            status, peer_info = self.peer.watchdog.getStatusByHost(data._to)
+            status, peer_info = self.peer.monitor.getStatusByHost(data._to)
             if status:
                 status.update(status_type=StatusType.PENDING)
         finally:

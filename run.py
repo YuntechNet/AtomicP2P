@@ -18,7 +18,7 @@ from LibreCisco.utils import printText
 from LibreCisco.utils.security import (
     create_self_signed_cert as cssc, self_hash
 )
-from LibreCisco.peer.watchdog import Watchdog
+from LibreCisco.peer.monitor import Watchdog
 
 
 @click.command()
@@ -47,10 +47,10 @@ def main(role, addr, target, name, cert):
         'peer': Peer(host=addr, name=name, role=role,
                      cert=(cert_file, key_file), _hash=hash_str,
                      output_field=[dashboard_field, peer_field]),
-        'watchdog': None
+        'monitor': None
     }
     peer = services['peer']
-    services['watchdog'] = peer.watchdog
+    services['monitor'] = peer.monitor
 
     peer.start()
 
@@ -92,7 +92,7 @@ def main(role, addr, target, name, cert):
             services[service_key].onProcess(cmd[1:])
         elif service_key == 'help':
             helptips = "peer help            - See peer's help\n"\
-                       "watchdog help        - See watchdog's help\n"\
+                       "monitor help        - See monitor's help\n"\
                        "exit/stop            - exit the whole program.\n"
             printText(helptips, output=dashboard_field)
         elif service_key == 'exit' or service_key == 'stop':

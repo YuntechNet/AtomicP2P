@@ -14,7 +14,7 @@ def test_onProcess(default_peer):
 def test_selectHandler(default_peer):
     for (key, value) in default_peer.handler.items():
         assert default_peer.selectHandler(key) == value
-    assert default_peer.selectHandler('watchdog_check') is not None
+    assert default_peer.selectHandler('monitor_check') is not None
     assert default_peer.selectHandler('this must be none') is None
 
 
