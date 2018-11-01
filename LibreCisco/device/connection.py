@@ -5,8 +5,7 @@ from paramiko import SSHClient, AutoAddPolicy
 
 class TelnetConnection(object):
 
-    def __init__(self, manager, host, username, password, debug_level=0):
-        self.manager = manager
+    def __init__(self, host, username, password, debug_level=0):
         self.host = host
         self.username = username
         self.password = password
@@ -45,8 +44,7 @@ class TelnetConnection(object):
 
 class SSHConnection(object):
 
-    def __init__(self, manager, host, username, password, timeout=60):
-        self.manager = manager
+    def __init__(self, host, username, password, timeout=60):
         self.host = (host[0], int(host[1]))
         self.username = username
         self.password = password
@@ -70,14 +68,34 @@ class SSHConnection(object):
         if self.client:
             self.client.close()
 
-    def sendCommand(self, command, wrap=True):
+    def send_command(self, command, wrap=True, time_sleep=0.5, short=True):
         self.shell.send(str(command) + ('\n' if wrap else ''))
-
-    def send_command(self, command, wrap=True, time_sleep=0.5):
-        self.sendCommand(command, wrap)
         time.sleep(time_sleep)
-        self.output = self.shell.recv(65535).decode('utf-8')
+        output = self.shell.recv(65535).decode('utf-8')
+        while ('#' not in output and '>' not in output):
+            if ' --More-- ' in output:
+                output = output.replace(' --More-- ', '') + \
+                         self.send_command(command='q' if short else ' ',
+                                           wrap=False, time_sleep=time_sleep,
+                                           short=short)
+            elif self.is_active():
+                output += self.shell.recv(65535).decode('utf-8')
+            else:
+                break
+        self.output = output
         return self.output
+
+    def send_commands(self, commands, wrap=True, time_sleep=0.5, short=True):
+        if type(commands) == list:
+            output = ''
+            for each in commands:
+                output += self.send_command(
+                                command=each, wrap=wrap, time_sleep=time_sleep,
+                                short=short)
+            return output
+        else:
+            return self.send_command(command=commands, wrap=wrap,
+                                     time_sleep=time_sleep)
 
     def is_active(self):
         if self.client and self.client.get_transport():

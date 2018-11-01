@@ -6,7 +6,6 @@ def test_init(request, ssh):
     host = config.getoption('--ssh-test-host').split(':')
     account = config.getoption('--ssh-account')
     passwd = config.getoption('--ssh-passwd')
-    assert ssh.manager is None
     assert ssh.host == (host[0], int(host[1]))
     assert ssh.username == account
     assert ssh.password == passwd

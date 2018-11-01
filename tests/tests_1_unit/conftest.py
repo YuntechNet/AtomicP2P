@@ -5,6 +5,7 @@ import time
 import pytest
 
 from LibreCisco.peer import Peer
+from LibreCisco.device import DeviceManager
 from LibreCisco.utils.security import self_hash as sh, create_self_signed_cert
 
 
@@ -27,3 +28,12 @@ def default_peer(cert, self_hash):
     yield p
     time.sleep(1)
     p.stop()
+
+@pytest.yield_fixture(scope='module')
+def default_device_manager(default_peer):
+    d = DeviceManager(peer=default_peer)
+    d.start()
+
+    yield d
+    time.sleep(1)
+    d.stop()
