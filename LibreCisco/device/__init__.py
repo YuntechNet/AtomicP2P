@@ -47,5 +47,6 @@ class DeviceManager(ProcManager):
         if type(device) is Device and device not in self.devices:
             self.devices.append(device)
             device.fetch_running_config()
+            device.fetch_interface_status()
             for each in device.interfaces:
                 print(str(each))

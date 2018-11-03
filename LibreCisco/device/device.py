@@ -27,6 +27,13 @@ class Device(object):
                        commands=['show run'], time_sleep=2, short=False)
         self.connection.logout()
         self.info = DeviceInfo.fromString(string=output)
+        return output
+
+    def fetch_interface_status(self):
+        self.connection.login()
+        output = self.connection.send_commands(
+                       commands=['show interface status'], short=False)
+        self.connection.logout()
         self.interfaces = Interface.fromString(string=output)
         return output
 

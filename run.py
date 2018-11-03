@@ -14,7 +14,6 @@ from prompt_toolkit.widgets import TextArea
 from prompt_toolkit.formatted_text import ANSI
 
 from LibreCisco.peer import Peer
-from LibreCisco.peer.watchdog import Watchdog
 from LibreCisco.device import DeviceManager as Device
 from LibreCisco.utils import printText
 from LibreCisco.utils.security import (
