@@ -1,5 +1,17 @@
 import pytest
+from LibreCisco.device.interface import Interface
+from LibreCisco.device.device_info import DeviceInfo
 from LibreCisco.device.connection import SSHConnection, TelnetConnection
+
+
+@pytest.fixture(scope='session')
+def test_interface():
+    return Interface(name='test_interface')
+
+
+@pytest.fixture(scope='session')
+def test_device_info():
+    return DeviceInfo(version='test_version', hostname='test_hostname')
 
 
 @pytest.fixture(scope='session')

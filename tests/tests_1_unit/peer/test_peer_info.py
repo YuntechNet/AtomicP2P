@@ -9,6 +9,10 @@ def test_eq(peer_info):
     assert p != peer_info
 
 
+def test_contains(peer_info):
+    assert peer_info.__contains__(peer_info)
+
+
 def test_str(peer_info):
     name = peer_info.name
     role = peer_info.role
