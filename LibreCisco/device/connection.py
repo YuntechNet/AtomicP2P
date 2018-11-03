@@ -1,6 +1,55 @@
 import time
 import telnetlib
 from paramiko import SSHClient, AutoAddPolicy
+from pysnmp.entity import config
+from pysnmp.hlapi.asyncore import *
+
+
+class SNMPv3Connection(object):
+
+    def __init__(self, userName, authKey, host, authProtocol=None,
+                 privProtocol=None):
+        assert type(host) == tuple
+        self._snmpEngine = SnmpEngine()
+        self._userData = UsmUserData(userName=userName, authKey=authKey,
+                                     authProtocol=authProtocol)
+        self._udpTransportTarget = UdpTransportTarget(host)
+        self._output = []
+
+    def response(self, snmpEngine, sendRequestHandler, errorIndication,
+                 errorStatus, errorIndex, varBindTable, cbCtx):
+        self._output.clear()
+        if errorIndication:
+            self._output.append(errirIndication)
+            return
+        elif errorStatus:
+            self._output.append(
+                '{} = {}'.format(
+                    errorStatus.prettyPrint(),
+                    errorIndex and varBindTable[-1][int(errorIndex) - 1][0]
+                    or '?'))
+        else:
+            for varBindRow in varBindTable:
+                if type(varBindRow) != list:
+                    varBindRow = [varBindRow]
+                for varBind in varBindRow:
+                    self._output.append(
+                        ' = '.join([x.prettyPrint() for x in varBind]))
+
+    def get(self, oid):
+        assert type(oid) == ObjectType
+        getCmd(self._snmpEngine, self._userData, self._udpTransportTarget,
+               ContextData(), oid, cbFun=self.response)
+        self._snmpEngine.transportDispatcher.runDispatcher()
+
+    def bulk(self, oid, NR):
+        assert type(oid) == ObjectType
+        bulkCmd(self._snmpEngine, self._userData, self._udpTransportTarget,
+                ContextData(), NR[0], NR[1], oid, cbFun=self.response)
+        self._snmpEngine.transportDispatcher.runDispatcher()
+
+    def output(self):
+        return self._output
 
 
 class TelnetConnection(object):
