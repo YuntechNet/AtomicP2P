@@ -21,10 +21,20 @@ def cert():
 
 @pytest.yield_fixture(scope='module')
 def default_peer(cert, self_hash):
-    p = Peer(host=('0.0.0.0', 8000), name='name',
-             role='role', cert=cert, _hash=self_hash)
+    p = Peer(host=('0.0.0.0', 8000), name='name', role='role', cert=cert,
+             _hash=self_hash)
     p.start()
 
+    yield p
+    time.sleep(1)
+    p.stop()
+
+
+@pytest.yield_fixture(scope='module')
+def default_peer2(cert, self_hash):
+    p = Peer(host=('0.0.0.0', 8001), name='name2', role='role', cert=cert,
+             _hash=self_hash)
+    p.start()
     yield p
     time.sleep(1)
     p.stop()
