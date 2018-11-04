@@ -7,14 +7,50 @@ from pysnmp.hlapi.asyncore import *
 
 class SNMPv3Connection(object):
 
-    def __init__(self, userName, authKey, host, authProtocol=None,
-                 privProtocol=None):
+    def __init__(self, authentication):
+        userName = authentication['account']
+        host = authentication['host']
+        authProtocol = self.get_protocol(
+                            auth_or_priv='AUTH',
+                            protocol_str=authentication['auth_protocol'])
+        privProtocol = self.get_protocol(
+                            auth_or_priv='PRIV',
+                            protocol_str=authentication['priv_protocol'])
+        authKey = authentication['auth_password']
+        privKey = authentication['priv_password']
         assert type(host) == tuple
         self._snmpEngine = SnmpEngine()
         self._userData = UsmUserData(userName=userName, authKey=authKey,
-                                     authProtocol=authProtocol)
+                                     authProtocol=authProtocol,
+                                     privKey=privKey,
+                                     privProtocol=privProtocol)
         self._udpTransportTarget = UdpTransportTarget(host)
         self._output = []
+
+    def get_protocol(self, auth_or_priv, protocol_str):
+        auth_or_priv = auth_or_priv.upper()
+        protocol_str = protocol_str.upper()
+        auth_protocols = {
+            'MD5': config.usmHMACMD5AuthProtocol,
+            'SHA': config.usmHMACSHAAuthProtocol,
+            'SHA224': config.usmHMAC128SHA224AuthProtocol,
+            'SHA256': config.usmHMAC192SHA256AuthProtocol,
+            'SHA384': config.usmHMAC256SHA384AuthProtocol,
+            'SHA512': config.usmHMAC384SHA512AuthProtocol
+        }
+        priv_protocols = {
+            'DES': config.usmDESPrivProtocol,
+            '3DES': config.usm3DESEDEPrivProtocol,
+            'AES': config.usmAesCfb128Protocol,
+        }
+        if auth_or_priv == 'AUTH':
+            return auth_protocols[protocol_str] \
+                   if protocol_str in auth_protocols \
+                   else config.usmNoAuthProtocol
+        else:
+            return priv_protocols[protocol_str] \
+                   if protocol_str in priv_protocols \
+                   else config.usmNoPrivProtocol
 
     def response(self, snmpEngine, sendRequestHandler, errorIndication,
                  errorStatus, errorIndex, varBindTable, cbCtx):
@@ -54,10 +90,10 @@ class SNMPv3Connection(object):
 
 class TelnetConnection(object):
 
-    def __init__(self, host, username, password, debug_level=0):
-        self.host = host
-        self.username = username
-        self.password = password
+    def __init__(self, authentication, debug_level=0):
+        self.host = authentication['host']
+        self.username = authentication['account']
+        self.password = authentication['password']
         self.debug_level = debug_level
 
     def login(self, debug_level=None):
@@ -93,10 +129,10 @@ class TelnetConnection(object):
 
 class SSHConnection(object):
 
-    def __init__(self, host, username, password, timeout=60):
-        self.host = (host[0], int(host[1]))
-        self.username = username
-        self.password = password
+    def __init__(self, authentication, timeout=60):
+        self.host = (authentication['host'][0], int(authentication['host'][1]))
+        self.username = authentication['account']
+        self.password = authentication['password']
         self.timeout = timeout
 
         self.client, self.shell, self.output = None, None, None

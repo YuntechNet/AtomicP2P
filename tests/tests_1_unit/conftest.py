@@ -39,6 +39,7 @@ def default_peer2(cert, self_hash):
     time.sleep(1)
     p.stop()
 
+
 @pytest.yield_fixture(scope='module')
 def default_device_manager(default_peer):
     d = DeviceManager(peer=default_peer)

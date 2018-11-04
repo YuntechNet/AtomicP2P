@@ -9,7 +9,7 @@ def test_init(test_device_info):
 def test_str(test_device_info):
     assert str(test_device_info) == \
         'DeviceInfo<version={}, hostname={}>'.format('test_version',
-                                                    'test_hostname')
+                                                     'test_hostname')
 
 
 def test_fromString():
