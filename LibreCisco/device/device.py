@@ -45,6 +45,10 @@ class Device(object):
             authentication['priv_password'] = priv_password
         return authentication
 
+    def snmp_v3_init(self):
+        self.info = DeviceInfo.snmp_v3_init(conn=self.connection)
+        self.interfaces = Interface.snmp_v3_init(conn=self.connection)
+
     def fetch_running_config(self):
         self.connection.login()
         output = self.connection.send_commands(

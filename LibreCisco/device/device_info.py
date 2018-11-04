@@ -1,7 +1,17 @@
 import re
+from pysnmp.hlapi.asyncore import *
 
 
 class DeviceInfo(object):
+
+    @staticmethod
+    def snmp_v3_init(conn):
+        outputs = conn.get_output(oid=[
+                    ObjectType(ObjectIdentity('SNMPv2-MIB', 'sysName', 0)),
+                    ObjectType(ObjectIdentity('SNMPv2-MIB', 'sysDescr', 0))])
+        hostname = outputs[0][outputs[0].rindex(' ') + 1:]
+        version = re.compile('Version .*?,').search(outputs[1]).group(0)[8:-1]
+        return DeviceInfo(version=version, hostname=hostname)
 
     @staticmethod
     def fromString(string):

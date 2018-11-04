@@ -8,10 +8,10 @@ install:
   - pip install -r requirements-dev.txt
 
 script:
-  - python -m pytest --ssh-test-host=${SSH_TEST_HOST} --ssh-account=${SSH_ACCOUNT} --ssh-passwd=${SSH_PASSWD} --telnet-test-host=${TELNET_TEST_HOST} --telnet-account=${TELNET_ACCOUNT} --telnet-passwd=${TELNET_PASSWD} -s --cov=./ --cov-report term-missing --cov-config=.coveragerc  ./tests/tests_1_unit/
-  - bash <(curl -s https://codecov.io/bash) -cF unittests
-  - python -m pytest --ssh-test-host=${SSH_TEST_HOST} --ssh-account=${SSH_ACCOUNT} --ssh-passwd=${SSH_PASSWD} --telnet-test-host=${TELNET_TEST_HOST} --telnet-account=${TELNET_ACCOUNT} --telnet-passwd=${TELNET_PASSWD} -s --cov=./ --cov-report term-missing --cov-config=.coveragerc  ./tests/tests_2_integrat/
-  - bash <(curl -s https://codecov.io/bash) -cF integration
+  - travis_retry python -m pytest --ssh-test-host=${SSH_TEST_HOST} --ssh-account=${SSH_ACCOUNT} --ssh-passwd=${SSH_PASSWD} --telnet-test-host=${TELNET_TEST_HOST} --telnet-account=${TELNET_ACCOUNT} --telnet-passwd=${TELNET_PASSWD} -s --cov=./ --cov-report term-missing --cov-config=.coveragerc  ./tests/tests_1_unit/
+  - travis_retry bash <(curl -s https://codecov.io/bash) -cF unittests
+  - travis_retry python -m pytest --ssh-test-host=${SSH_TEST_HOST} --ssh-account=${SSH_ACCOUNT} --ssh-passwd=${SSH_PASSWD} --telnet-test-host=${TELNET_TEST_HOST} --telnet-account=${TELNET_ACCOUNT} --telnet-passwd=${TELNET_PASSWD} -s --cov=./ --cov-report term-missing --cov-config=.coveragerc  ./tests/tests_2_integrat/
+  - travis_retry bash <(curl -s https://codecov.io/bash) -cF integration
 
 after_success:
   - pycodestyle --statistics LibreCisco

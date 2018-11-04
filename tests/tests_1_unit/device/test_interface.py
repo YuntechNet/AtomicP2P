@@ -6,7 +6,9 @@ def test_init(test_interface):
 
 
 def test_str(test_interface):
-    assert str(test_interface) == 'Interface<name={}>'.format('test_interface')
+    assert str(test_interface) == \
+            'Interface<snmp_index={}, name={}, status={}>'.format(
+                -1, 'test_interface', None)
 
 
 def test_fromReString():

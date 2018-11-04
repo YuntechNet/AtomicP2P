@@ -29,7 +29,7 @@ class SNMPv3Connection(object):
 
     def get_protocol(self, auth_or_priv, protocol_str):
         auth_or_priv = auth_or_priv.upper()
-        protocol_str = protocol_str.upper()
+        protocol_str = protocol_str.upper() if protocol_str else None
         auth_protocols = {
             'MD5': config.usmHMACMD5AuthProtocol,
             'SHA': config.usmHMACSHAAuthProtocol,
@@ -54,7 +54,6 @@ class SNMPv3Connection(object):
 
     def response(self, snmpEngine, sendRequestHandler, errorIndication,
                  errorStatus, errorIndex, varBindTable, cbCtx):
-        self._output.clear()
         if errorIndication:
             self._output.append(errirIndication)
             return
@@ -73,18 +72,37 @@ class SNMPv3Connection(object):
                         ' = '.join([x.prettyPrint() for x in varBind]))
 
     def get(self, oid):
-        assert type(oid) == ObjectType
-        getCmd(self._snmpEngine, self._userData, self._udpTransportTarget,
-               ContextData(), oid, cbFun=self.response)
+        if type(oid) != list:
+            oid = [oid]
+        self._output.clear()
+        for each in oid:
+            assert type(each) == ObjectType
+            getCmd(self._snmpEngine, self._userData, self._udpTransportTarget,
+                   ContextData(), each, cbFun=self.response)
         self._snmpEngine.transportDispatcher.runDispatcher()
 
-    def bulk(self, oid, NR):
-        assert type(oid) == ObjectType
-        bulkCmd(self._snmpEngine, self._userData, self._udpTransportTarget,
-                ContextData(), NR[0], NR[1], oid, cbFun=self.response)
+    def bulk(self, oid_with_NR):
+        if type(oid_with_NR) != list:
+            oid_with_NR = [oid_with_NR]
+        self._output.clear()
+        for each in oid_with_NR:
+            oid = each[0]
+            NR = each[1]
+            assert type(oid) == ObjectType
+            assert type(NR) == tuple
+            bulkCmd(self._snmpEngine, self._userData, self._udpTransportTarget,
+                    ContextData(), NR[0], NR[1], oid, cbFun=self.response)
         self._snmpEngine.transportDispatcher.runDispatcher()
 
     def output(self):
+        return self._output
+
+    def get_output(self, oid):
+        self.get(oid=oid)
+        return self._output
+
+    def bulk_output(self, oid_with_NR):
+        self.bulk(oid_with_NR=oid_with_NR)
         return self._output
 
 
