@@ -55,7 +55,7 @@ class SNMPv3Connection(object):
     def response(self, snmpEngine, sendRequestHandler, errorIndication,
                  errorStatus, errorIndex, varBindTable, cbCtx):
         if errorIndication:
-            self._output.append(errirIndication)
+            self._output.append(errorIndication)
             return
         elif errorStatus:
             self._output.append(

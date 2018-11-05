@@ -17,6 +17,7 @@ class Device(object):
                 account=account, password=passwd,
                 auth_protocol=auth_protocol, auth_password=auth_password,
                 priv_protocol=priv_protocol, priv_password=priv_password)
+        self.connect_type = connect_type
         if connect_type == 'snmp':
             self.connection = SNMPv3Conn(authentication=self.authentication)
         else:
