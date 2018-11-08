@@ -44,11 +44,16 @@ class LibreCisco(object):
 
         service_key = cmd[0].lower()
         if service_key in self.services:
-            self.services[service_key].onProcess(cmd[1:])
+            return (True, self.services[service_key].onProcess(cmd[1:]))
+        elif service_key in ['help', '?']:
+            help_tips = 'peer help            - See peer\'s help\n'\
+                        'monitor help        - See monitor\'s help\n'\
+                        'exit/stop            - exit the whole program.\n'
+            return (True, help_tips)
         elif service_key == 'monitor':
-            self.services['peer'].onProcess(cmd[1:])
+            return (True, self.services['peer'].onProcess(cmd[1:]))
         elif service_key == 'stop':
             self.stop()
+            return (True, None)
         else:
-            return False
-        return True
+            return (False, None)

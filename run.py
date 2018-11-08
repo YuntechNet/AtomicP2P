@@ -65,18 +65,17 @@ def main(role, addr, target, name, cert, auto_start, auto_join_net):
     @kb.add('enter')
     def _(event):
         cmd = input_field.text.split(' ')
-        if libreCisco.onProcess(cmd) is False:
-            if cmd[0] == 'help':
-                help_tips = 'peer help            - See peer\'s help\n'\
-                            'monitor help        - See monitor\'s help\n'\
-                            'exit/stop            - exit the whole program.\n'
-                printText(help_tips, output=dashboard_field)
-            elif cmd[0] == 'exit' or cmd[0] == 'stop':
+        result = libreCisco.onProcess(cmd)
+        if result[0] is False:
+            if cmd[0] == 'exit' or cmd[0] == 'stop':
                 libreCisco.onProcess(['stop'])
                 event.app.exit()
             else:
-                error_tips = 'command error, input "help" to check function.'
+                error_tips = 'command error,`help` or `?` to check function.'
                 printText(error_tips, output=dashboard_field)
+        else:
+            if result[1] is not None:
+                printText(result[1], output=dashboard_field)
         input_field.text = ''
 
     prompt_style = Style([

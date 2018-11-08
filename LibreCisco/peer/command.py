@@ -28,6 +28,7 @@ class HelpCmd(Command):
                       "leave current net.\n"
                       " - help [cmd]                                     "
                       "show help msg of sepecific command.")
+        return ''
 
 
 class JoinCmd(Command):
