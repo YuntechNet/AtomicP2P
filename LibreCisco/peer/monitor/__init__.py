@@ -1,11 +1,11 @@
 import traceback
 from LibreCisco.utils.manager import ThreadManager
-from LibreCisco.utils import printText
 from LibreCisco.peer.monitor.command import (
     HelpCmd, PauseCmd, PeriodCmd, ListCmd, ResetCmd, VerboseCmd, ManualCmd
 )
 from LibreCisco.peer.monitor.communication import CheckHandler
 from LibreCisco.peer.monitor.peer_status import PeerStatus
+from LibreCisco.utils.logging import getLogger
 
 
 class Monitor(ThreadManager):
@@ -13,9 +13,9 @@ class Monitor(ThreadManager):
     def __init__(self, peer, loopDelay=2, verbose=False,
                  max_no_response_count=5):
         self.peer = peer
-        super(Monitor, self).__init__(loopDelay=loopDelay,
-                                      output_field=peer.output_field,
-                                      auto_register=True)
+        super(Monitor, self).__init__(loopDelay=loopDelay, output_field=None,
+                                      auto_register=True,
+                                      logger=getLogger(__name__))
 
         self.verbose = False
         self.pause = False
@@ -102,6 +102,7 @@ class Monitor(ThreadManager):
         for each in missing:
             try:
                 self.monitorlist.remove(each)
-                printText('{} has been remove from status list.'.format(each))
+                self.logger.info(('{} has been remove from '
+                                  'status list.').format(each))
             except Exception as e:
-                printText(traceback.format_exc())
+                self.logger.error(traceback.format_exc())

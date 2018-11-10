@@ -14,7 +14,7 @@ prompt_test/
 *.un~
 *.sqlite
 *.log
-*log*
+*log.
 *.pem
 *.key
 

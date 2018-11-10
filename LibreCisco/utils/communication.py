@@ -65,6 +65,7 @@ class Handler(object):
 
     def __init__(self, pkt_type, peer, can_broadcast=False):
         self.pkt_type = pkt_type
+        self.logger = peer.logger
         self.peer = peer
         self.can_broadcast = can_broadcast
 
@@ -107,6 +108,8 @@ class Handler(object):
     def onRecvReject(self, src, pkt, **kwargs):
         reject = pkt._data['reject']
         printText('Rejected by {}, reason: {}'.format(pkt._from, reject))
+        self.logger.warning('Rejected by {}, reason: {}'.format(
+                                                            pkt._from, reject))
 
     def onRecvPkt(self, src, pkt, **kwargs):
         raise NotImplementedError

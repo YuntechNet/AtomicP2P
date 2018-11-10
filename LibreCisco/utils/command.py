@@ -28,7 +28,7 @@ class Command(object):
                     'Make sure there is __doc__ in {{{}}} command class.\n' \
                     '=========='
                 return error_text.format(self.cmd)
-        except:
+        except Exception as e:
             return format_exc()
 
     def onProcess(self, msg_arr, **kwargs):
