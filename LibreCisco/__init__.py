@@ -1,4 +1,3 @@
-import sys
 from os import getcwd
 from os.path import join
 
@@ -12,7 +11,7 @@ from LibreCisco.utils.logging import getLogger
 class LibreCisco(object):
 
     def __init__(self, role, addr, name, cert, dashboard_field,
-                 peer_field, local_monitor=False, msg_queue_size=100):
+                 peer_field):
         cert_file, key_file = cssc(cert_dir=getcwd(), cert_file=cert,
                                    key_file=cert.replace('.pem', '.key'))
 
@@ -26,9 +25,6 @@ class LibreCisco(object):
             'peer': Peer(host=addr, name=name, role=role, _hash=hash_str,
                          cert=(cert_file, key_file))
         }
-
-        if local_monitor is True:
-            pass
 
     def start(self):
         for each in self.services:
