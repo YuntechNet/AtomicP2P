@@ -1,5 +1,4 @@
 import json
-from LibreCisco.utils import printText
 
 
 class Message(object):
@@ -107,7 +106,6 @@ class Handler(object):
 
     def onRecvReject(self, src, pkt, **kwargs):
         reject = pkt._data['reject']
-        printText('Rejected by {}, reason: {}'.format(pkt._from, reject))
         self.logger.warning('Rejected by {}, reason: {}'.format(
                                                             pkt._from, reject))
 

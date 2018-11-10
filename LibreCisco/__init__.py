@@ -6,7 +6,7 @@ from LibreCisco.peer import Peer
 from LibreCisco.utils.security import (
     create_self_signed_cert as cssc, self_hash
 )
-from LibreCisco.utils.logging import logger_init, getLogger
+from LibreCisco.utils.logging import getLogger
 
 
 class LibreCisco(object):
@@ -16,7 +16,6 @@ class LibreCisco(object):
         cert_file, key_file = cssc(cert_dir=getcwd(), cert_file=cert,
                                    key_file=cert.replace('.pem', '.key'))
 
-        logger_init()
         self.logger = getLogger(__name__)
 
         hash_str = self_hash(path=join(getcwd(), 'LibreCisco'))

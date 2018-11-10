@@ -16,7 +16,6 @@ class Monitor(ThreadManager):
         super(Monitor, self).__init__(loopDelay=loopDelay, output_field=None,
                                       auto_register=True,
                                       logger=getLogger(__name__))
-
         self.verbose = False
         self.pause = False
         self.max_no_response_count = max_no_response_count
