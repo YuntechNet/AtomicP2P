@@ -2,7 +2,6 @@ import pytest
 
 
 def test_init(thread):
-    assert thread.output_field is None
     assert thread.loopDelay == 1
     assert thread.stopped.is_set() is False
 

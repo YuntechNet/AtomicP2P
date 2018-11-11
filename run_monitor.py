@@ -1,5 +1,8 @@
 import socket
 from threading import Thread
+from prompt_toolkit import prompt
+from prompt_toolkit.stdout_patch import stdout_patch
+
 from LibreCisco.utils.manager import ThreadManager
 
 
@@ -41,15 +44,16 @@ if __name__ == '__main__':
 
     while True:
         try:
-            user_input = input('> ')
-            if user_input.upper() == 'C:CONNECT':
-                sock.connect(('localhost', 17031))
-            elif user_input.upper() in ['C:CLOSE', 'C:STOP']:
-                sock.close()
-                logRecver.stop()
-                break
-            else:
-                sock.send(user_input.encode())
+            with stdout_patch():
+                user_input = prompt('> ')
+                if user_input.upper() == 'C:CONNECT':
+                    sock.connect(('localhost', 17031))
+                elif user_input.upper() in ['C:CLOSE', 'C:STOP']:
+                    sock.close()
+                    logRecver.stop()
+                    break
+                else:
+                    sock.send(user_input.encode())
         except KeyboardInterrupt:
             sock.close()
             logRecver.stop()

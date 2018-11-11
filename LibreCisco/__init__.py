@@ -25,6 +25,7 @@ class LibreCisco(object):
             'peer': Peer(host=addr, name=name, role=role, _hash=hash_str,
                          cert=(cert_file, key_file))
         }
+        self.services['monitor'] = self.services['peer'].monitor
 
     def start(self):
         for each in self.services:

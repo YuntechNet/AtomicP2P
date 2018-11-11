@@ -22,8 +22,7 @@ from LibreCisco.utils.logging import getLogger
 class Peer(ThreadManager):
 
     def __init__(self, host, name, role, cert, _hash, loopDelay=1):
-        super(Peer, self).__init__(loopDelay=loopDelay, output_field=None,
-                                   auto_register=True,
+        super(Peer, self).__init__(loopDelay=loopDelay, auto_register=True,
                                    logger=getLogger(__name__))
         self.peer_info = PeerInfo(name=name, role=role, host=host)
         self._hash = _hash
@@ -61,7 +60,8 @@ class Peer(ThreadManager):
 
     def start(self):
         super(Peer, self).start()
-        self.monitor.start()
+        if self.monitor.is_start() is False:
+            self.monitor.start()
         self.logger.info('Peer started.')
 
     def run(self):

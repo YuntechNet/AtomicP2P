@@ -1,5 +1,4 @@
 from LibreCisco.peer.monitor.peer_status import StatusType
-from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 
 
@@ -13,22 +12,21 @@ class HelpCmd(Command):
         super(HelpCmd, self).__init__('help')
         self.monitor = monitor
         self.peer = monitor.peer
-        self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
         if msg_arr != [] and msg_arr[0] in self.monitor.commands:
-            printText(self.monitor.commands[msg_arr[0]].__doc__)
+            return self.monitor.commands[msg_arr[0]].__doc__
         else:
-            printText("monitor [cmd] <options>\n"
-                      " - pause                                          "
-                      "pause monitor's main loop thread.\n"
-                      " - period [seconds]                               "
-                      "change monitor's loop period to another second.\n"
-                      " - list                                           "
-                      "list each statuses in list.\n"
-                      " - reset [peer name/role/all]                     "
-                      "reset all or specific name or role's peer status t"
-                      "o PENDING.")
+            return ("monitor [cmd] <options>\n"
+                    " - pause                                          "
+                    "pause monitor's main loop thread.\n"
+                    " - period [seconds]                               "
+                    "change monitor's loop period to another second.\n"
+                    " - list                                           "
+                    "list each statuses in list.\n"
+                    " - reset [peer name/role/all]                     "
+                    "reset all or specific name or role's peer status t"
+                    "o PENDING.")
 
 
 class PauseCmd(Command):
@@ -41,11 +39,10 @@ class PauseCmd(Command):
         super(PauseCmd, self).__init__('pause')
         self.monitor = monitor
         self.peer = monitor.peer
-        self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
         self.monitor.pause = not self.monitor.pause
-        printText('Monitor pause: {}'.format(self.monitor.pause))
+        return 'Monitor pause: {}'.format(self.monitor.pause)
 
 
 class PeriodCmd(Command):
@@ -58,18 +55,17 @@ class PeriodCmd(Command):
         super(PeriodCmd, self).__init__('period')
         self.monitor = monitor
         self.peer = monitor.peer
-        self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
         try:
             period = int(msg_arr[0])
             self.monitor.loopDelay = period
-            printText('Monitor check sending period \
+            return ('Monitor check sending period \
                        change to: {} seconds.'.format(period))
         except ValueError:
-            printText('Please input a integer: {}'.format(msg_arr[0]))
+            return 'Please input a integer: {}'.format(msg_arr[0])
         except Exception as e:
-            printText(e)
+            return e
 
 
 class ListCmd(Command):
@@ -82,16 +78,16 @@ class ListCmd(Command):
         super(ListCmd, self).__init__('list')
         self.monitor = monitor
         self.peer = monitor.peer
-        self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
         if len(self.monitor.monitorlist) == 0:
-            printText('There is no peer\'s info in current list')
+            return 'There is no peer\'s info in current list'
         else:
-            printText('There is the status list of peers in current net:')
+            output_text = 'Current peers status:'
             for each in self.monitor.monitorlist:
-                printText(' - ' + str(each))
-            printText('[---End of list---]')
+                output_text += (' - ' + str(each) + '\n')
+            output_text += '[---End of list---]'
+            return output_text
 
 
 class ResetCmd(Command):
@@ -123,12 +119,10 @@ class VerboseCmd(Command):
         super(VerboseCmd, self).__init__('verbose')
         self.monitor = monitor
         self.peer = monitor.peer
-        self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
         self.monitor.verbose = not self.monitor.verbose
-        printText('Monitor verbose toggle to: {}'.format(
-                        self.monitor.verbose))
+        return 'Monitor verbose toggle to: {}'.format(self.monitor.verbose)
 
 
 class ManualCmd(Command):
@@ -141,10 +135,9 @@ class ManualCmd(Command):
         super(ManualCmd, self).__init__('manual')
         self.monitor = monitor
         self.peer = monitor.peer
-        self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
         host = msg_arr[0].split(':')
         self.peer.sendMessage((host[0], host[1]), 'monitor_check')
         if self.monitor.verbose:
-            printText('Sended a monitor check to: {}'.format(host))
+            return 'Sended a monitor check to: {}'.format(host)

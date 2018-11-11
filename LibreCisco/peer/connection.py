@@ -32,6 +32,8 @@ class PeerConnection(threading.Thread):
             self.client.send(Message.send(data))
         except ConnectionRefusedError:
             except_process(data)
+        except ConnectionResetError:
+            except_process(data)
         except Exception as e:
             self.logger.warning(traceback.format_exc())
             except_process(data)

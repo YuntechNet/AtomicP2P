@@ -13,8 +13,7 @@ class Monitor(ThreadManager):
     def __init__(self, peer, loopDelay=2, verbose=False,
                  max_no_response_count=5):
         self.peer = peer
-        super(Monitor, self).__init__(loopDelay=loopDelay, output_field=None,
-                                      auto_register=True,
+        super(Monitor, self).__init__(loopDelay=loopDelay, auto_register=True,
                                       logger=getLogger(__name__))
         self.verbose = False
         self.pause = False
