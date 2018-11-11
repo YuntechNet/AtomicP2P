@@ -1,5 +1,5 @@
 import click
-from prompt_toolkit.widgets import TextArea
+
 from LibreCisco import LibreCisco
 from LibreCisco.local_monitor import LocalMonitor
 from LibreCisco.utils.logging import getLogger
@@ -17,16 +17,8 @@ from LibreCisco.utils.logging import getLogger
 def main(role, addr, target, name, cert, auto_start, auto_join_net,
          local_monitor):
 
-    dashboard_text = '==================== Dashboard ====================\n'
-    peer_text = '====================    Peer   ====================\n'
-
-    dashboard_field = TextArea(text=dashboard_text)
-    peer_field = TextArea(text=peer_text)
-
     logger = getLogger(add_monitor=local_monitor)
-    libreCisco = LibreCisco(role=role, addr=addr, name=name,
-                            cert=cert, dashboard_field=dashboard_field,
-                            peer_field=peer_field)
+    libreCisco = LibreCisco(role=role, addr=addr, name=name, cert=cert)
 
     if local_monitor is True:
         local_monitor = LocalMonitor(libreCisco)

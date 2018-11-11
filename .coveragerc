@@ -4,3 +4,4 @@ omit =
     35venv/*
     tests/*
     run.py
+    run_monitor.py

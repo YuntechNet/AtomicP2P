@@ -10,8 +10,7 @@ from LibreCisco.utils.logging import getLogger
 
 class LibreCisco(object):
 
-    def __init__(self, role, addr, name, cert, dashboard_field,
-                 peer_field):
+    def __init__(self, role, addr, name, cert):
         cert_file, key_file = cssc(cert_dir=getcwd(), cert_file=cert,
                                    key_file=cert.replace('.pem', '.key'))
 
@@ -20,7 +19,6 @@ class LibreCisco(object):
         hash_str = self_hash(path=join(getcwd(), 'LibreCisco'))
         addr = addr.split(':') if type(addr) is str else addr
 
-        self.output_field = dashboard_field
         self.services = {
             'peer': Peer(host=addr, name=name, role=role, _hash=hash_str,
                          cert=(cert_file, key_file))
