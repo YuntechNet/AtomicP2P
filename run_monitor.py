@@ -1,7 +1,7 @@
 import socket
 from threading import Thread
 from prompt_toolkit import prompt
-from prompt_toolkit.stdout_patch import stdout_patch
+from prompt_toolkit.patch_stdout import patch_stdout
 
 from LibreCisco.utils.manager import ThreadManager
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     while True:
         try:
-            with stdout_patch():
+            with patch_stdout():
                 user_input = prompt('> ')
                 if user_input.upper() == 'C:CONNECT':
                     sock.connect(('localhost', 17031))

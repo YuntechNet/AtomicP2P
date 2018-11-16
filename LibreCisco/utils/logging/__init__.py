@@ -1,10 +1,10 @@
 import sys
 from logging import (
-    basicConfig, DEBUG, StreamHandler, Formatter,
+    basicConfig, DEBUG, Formatter,
     getLogger as org_get_logger
 )
 
-from LibreCisco.utils.logging.handlers import SocketHandler
+from LibreCisco.utils.logging.handlers import StreamHandler, SocketHandler
 from LibreCisco.utils.logging.formatters import StdoutFormatter
 
 
@@ -14,17 +14,28 @@ def getLogger(name=None, level=DEBUG, add_monitor=False):
     else:
         logger = org_get_logger(name)
     logger.setLevel(level)
-    if logger.root.handlers == []:
-        formatter = StdoutFormatter()
+    toggle = {
+        'stdout': True,
+        'monitor': True
+    }
 
-        stdout_handler = StreamHandler(sys.stdout)
-        stdout_handler.setLevel(DEBUG)
-        stdout_handler.setFormatter(formatter)
+    formatter = StdoutFormatter()
 
-        if add_monitor is True:
-            monitor_handler = SocketHandler()
-            monitor_handler.setFormatter(formatter)
-            logger.root.addHandler(monitor_handler)
+    for each in logger.root.handlers:
+        if hasattr(each, 'name') is True:
+            toggle[each.name] = False
 
-        logger.root.addHandler(stdout_handler)
+    for (key, value) in toggle.items():
+        if value is True:
+            handler = None
+            if key == 'stdout':
+                handler = StreamHandler(name='stdout', stream=sys.stdout)
+            elif key == 'monitor' and add_monitor is True:
+                handler = SocketHandler(name='monitor')
+
+            if handler is not None:
+                handler.setLevel(DEBUG)
+                handler.setFormatter(formatter)
+                logger.root.addHandler(handler)
+
     return logger

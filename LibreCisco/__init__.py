@@ -27,7 +27,8 @@ class LibreCisco(object):
 
     def start(self):
         for each in self.services:
-            self.services[each].start()
+            if self.services[each].is_start() is False:
+                self.services[each].start()
         self.logger.info('Platform started.')
 
     def stop(self):
