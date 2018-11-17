@@ -52,11 +52,14 @@ class Peer(ThreadManager):
         }
 
     def onProcess(self, msg_arr, **kwargs):
-        msg_key = msg_arr[0].lower()
-        msg_arr = msg_arr[1:]
-        if msg_key in self.commands:
-            return self.commands[msg_key]._on_process(msg_arr)
-        return self.commands['help']._on_process(msg_arr)
+        try:
+            msg_key = msg_arr[0].lower()
+            msg_arr = msg_arr[1:]
+            if msg_key in self.commands:
+                return self.commands[msg_key]._on_process(msg_arr)
+            return self.commands['help']._on_process(msg_arr)
+        except Exception as e:
+            return self.commands['help']._on_process(msg_arr)
 
     def start(self):
         super(Peer, self).start()

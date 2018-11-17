@@ -49,11 +49,14 @@ class Monitor(ThreadManager):
         }
 
     def onProcess(self, msg_arr):
-        msg_key = msg_arr[0].lower()
-        msg_arr = msg_arr[1:]
-        if msg_key in self.commands:
-            return self.commands[msg_key].onProcess(msg_arr)
-        return ''
+        try:
+            msg_key = msg_arr[0].lower()
+            msg_arr = msg_arr[1:]
+            if msg_key in self.commands:
+                return self.commands[msg_key].onProcess(msg_arr)
+            return self.commands['help']._on_process(msg_arr)
+        except Exception as e:
+            return self.commands['help']._on_process(msg_arr)
 
     def onRecvPkt(self, addr, pkt):
         if not pkt.is_reject():

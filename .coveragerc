@@ -5,3 +5,4 @@ omit =
     tests/*
     run.py
     run_monitor.py
+    LibreCisco/__main__.py

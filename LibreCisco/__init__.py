@@ -2,6 +2,7 @@ from os import getcwd
 from os.path import join
 
 from LibreCisco.peer import Peer
+from LibreCisco.local_monitor import LocalMonitor
 from LibreCisco.utils.security import (
     create_self_signed_cert as cssc, self_hash
 )
@@ -54,3 +55,21 @@ class LibreCisco(object):
             return (True, None)
         else:
             return (False, None)
+
+
+def main(role, addr, target, name, cert, auto_start, auto_join_net,
+         local_monitor):
+
+    logger = getLogger(add_monitor=local_monitor)
+    libreCisco = LibreCisco(role=role, addr=addr, name=name, cert=cert)
+
+    if local_monitor is True:
+        local_monitor = LocalMonitor(libreCisco)
+        libreCisco.services['local_monitor'] = local_monitor
+
+    if auto_start is True:
+        libreCisco.start()
+    if auto_join_net is True and target is not None:
+        if auto_start is False:
+            libreCisco.start()
+        libreCisco.onProcess(['peer', 'join', target])
