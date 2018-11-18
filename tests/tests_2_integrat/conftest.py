@@ -3,6 +3,7 @@ from os import getcwd
 from os.path import join
 import time
 import pytest
+
 from LibreCisco.peer import Peer
 from LibreCisco.utils.security import self_hash as sh, create_self_signed_cert
 
@@ -55,18 +56,3 @@ def switch2(cert, self_hash):
     yield switch
     switch.stop()
     time.sleep(1)
-
-
-@pytest.fixture(scope='session')
-def net(core1, switch1, switch2):
-    nodes = {
-        'core_1': core1,
-        'sw_1': switch1,
-        'sw_2': switch2
-    }
-
-    nodes['sw_1'].sendMessage(('127.0.0.1', 8000), 'join')
-    nodes['sw_2'].sendMessage(('127.0.0.1', 8000), 'join')
-
-    time.sleep(8)
-    return nodes

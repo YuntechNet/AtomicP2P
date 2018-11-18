@@ -58,13 +58,14 @@ class LibreCisco(object):
 
 
 def main(role, addr, target, name, cert, auto_start, auto_join_net,
-         local_monitor):
+         local_monitor_pass):
 
-    logger = getLogger(add_monitor=local_monitor)
+    logger = getLogger(add_monitor_pass=local_monitor_pass)
     libreCisco = LibreCisco(role=role, addr=addr, name=name, cert=cert)
 
-    if local_monitor is True:
-        local_monitor = LocalMonitor(libreCisco)
+    if local_monitor_pass is not None:
+        local_monitor = LocalMonitor(service=libreCisco,
+                                     password=local_monitor_pass)
         libreCisco.services['local_monitor'] = local_monitor
 
     if auto_start is True:

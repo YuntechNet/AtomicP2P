@@ -8,7 +8,7 @@ from LibreCisco.utils.logging.handlers import StreamHandler, SocketHandler
 from LibreCisco.utils.logging.formatters import StdoutFormatter
 
 
-def getLogger(name=None, level=DEBUG, add_monitor=False):
+def getLogger(name=None, level=DEBUG, add_monitor_pass=None):
     if name is None:
         logger = org_get_logger()
     else:
@@ -30,8 +30,9 @@ def getLogger(name=None, level=DEBUG, add_monitor=False):
             handler = None
             if key == 'stdout':
                 handler = StreamHandler(name='stdout', stream=sys.stdout)
-            elif key == 'monitor' and add_monitor is True:
-                handler = SocketHandler(name='monitor')
+            elif key == 'monitor' and add_monitor_pass is not None:
+                handler = SocketHandler(name='monitor',
+                                        password=add_monitor_pass)
 
             if handler is not None:
                 handler.setLevel(DEBUG)
