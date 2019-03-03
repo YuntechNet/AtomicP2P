@@ -10,6 +10,7 @@ class SNMPv3Connection(object):
     def __init__(self, authentication):
         userName = authentication['account']
         host = authentication['host']
+        assert type(host) == tuple
         authProtocol = self.get_protocol(
                             auth_or_priv='AUTH',
                             protocol_str=authentication['auth_protocol'])
@@ -18,7 +19,6 @@ class SNMPv3Connection(object):
                             protocol_str=authentication['priv_protocol'])
         authKey = authentication['auth_password']
         privKey = authentication['priv_password']
-        assert type(host) == tuple
         self._snmpEngine = SnmpEngine()
         self._userData = UsmUserData(userName=userName, authKey=authKey,
                                      authProtocol=authProtocol,

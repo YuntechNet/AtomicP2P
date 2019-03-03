@@ -68,4 +68,4 @@ class Device(object):
 
     def __str__(self):
         return 'Device<connect_type={}, host={}>'.format(
-                    self.connect_type, self.authentication['host'])
+                    self.authentication['connect_type'], self.authentication['host'])
