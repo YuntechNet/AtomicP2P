@@ -6,7 +6,9 @@ def test_init(test_interface):
 
 
 def test_str(test_interface):
-    assert str(test_interface) == 'Interface<name={}>'.format('test_interface')
+    assert str(test_interface) == \
+            'Interface<snmp_index={}, name={}, status={}>'.format(
+                -1, 'test_interface', None)
 
 
 def test_fromReString():
@@ -17,16 +19,16 @@ def test_fromReString():
 
 
 def test_fromString():
-    strings = \
-'''
-Port      Name               Status       Vlan       Duplex  Speed Type
-Fa0/1                        notconnect   1            auto   auto 10/100BaseTX
-Fa0/2                        connected    1          a-full  a-100 10/100BaseTX
-          
-Gi0/1                        notconnect   1            auto   auto Not Present
-Gi0/2                        notconnect   1            auto   auto Not Present
-'''
-    assert len(strings.split('\n')) == 8 
+    strings = 'Port      Name               Status       Vlan       Duplex' \
+              '  Speed Type\n' \
+              'Fa0/1                        notconnect   1            auto' \
+              '   auto 10/100BaseTX\n' \
+              'Fa0/2                        connected    1          a-full' \
+              '  a-100 10/100BaseTX\n' \
+              'Gi0/1                        notconnect   1            auto' \
+              '   auto Not Present\n' \
+              'Gi0/2                        notconnect   1            auto' \
+              '   auto Not Present'
     interfaces = Interface.fromString(string=strings)
     assert len(interfaces) == 4
     assert interfaces[0].name == 'Fa0/1'

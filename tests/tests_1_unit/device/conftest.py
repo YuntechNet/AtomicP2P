@@ -20,7 +20,12 @@ def ssh(request):
     host = config.getoption('--ssh-test-host').split(':')
     account = config.getoption('--ssh-account')
     passwd = config.getoption('--ssh-passwd')
-    return SSHConnection(host=host, username=account, password=passwd)
+    authentication = {
+        'host': host,
+        'account': account,
+        'password': passwd
+    }
+    return SSHConnection(authentication=authentication)
 
 
 @pytest.fixture(scope='session')
@@ -29,4 +34,9 @@ def telnet(request):
     host = config.getoption('--telnet-test-host').split(':')
     account = config.getoption('--telnet-account')
     passwd = config.getoption('--telnet-passwd')
-    return TelnetConnection(host=host, username=account, password=passwd)
+    authentication = {
+        'host': host,
+        'account': account,
+        'password': passwd
+    }
+    return TelnetConnection(authentication=authentication)

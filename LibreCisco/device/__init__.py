@@ -1,5 +1,5 @@
 from LibreCisco.device.device import Device
-from LibreCisco.device.command import AddCmd, RemoveCmd
+from LibreCisco.device.command import AddCmd, RemoveCmd, ListCmd
 from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ProcManager
 
@@ -23,7 +23,8 @@ class DeviceManager(ProcManager):
     def registerCommand(self):
         self.commands = {
             'add': AddCmd(self),
-            'remove': RemoveCmd(self)
+            'remove': RemoveCmd(self),
+            'list': ListCmd(self)
         }
 
     def onProcess(self, msg_arr, **kwargs):
@@ -46,7 +47,8 @@ class DeviceManager(ProcManager):
     def addDevice(self, device):
         if type(device) is Device and device not in self.devices:
             self.devices.append(device)
-            device.fetch_running_config()
-            device.fetch_interface_status()
-            for each in device.interfaces:
-                print(str(each))
+            if device.connect_type == 'snmp':
+                device.snmp_v3_init()
+            else:
+                device.fetch_running_config()
+                device.fetch_interface_status()
