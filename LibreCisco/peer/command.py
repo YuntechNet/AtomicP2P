@@ -1,5 +1,7 @@
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
+from LibreCisco.peer.communication.net import JoinHandler
+from LibreCisco.peer.communication.msg import MessageHandler
 
 
 class HelpCmd(Command):
@@ -42,7 +44,7 @@ class JoinCmd(Command):
 
     def onProcess(self, msg_arr):
         addr = msg_arr[0].split(':')
-        self.peer.sendMessage((addr[0], addr[1]), 'join')
+        self.peer.sendMessage((addr[0], addr[1]), JoinHandler.pkt_type)
 
 
 class SendCmd(Command):
@@ -60,7 +62,7 @@ class SendCmd(Command):
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
         mes = {'msg': msg_arr}
-        self.peer.sendMessage((addr[0], addr[1]), 'message', **mes)
+        self.peer.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type, **mes)
 
 
 class ListCmd(Command):

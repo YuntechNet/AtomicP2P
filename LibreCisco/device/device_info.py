@@ -17,7 +17,7 @@ class DeviceInfo(object):
     @staticmethod
     def fromString(string):
         print(string)
-        model = re.compile('Software, .*? Software').search(string).group(0)[10:-9]
+        model = re.compile('model .*?\n').search(string).group(0)[6:-1]
         version = re.search('version .*?\n', string).group(0)[8:-2]
         hostname = re.search('hostname .*?\n', string).group(0)[9:-2]
         return DeviceInfo(model=model, version=version, hostname=hostname)

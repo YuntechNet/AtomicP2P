@@ -35,12 +35,13 @@ class Peer(ThreadManager):
         self.last_output = ''
 
     def registerHandler(self):
-        self.handler = {
-            'join': JoinHandler(self),
-            'checkjoin': CheckJoinHandler(self),
-            'newmember': NewMemberHandler(self),
-            'message': MessageHandler(self)
-        }
+        installed_handler = [
+            JoinHandler(self), CheckJoinHandler(self), NewMemberHandler(self),
+            MessageHandler(self)
+        ]
+        self.handler = {}
+        for each in installed_handler:
+            self.handler[type(each).pkt_type] = each
 
     def registerCommand(self):
         self.commands = {
@@ -72,7 +73,7 @@ class Peer(ThreadManager):
     def stop(self):
         self.monitor.stop()
         self.stopped.set()
-        self.sendMessage(('127.0.0.1', self.peer_info.host[1]), 'message',
+        self.sendMessage(('127.0.0.1', self.peer_info.host[1]), MessageHandler.pkt_type,
                          **{'msg': 'disconnect successful.'})
         self.server.close()
 
@@ -110,7 +111,7 @@ class Peer(ThreadManager):
                             addr, pkt._hash[:6], pkt._hash[-6:]))
                 self.sendMessage(pkt._from, pkt._type,
                                  **{'reject_reason': 'Unmatching peer hash.'})
-            elif in_net is True or pkt._type in ['join', 'checkjoin']:
+            elif in_net is True or pkt._type in [JoinHandler.pkt_type, CheckJoinHandler.pkt_type]:
                 handler.onRecv(src=addr, pkt=pkt)
                 self.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
             else:

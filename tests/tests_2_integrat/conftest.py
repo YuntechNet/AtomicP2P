@@ -4,6 +4,7 @@ from os.path import join
 import time
 import pytest
 from LibreCisco.peer import Peer
+from LibreCisco.peer.communication.net import JoinHandler
 from LibreCisco.utils.security import self_hash as sh, create_self_signed_cert
 
 
@@ -65,8 +66,8 @@ def net(core1, switch1, switch2):
         'sw_2': switch2
     }
 
-    nodes['sw_1'].sendMessage(('127.0.0.1', 8000), 'join')
-    nodes['sw_2'].sendMessage(('127.0.0.1', 8000), 'join')
+    nodes['sw_1'].sendMessage(('127.0.0.1', 8000), JoinHandler.pkt_type)
+    nodes['sw_2'].sendMessage(('127.0.0.1', 8000), JoinHandler.pkt_type)
 
     time.sleep(8)
     return nodes

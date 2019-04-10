@@ -1,8 +1,9 @@
 import time
+from LibreCisco.peer.communication.net import JoinHandler
 
 
 def test_two_dogs(core1, switch1):
-    switch1.sendMessage(('127.0.0.1', core1.peer_info.host[1]), 'join')
+    switch1.sendMessage(('127.0.0.1', core1.peer_info.host[1]), JoinHandler.pkt_type)
     time.sleep(4)
     assert core1.monitor.getStatusByHost(switch1.peer_info.host)[0] is not None
     assert switch1.monitor.getStatusByHost(core1.peer_info.host)[0] is not None
@@ -17,8 +18,8 @@ def test_two_dogs(core1, switch1):
 
 
 def test_three_dogs(core1, switch1, switch2):
-    switch1.sendMessage(('127.0.0.1', core1.peer_info.host[1]), 'join')
-    switch2.sendMessage(('127.0.0.1', core1.peer_info.host[1]), 'join')
+    switch1.sendMessage(('127.0.0.1', core1.peer_info.host[1]), JoinHandler.pkt_type)
+    switch2.sendMessage(('127.0.0.1', core1.peer_info.host[1]), JoinHandler.pkt_type)
     time.sleep(8)
     assert core1.monitor.getStatusByHost(switch1.peer_info.host)[0] is not None
     assert core1.monitor.getStatusByHost(switch2.peer_info.host)[0] is not None
