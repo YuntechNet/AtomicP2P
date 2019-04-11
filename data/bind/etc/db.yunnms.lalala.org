@@ -1,0 +1,17 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     yunnms.lalala.org. admin.yunnms.lalala.org. (
+                              3         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      localhost.
+
+;your sites
+peer_1.yunnms.lalala.org. IN A 192.168.1.103;
+peer_2.yunnms.lalala.org. IN A 192.168.1.104;
+peer_3.yunnms.lalala.org. IN A 192.168.1.105;

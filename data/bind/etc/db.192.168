@@ -1,0 +1,16 @@
+;
+; BIND reverse data file for broadcast zone
+;
+$TTL	604800
+@	IN	SOA	yunnms.lalala.org. admin.yunnms.lalala.org. (
+			      3		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@       IN      NS      localhost.
+
+103.1	IN	PTR	peer_1.yunnms.lalala.org.;
+104.1	IN	PTR	peer_2.yunnms.lalala.org.;
+105.1	IN	PTR peer_3.yunnms.lalala.org.
