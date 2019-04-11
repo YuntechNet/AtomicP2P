@@ -1,7 +1,5 @@
 options {
 	directory "/var/cache/bind";
-	allow-query { any; };
-	allow-query-cache { any; };
 
 	// If there is a firewall between you and nameservers you want
 	// to talk to, you may need to fix the firewall to allow multiple
@@ -22,6 +20,11 @@ options {
 	//========================================================================
 	dnssec-validation auto;
 	check-names master ignore;
+    recursion yes;
+	
+    allow-recursion { any; }; 
+	allow-query { any; };
+	allow-query-cache { any; };
 
 	auth-nxdomain no;    # conform to RFC1035
 	listen-on-v6 { any; };

@@ -3,7 +3,7 @@
 ;
 $TTL    604800
 @       IN      SOA     yunnms.lalala.org. admin.yunnms.lalala.org. (
-                              3         ; Serial
+                              8         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -11,7 +11,38 @@ $TTL    604800
 ;
 @       IN      NS      localhost.
 
-;your sites
-peer_1.yunnms.lalala.org. IN A 192.168.1.103;
-peer_2.yunnms.lalala.org. IN A 192.168.1.104;
-peer_3.yunnms.lalala.org. IN A 192.168.1.105;
+; Global A Record
+global.yunnms.lalala.org.  IN  A 192.168.1.103;
+global.yunnms.lalala.org.  IN  A 192.168.1.104;
+global.yunnms.lalala.org.  IN  A 192.168.1.105;
+global.yunnms.lalala.org.  IN  A 192.168.1.106;
+global.yunnms.lalala.org.  IN  A 192.168.1.107;
+global.yunnms.lalala.org.  IN  A 192.168.1.108;
+
+; Switch
+switch.yunnms.lalala.org. IN  A 192.168.1.103;
+switch.yunnms.lalala.org. IN  A 192.168.1.104;
+switch.yunnms.lalala.org. IN  A 192.168.1.105;
+
+; Scheduler
+scheduler.yunnms.lalala.org.  IN  A 192.168.1.106;
+scheduler.yunnms.lalala.org.  IN  A 192.168.1.107;
+scheduler.yunnms.lalala.org.  IN  A 192.168.1.108;
+
+; Switch Peer
+peer_1.switch.yunnms.lalala.org. IN  A 192.168.1.103;
+peer_2.switch.yunnms.lalala.org. IN  A 192.168.1.104;
+peer_3.switch.yunnms.lalala.org. IN  A 192.168.1.105;
+;; Switch SRV Record
+_yunnms._tcp.peer_1.switch.yunnms.lalala.org. IN  SRV 0 0 8000  peer_1.switch.yunnms.lalala.org.
+_yunnms._tcp.peer_2.switch.yunnms.lalala.org. IN  SRV 0 0 8000  peer_2.switch.yunnms.lalala.org.
+_yunnms._tcp.peer_3.switch.yunnms.lalala.org. IN  SRV 0 0 8000  peer_3.switch.yunnms.lalala.org.
+
+; Scheduler Peer
+peer_1.scheduler.yunnms.lalala.org.  IN  A 192.168.1.106;
+peer_2.scheduler.yunnms.lalala.org.  IN  A 192.168.1.107;
+peer_3.scheduler.yunnms.lalala.org.  IN  A 192.168.1.108;
+;; Scheduler SRV Record
+_yunnms._tcp.peer_1.scheduler.yunnms.lalala.org. IN  SRV 0 0 8000  peer_1.scheduler.yunnms.lalala.org.
+_yunnms._tcp.peer_2.scheduler.yunnms.lalala.org. IN  SRV 0 0 8000  peer_2.scheduler.yunnms.lalala.org.
+_yunnms._tcp.peer_3.scheduler.yunnms.lalala.org. IN  SRV 0 0 8000  peer_3.scheduler.yunnms.lalala.org.
