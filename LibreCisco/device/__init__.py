@@ -1,8 +1,9 @@
 from LibreCisco.device.device import Device
-from LibreCisco.device.command import AddCmd, RemoveCmd, ListCmd
+from LibreCisco.device.command import HelpCmd, AddCmd, RemoveCmd, ListCmd
 from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ProcManager
 
+from pysnmp.hlapi.asyncore import SnmpEngine
 
 class DeviceManager(ProcManager):
 
@@ -12,6 +13,7 @@ class DeviceManager(ProcManager):
                                             output_field=output_field,
                                             auto_register=True)
         self.devices = []
+        self._snmpEngine = SnmpEngine()
 
     def registerHandler(self):
         pass
@@ -22,6 +24,7 @@ class DeviceManager(ProcManager):
 
     def registerCommand(self):
         self.commands = {
+            'help': HelpCmd(self),
             'add': AddCmd(self),
             'remove': RemoveCmd(self),
             'list': ListCmd(self)

@@ -3,6 +3,33 @@ from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 
 
+class HelpCmd(Command):
+    """HelpCmd
+        show the help for peers.
+        Usage in prompt: peer help [cmd]
+    """
+
+    def __init__(self, peer):
+        super(HelpCmd, self).__init__('help')
+        self.peer = peer
+        self.output_field = peer.output_field
+
+    def onProcess(self, msg_arr):
+        if msg_arr != [] and msg_arr[0] in self.peer.commands:
+            printText(self.peer.commands[msg_arr[0]].__doc__)
+        else:
+            printText("peer [cmd] <options>\n"
+                      " - list                                           "
+                      "list all services in list.\n"
+                      " - device add [ssh/telnet] [ip:port] [account] [passwor"
+                      "d]\n   device add snmp [ip:port] [account] [password] ["
+                      "link-level] [auth_protocol] [auth_passowrd] [priv_proto"
+                      "col] [priv_password]\n"
+                      "  add service.\n"
+                      " - help [cmd]                                     "
+                      "show help msg of sepecific command.")
+
+
 class ListCmd(Command):
     """ListCmd
         list all services in list
@@ -51,8 +78,9 @@ class AddCmd(Command):
             priv_password = msg_arr[8]
             device = \
                 Device(connect_type=connect_type, host=(host, 161),
-                       account=account, passwd=passwd, link_level=link_level,
-                       auth_protocol=auth_protocol,
+                       account=account, passwd=passwd,
+                       snmpEngine=self.device._snmpEngine,
+                       link_level=link_level, auth_protocol=auth_protocol,
                        auth_password=auth_password,
                        priv_protocol=priv_protocol,
                        priv_password=priv_password)

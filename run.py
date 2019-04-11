@@ -99,7 +99,8 @@ def main(role, addr, target, name, cert):
             service[service_key].onProcess(cmd[1:])
         elif service_key == 'help':
             helptips = "peer help            - See peer's help\n"\
-                       "monitor help        - See monitor's help\n"\
+                       "monitor help         - See monitor's help\n"\
+                       "device help          - See defice's help\n"\
                        "exit/stop            - exit the whole program.\n"
             printText(helptips, output=dashboard_field)
         elif service_key == 'exit' or service_key == 'stop':

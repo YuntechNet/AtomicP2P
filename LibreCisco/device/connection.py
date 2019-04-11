@@ -7,7 +7,7 @@ from pysnmp.hlapi.asyncore import *
 
 class SNMPv3Connection(object):
 
-    def __init__(self, authentication):
+    def __init__(self, snmpEngine, authentication):
         userName = authentication['account']
         host = authentication['host']
         assert type(host) == tuple
@@ -19,7 +19,7 @@ class SNMPv3Connection(object):
                             protocol_str=authentication['priv_protocol'])
         authKey = authentication['auth_password']
         privKey = authentication['priv_password']
-        self._snmpEngine = SnmpEngine()
+        self._snmpEngine = snmpEngine
         self._userData = UsmUserData(userName=userName, authKey=authKey,
                                      authProtocol=authProtocol,
                                      privKey=privKey,

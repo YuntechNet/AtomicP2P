@@ -8,9 +8,9 @@ from LibreCisco.device.connection import (
 
 class Device(object):
 
-    def __init__(self, connect_type, host, account, passwd, link_level=None,
-                 auth_protocol=None, priv_protocol=None, auth_password=None,
-                 priv_password=None):
+    def __init__(self, connect_type, host, account, passwd, snmpEngine=None,
+                 link_level=None, auth_protocol=None, priv_protocol=None,
+                 auth_password=None, priv_password=None):
         self.authentication = \
             self.create_authentication(
                 connect_type=connect_type, host=host, link_level=link_level,
@@ -19,7 +19,9 @@ class Device(object):
                 priv_protocol=priv_protocol, priv_password=priv_password)
         self.connect_type = connect_type
         if connect_type == 'snmp':
-            self.connection = SNMPv3Conn(authentication=self.authentication)
+            assert snmpEngine is not None
+            self.connection = SNMPv3Conn(snmpEngine=snmpEngine,
+                                         authentication=self.authentication)
         else:
             self.connection = SSHConn(authentication=self.authentication) if \
                               connect_type == 'ssh' else \
