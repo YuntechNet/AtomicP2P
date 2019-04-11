@@ -1,5 +1,6 @@
 from LibreCisco.device.device import Device
 from LibreCisco.device.command import HelpCmd, AddCmd, RemoveCmd, ListCmd
+from LibreCisco.device.trap_server import TrapServer
 from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ProcManager
 
@@ -14,6 +15,7 @@ class DeviceManager(ProcManager):
                                             auto_register=True)
         self.devices = []
         self._snmpEngine = SnmpEngine()
+        self.trapServer = TrapServer()
 
     def registerHandler(self):
         pass
@@ -38,9 +40,10 @@ class DeviceManager(ProcManager):
         return ''
 
     def start(self):
-        pass
+        self.trapServer.start()
 
     def stop(self):
+        self.trapServer.stop()
         self.stopped.set()
 
     def run(self):
