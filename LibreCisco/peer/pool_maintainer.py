@@ -43,7 +43,7 @@ class PoolMaintainer(ThreadManager):
         records = self.forward('global.' + self._domain)
         for each in records:
             name, role, fqdn, addr = self.fqdnInfo(each)
-            priority, weight, port, srv_fqdn = self.srv(fqdn)
+            priority, weight, port, srv_fqdn = tuple(self.srv(fqdn))
             if name is not None and srv_fqdn is not None:
                 peer_info = PeerInfo(name=name, role=role,
                                      host=(addr, int(port)))
@@ -62,11 +62,11 @@ class PoolMaintainer(ThreadManager):
             Each element would be string.
             Any error cause failure will turn elements to None.
         """
-        fqdn = self.reverse(addr)[0][:-1]
-        if fqdn != []:
+        try:
+            fqdn = self.reverse(addr)[0][:-1]
             splits = fqdn.split('.')
             return splits[0], splits[1], fqdn, addr
-        else:
+        except Exception:
             return None, None, None, None
 
     def forward(self, fqdn):
@@ -88,4 +88,4 @@ class PoolMaintainer(ThreadManager):
             return str(self._resolver.query(
                 '_yunnms._tcp.' + fqdn, 'SRV')[0]).split(' ')
         except Exception:
-            return 0, 0, -1, None
+            return [0, 0, -1, None]
