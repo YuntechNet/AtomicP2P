@@ -15,7 +15,9 @@ class DeviceManager(ProcManager):
                                             auto_register=True)
         self.devices = []
         self._snmpEngine = SnmpEngine()
-        self.trapServer = TrapServer()
+        # TODO: Temporary remove trapServer variable until fix the Permission-
+        #       Denied error in Travis build when binding to 0.0.0.0:162.
+        #self.trapServer = TrapServer()
 
     def registerHandler(self):
         pass
@@ -40,10 +42,11 @@ class DeviceManager(ProcManager):
         return ''
 
     def start(self):
-        self.trapServer.start()
+        #self.trapServer.start()    # L18
+        pass
 
     def stop(self):
-        self.trapServer.stop()
+        #self.trapServer.stop()     # L18
         self.stopped.set()
 
     def run(self):
