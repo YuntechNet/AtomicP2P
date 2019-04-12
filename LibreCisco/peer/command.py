@@ -1,6 +1,8 @@
+from time import sleep
+
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
-from LibreCisco.peer.communication.net import JoinHandler
+from LibreCisco.peer.communication.net import JoinHandler, DisconnectHandler
 from LibreCisco.peer.communication.msg import MessageHandler
 
 
@@ -62,8 +64,9 @@ class SendCmd(Command):
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
         mes = {'msg': msg_arr}
-        self.peer.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type,
-                              **mes)
+        peer_info = self.peer.getConnectByHost(host=(addr[0], int(addr[1])))
+        peer_info.conn.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type,
+                                   **mes)
 
 
 class ListCmd(Command):
@@ -99,7 +102,15 @@ class LeaveNetCmd(Command):
         self.output_field = peer.output_field
 
     def onProcess(self, msg_arr):
-        # self.peer.sendMessage(('broadcast', 'all'), 'leavenet')
+        for each in self.peer.connectlist:
+            # TODO: Fit unittest empty conn in PeerInfo
+            #       Waiting for use mock.
+            #               - 2019/04/13
+            if each.conn is None:
+                continue
+            each.conn.sendMessage(host=each.host,
+                                  pkt_type=DisconnectHandler.pkt_type)
+            sleep(2)
+            each.conn.stop()
         self.peer.connectlist.clear()
-        self.peer.monitor.monitorlist.clear()
         printText('You left net.')

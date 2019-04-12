@@ -104,9 +104,14 @@ class Handler(object):
         else:
             self.onRecvPkt(src=src, pkt=pkt, **kwargs)
 
-    def onRecvReject(self, src, pkt, **kwargs):
+    def onRecvReject(self, src, pkt, conn, **kwargs):
         reject = pkt._data['reject']
         printText('Rejected by {}, reason: {}'.format(pkt._from, reject))
+        # TODO: Fit unittest empty conn in PeerInfo
+        #       Waiting for use mock.
+        #                      - 2019/04/13
+        if conn is not None:
+            conn.stop()
 
     def onRecvPkt(self, src, pkt, **kwargs):
         raise NotImplementedError

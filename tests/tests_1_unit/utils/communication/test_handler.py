@@ -24,7 +24,7 @@ def test_onSendPkt(handler):
 def test_onRecvReject(handler, message):
     message = message.copy()
     message.set_reject('test reason')
-    handler.onRecvReject('1.2.3.4:5678', message)
+    handler.onRecvReject('1.2.3.4:5678', message, None)
 
 
 def test_onRecvPkt(handler):

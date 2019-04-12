@@ -1,6 +1,7 @@
 from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message, Handler
 from LibreCisco.peer.entity.peer_info import PeerInfo
+from time import sleep
 
 
 class JoinHandler(Handler):
@@ -23,21 +24,21 @@ class JoinHandler(Handler):
                        _hash=self.peer._hash, _type=type(self).pkt_type,
                        _data=data)
 
-    def onRecvPkt(self, src, pkt):
+    def onRecvPkt(self, src, pkt, conn):
         data = pkt._data
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
-        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
-        self.last_join_host = peer_info.host
+        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port),
+                             conn=conn)
         send_data = {'peer_info': peer_info}
         for each in self.peer.connectlist:
-            self.peer.sendMessage((each.host[0], each.host[1]),
+            each.conn.sendMessage((each.host[0], each.host[1]),
                                   NewMemberHandler.pkt_type, **send_data)
         printText('Recieve new peer add request: {}, added.'.format(
                     str(peer_info)))
         self.peer.addConnectlist(peer_info)
-        self.peer.sendMessage((src[0], listen_port), CheckJoinHandler.pkt_type)
+        conn.sendMessage((src[0], listen_port), CheckJoinHandler.pkt_type)
 
 
 class CheckJoinHandler(Handler):
@@ -58,12 +59,13 @@ class CheckJoinHandler(Handler):
                        _hash=self.peer._hash, _type=type(self).pkt_type,
                        _data=data)
 
-    def onRecvPkt(self, src, pkt):
+    def onRecvPkt(self, src, pkt, conn):
         data = pkt._data
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
-        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
+        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port),
+                             conn=conn)
         printText('Added peer:' + str(peer_info))
         self.peer.addConnectlist(peer_info)
 
@@ -79,6 +81,7 @@ class NewMemberHandler(Handler):
     def onSendPkt(self, target, peer_info):
         data = {
             'name': peer_info.name,
+            'addr': peer_info.host[0],
             'listen_port': int(peer_info.host[1]),
             'role': peer_info.role
         }
@@ -86,12 +89,65 @@ class NewMemberHandler(Handler):
                        _hash=self.peer._hash, _type=type(self).pkt_type,
                        _data=data)
 
-    def onRecvPkt(self, src, pkt):
+    def onRecvPkt(self, src, pkt, conn):
         data = pkt._data
         name = data['name']
+        addr = data['addr']
         listen_port = int(data['listen_port'])
         role = data['role']
-        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
-        printText('New peer join net:' + str(peer_info))
+        conn = self.peer.sendMessage(
+                (addr, listen_port), AckNewMemberHandler.pkt_type)
+        peer_info = PeerInfo(name=name, role=role, host=(addr, listen_port),
+                             conn=conn)
+        printText('New peer join net: {}'.format(peer_info))
         self.peer.addConnectlist(peer_info)
-        self.peer.sendMessage((src[0], listen_port), CheckJoinHandler.pkt_type)
+
+
+class AckNewMemberHandler(Handler):
+    pkt_type = 'peer-ack-new-memeber'
+
+    def __init__(self, peer):
+        super(AckNewMemberHandler, self).__init__(pkt_type=type(self).pkt_type,
+                                                  peer=peer)
+        self.output_field = peer.output_field
+
+    def onSendPkt(self, target):
+        data = {
+            'name': self.peer.peer_info.name,
+            'role': self.peer.peer_info.role,
+            'listen_port': int(self.peer.peer_info.host[1])
+        }
+        return Message(_to=target, _from=self.peer.peer_info.host,
+                       _hash=self.peer._hash, _type=type(self).pkt_type,
+                       _data=data)
+
+    def onRecvPkt(self, src, pkt, conn):
+        data = pkt._data
+        name = data['name']
+        role = data['role']
+        listen_port = int(data['listen_port'])
+        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port),
+                             conn=conn)
+        self.peer.addConnectlist(peer_info)
+        printText('ACK new member join net: {}'.format(peer_info))
+
+
+class DisconnectHandler(Handler):
+    pkt_type = 'peer-disconnect'
+
+    def __init__(self, peer):
+        super(DisconnectHandler, self).__init__(pkt_type=type(self).pkt_type,
+                                                peer=peer)
+        self.output_field = peer.output_field
+
+    def onSendPkt(self, target):
+        printText("Sending Local Stop Signal.")
+        return Message(_to=target, _from=self.peer.peer_info.host,
+                       _hash=self.peer._hash, _type=type(self).pkt_type,
+                       _data={})
+
+    def onRecvPkt(self, src, pkt, conn):
+        conn.stop()
+        peer_info = self.peer.getConnectByHost(host=pkt._from)
+        self.peer.removeConnectlist(peer_info=peer_info)
+        printText("Received Stop Signal and Stopped.")

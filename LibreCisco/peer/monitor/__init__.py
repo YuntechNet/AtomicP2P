@@ -20,14 +20,13 @@ class Monitor(ThreadManager):
         self.verbose = False
         self.pause = False
         self.max_no_response_count = max_no_response_count
-        self.monitorlist = []
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
-            if not self.pause:
+            if self.pause is False:
                 no_response_list = []
                 for each in self.peer.connectlist:
-                    self.peer.sendMessage(each.host, 'monitor_check')
+                    each.conn.sendMessage(each.host, 'monitor_check')
                     if each.status.no_response_count >= \
                             self.max_no_response_count:
                         no_response_list.append(each)
@@ -61,8 +60,6 @@ class Monitor(ThreadManager):
             status, peer_info = self.getStatusByHost(host=pkt._from)
             if peer_info is not None:
                 status.update()
-            else:
-                pass
 
     def getStatusByHost(self, host):
         peer_info = self.peer.getConnectByHost(host=host)
@@ -71,6 +68,7 @@ class Monitor(ThreadManager):
     def removeMonitorlist(self, missing):
         for each in missing:
             try:
+                each.conn.stop()
                 self.peer.removeConnectlist(each)
                 printText('{} has been remove from peer list.'.format(each))
             except Exception as e:

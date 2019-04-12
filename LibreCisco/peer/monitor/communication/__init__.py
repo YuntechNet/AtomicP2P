@@ -19,14 +19,14 @@ class CheckHandler(Handler):
         return Message(_to=target, _from=self.peer.peer_info.host,
                        _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
-    def onRecvPkt(self, src, pkt):
+    def onRecvPkt(self, src, pkt, conn):
         data = pkt._data
         message = 'WatchDog check from {}: send ts {}'.format(pkt._from,
                                                               data['send_ts'])
         if self.monitor.verbose:
             printText(message)
 
-    def onRecvReject(self, src, pkt):
+    def onRecvReject(self, src, pkt, conn):
         if self.monitor.verbose:
             super(CheckHandler, self).onRecvReject(src, pkt)
         status, peer_info = self.monitor.getStatusByHost(pkt._from)

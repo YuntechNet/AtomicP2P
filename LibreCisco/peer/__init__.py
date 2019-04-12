@@ -1,14 +1,16 @@
 import ssl
 import socket
 import threading
+from time import sleep
 
 from LibreCisco.peer.entity.peer_info import PeerInfo
-from LibreCisco.peer.connection import PeerConnection
+from LibreCisco.peer.connection import PeerTCPLongConn
 from LibreCisco.peer.command import (
     HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
 )
 from LibreCisco.peer.communication import (
-    JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
+    JoinHandler, CheckJoinHandler, NewMemberHandler, AckNewMemberHandler,
+    DisconnectHandler, MessageHandler
 )
 from LibreCisco.peer.monitor import Monitor
 from LibreCisco.utils import printText
@@ -36,7 +38,8 @@ class Peer(ThreadManager):
     def registerHandler(self):
         installed_handler = [
             JoinHandler(self), CheckJoinHandler(self), NewMemberHandler(self),
-            MessageHandler(self)
+            MessageHandler(self), AckNewMemberHandler(self),
+            DisconnectHandler(self)
         ]
         self.handler = {}
         for each in installed_handler:
@@ -65,17 +68,26 @@ class Peer(ThreadManager):
     def run(self):
         while not self.stopped.wait(self.loopDelay):
             (conn, addr) = self.server.accept()
-            accepthandle = threading.Thread(target=self.acceptHandle,
-                                            args=(conn, addr))
-            accepthandle.start()
+            tcpLongConn = PeerTCPLongConn(peer=self, conn=conn, host=addr)
+            tcpLongConn.start()
+        self.server.close()
 
     def stop(self):
         self.monitor.stop()
         self.stopped.set()
-        self.sendMessage(('127.0.0.1', self.peer_info.host[1]),
-                         MessageHandler.pkt_type,
-                         **{'msg': 'disconnect successful.'})
-        self.server.close()
+        for each in self.connectlist:
+            each.conn.sendMessage(host=each.host,
+                                  pkt_type=DisconnectHandler.pkt_type)
+            sleep(2)
+            each.conn.stop()
+
+        host = ('127.0.0.1', self.peer_info.host[1])
+        tcpLongConn = PeerTCPLongConn(peer=self, host=host, conn=None,
+                                      cert_pem=self.cert[0])
+        tcpLongConn.start()
+        tcpLongConn.sendMessage(host=host, pkt_type=DisconnectHandler.pkt_type)
+        sleep(2)
+        tcpLongConn.stop()
 
     # accept
     def setServer(self, cert):
@@ -98,41 +110,29 @@ class Peer(ThreadManager):
         else:
             return None
 
-    def acceptHandle(self, conn, addr):
-        pkt = Message.recv(conn.recv(1024))
-        in_net = self.containsInConnectlist(addr[0])
-        hash_match = self._hash == pkt._hash
-        handler = self.selectHandler(pkt._type)
-
-        if handler:
-            if hash_match is False and pkt.is_reject() is False:
-                printText(('Illegal peer {} with unmatch hash {{{}...{}}} '
-                           'trying to connect to net.').format(
-                            addr, pkt._hash[:6], pkt._hash[-6:]))
-                self.sendMessage(pkt._from, pkt._type,
-                                 **{'reject_reason': 'Unmatching peer hash.'})
-            elif in_net is True or pkt._type in \
-                    [JoinHandler.pkt_type, CheckJoinHandler.pkt_type]:
-                handler.onRecv(src=addr, pkt=pkt)
-                self.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
-            else:
-                self.sendMessage(pkt._from, pkt._type,
-                                 **{'reject_reason': 'not in current net'})
-        else:
-            printText('Unknown packet tpye: {}'.format(pkt._type))
-
-    # send
+    # TODO: Currently this is cover the missing part of PeerTCPLongConn.
+    #       This is a very inappropriate usage to cover it.
+    #       Still seeking better way to cover broascast and various invoke.
+    #                       - 2019/04/13
     def sendMessage(self, host, sendType, **kwargs):
-        handler = self.selectHandler(sendType)
-        if handler:
-            messages = handler.onSend(target=host, **kwargs)
-            for each in messages:
-                sender = PeerConnection(peer=self, message=each,
-                                        cert_pem=self.cert[0],
-                                        output_field=self.output_field)
-                sender.start()
+        if self.selectHandler(sendType) is None:
+            printText('No such type')
+            return
+        if self.containsInConnectlist(host=host):
+            peer_info = self.getConnectByHost(host=host)
+            peer_info.conn.sendMessage(host=host, pkt_type=sendType, **kwargs)
+        elif host[0] == 'broadcast':
+            for each in self.connectlist:
+                if each.role == host[1] or host[1] == 'all':
+                    each.conn.sendMessage(host=host, pkt_type=sendType,
+                                          **kwargs)
         else:
-            printText('No such type.')
+            tcpLongConn = PeerTCPLongConn(peer=self,
+                                          host=(host[0], int(host[1])),
+                                          conn=None, cert_pem=self.cert[0])
+            tcpLongConn.start()
+            tcpLongConn.sendMessage(host=host, pkt_type=sendType, **kwargs)
+            return tcpLongConn
 
     # list
     def containsInConnectlist(self, host):

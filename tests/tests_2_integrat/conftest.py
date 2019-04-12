@@ -27,6 +27,7 @@ def malware_peer(cert):
     mp.start()
     yield mp
     mp.stop()
+    time.sleep(1)
 
 
 @pytest.yield_fixture(scope='function')

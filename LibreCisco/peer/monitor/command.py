@@ -85,12 +85,12 @@ class ListCmd(Command):
         self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
-        if len(self.monitor.monitorlist) == 0:
+        if len(self.peer.connectlist) == 0:
             printText('There is no peer\'s info in current list')
         else:
             printText('There is the status list of peers in current net:')
-            for each in self.monitor.monitorlist:
-                printText(' - ' + str(each))
+            for each in self.peer.connectlist:
+                printText(' - {} / {}'.format(each.status, each))
             printText('[---End of list---]')
 
 
@@ -107,8 +107,10 @@ class ResetCmd(Command):
 
     def onProcess(self, msg_arr):
         if msg_arr == []:
-            for each in self.monitor.monitorlist:
-                each.update(status_type=StatusType.PENDING)
+            for each in self.peer.connectlist:
+                each.status.update(status_type=StatusType.PENDING)
+                printText(each.status)
+            printText("Reset success")
         else:
             pass
 
