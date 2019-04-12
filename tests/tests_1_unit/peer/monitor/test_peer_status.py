@@ -1,19 +1,12 @@
-from LibreCisco.peer.monitor.peer_status import StatusType
+from LibreCisco.peer.entity.peer_status import StatusType
 
 
 def test_init(peer_info, peer_status):
-    assert peer_status.peer_info == peer_info
     assert peer_status.status == StatusType.PENDING
 
 
-def test_eq(peer_status, peer_status2):
-    assert peer_status == peer_status
-    assert peer_status != peer_status2
-
-
 def test_str(peer_status):
-    assert str(peer_status) == 'PeerStatus<host={}, status={}>'.format(
-            str(peer_status.peer_info.host), peer_status.status)
+    assert str(peer_status) == str(peer_status.status)
 
 
 def test_toDict(peer_status):

@@ -1,7 +1,7 @@
 import traceback
 import time
 from LibreCisco.peer.communication.net import JoinHandler
-from LibreCisco.peer.peer_info import PeerInfo
+from LibreCisco.peer.entity.peer_info import PeerInfo
 
 
 def test_two_link(core1, switch1):

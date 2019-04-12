@@ -1,6 +1,6 @@
 from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message, Handler
-from LibreCisco.peer.peer_info import PeerInfo
+from LibreCisco.peer.entity.peer_info import PeerInfo
 
 
 class JoinHandler(Handler):
@@ -55,7 +55,8 @@ class CheckJoinHandler(Handler):
             'role': self.peer.peer_info.role
         }
         return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type, _data=data)
+                       _hash=self.peer._hash, _type=type(self).pkt_type,
+                       _data=data)
 
     def onRecvPkt(self, src, pkt):
         data = pkt._data
@@ -71,7 +72,8 @@ class NewMemberHandler(Handler):
     pkt_type = 'peer-new-member'
 
     def __init__(self, peer):
-        super(NewMemberHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer)
+        super(NewMemberHandler, self).__init__(pkt_type=type(self).pkt_type,
+                                               peer=peer)
         self.output_field = peer.output_field
 
     def onSendPkt(self, target, peer_info):
@@ -81,7 +83,8 @@ class NewMemberHandler(Handler):
             'role': peer_info.role
         }
         return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type, _data=data)
+                       _hash=self.peer._hash, _type=type(self).pkt_type,
+                       _data=data)
 
     def onRecvPkt(self, src, pkt):
         data = pkt._data

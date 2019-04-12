@@ -62,7 +62,8 @@ class SendCmd(Command):
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
         mes = {'msg': msg_arr}
-        self.peer.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type, **mes)
+        self.peer.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type,
+                              **mes)
 
 
 class ListCmd(Command):

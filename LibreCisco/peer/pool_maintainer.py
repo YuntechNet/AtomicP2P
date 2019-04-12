@@ -1,7 +1,7 @@
 from dns.reversename import from_address
 from dns.resolver import Resolver, query
 
-from LibreCisco.peer.peer_info import PeerInfo
+from LibreCisco.peer.entity.peer_info import PeerInfo
 from LibreCisco.utils.manager import ThreadManager
 
 

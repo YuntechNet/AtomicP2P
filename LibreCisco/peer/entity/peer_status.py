@@ -11,18 +11,13 @@ class StatusType(Enum):
 
 class PeerStatus(object):
 
-    def __init__(self, peer_info, status=StatusType.PENDING):
-        self.peer_info = peer_info
+    def __init__(self, status=StatusType.PENDING):
         self.last_update_ts = time.time()
         self.no_response_count = 0
         self.status = status
 
-    def __eq__(self, other):
-        return other is not None and self.peer_info == other.peer_info
-
     def __str__(self):
-        return 'PeerStatus<host={}, status={}>'.format(
-                    str(self.peer_info.host), self.status)
+        return str(self.status)
 
     def toDict(self):
         return {

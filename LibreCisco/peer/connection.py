@@ -3,7 +3,7 @@ import threading
 import socket
 import ssl
 
-from LibreCisco.peer.monitor.peer_status import StatusType
+from LibreCisco.peer.entity.peer_status import StatusType
 from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message
 

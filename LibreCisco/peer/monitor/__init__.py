@@ -5,7 +5,7 @@ from LibreCisco.peer.monitor.command import (
     HelpCmd, PauseCmd, PeriodCmd, ListCmd, ResetCmd, VerboseCmd, ManualCmd
 )
 from LibreCisco.peer.monitor.communication import CheckHandler
-from LibreCisco.peer.monitor.peer_status import PeerStatus
+from LibreCisco.peer.entity.peer_status import PeerStatus
 
 
 class Monitor(ThreadManager):
@@ -26,11 +26,10 @@ class Monitor(ThreadManager):
         while not self.stopped.wait(self.loopDelay):
             if not self.pause:
                 no_response_list = []
-                for each in self.monitorlist:
-                    addr = each.peer_info.host[0]
-                    port = each.peer_info.host[1]
-                    self.peer.sendMessage((addr, port), 'monitor_check')
-                    if each.no_response_count >= self.max_no_response_count:
+                for each in self.peer.connectlist:
+                    self.peer.sendMessage(each.host, 'monitor_check')
+                    if each.status.no_response_count >= \
+                            self.max_no_response_count:
                         no_response_list.append(each)
                 self.removeMonitorlist(no_response_list)
 
@@ -60,48 +59,19 @@ class Monitor(ThreadManager):
     def onRecvPkt(self, addr, pkt):
         if not pkt.is_reject():
             status, peer_info = self.getStatusByHost(host=pkt._from)
-            if status is not None:
+            if peer_info is not None:
                 status.update()
-            elif peer_info is not None:
-                self.addMonitorlist(PeerStatus(peer_info=peer_info))
             else:
                 pass
 
     def getStatusByHost(self, host):
         peer_info = self.peer.getConnectByHost(host=host)
-        if peer_info:
-            for each in self.monitorlist:
-                if each.peer_info == peer_info:
-                    return each, peer_info
-        return None, peer_info
-
-    def updateStatusByHost(self, host):
-        status, peer_info = self.getStatusByHost(host=host)
-        if peer_info:
-            if status:
-                status.update()
-                return False
-            else:
-                return self.addMonitorlist(PeerStatus(peer_info))
-        return None
-
-    def addMonitorlist(self, peer_status):
-        if peer_status not in self.monitorlist:
-            self.monitorlist.append(peer_status)
-            return True
-        return False
-
-    def removeStatusByHost(self, host):
-        missing = []
-        for each in self.monitorlist:
-            if each.peer_info.host == host:
-                missing .append(each)
-        self.removeMonitorlist(missing)
+        return (peer_info.status if peer_info else None, peer_info)
 
     def removeMonitorlist(self, missing):
         for each in missing:
             try:
-                self.monitorlist.remove(each)
-                printText('{} has been remove from status list.'.format(each))
+                self.peer.removeConnectlist(each)
+                printText('{} has been remove from peer list.'.format(each))
             except Exception as e:
                 printText(traceback.format_exc())

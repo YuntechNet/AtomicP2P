@@ -2,7 +2,7 @@ import ssl
 import socket
 import threading
 
-from LibreCisco.peer.peer_info import PeerInfo
+from LibreCisco.peer.entity.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
 from LibreCisco.peer.command import (
     HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
@@ -10,7 +10,7 @@ from LibreCisco.peer.command import (
 from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
-from LibreCisco.peer.monitor.peer_status import PeerStatus, StatusType
+from LibreCisco.peer.entity.peer_status import PeerStatus, StatusType
 from LibreCisco.peer.monitor import Monitor
 from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ThreadManager
@@ -73,7 +73,8 @@ class Peer(ThreadManager):
     def stop(self):
         self.monitor.stop()
         self.stopped.set()
-        self.sendMessage(('127.0.0.1', self.peer_info.host[1]), MessageHandler.pkt_type,
+        self.sendMessage(('127.0.0.1', self.peer_info.host[1]),
+                         MessageHandler.pkt_type,
                          **{'msg': 'disconnect successful.'})
         self.server.close()
 
@@ -111,7 +112,8 @@ class Peer(ThreadManager):
                             addr, pkt._hash[:6], pkt._hash[-6:]))
                 self.sendMessage(pkt._from, pkt._type,
                                  **{'reject_reason': 'Unmatching peer hash.'})
-            elif in_net is True or pkt._type in [JoinHandler.pkt_type, CheckJoinHandler.pkt_type]:
+            elif in_net is True or pkt._type in \
+                    [JoinHandler.pkt_type, CheckJoinHandler.pkt_type]:
                 handler.onRecv(src=addr, pkt=pkt)
                 self.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
             else:
@@ -155,7 +157,6 @@ class Peer(ThreadManager):
     def addConnectlist(self, peer_info):
         if peer_info not in self.connectlist:
             self.connectlist.append(peer_info)
-            self.monitor.addMonitorlist(PeerStatus(peer_info))
 
     def removeConnectlist(self, peer_info):
         try:
