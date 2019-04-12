@@ -1,11 +1,11 @@
 import traceback
+
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils import printText
 from LibreCisco.peer.monitor.command import (
     HelpCmd, PauseCmd, PeriodCmd, ListCmd, ResetCmd, VerboseCmd, ManualCmd
 )
 from LibreCisco.peer.monitor.communication import CheckHandler
-from LibreCisco.peer.entity.peer_status import PeerStatus
 
 
 class Monitor(ThreadManager):

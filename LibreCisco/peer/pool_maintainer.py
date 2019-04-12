@@ -43,10 +43,15 @@ class PoolMaintainer(ThreadManager):
         records = self.forward('global.' + self._domain)
         for each in records:
             name, role, fqdn, addr = self.fqdnInfo(each)
+            # TODO: Seeking better solution at determine whether fqdnInfo() is 
+            #       valid or not, Currently each call will produce N+1 querys 
+            #       to DNS.
             priority, weight, port, srv_fqdn = tuple(self.srv(fqdn))
             if name is not None and srv_fqdn is not None:
                 peer_info = PeerInfo(name=name, role=role,
                                      host=(addr, int(port)))
+                # TODO: sevicePeerPool should be a duplicate contents of 
+                #       PeerInfo insides globalPeerPool.
                 if role == self._role and \
                    peer_info not in self._servicePeerPool:
                     self._servicePeerPool.append(peer_info)

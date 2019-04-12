@@ -10,7 +10,6 @@ from LibreCisco.peer.command import (
 from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, MessageHandler
 )
-from LibreCisco.peer.entity.peer_status import PeerStatus, StatusType
 from LibreCisco.peer.monitor import Monitor
 from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ThreadManager
