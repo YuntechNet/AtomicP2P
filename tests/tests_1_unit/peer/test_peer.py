@@ -18,8 +18,8 @@ def test_selectHandler(default_peer):
     assert default_peer.selectHandler('this must be none') is None
 
 
-def test_sendMessage(default_peer):
-    default_peer.sendMessage(None, 'None')
+def test_handler_unicast_packet(default_peer):
+    default_peer.handler_unicast_packet(('1.2.3.4', 1234), 'None')
 
 
 def test_addConnectlist(default_peer, peer_info):
@@ -31,11 +31,6 @@ def test_addConnectlist(default_peer, peer_info):
 def test_getConnectByHost(default_peer, peer_info):
     assert default_peer.getConnectByHost(peer_info.host) == peer_info
     assert default_peer.getConnectByHost('fakehost:1111') is None
-
-
-def test_getConnectByName(default_peer, peer_info):
-    assert default_peer.getConnectByName('this must be none') is None
-    assert default_peer.getConnectByName(peer_info.name) == peer_info
 
 
 def test_removeConnectlist(default_peer, peer_info):

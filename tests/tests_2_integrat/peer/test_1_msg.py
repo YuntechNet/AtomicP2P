@@ -3,7 +3,7 @@ from LibreCisco.peer.communication.net import JoinHandler
 
 
 def test_send(core1, switch1):
-    switch1.sendMessage(('127.0.0.1', core1.peer_info.host[1]), JoinHandler.pkt_type)
+    switch1.onProcess(['join', '127.0.0.1:{}'.format(core1.peer_info.host[1])])
     time.sleep(3)
     switch1.onProcess(['send', '127.0.0.1:{}'.format(core1.peer_info.host[1]),
                        '123'])
@@ -12,8 +12,8 @@ def test_send(core1, switch1):
 
 
 def test_broadcast(core1, switch1, switch2):
-    switch1.sendMessage(('127.0.0.1', core1.peer_info.host[1]), JoinHandler.pkt_type)
-    switch2.sendMessage(('127.0.0.1', core1.peer_info.host[1]), JoinHandler.pkt_type)
+    switch1.onProcess(['join', '127.0.0.1:{}'.format(core1.peer_info.host[1])])
+    switch2.onProcess(['join', '127.0.0.1:{}'.format(core1.peer_info.host[1])])
     time.sleep(3)
 
     core1.onProcess(['send', 'broadcast:sw', 'ttt'])

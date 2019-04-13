@@ -39,7 +39,7 @@ class Handler(object):
 
     def on_send_reject_pkt(self, target, reject_data, **kwargs):
         packet = Packet(dst=target, src=self.peer.peer_info.host, _hash=None,
-                         _type=self.pkt_type, _data={})
+                        _type=self.pkt_type, _data={})
         packet.set_reject(reject_data=reject_data)
         return packet
 

@@ -110,29 +110,32 @@ class Peer(ThreadManager):
         else:
             return None
 
-    # TODO: Currently this is cover the missing part of PeerTCPLongConn.
-    #       This is a very inappropriate usage to cover it.
-    #       Still seeking better way to cover broascast and various invoke.
-    #                       - 2019/04/13
-    def sendMessage(self, host, sendType, **kwargs):
-        if self.selectHandler(sendType) is None:
-            printText('No such type')
-            return
-        if host[0] == 'broadcast':
-            for each in self.connectlist:
-                if each.role == host[1] or host[1] == 'all':
-                    each.conn.sendMessage(host=each.host, pkt_type=sendType,
-                                          **kwargs)
+    def handler_unicast_packet(self, host, pkt_type, **kwargs):
+        assert host_valid(host) is True
+        handler = self.selectHandler(_type=pkt_type)
+        if handler is None:
+            printText('Unknow handler pkt_type')
         elif self.containsInNet(host=host):
+            pkt = handler.on_send(target=host, **kwargs)
             peer_info = self.getConnectByHost(host=host)
-            peer_info.conn.sendMessage(host=host, pkt_type=sendType, **kwargs)
+            peer_info.conn.send_packet(pkt=pkt)
         else:
-            tcpLongConn = PeerTCPLongConn(peer=self,
-                                          host=(host[0], int(host[1])),
-                                          conn=None, cert_pem=self.cert[0])
-            tcpLongConn.start()
-            tcpLongConn.sendMessage(host=host, pkt_type=sendType, **kwargs)
-            return tcpLongConn
+            printText('Host not in current net.')
+
+    def handler_broadcast_packet(self, host, pkt_type, **kwargs):
+        handler = self.selectHandler(_type=pkt_type)
+        if handler is None:
+            printText('Unknow handler pkt_type')
+        else:
+            for each in self.connectlist:
+                if host[1] == 'all' or host[1] == each.role:
+                    pkt = handler.on_send(target=each.host, **kwargs)
+                    each.conn.send_packet(pkt=pkt)
+
+    def new_tcp_long_conn(self, host):
+        assert host_valid(host) is True
+        return PeerTCPLongConn(peer=self, host=host, conn=None,
+                               cert_pem=self.cert[0])
 
     def containsInNet(self, host):
         assert host_valid(host) is True
@@ -141,22 +144,9 @@ class Peer(ThreadManager):
                 return True
         return False
 
-    # list
-    def containsInConnectlist(self, host):
-        for each in self.connectlist:
-            if each.host[0] == host:
-                return True
-        return False
-
     def getConnectByHost(self, host):
         for each in self.connectlist:
             if each.host == host:
-                return each
-        return None
-
-    def getConnectByName(self, name):
-        for each in self.connectlist:
-            if each.name == name:
                 return each
         return None
 

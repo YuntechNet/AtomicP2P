@@ -51,7 +51,7 @@ class Packet(object):
 
     @property
     def dst(self):
-        return self.__dst    
+        return self.__dst
 
     @property
     def src(self):

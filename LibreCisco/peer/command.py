@@ -2,6 +2,7 @@ from time import sleep
 
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
+from LibreCisco.peer.entity.peer_info import PeerInfo
 from LibreCisco.peer.communication.net import JoinHandler, DisconnectHandler
 from LibreCisco.peer.communication.msg import MessageHandler
 
@@ -46,7 +47,13 @@ class JoinCmd(Command):
 
     def onProcess(self, msg_arr):
         addr = msg_arr[0].split(':')
-        self.peer.sendMessage((addr[0], addr[1]), JoinHandler.pkt_type)
+        addr[1] = int(addr[1])
+        handler = self.peer.selectHandler(_type=JoinHandler.pkt_type)
+        pkt = handler.on_send(target=(addr[0], addr[1]))
+
+        tcpLongConn = self.peer.new_tcp_long_conn(host=(addr[0], addr[1]))
+        tcpLongConn.start()
+        tcpLongConn.send_packet(pkt=pkt)
 
 
 class SendCmd(Command):
@@ -66,10 +73,13 @@ class SendCmd(Command):
         mes = {'msg': msg_arr}
         try:
             addr[1] = int(addr[1])
+            self.peer.handler_unicast_packet(
+                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type,
+                **mes)
         except ValueError:
-            pass
-        self.peer.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type,
-                              **mes)
+            self.peer.handler_broadcast_packet(
+                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type,
+                **mes)
 
 
 class ListCmd(Command):

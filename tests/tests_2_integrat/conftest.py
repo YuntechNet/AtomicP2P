@@ -68,8 +68,8 @@ def net(core1, switch1, switch2):
         'sw_2': switch2
     }
 
-    nodes['sw_1'].sendMessage(('127.0.0.1', 8000), JoinHandler.pkt_type)
-    nodes['sw_2'].sendMessage(('127.0.0.1', 8000), JoinHandler.pkt_type)
+    nodes['sw_1'].handler_unicast_packet(('127.0.0.1', 8000), JoinHandler.pkt_type)
+    nodes['sw_2'].handler_unicast_packet(('127.0.0.1', 8000), JoinHandler.pkt_type)
 
     time.sleep(8)
     return nodes

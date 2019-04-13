@@ -5,8 +5,7 @@ from time import sleep
 
 from LibreCisco.peer.entity.peer_status import StatusType
 from LibreCisco.peer.communication import (
-    JoinHandler, CheckJoinHandler, NewMemberHandler, AckNewMemberHandler,
-    DisconnectHandler
+    JoinHandler, CheckJoinHandler, AckNewMemberHandler, DisconnectHandler
 )
 from LibreCisco.utils import printText, host_valid
 from LibreCisco.utils.communication import Packet, Handler

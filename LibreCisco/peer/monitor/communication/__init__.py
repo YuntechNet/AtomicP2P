@@ -16,7 +16,7 @@ class CheckHandler(Handler):
     def on_send_pkt(self, target):
         data = {'send_ts': time.time()}
         return Packet(dst=target, src=self.peer.peer_info.host,
-                          _hash=self.peer._hash, _type=self.pkt_type, _data=data)
+                      _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
     def on_recv_pkt(self, src, pkt, conn):
         data = pkt.data

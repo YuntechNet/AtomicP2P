@@ -1,7 +1,8 @@
-from LibreCisco.utils import printText
-from LibreCisco.utils.communication import Packet, Handler
-from LibreCisco.peer.entity.peer_info import PeerInfo
 from time import sleep
+
+from LibreCisco.utils import printText
+from LibreCisco.peer.entity.peer_info import PeerInfo
+from LibreCisco.utils.communication import Packet, Handler
 
 
 class JoinHandler(Handler):
@@ -95,10 +96,15 @@ class NewMemberHandler(Handler):
         addr = data['addr']
         listen_port = int(data['listen_port'])
         role = data['role']
-        conn = self.peer.sendMessage(
-                (addr, listen_port), AckNewMemberHandler.pkt_type)
+
+        handler = self.peer.selectHandler(_type=AckNewMemberHandler.pkt_type)
+        pkt = handler.on_send(target=(addr, listen_port))
+        tcpLongConn = self.peer.new_tcp_long_conn(host=(addr, listen_port))
+        tcpLongConn.start()
+        tcpLongConn.send_packet(pkt=pkt)
+
         peer_info = PeerInfo(name=name, role=role, host=(addr, listen_port),
-                             conn=conn)
+                             conn=tcpLongConn)
         printText('New peer join net: {}'.format(peer_info))
         self.peer.addConnectlist(peer_info)
 

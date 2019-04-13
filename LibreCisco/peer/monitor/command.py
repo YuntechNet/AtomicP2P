@@ -147,6 +147,12 @@ class ManualCmd(Command):
 
     def onProcess(self, msg_arr):
         host = msg_arr[0].split(':')
-        self.peer.sendMessage((host[0], host[1]), 'monitor_check')
+        try:
+            host[1] = int(host[1])
+            self.peer.handler_unicat_packet(
+                host=(host[0], host[1]), pkt_type='monitor_check')
+        except ValueError:
+            self.peer.handler_broadcast_packet(
+                host=(host[0], host[1]), pkt_type='monitor_check')
         if self.monitor.verbose:
             printText('Sended a monitor check to: {}'.format(host))
