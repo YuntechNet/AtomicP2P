@@ -1,64 +1,7 @@
 import json
+
 from LibreCisco.utils import printText
-
-
-class Message(object):
-
-    def __init__(self, _to, _from, _hash, _type, _data):
-        self._to = _to
-        self._from = _from
-        self._hash = _hash
-        self._type = _type
-        self._data = _data
-
-    def __str__(self):
-        return 'Message<Type={}, To={}>'.format(self._type, self._to)
-
-    def copy(self):
-        return Message.recv(data=self.toDict())
-
-    def set_reject(self, reject, maintain_data=False):
-        if maintain_data:
-            self._data['reject'] = reject
-        else:
-            self._data = {
-                'reject': reject
-            }
-
-    def is_reject(self):
-        return 'reject' in self._data
-
-    def is_broadcast(self):
-        return self._to[0] == 'broadcast'
-
-    def toDict(self):
-        return {
-            'to': {
-                'ip': self._to[0],
-                'port': self._to[1]
-            },
-            'from': {
-                'ip': self._from[0],
-                'port': self._from[1]
-            },
-            'hash': self._hash,
-            'type': self._type,
-            'data': self._data
-        }
-
-    @staticmethod
-    def recv(data):
-        if type(data) is not dict:
-            data = json.loads(str(data, encoding='utf-8'))
-        return Message(_to=(data['to']['ip'], data['to']['port']),
-                       _from=(data['from']['ip'], data['from']['port']),
-                       _hash=data['hash'], _type=data['type'],
-                       _data=data['data'])
-
-    @staticmethod
-    def send(data):
-        data = json.dumps(data.toDict())
-        return bytes(data, encoding='utf-8')
+from LibreCisco.utils.communication.packet import Packet
 
 
 class Handler(object):
@@ -90,8 +33,8 @@ class Handler(object):
             return self.wrap_packet(message=message, **kwargs)
 
     def onSendReject(self, target, reject_reason, **kwargs):
-        message = Message(_to=target, _from=self.peer.peer_info.host,
-                          _hash=None, _type=self.pkt_type, _data={})
+        message = Packet(dst=target, src=self.peer.peer_info.host, _hash=None,
+                         _type=self.pkt_type, _data={})
         message.set_reject(reject_reason)
         return message
 

@@ -11,9 +11,9 @@ def onSend(handler):
 
 
 def test_onSendReject(handler):
-    message = handler.onSendReject('1.2.3.4:5678', 'test reason')
+    message = handler.onSendReject(('1.2.3.4', 5678), **{'reject_reason': 'test reason'})
     assert message._data['reject'] == 'test reason'
-    assert message._to == '1.2.3.4:5678'
+    assert message._to == ('1.2.3.4', 5678)
 
 
 def test_onSendPkt(handler):
@@ -24,7 +24,7 @@ def test_onSendPkt(handler):
 def test_onRecvReject(handler, message):
     message = message.copy()
     message.set_reject('test reason')
-    handler.onRecvReject('1.2.3.4:5678', message, None)
+    handler.onRecvReject(('1.2.3.4', 5678), message, None)
 
 
 def test_onRecvPkt(handler):

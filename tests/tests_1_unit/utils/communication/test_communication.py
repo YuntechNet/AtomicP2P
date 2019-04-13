@@ -1,35 +1,32 @@
 import json
-from LibreCisco.utils.communication import Message
+from LibreCisco.utils.communication import Packet
 
 
 def test_init(message, default_peer, self_hash):
     assert message._to == ('0.0.0.0', 9000)
     assert message._type == 'a'
-    assert message._data == 'test text'
+    assert message._data == {'test': 'test text'}
 
-    assert Message(_to=('0.0.0.0', '9000'), _from=default_peer.peer_info.host,
-                   _hash=self_hash, _type=None,
-                   _data=None)._to == ('0.0.0.0', '9000')
+    assert Packet(dst=('0.0.0.0', 9000), src=default_peer.peer_info.host,
+                  _hash=self_hash, _type='str',
+                  _data={})._to == ('0.0.0.0', 9000)
 
 
 def test_str(message):
-    assert str(message) == 'Message<Type={}, To={}>'.format(
-                                                        message._type,
-                                                        message._to)
+    assert str(message) == 'Packet<DST={} SRC={} TYP={}>'.format(
+                message._to, message._from, message._type)
 
 
 def test_set_reject(message):
     assert 'reject' not in message._data
-    message.set_reject('123')
-    assert message._data == {'reject': '123'}
-    message._data = {
-        'test': 'exists'
-    }
+    assert message._data == {'test': 'test text'}
     message.set_reject('456', maintain_data=True)
     assert message._data == {
-        'test': 'exists',
+        'test': 'test text',
         'reject': '456'
     }
+    message.set_reject('123')
+    assert message._data == {'reject': '123'}
 
 
 def test_is_reject(message):
@@ -55,7 +52,7 @@ def test_toDict(message, default_peer):
 
 
 def test_send(message):
-    send_data = str(Message.send(message), encoding='utf-8')
+    send_data = str(Packet.send(message), encoding='utf-8')
     data = json.loads(send_data)
     assert data['to']['ip'] == message._to[0]
     assert data['to']['port'] == int(message._to[1])
@@ -65,7 +62,7 @@ def test_send(message):
 
 def test_recv(message):
     dict_data = message.send(message)
-    data = Message.recv(dict_data)
+    data = Packet.recv(dict_data)
     assert data._to == ('0.0.0.0', 9000)
     assert data._type == 'a'
-    assert data._data == 'test text'
+    assert data._data == {'test' :'test text'}

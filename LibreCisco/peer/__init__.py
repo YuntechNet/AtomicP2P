@@ -13,10 +13,10 @@ from LibreCisco.peer.communication import (
     DisconnectHandler, MessageHandler
 )
 from LibreCisco.peer.monitor import Monitor
-from LibreCisco.utils import printText
+from LibreCisco.utils import printText, host_valid
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils.command import Command
-from LibreCisco.utils.communication import Message
+from LibreCisco.utils.communication import Packet
 
 
 class Peer(ThreadManager):
@@ -118,14 +118,14 @@ class Peer(ThreadManager):
         if self.selectHandler(sendType) is None:
             printText('No such type')
             return
-        if self.containsInConnectlist(host=host):
-            peer_info = self.getConnectByHost(host=host)
-            peer_info.conn.sendMessage(host=host, pkt_type=sendType, **kwargs)
-        elif host[0] == 'broadcast':
+        if host[0] == 'broadcast':
             for each in self.connectlist:
                 if each.role == host[1] or host[1] == 'all':
-                    each.conn.sendMessage(host=host, pkt_type=sendType,
+                    each.conn.sendMessage(host=each.host, pkt_type=sendType,
                                           **kwargs)
+        elif self.containsInNet(host=host):
+            peer_info = self.getConnectByHost(host=host)
+            peer_info.conn.sendMessage(host=host, pkt_type=sendType, **kwargs)
         else:
             tcpLongConn = PeerTCPLongConn(peer=self,
                                           host=(host[0], int(host[1])),
@@ -133,6 +133,13 @@ class Peer(ThreadManager):
             tcpLongConn.start()
             tcpLongConn.sendMessage(host=host, pkt_type=sendType, **kwargs)
             return tcpLongConn
+
+    def containsInNet(self, host):
+        assert host_valid(host) is True
+        for each in self.connectlist:
+            if each.host == host:
+                return True
+        return False
 
     # list
     def containsInConnectlist(self, host):

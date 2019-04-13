@@ -1,5 +1,5 @@
 from LibreCisco.utils import printText
-from LibreCisco.utils.communication import Message, Handler
+from LibreCisco.utils.communication import Packet, Handler
 from LibreCisco.peer.entity.peer_info import PeerInfo
 from time import sleep
 
@@ -20,9 +20,9 @@ class JoinHandler(Handler):
            'listen_port': int(self.peer.peer_info.host[1]),
            'role': self.peer.peer_info.role
         }
-        return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type,
-                       _data=data)
+        return Packet(dst=target, src=self.peer.peer_info.host,
+                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      _data=data)
 
     def onRecvPkt(self, src, pkt, conn):
         data = pkt._data
@@ -55,9 +55,9 @@ class CheckJoinHandler(Handler):
             'listen_port': int(self.peer.peer_info.host[1]),
             'role': self.peer.peer_info.role
         }
-        return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type,
-                       _data=data)
+        return Packet(dst=target, src=self.peer.peer_info.host,
+                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      _data=data)
 
     def onRecvPkt(self, src, pkt, conn):
         data = pkt._data
@@ -85,9 +85,9 @@ class NewMemberHandler(Handler):
             'listen_port': int(peer_info.host[1]),
             'role': peer_info.role
         }
-        return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type,
-                       _data=data)
+        return Packet(dst=target, src=self.peer.peer_info.host,
+                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      _data=data)
 
     def onRecvPkt(self, src, pkt, conn):
         data = pkt._data
@@ -117,9 +117,9 @@ class AckNewMemberHandler(Handler):
             'role': self.peer.peer_info.role,
             'listen_port': int(self.peer.peer_info.host[1])
         }
-        return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type,
-                       _data=data)
+        return Packet(dst=target, src=self.peer.peer_info.host,
+                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      _data=data)
 
     def onRecvPkt(self, src, pkt, conn):
         data = pkt._data
@@ -142,9 +142,9 @@ class DisconnectHandler(Handler):
 
     def onSendPkt(self, target):
         printText("Sending Local Stop Signal.")
-        return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type,
-                       _data={})
+        return Packet(dst=target, src=self.peer.peer_info.host,
+                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      _data={})
 
     def onRecvPkt(self, src, pkt, conn):
         conn.stop()

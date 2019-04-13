@@ -1,5 +1,5 @@
 from LibreCisco.utils import printText
-from LibreCisco.utils.communication import Message, Handler
+from LibreCisco.utils.communication import Packet, Handler
 
 
 class MessageHandler(Handler):
@@ -14,9 +14,9 @@ class MessageHandler(Handler):
         data = {
             'message': msg
         }
-        return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type,
-                       _data=data)
+        return Packet(dst=target, src=self.peer.peer_info.host,
+                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      _data=data)
 
     def onRecvPkt(self, src, pkt, conn):
         data = pkt._data

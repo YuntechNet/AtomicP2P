@@ -64,17 +64,12 @@ class SendCmd(Command):
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
         mes = {'msg': msg_arr}
-        # TODO: This block both fit broadcast and unicast situation.
-        #       Because peer.sendMessage is not enough function.
-        #       Should additionally design for broadcast.
-        #                       - 2019/04/13
         try:
             addr[1] = int(addr[1])
-            peer_info = self.peer.getConnectByHost(host=(addr[0], addr[1]))
-            peer_info.conn.sendMessage((addr[0], addr[1]),
-                                       MessageHandler.pkt_type, **mes)
         except ValueError:
-            self.peer.sendMessage((addr), MessageHandler.pkt_type, **mes)
+            pass
+        self.peer.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type,
+                              **mes)
 
 
 class ListCmd(Command):

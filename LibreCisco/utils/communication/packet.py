@@ -1,0 +1,126 @@
+from json import loads, dumps
+
+from LibreCisco.utils import host_valid
+
+# TODO: Should deprecate old functions class which care about tests compatibi-
+#       lity. Also the useless is_broadcast method which the init value of dst
+#       and src parameter would never be (broadcast, role) format.
+#                       - 2019/04/13
+class Packet(object):
+    """This class is about how actual information been parse to datas"""
+
+    @staticmethod
+    def serilize(raw_data):
+        """This is serilizer convert data from utf-8 format string to Packet"""
+        data = raw_data if type(raw_data) is dict else loads(
+                str(raw_data, encoding='utf-8'))
+        return Packet(dst=(data['to']['ip'], int(data['to']['port'])),
+                      src=(data['from']['ip'], int(data['from']['port'])),
+                      _hash=data['hash'], _type=data['type'],
+                      _data=data['data'])
+
+    @staticmethod
+    def deserilize(obj):
+        raw_data = dumps(obj.to_dict())
+        return bytes(raw_data, encoding='utf-8')
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    @staticmethod
+    def recv(data):
+        return Packet.serilize(raw_data=data)
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    @staticmethod
+    def send(data):
+        return Packet.deserilize(obj=data)
+
+    def __init__(self, dst, src, _hash, _type, _data):
+        """Init of Packet class
+        Args:
+            dst: A tuple with type (str, int) represents this packet is made by
+                  who.
+            src: A tuple with type (str, int) represents this packet is send-
+                   ing to whoe.
+            _hash: A string represent sender's security hash.
+                   None means it's a reject packet need to hide security hash.
+            _type: A string is a unique handler key to determine packet made
+                   by what handler.
+            _data: A dict object to payload on.
+        """
+        assert host_valid(dst) is True
+        assert host_valid(src) is True
+        assert type(_hash) == str or _hash is None
+        assert type(_type) == str
+        assert type(_data) == dict
+        self.__dst = dst
+        self.__src = src
+        self.__hash = _hash
+        self.__type = _type
+        self.__data = _data
+
+    @property
+    def export(self):
+        return self.__dst, self.__src, self.__hash, self.__type, self.__data
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    @property
+    def _to(self):
+        return self.__dst    
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    @property
+    def _from(self):
+        return self.__src
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    @property
+    def _hash(self):
+        return self.__hash
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    @property
+    def _type(self):
+        return self.__type
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    @property
+    def _data(self):
+        return self.__data
+
+    def __str__(self):
+        return 'Packet<DST={} SRC={} TYP={}>'.format(
+                self.__dst, self.__src, self.__type)
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    def copy(self):
+        return self.clone()
+
+    def clone(self):
+        return Packet(dst=self.__dst, src=self.__src, _hash=self.__hash,
+                      _type=self.__type, _data=self.__data)
+
+    def set_reject(self, reject_data, maintain_data=False):
+        if maintain_data is True:
+            self.__data['reject'] = reject_data
+        else:
+            self.__data = {'reject': reject_data}
+
+    def is_reject(self):
+        return 'reject' in self.__data
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    def is_broadcast(self):
+        return self.__src[0] == 'broadcast'
+
+    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
+    def toDict(self):
+        return self.to_dict()
+
+    def to_dict(self):
+        return {
+            'to': {'ip': self.__dst[0], 'port': self.__dst[1]},
+            'from': {'ip': self.__src[0], 'port': self.__src[1]},
+            'hash': self.__hash,
+            'type': self.__type,
+            'data': self.__data
+        }

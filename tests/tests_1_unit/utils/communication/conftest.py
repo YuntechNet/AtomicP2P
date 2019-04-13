@@ -1,14 +1,14 @@
 import pytest
 
-from LibreCisco.utils.communication import Message, Handler
+from LibreCisco.utils.communication import Packet, Handler
 
 
 @pytest.fixture(scope='class')
 def message(default_peer, self_hash):
-    return Message(_to=('0.0.0.0', 9000), _from=default_peer.peer_info.host,
-                   _hash=self_hash, _type='a', _data='test text')
+    return Packet(dst=('0.0.0.0', 9000), src=default_peer.peer_info.host,
+                  _hash=self_hash, _type='a', _data={'test': 'test text'})
 
 
 @pytest.fixture(scope='class')
 def handler(default_peer):
-    return Handler(None, default_peer)
+    return Handler('test_key', default_peer)

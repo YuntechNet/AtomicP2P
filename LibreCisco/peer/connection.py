@@ -1,14 +1,15 @@
 import traceback
 import socket
 import ssl
+from time import sleep
 
 from LibreCisco.peer.entity.peer_status import StatusType
 from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, AckNewMemberHandler,
     DisconnectHandler
 )
-from LibreCisco.utils import printText
-from LibreCisco.utils.communication import Message
+from LibreCisco.utils import printText, host_valid
+from LibreCisco.utils.communication import Packet, Handler
 from LibreCisco.utils.manager import ThreadManager
 
 
@@ -29,13 +30,11 @@ class PeerTCPLongConn(ThreadManager):
             host: A tuple of this tcp socket connecting to.
             conn: Actual socket which get from initializer,
                   If None, then will be init by host and wrap with cert files.
-            cert_perm: If conn is None, then this arg should not be None, in 
+            cert_perm: If conn is None, then this arg should not be None, in
                        order to new a socket with ssl wrap.
         """
         super(PeerTCPLongConn, self).__init__(loopDelay=1)
-        assert type(host) == tuple
-        assert type(host[0]) == str
-        assert type(host[1]) == int
+        assert host_valid(host) is True
 
         self.output_field = peer.output_field
         self.peer = peer
@@ -56,36 +55,50 @@ class PeerTCPLongConn(ThreadManager):
                 if data == b'':
                     continue
 
-                pkt = Message.recv(data)
-                in_net = self.peer.containsInConnectlist(self.host[0])
-                hash_match = self.peer._hash == pkt._hash
-                handler = self.peer.selectHandler(pkt._type)
+                pkt = Packet.serilize(raw_data=data)
+                dst, src, _hash, pkt_type, data = pkt.export
+                in_net, hash_match = \
+                    self.valid_packet_src(src=src, _hash=_hash)
+                handler = self.peer.selectHandler(_type=pkt_type)
 
-                if handler:
-                    if hash_match is False and pkt.is_reject() is False:
-                        printText(
-                            ('Illegal peer {} with unmatch hash {{{}...{}}}'
-                             'trying to connect to net.').format(
-                                self.host, pkt._hash[:6], pkt._hash[-6:]))
-                        self.sendMessage(pkt._from, pkt._type, **{
-                            'reject_reason': 'Unmatching peer hash.'})
-                        self.stop()
-                        break
-                    elif in_net is True or pkt._type in \
-                            [JoinHandler.pkt_type, CheckJoinHandler.pkt_type,
-                             AckNewMemberHandler, DisconnectHandler.pkt_type]:
-                        handler.onRecv(src=self.host, pkt=pkt,
-                                       **{'conn': self})
-                        self.peer.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
-                    else:
-                        self.sendMessage(
-                            host=pkt._from, pkt_type=pkt._type,
-                            **{'reject_reason': 'not in current net'})
-                else:
-                    printText('Unknown packet tpye: {}'.format(pkt._type))
+                if handler is None:     # Invalid pkt_type
+                    printText('Unknown packet type: {}'.format(pkt._type))
+                    sleep(3)
+                    self.stop()
+                    break
+                elif hash_match is False and pkt.is_reject() is False:
+                    # Invalid hash -> Dangerous peer's pkt.
+                    printText('Illegal peer {} with unmatch hash {{{}...{}}}'
+                              ' try to connect to net.'.format(
+                                    self.host, _hash[:6], _hash[-6:]
+                                ))
+                    self.sendMessage(host=src, pkt_type=pkt_type, **{
+                        'reject_reason': 'Unmatching peer hash.'})
+                    sleep(3)
+                    self.stop()
+                    break
+                elif in_net is True or type(handler) in [
+                        JoinHandler, AckNewMemberHandler, CheckJoinHandler,
+                        DisconnectHandler]:
+                    # In_net or A join / check_join pkt send.
+                    # The exception pkt will be process whether reject or not.
+                    handler.onRecv(src=self.host, pkt=pkt, conn=self)
+                    self.peer.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
+                else:  # Not in net and not exception pkt
+                    self.sendMessage(host=src, pkt_type=pkt_type, **{
+                        'reject_reason': 'Not in current net'})
+                    sleep(3)
+                    self.stop()
+                    break
+
             except Exception as e:
                 print(traceback.format_exc())
         self.conn.close()
+
+    def valid_packet_src(self, src, _hash):
+        in_net = self.peer.containsInNet(host=src)
+        hash_match = self.peer._hash == _hash
+        return in_net, hash_match
 
     def sendMessage(self, host, pkt_type, **kwargs):
         handler = self.peer.selectHandler(pkt_type)
@@ -93,7 +106,7 @@ class PeerTCPLongConn(ThreadManager):
             messages = handler.onSend(target=host, **kwargs)
             for each in messages:
                 try:
-                    self.conn.send(Message.send(each))
+                    self.conn.send(Packet.send(each))
                 except Exception:
                     if self.peer.containsInConnectlist(self.host[0]):
                         status, peer_info = \
