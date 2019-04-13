@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  fake_dns:
+    container_name: "Fake_DNS"
+    image: sameersbn/bind:latest
+    volumes:
+      - "../data/bind:/data/bind"
+    ports:
+      - "53:53/udp"
+    
+  test_ubuntu:
+    container_name: "Test_Ubuntu"
+    build:
+      context: .
+      dockerfile: test_ubuntu.Dockerfile
+    ports:
+      - "127.0.0.1:7022:22"
+      - "127.0.0.1:7023:23"

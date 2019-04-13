@@ -21,7 +21,7 @@ install:
   - pip install -r requirements-dev.txt
 
 script:
-  - docker-compose -f docker-compose.yml up -d
+  - docker-compose -f ./docker-compose/docker-compose.yml up -d
   - travis_retry python -m pytest --ssh-test-host=${SSH_TEST_HOST} --ssh-account=${SSH_ACCOUNT} --ssh-passwd=${SSH_PASSWD} --telnet-test-host=${TELNET_TEST_HOST} --telnet-account=${TELNET_ACCOUNT} --telnet-passwd=${TELNET_PASSWD} -s --cov=./ --cov-report term-missing --cov-config=.coveragerc  ./tests/tests_1_unit/ -v
   - travis_retry bash <(curl -s https://codecov.io/bash) -cF unittests
   - travis_retry python -m pytest --ssh-test-host=${SSH_TEST_HOST} --ssh-account=${SSH_ACCOUNT} --ssh-passwd=${SSH_PASSWD} --telnet-test-host=${TELNET_TEST_HOST} --telnet-account=${TELNET_ACCOUNT} --telnet-passwd=${TELNET_PASSWD} -s --cov=./ --cov-report term-missing --cov-config=.coveragerc  ./tests/tests_2_integrat/ -v
