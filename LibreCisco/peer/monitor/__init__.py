@@ -55,9 +55,9 @@ class Monitor(ThreadManager):
             return self.commands[msg_key].onProcess(msg_arr)
         return ''
 
-    def onRecvPkt(self, addr, pkt):
+    def on_recv_pkt(self, addr, pkt, conn):
         if not pkt.is_reject():
-            status, peer_info = self.getStatusByHost(host=pkt._from)
+            status, peer_info = self.getStatusByHost(host=pkt.src)
             if peer_info is not None:
                 status.update()
 

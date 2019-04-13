@@ -5,33 +5,23 @@ def test_init(handler, default_peer):
     assert handler.peer == default_peer
 
 
-def onSend(handler):
+def test_on_send_reject_pkt(handler):
+    packet = handler.on_send_reject_pkt(('1.2.3.4', 5678), **{'reject_data': 'test reason'})
+    assert packet.data['reject'] == 'test reason'
+    assert packet.dst == ('1.2.3.4', 5678)
+
+
+def test_on_send_pkt(handler):
     with pytest.raises(NotImplementedError):
-        handler.onSend()
+        handler.on_send_pkt(None)
 
 
-def test_onSendReject(handler):
-    message = handler.onSendReject(('1.2.3.4', 5678), **{'reject_reason': 'test reason'})
-    assert message._data['reject'] == 'test reason'
-    assert message._to == ('1.2.3.4', 5678)
+def test_on_recv_reject_pkt(handler, packet):
+    packet = packet.clone()
+    packet.set_reject('test reason')
+    handler.on_recv_reject_pkt(('1.2.3.4', 5678), packet, None)
 
 
-def test_onSendPkt(handler):
+def test_on_recv_pkt(handler):
     with pytest.raises(NotImplementedError):
-        handler.onSendPkt(None)
-
-
-def test_onRecvReject(handler, message):
-    message = message.copy()
-    message.set_reject('test reason')
-    handler.onRecvReject(('1.2.3.4', 5678), message, None)
-
-
-def test_onRecvPkt(handler):
-    with pytest.raises(NotImplementedError):
-        handler.onRecvPkt(None, None)
-
-
-def onRecv(handler):
-    with pytest.raises(NotImplementedError):
-        handler.onRecv()
+        handler.on_recv_pkt(None, None, None)

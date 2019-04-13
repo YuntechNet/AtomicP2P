@@ -7,10 +7,10 @@ class MessageHandler(Handler):
 
     def __init__(self, peer):
         super(MessageHandler, self).__init__(pkt_type=type(self).pkt_type,
-                                             peer=peer, can_broadcast=True)
+                                             peer=peer)
         self.output_field = peer.output_field
 
-    def onSendPkt(self, target, msg):
+    def on_send_pkt(self, target, msg):
         data = {
             'message': msg
         }
@@ -18,8 +18,8 @@ class MessageHandler(Handler):
                       _hash=self.peer._hash, _type=type(self).pkt_type,
                       _data=data)
 
-    def onRecvPkt(self, src, pkt, conn):
-        data = pkt._data
+    def on_recv_pkt(self, src, pkt, conn):
+        data = pkt.data
         message = 'Message from {}: {}'.format(str(src), data['message'])
         self.peer.last_output = message
         printText(message)

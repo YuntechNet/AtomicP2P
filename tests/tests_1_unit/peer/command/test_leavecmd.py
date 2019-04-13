@@ -5,7 +5,7 @@ def test_onProcess(default_peer, peer_info):
         default_peer.onProcess(['leavenet'])
         assert default_peer.connectlist == []
     else:
-        copyConn = default_peer.connectlist.copy()
+        copyConn = default_peer.connectlist.clone()
         default_peer.onProcess(['leavenet'])
         assert default_peer.connectlist == []
         default_peer.connectlist = copyConn

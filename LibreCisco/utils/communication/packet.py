@@ -2,15 +2,17 @@ from json import loads, dumps
 
 from LibreCisco.utils import host_valid
 
-# TODO: Should deprecate old functions class which care about tests compatibi-
-#       lity. Also the useless is_broadcast method which the init value of dst
-#       and src parameter would never be (broadcast, role) format.
-#                       - 2019/04/13
+
 class Packet(object):
     """This class is about how actual information been parse to datas"""
 
     @staticmethod
-    def serilize(raw_data):
+    def serilize(obj):
+        raw_data = dumps(obj.to_dict())
+        return bytes(raw_data, encoding='utf-8')
+
+    @staticmethod
+    def deserilize(raw_data):
         """This is serilizer convert data from utf-8 format string to Packet"""
         data = raw_data if type(raw_data) is dict else loads(
                 str(raw_data, encoding='utf-8'))
@@ -18,21 +20,6 @@ class Packet(object):
                       src=(data['from']['ip'], int(data['from']['port'])),
                       _hash=data['hash'], _type=data['type'],
                       _data=data['data'])
-
-    @staticmethod
-    def deserilize(obj):
-        raw_data = dumps(obj.to_dict())
-        return bytes(raw_data, encoding='utf-8')
-
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
-    @staticmethod
-    def recv(data):
-        return Packet.serilize(raw_data=data)
-
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
-    @staticmethod
-    def send(data):
-        return Packet.deserilize(obj=data)
 
     def __init__(self, dst, src, _hash, _type, _data):
         """Init of Packet class
@@ -62,38 +49,29 @@ class Packet(object):
     def export(self):
         return self.__dst, self.__src, self.__hash, self.__type, self.__data
 
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
     @property
-    def _to(self):
+    def dst(self):
         return self.__dst    
 
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
     @property
-    def _from(self):
+    def src(self):
         return self.__src
 
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
     @property
     def _hash(self):
         return self.__hash
 
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
     @property
     def _type(self):
         return self.__type
 
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
     @property
-    def _data(self):
+    def data(self):
         return self.__data
 
     def __str__(self):
         return 'Packet<DST={} SRC={} TYP={}>'.format(
                 self.__dst, self.__src, self.__type)
-
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
-    def copy(self):
-        return self.clone()
 
     def clone(self):
         return Packet(dst=self.__dst, src=self.__src, _hash=self.__hash,
@@ -107,14 +85,6 @@ class Packet(object):
 
     def is_reject(self):
         return 'reject' in self.__data
-
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
-    def is_broadcast(self):
-        return self.__src[0] == 'broadcast'
-
-    # Temporary support old calling. Will be deprecate soon. 2019/04/13.
-    def toDict(self):
-        return self.to_dict()
 
     def to_dict(self):
         return {

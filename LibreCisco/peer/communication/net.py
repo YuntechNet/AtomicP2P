@@ -13,7 +13,7 @@ class JoinHandler(Handler):
         self.output_field = peer.output_field
         self.last_join_host = None
 
-    def onSendPkt(self, target):
+    def on_send_pkt(self, target):
         printText('Joining net to:{}'.format(str(target)))
         data = {
            'name': self.peer.peer_info.name,
@@ -24,8 +24,8 @@ class JoinHandler(Handler):
                       _hash=self.peer._hash, _type=type(self).pkt_type,
                       _data=data)
 
-    def onRecvPkt(self, src, pkt, conn):
-        data = pkt._data
+    def on_recv_pkt(self, src, pkt, conn):
+        data = pkt.data
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
@@ -49,7 +49,7 @@ class CheckJoinHandler(Handler):
                                                peer=peer)
         self.output_field = peer.output_field
 
-    def onSendPkt(self, target):
+    def on_send_pkt(self, target):
         data = {
             'name': self.peer.peer_info.name,
             'listen_port': int(self.peer.peer_info.host[1]),
@@ -59,8 +59,8 @@ class CheckJoinHandler(Handler):
                       _hash=self.peer._hash, _type=type(self).pkt_type,
                       _data=data)
 
-    def onRecvPkt(self, src, pkt, conn):
-        data = pkt._data
+    def on_recv_pkt(self, src, pkt, conn):
+        data = pkt.data
         name = data['name']
         listen_port = int(data['listen_port'])
         role = data['role']
@@ -78,7 +78,7 @@ class NewMemberHandler(Handler):
                                                peer=peer)
         self.output_field = peer.output_field
 
-    def onSendPkt(self, target, peer_info):
+    def on_send_pkt(self, target, peer_info):
         data = {
             'name': peer_info.name,
             'addr': peer_info.host[0],
@@ -89,8 +89,8 @@ class NewMemberHandler(Handler):
                       _hash=self.peer._hash, _type=type(self).pkt_type,
                       _data=data)
 
-    def onRecvPkt(self, src, pkt, conn):
-        data = pkt._data
+    def on_recv_pkt(self, src, pkt, conn):
+        data = pkt.data
         name = data['name']
         addr = data['addr']
         listen_port = int(data['listen_port'])
@@ -111,7 +111,7 @@ class AckNewMemberHandler(Handler):
                                                   peer=peer)
         self.output_field = peer.output_field
 
-    def onSendPkt(self, target):
+    def on_send_pkt(self, target):
         data = {
             'name': self.peer.peer_info.name,
             'role': self.peer.peer_info.role,
@@ -121,8 +121,8 @@ class AckNewMemberHandler(Handler):
                       _hash=self.peer._hash, _type=type(self).pkt_type,
                       _data=data)
 
-    def onRecvPkt(self, src, pkt, conn):
-        data = pkt._data
+    def on_recv_pkt(self, src, pkt, conn):
+        data = pkt.data
         name = data['name']
         role = data['role']
         listen_port = int(data['listen_port'])
@@ -140,14 +140,14 @@ class DisconnectHandler(Handler):
                                                 peer=peer)
         self.output_field = peer.output_field
 
-    def onSendPkt(self, target):
+    def on_send_pkt(self, target):
         printText("Sending Local Stop Signal.")
         return Packet(dst=target, src=self.peer.peer_info.host,
                       _hash=self.peer._hash, _type=type(self).pkt_type,
                       _data={})
 
-    def onRecvPkt(self, src, pkt, conn):
+    def on_recv_pkt(self, src, pkt, conn):
         conn.stop()
-        peer_info = self.peer.getConnectByHost(host=pkt._from)
+        peer_info = self.peer.getConnectByHost(host=pkt.src)
         self.peer.removeConnectlist(peer_info=peer_info)
         printText("Received Stop Signal and Stopped.")

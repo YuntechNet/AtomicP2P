@@ -55,7 +55,7 @@ class PeerTCPLongConn(ThreadManager):
                 if data == b'':
                     continue
 
-                pkt = Packet.serilize(raw_data=data)
+                pkt = Packet.deserilize(raw_data=data)
                 dst, src, _hash, pkt_type, data = pkt.export
                 in_net, hash_match = \
                     self.valid_packet_src(src=src, _hash=_hash)
@@ -73,7 +73,7 @@ class PeerTCPLongConn(ThreadManager):
                                     self.host, _hash[:6], _hash[-6:]
                                 ))
                     self.sendMessage(host=src, pkt_type=pkt_type, **{
-                        'reject_reason': 'Unmatching peer hash.'})
+                        'reject_data': 'Unmatching peer hash.'})
                     sleep(3)
                     self.stop()
                     break
@@ -82,11 +82,12 @@ class PeerTCPLongConn(ThreadManager):
                         DisconnectHandler]:
                     # In_net or A join / check_join pkt send.
                     # The exception pkt will be process whether reject or not.
-                    handler.onRecv(src=self.host, pkt=pkt, conn=self)
-                    self.peer.monitor.onRecvPkt(addr=pkt._from, pkt=pkt)
+                    handler.on_recv(src=self.host, pkt=pkt, conn=self)
+                    self.peer.monitor.on_recv_pkt(addr=pkt.src, pkt=pkt,
+                                                  conn=self)
                 else:  # Not in net and not exception pkt
                     self.sendMessage(host=src, pkt_type=pkt_type, **{
-                        'reject_reason': 'Not in current net'})
+                        'reject_data': 'Not in current net'})
                     sleep(3)
                     self.stop()
                     break
@@ -103,15 +104,25 @@ class PeerTCPLongConn(ThreadManager):
     def sendMessage(self, host, pkt_type, **kwargs):
         handler = self.peer.selectHandler(pkt_type)
         if handler:
-            messages = handler.onSend(target=host, **kwargs)
-            for each in messages:
-                try:
-                    self.conn.send(Packet.send(each))
-                except Exception:
-                    if self.peer.containsInConnectlist(self.host[0]):
-                        status, peer_info = \
-                            self.peer.monitor.getStatusByHost(self.host[0])
-                        if status:
-                            status.update(status_type=StatusType.PENDING)
+            pkt = handler.on_send(target=host, **kwargs)
+            self.send_packet(pkt=pkt)
         else:
             printText('No such type.')
+
+    def send_packet(self, pkt):
+        """Sending pkt by conn.
+        Any exception when wrapping handler to packet whould cause this connec-
+        tion been close and thread maintaining loop terminate.
+
+        Args:
+            pkt: A Packet object ready to be send.
+            kwargs: Any additional arguments needs by handler object.
+        """
+        try:
+            assert type(pkt) is Packet
+            data = Packet.serilize(obj=pkt)
+            self.conn.send(data)
+        except Exception as e:
+            print(e)
+            self.stop()
+            self.conn.close()
