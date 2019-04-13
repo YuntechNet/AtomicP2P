@@ -1,12 +1,11 @@
 import traceback
-import threading
 import socket
 import ssl
 
 from LibreCisco.peer.entity.peer_status import StatusType
 from LibreCisco.peer.communication import (
     JoinHandler, CheckJoinHandler, NewMemberHandler, AckNewMemberHandler,
-    DisconnectHandler, MessageHandler
+    DisconnectHandler
 )
 from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message
@@ -14,8 +13,25 @@ from LibreCisco.utils.manager import ThreadManager
 
 
 class PeerTCPLongConn(ThreadManager):
+    """PeerTCPLongConn handles detail of a TCP long connection
+    This class responsible for every send and recv of each connection.
+    Arrtibutes:
+        output_field: A output_filed get from peer instance for output infos.
+        peer: peer instance get from initializer.
+        host: A tuple of this tcp socket connecting to.
+        conn: actual socket which get from initializer or later init by host.
+    """
 
     def __init__(self, peer, host, conn, cert_pem=None):
+        """Init of PeerTCPLongConn
+        Args:
+            peer: peer instance get from initializer.
+            host: A tuple of this tcp socket connecting to.
+            conn: Actual socket which get from initializer,
+                  If None, then will be init by host and wrap with cert files.
+            cert_perm: If conn is None, then this arg should not be None, in 
+                       order to new a socket with ssl wrap.
+        """
         super(PeerTCPLongConn, self).__init__(loopDelay=1)
         assert type(host) == tuple
         assert type(host[0]) == str
@@ -26,6 +42,7 @@ class PeerTCPLongConn(ThreadManager):
         self.host = host
 
         if conn is None:
+            assert cert_pem is not None
             unwrap_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             conn = ssl.wrap_socket(unwrap_socket, cert_reqs=ssl.CERT_REQUIRED,
                                    ca_certs=cert_pem)
