@@ -52,8 +52,8 @@ class JoinCmd(Command):
         pkt = handler.on_send(target=(addr[0], addr[1]))
 
         tcpLongConn = self.peer.new_tcp_long_conn(host=(addr[0], addr[1]))
-        tcpLongConn.start()
         tcpLongConn.send_packet(pkt=pkt)
+        self.peer.pending_conns.append(tcpLongConn)
 
 
 class SendCmd(Command):
@@ -115,7 +115,7 @@ class LeaveNetCmd(Command):
         self.output_field = peer.output_field
 
     def onProcess(self, msg_arr):
-        for each in self.peer.connectlist:
+        for each in list(self.peer.connectlist):
             # TODO: Fit unittest empty conn in PeerInfo
             #       Waiting for use mock.
             #               - 2019/04/13
@@ -123,7 +123,4 @@ class LeaveNetCmd(Command):
                 continue
             each.conn.sendMessage(host=each.host,
                                   pkt_type=DisconnectHandler.pkt_type)
-            sleep(2)
-            each.conn.stop()
-        self.peer.connectlist.clear()
         printText('You left net.')

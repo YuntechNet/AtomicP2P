@@ -6,7 +6,7 @@ from LibreCisco.peer.entity.peer_info import PeerInfo
 
 def test_two_link(core1, switch1):
     switch1.onProcess(['join', '127.0.0.1:{}'.format(core1.peer_info.host[1])])
-    time.sleep(2)
+    time.sleep(4)
     assert switch1.peer_info in core1.connectlist
     assert core1.peer_info in switch1.connectlist
 

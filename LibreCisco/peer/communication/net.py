@@ -100,7 +100,6 @@ class NewMemberHandler(Handler):
         handler = self.peer.selectHandler(_type=AckNewMemberHandler.pkt_type)
         pkt = handler.on_send(target=(addr, listen_port))
         tcpLongConn = self.peer.new_tcp_long_conn(host=(addr, listen_port))
-        tcpLongConn.start()
         tcpLongConn.send_packet(pkt=pkt)
 
         peer_info = PeerInfo(name=name, role=role, host=(addr, listen_port),
@@ -153,7 +152,9 @@ class DisconnectHandler(Handler):
                       _data={})
 
     def on_recv_pkt(self, src, pkt, conn):
-        conn.stop()
         peer_info = self.peer.getConnectByHost(host=pkt.src)
-        self.peer.removeConnectlist(peer_info=peer_info)
+        peer_info.conn.terminated = True
+        peer_info.conn.conn.close()
+        self.peer.remove_peer_info_by_socket(socket=peer_info.conn.conn)
+        self.peer.remove_fd_by_socket(socket=peer_info.conn.conn)
         printText("Received Stop Signal and Stopped.")

@@ -12,7 +12,7 @@ def test_two_dogs(core1, switch1):
     max_no_res_count = max(core1.monitor.max_no_response_count,
                            switch1.monitor.max_no_response_count)
     switch1.onProcess(['leavenet'])
-    time.sleep(max_loop_delay * (max_no_res_count + 2))
+    time.sleep(5)
     assert core1.monitor.getStatusByHost(switch1.peer_info.host)[0] is None
     assert switch1.monitor.getStatusByHost(core1.peer_info.host)[0] is None
 
@@ -40,7 +40,7 @@ def test_three_dogs(core1, switch1, switch2):
                            switch1.monitor.max_no_response_count,
                            switch2.monitor.max_no_response_count)
     switch1.onProcess(['leavenet'])
-    time.sleep(max_loop_delay * (max_no_res_count + 5))
+    time.sleep(5)
 
     assert core1.monitor.getStatusByHost(switch1.peer_info.host)[0] is None
     assert core1.monitor.getStatusByHost(switch2.peer_info.host)[0] is not None

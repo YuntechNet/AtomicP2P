@@ -10,7 +10,7 @@ from LibreCisco.peer.monitor.communication import CheckHandler
 
 class Monitor(ThreadManager):
 
-    def __init__(self, peer, loopDelay=2, verbose=False,
+    def __init__(self, peer, loopDelay=10, verbose=False,
                  max_no_response_count=5):
         self.peer = peer
         super(Monitor, self).__init__(loopDelay=loopDelay,
@@ -68,8 +68,7 @@ class Monitor(ThreadManager):
     def removeMonitorlist(self, missing):
         for each in missing:
             try:
-                each.conn.stop()
-                self.peer.removeConnectlist(each)
+                self.peer.terminating_fds.append(each.conn.conn)
                 printText('{} has been remove from peer list.'.format(each))
             except Exception as e:
                 printText(traceback.format_exc())
