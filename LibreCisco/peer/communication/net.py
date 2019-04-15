@@ -32,7 +32,7 @@ class JoinHandler(Handler):
         for each in self.peer.connectlist:
             self.peer.sendMessage((each.host[0], each.host[1]),
                                   NewMemberHandler.pkt_type, **send_data)
-        self.logger.info(('Recieve new peer add request: {}, added.'.format(
+        self.logger.info('Recieve new peer add request: {}, added.'.format(
                     str(peer_info)))
         self.peer.addConnectlist(peer_info)
         self.peer.sendMessage((src[0], listen_port), CheckJoinHandler.pkt_type)

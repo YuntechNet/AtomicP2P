@@ -1,5 +1,4 @@
 from LibreCisco.device.device import Device
-from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 
 
@@ -12,22 +11,21 @@ class HelpCmd(Command):
     def __init__(self, peer):
         super(HelpCmd, self).__init__('help')
         self.peer = peer
-        self.output_field = peer.output_field
 
     def onProcess(self, msg_arr):
         if msg_arr != [] and msg_arr[0] in self.peer.commands:
-            printText(self.peer.commands[msg_arr[0]].__doc__)
+            return self.peer.commands[msg_arr[0]].__doc__
         else:
-            printText("peer [cmd] <options>\n"
-                      " - list                                           "
-                      "list all services in list.\n"
-                      " - device add [ssh/telnet] [ip:port] [account] [passwor"
-                      "d]\n   device add snmp [ip:port] [account] [password] ["
-                      "link-level] [auth_protocol] [auth_passowrd] [priv_proto"
-                      "col] [priv_password]\n"
-                      "  add service.\n"
-                      " - help [cmd]                                     "
-                      "show help msg of sepecific command.")
+            return ("peer [cmd] <options>\n"
+                    " - list                                           "
+                    "list all services in list.\n"
+                    " - device add [ssh/telnet] [ip:port] [account] [passwor"
+                    "d]\n   device add snmp [ip:port] [account] [password] ["
+                    "link-level] [auth_protocol] [auth_passowrd] [priv_proto"
+                    "col] [priv_password]\n"
+                    "  add service.\n"
+                    " - help [cmd]                                     "
+                    "show help msg of sepecific command.")
 
 
 class ListCmd(Command):
@@ -40,14 +38,15 @@ class ListCmd(Command):
         super(ListCmd, self).__init__('list')
         self.device = device
         self.peer = device.peer
-        self.output_field = self.device.output_field
 
     def onProcess(self, msg_arr):
+        msg = ''
         hostname = msg_arr[0]
         for each in self.device.devices:
             if each.info.hostname == hostname:
                 for every in each.interfaces:
-                    printText(str(every))
+                    msg = '{}\n{}'.format(msg, str(every))
+        return msg
 
 
 class AddCmd(Command):
@@ -63,7 +62,6 @@ class AddCmd(Command):
         super(AddCmd, self).__init__('add')
         self.device = device
         self.peer = device.peer
-        self.output_field = self.device.output_field
 
     def onProcess(self, msg_arr):
         connect_type = msg_arr[0]
@@ -89,7 +87,7 @@ class AddCmd(Command):
             device = Device(connect_type=msg_arr[0], host=(host[0], host[1]),
                             account=msg_arr[2], passwd=msg_arr[3])
         self.device.addDevice(device)
-        printText(device.info.hostname + ' added.')
+        return '{} added.'.format(device.info.hostname)
 
 
 class RemoveCmd(Command):

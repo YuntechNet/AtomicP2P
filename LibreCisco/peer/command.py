@@ -14,7 +14,6 @@ class HelpCmd(Command):
         self.peer = peer
 
     def onProcess(self, msg_arr):
-
         if msg_arr != [] and msg_arr[0] in self.peer.commands:
             return self.peer.commands[msg_arr[0]].__doc__
         else:

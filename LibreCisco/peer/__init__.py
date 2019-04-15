@@ -1,7 +1,6 @@
 import ssl
 import socket
 import threading
-import logging
 
 from LibreCisco.peer.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
@@ -86,6 +85,7 @@ class Peer(ThreadManager):
     def setServer(self, cert):
         unwrap_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         unwrap_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        unwrap_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         unwrap_socket.bind(self.peer_info.host)
         unwrap_socket.listen(5)
         self.server = ssl.wrap_socket(unwrap_socket, certfile=cert[0],

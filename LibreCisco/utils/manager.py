@@ -5,8 +5,7 @@ from LibreCisco.utils.logging import getLogger
 
 class ProcManager(Process):
 
-    def __init__(self, loopDelay=1, auto_register=False,
-                 logger=None):
+    def __init__(self, loopDelay=1, auto_register=False, logger=None):
         super(ProcManager, self).__init__()
         self.logger = getLogger(__name__) if logger is None else logger
         self.loopDelay = loopDelay
@@ -40,8 +39,7 @@ class ProcManager(Process):
 
 class ThreadManager(Thread):
 
-    def __init__(self, loopDelay=1, auto_register=False,
-                 logger=None):
+    def __init__(self, loopDelay=1, auto_register=False, logger=None):
         super(ThreadManager, self).__init__()
         self.logger = getLogger(__name__) if logger is None else logger
         self.loopDelay = loopDelay
