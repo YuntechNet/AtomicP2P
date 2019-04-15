@@ -1,4 +1,3 @@
-from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message, Handler
 from LibreCisco.peer.peer_info import PeerInfo
 
@@ -9,11 +8,10 @@ class JoinHandler(Handler):
     def __init__(self, peer):
         super(JoinHandler, self).__init__(pkt_type=type(self).pkt_type,
                                           peer=peer)
-        self.output_field = peer.output_field
         self.last_join_host = None
 
     def onSendPkt(self, target):
-        printText('Joining net to:{}'.format(str(target)))
+        self.logger.info('Joining net to:{}'.format(str(target)))
         data = {
            'name': self.peer.peer_info.name,
            'listen_port': int(self.peer.peer_info.host[1]),
@@ -34,7 +32,7 @@ class JoinHandler(Handler):
         for each in self.peer.connectlist:
             self.peer.sendMessage((each.host[0], each.host[1]),
                                   NewMemberHandler.pkt_type, **send_data)
-        printText('Recieve new peer add request: {}, added.'.format(
+        self.logger.info(('Recieve new peer add request: {}, added.'.format(
                     str(peer_info)))
         self.peer.addConnectlist(peer_info)
         self.peer.sendMessage((src[0], listen_port), CheckJoinHandler.pkt_type)
@@ -46,7 +44,6 @@ class CheckJoinHandler(Handler):
     def __init__(self, peer):
         super(CheckJoinHandler, self).__init__(pkt_type=type(self).pkt_type,
                                                peer=peer)
-        self.output_field = peer.output_field
 
     def onSendPkt(self, target):
         data = {
@@ -63,7 +60,7 @@ class CheckJoinHandler(Handler):
         listen_port = int(data['listen_port'])
         role = data['role']
         peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
-        printText('Added peer:' + str(peer_info))
+        self.logger.info('Added peer:' + str(peer_info))
         self.peer.addConnectlist(peer_info)
 
 
@@ -72,7 +69,6 @@ class NewMemberHandler(Handler):
 
     def __init__(self, peer):
         super(NewMemberHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer)
-        self.output_field = peer.output_field
 
     def onSendPkt(self, target, peer_info):
         data = {
@@ -89,6 +85,6 @@ class NewMemberHandler(Handler):
         listen_port = int(data['listen_port'])
         role = data['role']
         peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
-        printText('New peer join net:' + str(peer_info))
+        self.logger.info('New peer join net:' + str(peer_info))
         self.peer.addConnectlist(peer_info)
         self.peer.sendMessage((src[0], listen_port), CheckJoinHandler.pkt_type)

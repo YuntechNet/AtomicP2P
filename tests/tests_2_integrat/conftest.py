@@ -3,6 +3,7 @@ from os import getcwd
 from os.path import join
 import time
 import pytest
+
 from LibreCisco.peer import Peer
 from LibreCisco.peer.communication.net import JoinHandler
 from LibreCisco.utils.security import self_hash as sh, create_self_signed_cert

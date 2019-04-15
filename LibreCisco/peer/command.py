@@ -1,4 +1,3 @@
-from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 from LibreCisco.peer.communication.net import JoinHandler
 from LibreCisco.peer.communication.msg import MessageHandler
@@ -13,23 +12,23 @@ class HelpCmd(Command):
     def __init__(self, peer):
         super(HelpCmd, self).__init__('help')
         self.peer = peer
-        self.output_field = peer.output_field
 
     def onProcess(self, msg_arr):
+
         if msg_arr != [] and msg_arr[0] in self.peer.commands:
-            printText(self.peer.commands[msg_arr[0]].__doc__)
+            return self.peer.commands[msg_arr[0]].__doc__
         else:
-            printText("peer [cmd] <options>\n"
-                      " - join [ip:port]                                 "
-                      "send a join net request to a exists net peer.\n"
-                      " - send [ip:port/broadcast:role] [msg]            "
-                      "send a msg to host.\n"
-                      " - list                                           "
-                      "list all peer's info in know peer list.\n"
-                      " - leavenet                                       "
-                      "leave current net.\n"
-                      " - help [cmd]                                     "
-                      "show help msg of sepecific command.")
+            return ("peer [cmd] <options>\n"
+                    " - join [ip:port]                                 "
+                    "send a join net request to a exists net peer.\n"
+                    " - send [ip:port/broadcast:role] [msg]            "
+                    "send a msg to host.\n"
+                    " - list                                           "
+                    "list all peer's info in know peer list.\n"
+                    " - leavenet                                       "
+                    "leave current net.\n"
+                    " - help [cmd]                                     "
+                    "show help msg of sepecific command.")
 
 
 class JoinCmd(Command):
@@ -45,6 +44,7 @@ class JoinCmd(Command):
     def onProcess(self, msg_arr):
         addr = msg_arr[0].split(':')
         self.peer.sendMessage((addr[0], addr[1]), JoinHandler.pkt_type)
+        return 'Joinning...'
 
 
 class SendCmd(Command):
@@ -74,16 +74,16 @@ class ListCmd(Command):
     def __init__(self, peer):
         super(ListCmd, self).__init__('list')
         self.peer = peer
-        self.output_field = peer.output_field
 
     def onProcess(self, msg_arr):
         if len(self.peer.connectlist) == 0:
-            printText('There is no peers in current net.')
+            return 'There is no peers in current net.'
         else:
-            printText('There is the connection list of peers in current net:')
+            output_text = 'Current peers info:'
             for each in self.peer.connectlist:
-                printText(' - ' + str(each))
-            printText('[---End of list---]')
+                output_text += (' - ' + str(each) + '\n')
+            output_text += '[---End of list---]'
+            return output_text
 
 
 class LeaveNetCmd(Command):
@@ -95,10 +95,9 @@ class LeaveNetCmd(Command):
     def __init__(self, peer):
         super(LeaveNetCmd, self).__init__('leavenet')
         self.peer = peer
-        self.output_field = peer.output_field
 
     def onProcess(self, msg_arr):
         # self.peer.sendMessage(('broadcast', 'all'), 'leavenet')
         self.peer.connectlist.clear()
         self.peer.monitor.monitorlist.clear()
-        printText('You left net.')
+        return 'You left net.'

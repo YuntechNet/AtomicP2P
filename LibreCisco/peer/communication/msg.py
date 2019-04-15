@@ -1,4 +1,3 @@
-from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message, Handler
 
 
@@ -8,7 +7,6 @@ class MessageHandler(Handler):
     def __init__(self, peer):
         super(MessageHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer,
                                              can_broadcast=True)
-        self.output_field = peer.output_field
 
     def onSendPkt(self, target, msg):
         data = {
@@ -21,4 +19,4 @@ class MessageHandler(Handler):
         data = pkt._data
         message = 'Message from {}: {}'.format(str(src), data['message'])
         self.peer.last_output = message
-        printText(message)
+        self.logger.info(message)

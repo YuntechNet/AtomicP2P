@@ -1,6 +1,5 @@
 import time
 from LibreCisco.peer.monitor.peer_status import StatusType
-from LibreCisco.utils import printText
 from LibreCisco.utils.communication import Message, Handler
 
 
@@ -11,7 +10,6 @@ class CheckHandler(Handler):
                                            peer=monitor.peer,
                                            can_broadcast=True)
         self.monitor = monitor
-        self.output_field = self.peer.output_field
 
     def onSendPkt(self, target):
         data = {'send_ts': time.time()}
@@ -23,7 +21,7 @@ class CheckHandler(Handler):
         message = 'WatchDog check from {}: send ts {}'.format(pkt._from,
                                                               data['send_ts'])
         if self.monitor.verbose:
-            printText(message)
+            self.logger.warning(message)
 
     def onRecvReject(self, src, pkt):
         if self.monitor.verbose:

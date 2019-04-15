@@ -1,6 +1,7 @@
 import ssl
 import socket
 import threading
+import logging
 
 from LibreCisco.peer.peer_info import PeerInfo
 from LibreCisco.peer.connection import PeerConnection
@@ -12,22 +13,21 @@ from LibreCisco.peer.communication import (
 )
 from LibreCisco.peer.monitor.peer_status import PeerStatus, StatusType
 from LibreCisco.peer.monitor import Monitor
-from LibreCisco.utils import printText
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils.command import Command
 from LibreCisco.utils.communication import Message
+from LibreCisco.utils.logging import getLogger
 
 
 class Peer(ThreadManager):
 
-    def __init__(self, host, name, role, cert, _hash, loopDelay=1,
-                 output_field=None):
-        super(Peer, self).__init__(loopDelay=loopDelay,
-                                   output_field=output_field,
-                                   auto_register=True)
+    def __init__(self, host, name, role, cert, _hash, loopDelay=1):
+        super(Peer, self).__init__(loopDelay=loopDelay, auto_register=True,
+                                   logger=getLogger(__name__))
         self.peer_info = PeerInfo(name=name, role=role, host=host)
         self._hash = _hash
-        printText('Program hash: {{{}...{}}}'.format(_hash[:6], _hash[-6:]))
+        self.logger.info('Program hash: {{{}...{}}}'.format(
+                                                        _hash[:6], _hash[-6:]))
         self.cert = cert
         self.setServer(cert)
         self.connectlist = []
@@ -53,15 +53,20 @@ class Peer(ThreadManager):
         }
 
     def onProcess(self, msg_arr, **kwargs):
-        msg_key = msg_arr[0].lower()
-        msg_arr = msg_arr[1:]
-        if msg_key in self.commands:
-            return self.commands[msg_key].onProcess(msg_arr)
-        return ''
+        try:
+            msg_key = msg_arr[0].lower()
+            msg_arr = msg_arr[1:]
+            if msg_key in self.commands:
+                return self.commands[msg_key]._on_process(msg_arr)
+            return self.commands['help']._on_process(msg_arr)
+        except Exception as e:
+            return self.commands['help']._on_process(msg_arr)
 
     def start(self):
         super(Peer, self).start()
-        self.monitor.start()
+        if self.monitor.is_start() is False:
+            self.monitor.start()
+        self.logger.info('Peer started.')
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
@@ -85,10 +90,10 @@ class Peer(ThreadManager):
         unwrap_socket.listen(5)
         self.server = ssl.wrap_socket(unwrap_socket, certfile=cert[0],
                                       keyfile=cert[1], server_side=True)
-        printText('Peer prepared')
-        printText('This peer is running with certificate at path {}'.format(
-                    cert[0]))
-        printText('Please make sure other peers have same certicate.')
+        self.logger.info('Peer prepared')
+        self.logger.info(('This peer is running with certificate at path'
+                          ' {}').format(cert[0]))
+        self.logger.info('Please make sure other peers have same certicate.')
 
     def selectHandler(self, _type):
         if _type in self.handler:
@@ -106,8 +111,9 @@ class Peer(ThreadManager):
 
         if handler:
             if hash_match is False and pkt.is_reject() is False:
-                printText(('Illegal peer {} with unmatch hash {{{}...{}}} '
-                           'trying to connect to net.').format(
+                self.logger.info(
+                    ('Illegal peer {} with unmatch hash '
+                     '{{{}...{}}} trying to connect to net.').format(
                             addr, pkt._hash[:6], pkt._hash[-6:]))
                 self.sendMessage(pkt._from, pkt._type,
                                  **{'reject_reason': 'Unmatching peer hash.'})
@@ -118,7 +124,7 @@ class Peer(ThreadManager):
                 self.sendMessage(pkt._from, pkt._type,
                                  **{'reject_reason': 'not in current net'})
         else:
-            printText('Unknown packet tpye: {}'.format(pkt._type))
+            self.logger.info('Unknown packet tpye: {}'.format(pkt._type))
 
     # send
     def sendMessage(self, host, sendType, **kwargs):
@@ -127,11 +133,10 @@ class Peer(ThreadManager):
             messages = handler.onSend(target=host, **kwargs)
             for each in messages:
                 sender = PeerConnection(peer=self, message=each,
-                                        cert_pem=self.cert[0],
-                                        output_field=self.output_field)
+                                        cert_pem=self.cert[0])
                 sender.start()
         else:
-            printText('No such type.')
+            self.logger.info('No such type.')
 
     # list
     def containsInConnectlist(self, host):

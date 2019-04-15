@@ -8,7 +8,7 @@ def test_init(default_peer):
 
 def test_onProcess(default_peer):
     # assert default_peer.onProcess(['send']) == ''
-    assert default_peer.onProcess(['test', 'test2']) == ''
+    assert 'help' in default_peer.onProcess(['test', 'test2'])
 
 
 def test_selectHandler(default_peer):
