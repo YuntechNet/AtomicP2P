@@ -34,13 +34,10 @@ class ThreadManager(Thread):
 
     def __init__(self, loopDelay=1, output_field=None, auto_register=False):
         super(ThreadManager, self).__init__()
+        self.__auto_register = auto_register
         self.output_field = output_field
         self.loopDelay = loopDelay
         self.stopped = tEvent()
-
-        if auto_register:
-            self.registerHandler()
-            self.registerCommand()
 
     def registerHandler(self):
         raise NotImplementedError
@@ -50,6 +47,9 @@ class ThreadManager(Thread):
 
     def start(self):
         super(ThreadManager, self).start()
+        if self.__auto_register:
+            self.registerHandler()
+            self.registerCommand()
 
     def run(self):
         pass

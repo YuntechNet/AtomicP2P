@@ -25,11 +25,13 @@ class Monitor(ThreadManager):
         while not self.stopped.wait(self.loopDelay):
             if self.pause is False:
                 no_response_list = []
-                for each in self.peer.connectlist:
-                    each.conn.sendMessage(each.host, 'monitor_check')
-                    if each.status.no_response_count >= \
+                handler = self.handler['monitor_check']
+                for (host, peer_info) in self.peer.peer_pool.items():
+                    pkt = handler.on_send(target=host)
+                    self.peer.pend_packet(sock=peer_info.conn, pkt=pkt)
+                    if peer_info.status.no_response_count >= \
                             self.max_no_response_count:
-                        no_response_list.append(each)
+                        no_response_list.append(peer_info)
                 self.removeMonitorlist(no_response_list)
 
     def registerHandler(self):
@@ -62,13 +64,16 @@ class Monitor(ThreadManager):
                 status.update()
 
     def getStatusByHost(self, host):
-        peer_info = self.peer.getConnectByHost(host=host)
-        return (peer_info.status if peer_info else None, peer_info)
+        if host in self.peer.peer_pool:
+            peer_info = self.peer.peer_pool[host]
+            return peer_info.status, peer_info
+        else:
+            return None, None
 
     def removeMonitorlist(self, missing):
         for each in missing:
             try:
-                self.peer.terminating_fds.append(each.conn.conn)
+                self.peer.pend_socket_to_rm(each.conn)
                 printText('{} has been remove from peer list.'.format(each))
-            except Exception as e:
+            except Exception:
                 printText(traceback.format_exc())

@@ -14,7 +14,7 @@ class MessageHandler(Handler):
         data = {
             'message': msg
         }
-        return Packet(dst=target, src=self.peer.peer_info.host,
+        return Packet(dst=target, src=self.peer.server_info.host,
                       _hash=self.peer._hash, _type=type(self).pkt_type,
                       _data=data)
 

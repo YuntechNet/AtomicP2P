@@ -77,11 +77,19 @@ class Packet(object):
         return Packet(dst=self.__dst, src=self.__src, _hash=self.__hash,
                       _type=self.__type, _data=self.__data)
 
-    def set_reject(self, reject_data, maintain_data=False):
+    def redirect_to_host(self, src, dst):
+        self.__src = src
+        self.__dst = dst
+
+    def set_reject(self, reject_data, maintain_data=False,
+                   maintain_secret=False):
         if maintain_data is True:
             self.__data['reject'] = reject_data
         else:
             self.__data = {'reject': reject_data}
+
+        if maintain_secret is False:
+            self.__hash = None
 
     def is_reject(self):
         return 'reject' in self.__data

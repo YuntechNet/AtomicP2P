@@ -7,7 +7,7 @@ def test_init(packet, default_peer, self_hash):
     assert packet._type == 'a'
     assert packet.data == {'test': 'test text'}
 
-    assert Packet(dst=('0.0.0.0', 9000), src=default_peer.peer_info.host,
+    assert Packet(dst=('0.0.0.0', 9000), src=default_peer.server_info.host,
                   _hash=self_hash, _type='str',
                   _data={}).dst == ('0.0.0.0', 9000)
 
@@ -42,8 +42,8 @@ def test_to_dict(packet, default_peer):
             'port': int(packet.dst[1])
         },
         'from': {
-            'ip': default_peer.peer_info.host[0],
-            'port': int(default_peer.peer_info.host[1])
+            'ip': default_peer.server_info.host[0],
+            'port': int(default_peer.server_info.host[1])
         },
         'hash': packet._hash,
         'type': packet._type,

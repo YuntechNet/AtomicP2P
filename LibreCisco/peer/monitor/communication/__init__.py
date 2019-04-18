@@ -15,7 +15,7 @@ class CheckHandler(Handler):
 
     def on_send_pkt(self, target):
         data = {'send_ts': time.time()}
-        return Packet(dst=target, src=self.peer.peer_info.host,
+        return Packet(dst=target, src=self.peer.server_info.host,
                       _hash=self.peer._hash, _type=self.pkt_type, _data=data)
 
     def on_recv_pkt(self, src, pkt, conn):
@@ -27,7 +27,7 @@ class CheckHandler(Handler):
 
     def on_recv_reject_pkt(self, src, pkt, conn):
         if self.monitor.verbose:
-            super(CheckHandler, self).on_recv_reject_pkt(src, pkt)
+            super(CheckHandler, self).on_recv_reject_pkt(src, pkt, conn)
         status, peer_info = self.monitor.getStatusByHost(pkt.src)
         if status:
             status.update(status_type=StatusType.PENDING)

@@ -38,22 +38,23 @@ class Handler(object):
         raise NotImplementedError
 
     def on_send_reject_pkt(self, target, reject_data, **kwargs):
-        packet = Packet(dst=target, src=self.peer.peer_info.host, _hash=None,
+        packet = Packet(dst=target, src=self.peer.server_info.host, _hash=None,
                         _type=self.pkt_type, _data={})
         packet.set_reject(reject_data=reject_data)
         return packet
 
-    def on_recv(self, src, pkt, conn, **kwargs):
+    def on_recv(self, src, pkt, sock, **kwargs):
         """
         Args:
             src: A tuple of (str, int) represents source host.
             pkt: A Packet object contains all data which recieved.
+            sock: A socket object who recv this pkt.
         """
         assert host_valid(src) is True
         if pkt.is_reject():
-            self.on_recv_reject_pkt(src=src, pkt=pkt, conn=conn, **kwargs)
+            self.on_recv_reject_pkt(src=src, pkt=pkt, conn=sock, **kwargs)
         else:
-            self.on_recv_pkt(src=src, pkt=pkt, conn=conn, **kwargs)
+            self.on_recv_pkt(src=src, pkt=pkt, conn=sock, **kwargs)
 
     def on_recv_pkt(self, src, pkt, conn, **kwargs):
         raise NotImplementedError
@@ -65,4 +66,4 @@ class Handler(object):
         #       Waiting for use mock.
         #                      - 2019/04/13
         if conn is not None:
-            conn.stop()
+            self.peer.pend_socket_to_rm(sock=conn)
