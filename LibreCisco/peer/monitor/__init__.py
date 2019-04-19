@@ -34,12 +34,12 @@ class Monitor(ThreadManager):
                         no_response_list.append(peer_info)
                 self.removeMonitorlist(no_response_list)
 
-    def registerHandler(self):
+    def _register_handler(self):
         self.handler = {
             'monitor_check': CheckHandler(self)
         }
 
-    def registerCommand(self):
+    def _register_command(self):
         self.commands = {
             'help': HelpCmd(self),
             'pause': PauseCmd(self),

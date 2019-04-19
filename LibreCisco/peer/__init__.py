@@ -196,9 +196,6 @@ class Peer(ThreadManager):
             raise ValueError('Parameter peer_info should be tuple with '
                              '(str, int) or type PeerInfo')
 
-    def registerHandler(self):
-        return self.__register_handler()
-
     def handler_unicast_packet(self, host, pkt_type, **kwargs):
         assert host_valid(host) is True
         handler = self.select_handler(pkt_type=pkt_type)
@@ -220,9 +217,6 @@ class Peer(ThreadManager):
                 if host[1] == 'all' or host[1] == value.role:
                     pkt = handler.on_send(target=value.host, **kwargs)
                     self.pend_packet(sock=value.conn, pkt=pkt)
-
-    def registerCommand(self):
-        return self.__register_command()
 
     def onProcess(self, msg_arr, **kwargs):
         return self.__on_command(msg_arr, **kwargs)
@@ -309,7 +303,7 @@ class Peer(ThreadManager):
         return wrap_socket(unwrap_socket, certfile=cert[0], keyfile=cert[1],
                            server_side=True)
 
-    def __register_handler(self):
+    def _register_handler(self):
         installing_handlers = [
             JoinHandler(self), CheckJoinHandler(self), NewMemberHandler(self),
             MessageHandler(self), AckNewMemberHandler(self),
@@ -318,7 +312,7 @@ class Peer(ThreadManager):
         for each in installing_handlers:
             self.pkt_handlers[type(each).pkt_type] = each
 
-    def __register_command(self):
+    def _register_command(self):
         self.commands = {
             'help': HelpCmd(self),
             'join': JoinCmd(self),
