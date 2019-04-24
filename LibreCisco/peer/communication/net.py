@@ -159,7 +159,8 @@ class DisconnectHandler(Handler):
                       _data={})
 
     def on_recv_pkt(self, src, pkt, conn):
-        peer_info = self.peer.peer_pool[pkt.src]
-        self.peer.del_peer_in_net(peer_info=peer_info)
-        self.peer.pend_socket_to_rm(sock=conn)
-        printText('Received Stop Signal from {} and Stopped.'.format(pkt.src))
+        peer_info = self.peer.get_peer_info_by_host(host=pkt.src)
+        if peer_info is not None:
+            self.peer.del_peer_in_net(peer_info=peer_info)
+            self.peer.pend_socket_to_rm(sock=conn)
+            printText('Received Stop Signal from {} and Stopped.'.format(pkt.src))

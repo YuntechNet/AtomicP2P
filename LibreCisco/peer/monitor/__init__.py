@@ -59,16 +59,9 @@ class Monitor(ThreadManager):
 
     def on_recv_pkt(self, addr, pkt, conn):
         if not pkt.is_reject():
-            status, peer_info = self.getStatusByHost(host=pkt.src)
+            peer_info = self.peer.get_peer_info_by_host(host=pkt.src)
             if peer_info is not None:
-                status.update()
-
-    def getStatusByHost(self, host):
-        if host in self.peer.peer_pool:
-            peer_info = self.peer.peer_pool[host]
-            return peer_info.status, peer_info
-        else:
-            return None, None
+                peer_info.status.update()
 
     def removeMonitorlist(self, missing):
         for each in missing:

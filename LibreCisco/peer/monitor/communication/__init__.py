@@ -28,6 +28,6 @@ class CheckHandler(Handler):
     def on_recv_reject_pkt(self, src, pkt, conn):
         if self.monitor.verbose:
             super(CheckHandler, self).on_recv_reject_pkt(src, pkt, conn)
-        status, peer_info = self.monitor.getStatusByHost(pkt.src)
-        if status:
-            status.update(status_type=StatusType.PENDING)
+        peer_info = self.monitor.peer.ge_peer_info_by_host(host=pkt.src)
+        if peer_info is not None:
+            peer_info.status.update(status_type=StatusType.PENDING)

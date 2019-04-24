@@ -196,13 +196,19 @@ class Peer(ThreadManager):
             raise ValueError('Parameter peer_info should be tuple with '
                              '(str, int) or type PeerInfo')
 
+    def get_peer_info_by_host(self, host):
+        if host in self.peer_pool:
+            return self.peer_pool[host]
+        else:
+            return None
+
     def handler_unicast_packet(self, host, pkt_type, **kwargs):
         assert host_valid(host) is True
         handler = self.select_handler(pkt_type=pkt_type)
         if handler is None:
             printText('Unknow handler pkt_type')
         elif self.is_peer_in_net(info=host):
-            peer_info = self.peer_pool[host]
+            peer_info = self.get_peer_info_by_host(host=host)
             pkt = handler.on_send(target=host, **kwargs)
             self.pend_packet(sock=peer_info.conn, pkt=pkt)
         else:
