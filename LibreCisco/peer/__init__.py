@@ -161,8 +161,8 @@ class Peer(ThreadManager):
     def select_handler(self, pkt_type):
         if pkt_type in self.pkt_handlers:
             return self.pkt_handlers[pkt_type]
-        elif (pkt_type in self.monitor.handler):
-            return self.monitor.handler[pkt_type]
+        elif (pkt_type in self.monitor.pkt_handlers):
+            return self.monitor.pkt_handlers[pkt_type]
         return None
 
     def add_peer_in_net(self, peer_info):

@@ -1,4 +1,5 @@
 from LibreCisco.peer.entity.peer_status import StatusType
+from LibreCisco.peer.monitor.communication import CheckHandler
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 
@@ -150,9 +151,9 @@ class ManualCmd(Command):
         try:
             host[1] = int(host[1])
             self.peer.handler_unicat_packet(
-                host=(host[0], host[1]), pkt_type='monitor_check')
+                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
         except ValueError:
             self.peer.handler_broadcast_packet(
-                host=(host[0], host[1]), pkt_type='monitor_check')
+                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
         if self.monitor.verbose:
             printText('Sended a monitor check to: {}'.format(host))

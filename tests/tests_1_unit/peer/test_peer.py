@@ -1,4 +1,5 @@
 import pytest
+from LibreCisco.peer.monitor.communication import CheckHandler
 
 
 def test_init(default_peer):
@@ -13,7 +14,7 @@ def test_onProcess(default_peer):
 def test_select_handler(default_peer):
     for (key, value) in default_peer.pkt_handlers.items():
         assert default_peer.select_handler(key) == value
-    assert default_peer.select_handler('monitor_check') is not None
+    assert default_peer.select_handler(CheckHandler.pkt_type) is not None
     assert default_peer.select_handler('this must be none') is None
 
 

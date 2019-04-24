@@ -16,7 +16,7 @@ class Monitor(ThreadManager):
         super(Monitor, self).__init__(loopDelay=loopDelay,
                                       output_field=peer.output_field,
                                       auto_register=True)
-
+        self.pkt_handlers = {}
         self.verbose = False
         self.pause = False
         self.max_no_response_count = max_no_response_count
@@ -25,7 +25,7 @@ class Monitor(ThreadManager):
         while not self.stopped.wait(self.loopDelay):
             if self.pause is False:
                 no_response_list = []
-                handler = self.handler['monitor_check']
+                handler = self.select_handler(CheckHandler.pkt_type)
                 for (host, peer_info) in self.peer.peer_pool.items():
                     pkt = handler.on_send(target=host)
                     self.peer.pend_packet(sock=peer_info.conn, pkt=pkt)
@@ -34,21 +34,10 @@ class Monitor(ThreadManager):
                         no_response_list.append(peer_info)
                 self.removeMonitorlist(no_response_list)
 
-    def _register_handler(self):
-        self.handler = {
-            'monitor_check': CheckHandler(self)
-        }
-
-    def _register_command(self):
-        self.commands = {
-            'help': HelpCmd(self),
-            'pause': PauseCmd(self),
-            'period': PeriodCmd(self),
-            'list': ListCmd(self),
-            'reset': ResetCmd(self),
-            'verbose': VerboseCmd(self),
-            'manual': ManualCmd(self)
-        }
+    def select_handler(self, pkt_type):
+        if pkt_type in self.pkt_handlers:
+            return self.pkt_handlers[pkt_type]
+        return None
 
     def onProcess(self, msg_arr):
         msg_key = msg_arr[0].lower()
@@ -70,3 +59,21 @@ class Monitor(ThreadManager):
                 printText('{} has been remove from peer list.'.format(each))
             except Exception:
                 printText(traceback.format_exc())
+
+    def _register_handler(self):
+        installing_handlers = [
+            CheckHandler(self)
+        ]
+        for each in installing_handlers:
+            self.pkt_handlers[type(each).pkt_type] = each
+
+    def _register_command(self):
+        self.commands = {
+            'help': HelpCmd(self),
+            'pause': PauseCmd(self),
+            'period': PeriodCmd(self),
+            'list': ListCmd(self),
+            'reset': ResetCmd(self),
+            'verbose': VerboseCmd(self),
+            'manual': ManualCmd(self)
+        }

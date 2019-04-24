@@ -6,9 +6,10 @@ from LibreCisco.utils.communication import Packet, Handler
 
 
 class CheckHandler(Handler):
+    pkt_type = 'monitor-check'
 
     def __init__(self, monitor):
-        super(CheckHandler, self).__init__(pkt_type='monitor_check',
+        super(CheckHandler, self).__init__(pkt_type=type(self).pkt_type,
                                            peer=monitor.peer)
         self.monitor = monitor
         self.output_field = self.peer.output_field
