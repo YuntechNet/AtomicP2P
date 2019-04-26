@@ -13,6 +13,7 @@ class PoolMaintainer(ThreadManager):
 
     def __init__(self, ns, role, domain, loopDelay=300):
         """Init of PoolMaintainer
+
         Args:
             ns: A string or list which contains all avaiable nameservers.
             role: A string represent current peer's service type.
@@ -60,8 +61,10 @@ class PoolMaintainer(ThreadManager):
 
     def fqdnInfo(self, addr):
         """Get a address's fqdn and split it
+
         Args:
             addr: A IPv4 format string.
+        
         Returns:
             Toupe contains name, role, fqdn and original address.
             Each element would be string.

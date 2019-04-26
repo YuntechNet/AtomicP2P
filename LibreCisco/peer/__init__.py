@@ -43,6 +43,7 @@ class Peer(ThreadManager):
     def __init__(self, host, name, role, cert, _hash, loop_delay=1,
                  output_field=None):
         """Init of PeerManager
+
         Args:
             host: A tuple with (str, int) type, represents binding host.
             name: A string represents this peer's name in net.
@@ -130,8 +131,10 @@ class Peer(ThreadManager):
 
     def new_tcp_long_conn(self, dst):
         """Create a ssl-wrapped TCP socket with given destination host
+
         Args:
             dst: A tuple(str, int) object to specified socket destination.
+        
         Returns:
             A socket object which connected to destination host.
         """
@@ -147,6 +150,7 @@ class Peer(ThreadManager):
         """Pending socket into I/O list.
         Init a sending queue and put into dict for further handling of pkts.
         And the given sock will be append into I/O file descriptor list.
+
         Args:
             sock: A socket object want to be append.
         """
@@ -157,7 +161,8 @@ class Peer(ThreadManager):
     def pend_socket_to_rm(self, sock):
         """Pending socket into rm list for remove at next thread iteration.
         Given socket append into remove list and clear it's sending queue, 
-         then will be remove at next iteration of thread.
+        then will be remove at next iteration of thread.
+        
         Args:
             sock: A socket object want to remove at next iteration.
         """
@@ -189,9 +194,11 @@ class Peer(ThreadManager):
 
     def add_peer_in_net(self, peer_info):
         """Add given PeerInfo into current net's peer_pool.
+
         Args:
             peer_info: A PeerInfo object to be add.
-        raises:
+
+        Raises:
             ValueError: if arg peer_info is not a PeerInfo object.
         """
         if type(peer_info) is PeerInfo:
@@ -201,11 +208,14 @@ class Peer(ThreadManager):
 
     def del_peer_in_net(self, peer_info):
         """Delete given PeerInfo if exists in current net's peer_pool
+
         Args:
             peer_info: A PeerInfo object to be delete.
-        return:
+
+        Return:
             True is success, or False.
-        raises:
+        
+        Raises:
             ValueError: If peer_info object type is not PeerInfo.
         """
         if self.is_peer_in_net(info=peer_info) is True:
@@ -216,12 +226,15 @@ class Peer(ThreadManager):
 
     def is_peer_in_net(self, info):
         """Return if in current net pool
+
         Args:
             info: A PeerInfo object or a tuple with (str, int) type represents
                 host.
+        
         Returns:
             true if in net, or False.
-        raise:
+        
+        Raises:
             ValueError: If peer_info's type is not PeerInfo or tuple (str, int)
         """
         if type(info) is tuple:
@@ -234,10 +247,13 @@ class Peer(ThreadManager):
 
     def get_peer_info_by_host(self, host):
         """Get PeerInfo object from current net's peer_pool if exists.
+
         Args:
             host: A tuple(str, int) object represents host in net.
+        
         Returns:
             A PeerInfo object get from peer_pool if exists or None.
+        
         Raises:
             ValueError: If a given host is not tuple(str, int) object.
         """
@@ -250,11 +266,13 @@ class Peer(ThreadManager):
         """Exported function for pending unicast pkt with specific host.
         This function is for anyother instance to make a safer packet send with
         specific host currently in peer_pool.
+
         Args:
             host: A tuple(str, int) represents destination to recieve packet.
                 This host should be currently in peer_pool.
             pkt_type: A Packet's unique identity str.
             kwargs: Any addtional arguments need by Handler.
+        
         Raises:
             ValueError: If given host type is not tuple(str, int).
         """
@@ -273,6 +291,7 @@ class Peer(ThreadManager):
         """Exported function for pending broadcast pkt to specific peers.
         This function is for anyother instance to make a safer packet send with
         given role currently in peer_pool to broadcast.
+        
         Args:
             host: A tuple(str, str), first argument will not be used. Only use 
                 second argument which represents target role to recive the pkt.

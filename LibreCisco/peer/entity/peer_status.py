@@ -24,6 +24,7 @@ class PeerStatus(object):
 
     def __init__(self, status=StatusType.PENDING):
         """Init of PeerStatus
+        
         Args:
             status: A StatusType to be init, default is StatusType.PENDING.
         """
