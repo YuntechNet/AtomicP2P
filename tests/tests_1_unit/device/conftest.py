@@ -16,11 +16,10 @@ def test_device_info():
 
 
 @pytest.fixture(scope='session')
-def ssh(request):
-    config = request.config
-    host = config.getoption('--ssh-test-host').split(':')
-    account = config.getoption('--ssh-account')
-    passwd = config.getoption('--ssh-passwd')
+def ssh():
+    host = ('127.0.0.1', 7022)
+    account = 'root'
+    passwd = 'toor'
     authentication = {
         'host': host,
         'account': account,
@@ -30,11 +29,10 @@ def ssh(request):
 
 
 @pytest.fixture(scope='session')
-def telnet(request):
-    config = request.config
-    host = config.getoption('--telnet-test-host').split(':')
-    account = config.getoption('--telnet-account')
-    passwd = config.getoption('--telnet-passwd')
+def telnet():
+    host = ('127.0.0.1', 7023)
+    account = 'root'
+    passwd = 'toor'
     authentication = {
         'host': host,
         'account': account,

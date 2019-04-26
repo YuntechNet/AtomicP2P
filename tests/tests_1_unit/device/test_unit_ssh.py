@@ -1,14 +1,10 @@
 import time
 
 
-def test_init(request, ssh):
-    config = request.config
-    host = config.getoption('--ssh-test-host').split(':')
-    account = config.getoption('--ssh-account')
-    passwd = config.getoption('--ssh-passwd')
-    assert ssh.host == (host[0], int(host[1]))
-    assert ssh.username == account
-    assert ssh.password == passwd
+def test_init(ssh):
+    assert ssh.host == ('127.0.0.1', 7022)
+    assert ssh.username == 'root'
+    assert ssh.password == 'toor'
     assert ssh.timeout == 60
 
 
