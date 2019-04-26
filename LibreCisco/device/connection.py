@@ -116,12 +116,12 @@ class TelnetConnection(object):
 
     def login(self, debug_level=None):
         debug_level = debug_level if debug_level else self.debug_level
-        self.client = telnetlib.Telnet(self.host)
+        self.client = telnetlib.Telnet(host=self.host[0], port=self.host[1])
         self.client.set_debuglevel(debug_level)
         if self.username:
-            self.client.read_until(bytes('login: ', encoding='utf-8'))
+            self.client.read_until(bytes('login:', encoding='utf-8'))
             self.client.write(bytes(self.username + '\n', encoding='utf-8'))
-        self.client.read_until(bytes('Password ', encoding='utf-8'))
+        self.client.read_until(bytes('Password', encoding='utf-8'))
         self.client.write(bytes(self.password + '\n', encoding='utf-8'))
         return self
 
