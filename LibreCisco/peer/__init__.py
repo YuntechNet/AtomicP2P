@@ -96,6 +96,10 @@ class Peer(ThreadManager):
         super(Peer, self).stop()
         self.monitor.stop()
 
+    # TODO: Currently there is only one thread responsible for every fd's hand-
+    #       ling. Inside the method have few line with thread. Need benchmark 
+    #       to decide use thread or not.
+    #                                   2019/04/26
     def run(self):
         self.__in_fds.append(self.__tcp_server)
         while (self.stopped.wait(self.loopDelay) is False or
@@ -125,6 +129,12 @@ class Peer(ThreadManager):
         printText('{} stopped.'.format(self.server_info))
 
     def new_tcp_long_conn(self, dst):
+        """Create a ssl-wrapped TCP socket with given destination host
+        Args:
+            dst: A tuple(str, int) object to specified socket destination.
+        Returns:
+            A socket object which connected to destination host.
+        """
         assert host_valid(dst) is True
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
         sock = wrap_socket(unwrap_socket, cert_reqs=CERT_REQUIRED,
@@ -134,11 +144,23 @@ class Peer(ThreadManager):
         return sock
 
     def pend_socket(self, sock):
+        """Pending socket into I/O list.
+        Init a sending queue and put into dict for further handling of pkts.
+        And the given sock will be append into I/O file descriptor list.
+        Args:
+            sock: A socket object want to be append.
+        """
         self.__send_queue[sock] = Queue()
         self.__in_fds.append(sock)
         self.__out_fds.append(sock)
 
     def pend_socket_to_rm(self, sock):
+        """Pending socket into rm list for remove at next thread iteration.
+        Given socket append into remove list and clear it's sending queue, 
+         then will be remove at next iteration of thread.
+        Args:
+            sock: A socket object want to remove at next iteration.
+        """
         self.__pend_rm_fds.append(sock)
         self.__send_queue[sock].queue.clear()
 
@@ -166,13 +188,27 @@ class Peer(ThreadManager):
         return None
 
     def add_peer_in_net(self, peer_info):
+        """Add given PeerInfo into current net's peer_pool.
+        Args:
+            peer_info: A PeerInfo object to be add.
+        raises:
+            ValueError: if arg peer_info is not a PeerInfo object.
+        """
         if type(peer_info) is PeerInfo:
             self.peer_pool[peer_info.host] = peer_info
         else:
             raise ValueError('Parameter peer_info is not a PeerInfo object')
 
     def del_peer_in_net(self, peer_info):
-        if peer_info.host in self.peer_pool:
+        """Delete given PeerInfo if exists in current net's peer_pool
+        Args:
+            peer_info: A PeerInfo object to be delete.
+        return:
+            True is success, or False.
+        raises:
+            ValueError: If peer_info object type is not PeerInfo.
+        """
+        if self.is_peer_in_net(info=peer_info) is True:
             del self.peer_pool[peer_info.host]
             return True
         else:
@@ -197,12 +233,31 @@ class Peer(ThreadManager):
                              '(str, int) or type PeerInfo')
 
     def get_peer_info_by_host(self, host):
-        if host in self.peer_pool:
+        """Get PeerInfo object from current net's peer_pool if exists.
+        Args:
+            host: A tuple(str, int) object represents host in net.
+        Returns:
+            A PeerInfo object get from peer_pool if exists or None.
+        Raises:
+            ValueError: If a given host is not tuple(str, int) object.
+        """
+        if self.is_peer_in_net(info=host) is True:
             return self.peer_pool[host]
         else:
             return None
 
     def handler_unicast_packet(self, host, pkt_type, **kwargs):
+        """Exported function for pending unicast pkt with specific host.
+        This function is for anyother instance to make a safer packet send with
+        specific host currently in peer_pool.
+        Args:
+            host: A tuple(str, int) represents destination to recieve packet.
+                This host should be currently in peer_pool.
+            pkt_type: A Packet's unique identity str.
+            kwargs: Any addtional arguments need by Handler.
+        Raises:
+            ValueError: If given host type is not tuple(str, int).
+        """
         assert host_valid(host) is True
         handler = self.select_handler(pkt_type=pkt_type)
         if handler is None:
@@ -215,6 +270,15 @@ class Peer(ThreadManager):
             printText('Host not in current net.')
 
     def handler_broadcast_packet(self, host, pkt_type, **kwargs):
+        """Exported function for pending broadcast pkt to specific peers.
+        This function is for anyother instance to make a safer packet send with
+        given role currently in peer_pool to broadcast.
+        Args:
+            host: A tuple(str, str), first argument will not be used. Only use 
+                second argument which represents target role to recive the pkt.
+            pkt_type: A Packet's unique identity str.
+            kwargs: Any addtional arguments need by Handler.
+        """
         handler = self.select_handler(pkt_type=pkt_type)
         if handler is None:
             printText('Unknow handler pkt_type')
@@ -224,6 +288,7 @@ class Peer(ThreadManager):
                     pkt = handler.on_send(target=value.host, **kwargs)
                     self.pend_packet(sock=value.conn, pkt=pkt)
 
+    # Temporary support old calling. Will be deprecate soon. 2019/04/26
     def onProcess(self, msg_arr, **kwargs):
         return self.__on_command(msg_arr, **kwargs)
 

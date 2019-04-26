@@ -115,14 +115,7 @@ class LeaveNetCmd(Command):
         self.output_field = peer.output_field
 
     def onProcess(self, msg_arr):
-        handler = self.peer.select_handler(pkt_type=DisconnectHandler.pkt_type)
-        for each in list(self.peer.connectlist):
-            # TODO: Fit unittest empty conn in PeerInfo
-            #       Waiting for use mock.
-            #               - 2019/04/13
-            if each.conn is None:
-                continue
-            pkt = handler.on_send(target=each.host)
-            self.peer.pend_packet(sock=each.conn, pkt=pkt)
+        self.peer.handler_broadcast_packet(
+            host=('', 'all'), pkt_type=DisconnectHandler.pkt_type)
         self.peer.peer_pool = {}
         printText('You left net.')

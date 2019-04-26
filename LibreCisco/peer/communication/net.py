@@ -33,18 +33,16 @@ class JoinHandler(Handler):
         peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port),
                              conn=conn)
 
-        handler = self.peer.select_handler(pkt_type=NewMemberHandler.pkt_type)
-        for (key, value) in self.peer.peer_pool.items():
-            pkt = handler.on_send_pkt(target=key, **{'peer_info': peer_info})
-            self.peer.pend_packet(pkt=pkt, sock=value.conn)
+        self.peer.handler_broadcast_packet(
+            host=('', 'all'), pkt_type=NewMemberHandler.pkt_type,
+            **{'peer_info': peer_info})
         printText('Recieve new peer add request: {}, added.'.format(
                     str(peer_info)))
 
-        handler = self.peer.select_handler(pkt_type=CheckJoinHandler.pkt_type)
-        pkt = handler.on_send_pkt(target=(src[0], listen_port))
         self.peer.pend_socket(sock=conn)
-        self.peer.pend_packet(pkt=pkt, sock=conn)
         self.peer.add_peer_in_net(peer_info=peer_info)
+        self.peer.handler_unicast_packet(
+            host=(src[0], listen_port), pkt_type=CheckJoinHandler.pkt_type)
 
 
 class CheckJoinHandler(Handler):
@@ -102,17 +100,16 @@ class NewMemberHandler(Handler):
         listen_port = int(data['listen_port'])
         role = data['role']
 
-        handler = self.peer.select_handler(
-                    pkt_type=AckNewMemberHandler.pkt_type)
-        pkt = handler.on_send(target=(addr, listen_port))
         sock = self.peer.new_tcp_long_conn(dst=(addr, listen_port))
         peer_info = PeerInfo(
             name=name, role=role, host=(addr, listen_port), conn=sock)
+
         self.peer.pend_socket(sock=sock)
-        self.peer.pend_packet(sock=sock, pkt=pkt)
+        self.peer.add_peer_in_net(peer_info=peer_info)
+        self.peer.handler_unicast_packet(
+            host=(addr, listen_port), pkt_type=AckNewMemberHandler.pkt_type)
 
         printText('New peer join net: {}'.format(peer_info))
-        self.peer.add_peer_in_net(peer_info=peer_info)
 
 
 class AckNewMemberHandler(Handler):

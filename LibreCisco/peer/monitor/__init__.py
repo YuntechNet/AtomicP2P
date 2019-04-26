@@ -25,10 +25,8 @@ class Monitor(ThreadManager):
         while not self.stopped.wait(self.loopDelay):
             if self.pause is False:
                 no_response_list = []
-                handler = self.select_handler(CheckHandler.pkt_type)
                 for (host, peer_info) in self.peer.peer_pool.items():
-                    pkt = handler.on_send(target=host)
-                    self.peer.pend_packet(sock=peer_info.conn, pkt=pkt)
+                    self.peer.handler_unicast_packet(host=host, pkt_type=CheckHandler.pkt_type)
                     if peer_info.status.no_response_count >= \
                             self.max_no_response_count:
                         no_response_list.append(peer_info)
