@@ -19,14 +19,14 @@ class DeviceManager(ProcManager):
         #       Denied error in Travis build when binding to 0.0.0.0:162.
         #self.trapServer = TrapServer()
 
-    def registerHandler(self):
+    def _register_handler(self):
         pass
 #        self.peer.handlers.update({
 #            'add': JoinHandler(self.peer, self),
 #            'remove': RemoveHandler(self.peer, self)
 #        })
 
-    def registerCommand(self):
+    def _register_command(self):
         self.commands = {
             'help': HelpCmd(self),
             'add': AddCmd(self),
@@ -42,12 +42,12 @@ class DeviceManager(ProcManager):
         return ''
 
     def start(self):
+        super(DeviceManager, self).start()
         #self.trapServer.start()    # L18
-        pass
 
     def stop(self):
+        super(DeviceManager, self).stop()
         #self.trapServer.stop()     # L18
-        self.stopped.set()
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):

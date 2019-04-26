@@ -1,6 +1,9 @@
+from time import sleep
+
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
-from LibreCisco.peer.communication.net import JoinHandler
+from LibreCisco.peer.entity.peer_info import PeerInfo
+from LibreCisco.peer.communication.net import JoinHandler, DisconnectHandler
 from LibreCisco.peer.communication.msg import MessageHandler
 
 
@@ -44,7 +47,13 @@ class JoinCmd(Command):
 
     def onProcess(self, msg_arr):
         addr = msg_arr[0].split(':')
-        self.peer.sendMessage((addr[0], addr[1]), JoinHandler.pkt_type)
+        addr[1] = int(addr[1])
+        handler = self.peer.select_handler(pkt_type=JoinHandler.pkt_type)
+        pkt = handler.on_send(target=(addr[0], addr[1]))
+
+        sock = self.peer.new_tcp_long_conn(dst=(addr[0], addr[1]))
+        self.peer.pend_socket(sock=sock)
+        self.peer.pend_packet(sock=sock, pkt=pkt)
 
 
 class SendCmd(Command):
@@ -62,8 +71,15 @@ class SendCmd(Command):
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
         mes = {'msg': msg_arr}
-        self.peer.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type,
-                              **mes)
+        try:
+            addr[1] = int(addr[1])
+            self.peer.handler_unicast_packet(
+                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type,
+                **mes)
+        except ValueError:
+            self.peer.handler_broadcast_packet(
+                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type,
+                **mes)
 
 
 class ListCmd(Command):
@@ -99,7 +115,7 @@ class LeaveNetCmd(Command):
         self.output_field = peer.output_field
 
     def onProcess(self, msg_arr):
-        # self.peer.sendMessage(('broadcast', 'all'), 'leavenet')
-        self.peer.connectlist.clear()
-        self.peer.monitor.monitorlist.clear()
+        self.peer.handler_broadcast_packet(
+            host=('', 'all'), pkt_type=DisconnectHandler.pkt_type)
+        self.peer.peer_pool = {}
         printText('You left net.')

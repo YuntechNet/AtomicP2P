@@ -1,4 +1,5 @@
 from LibreCisco.peer.entity.peer_status import StatusType
+from LibreCisco.peer.monitor.communication import CheckHandler
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
 
@@ -85,12 +86,12 @@ class ListCmd(Command):
         self.output_field = self.peer.output_field
 
     def onProcess(self, msg_arr):
-        if len(self.monitor.monitorlist) == 0:
+        if len(self.peer.connectlist) == 0:
             printText('There is no peer\'s info in current list')
         else:
             printText('There is the status list of peers in current net:')
-            for each in self.monitor.monitorlist:
-                printText(' - ' + str(each))
+            for each in self.peer.connectlist:
+                printText(' - {} / {}'.format(each.status, each))
             printText('[---End of list---]')
 
 
@@ -107,8 +108,10 @@ class ResetCmd(Command):
 
     def onProcess(self, msg_arr):
         if msg_arr == []:
-            for each in self.monitor.monitorlist:
-                each.update(status_type=StatusType.PENDING)
+            for each in self.peer.connectlist:
+                each.status.update(status_type=StatusType.PENDING)
+                printText(each.status)
+            printText("Reset success")
         else:
             pass
 
@@ -145,6 +148,12 @@ class ManualCmd(Command):
 
     def onProcess(self, msg_arr):
         host = msg_arr[0].split(':')
-        self.peer.sendMessage((host[0], host[1]), 'monitor_check')
+        try:
+            host[1] = int(host[1])
+            self.peer.handler_unicat_packet(
+                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
+        except ValueError:
+            self.peer.handler_broadcast_packet(
+                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
         if self.monitor.verbose:
             printText('Sended a monitor check to: {}'.format(host))

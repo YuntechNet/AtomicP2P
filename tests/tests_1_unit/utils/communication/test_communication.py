@@ -1,71 +1,68 @@
 import json
-from LibreCisco.utils.communication import Message
+from LibreCisco.utils.communication import Packet
 
 
-def test_init(message, default_peer, self_hash):
-    assert message._to == ('0.0.0.0', 9000)
-    assert message._type == 'a'
-    assert message._data == 'test text'
+def test_init(packet, default_peer, self_hash):
+    assert packet.dst == ('0.0.0.0', 9000)
+    assert packet._type == 'a'
+    assert packet.data == {'test': 'test text'}
 
-    assert Message(_to=('0.0.0.0', '9000'), _from=default_peer.peer_info.host,
-                   _hash=self_hash, _type=None,
-                   _data=None)._to == ('0.0.0.0', '9000')
-
-
-def test_str(message):
-    assert str(message) == 'Message<Type={}, To={}>'.format(
-                                                        message._type,
-                                                        message._to)
+    assert Packet(dst=('0.0.0.0', 9000), src=default_peer.server_info.host,
+                  _hash=self_hash, _type='str',
+                  _data={}).dst == ('0.0.0.0', 9000)
 
 
-def test_set_reject(message):
-    assert 'reject' not in message._data
-    message.set_reject('123')
-    assert message._data == {'reject': '123'}
-    message._data = {
-        'test': 'exists'
-    }
-    message.set_reject('456', maintain_data=True)
-    assert message._data == {
-        'test': 'exists',
+def test_str(packet):
+    assert str(packet) == 'Packet<DST={} SRC={} TYP={}>'.format(
+                packet.dst, packet.src, packet._type)
+
+
+def test_set_reject(packet):
+    assert 'reject' not in packet.data
+    assert packet.data == {'test': 'test text'}
+    packet.set_reject('456', maintain_data=True)
+    assert packet.data == {
+        'test': 'test text',
         'reject': '456'
     }
+    packet.set_reject('123')
+    assert packet.data == {'reject': '123'}
 
 
-def test_is_reject(message):
-    assert message.is_reject() is False
-    message.set_reject('123')
-    assert message.is_reject() is True
+def test_is_reject(packet):
+    assert packet.is_reject() is False
+    packet.set_reject('123')
+    assert packet.is_reject() is True
 
 
-def test_toDict(message, default_peer):
-    assert message.toDict() == {
+def test_to_dict(packet, default_peer):
+    assert packet.to_dict() == {
         'to': {
-            'ip': message._to[0],
-            'port': int(message._to[1])
+            'ip': packet.dst[0],
+            'port': int(packet.dst[1])
         },
         'from': {
-            'ip': default_peer.peer_info.host[0],
-            'port': int(default_peer.peer_info.host[1])
+            'ip': default_peer.server_info.host[0],
+            'port': int(default_peer.server_info.host[1])
         },
-        'hash': message._hash,
-        'type': message._type,
-        'data': message._data
+        'hash': packet._hash,
+        'type': packet._type,
+        'data': packet.data
     }
 
 
-def test_send(message):
-    send_data = str(Message.send(message), encoding='utf-8')
+def test_serilize(packet):
+    send_data = str(Packet.serilize(packet), encoding='utf-8')
     data = json.loads(send_data)
-    assert data['to']['ip'] == message._to[0]
-    assert data['to']['port'] == int(message._to[1])
-    assert data['type'] == message._type
-    assert data['data'] == message._data
+    assert data['to']['ip'] == packet.dst[0]
+    assert data['to']['port'] == int(packet.dst[1])
+    assert data['type'] == packet._type
+    assert data['data'] == packet.data
 
 
-def test_recv(message):
-    dict_data = message.send(message)
-    data = Message.recv(dict_data)
-    assert data._to == ('0.0.0.0', 9000)
+def test_deserilize(packet):
+    dict_data = packet.serilize(packet)
+    data = Packet.deserilize(dict_data)
+    assert data.dst == ('0.0.0.0', 9000)
     assert data._type == 'a'
-    assert data._data == 'test text'
+    assert data.data == {'test' :'test text'}
