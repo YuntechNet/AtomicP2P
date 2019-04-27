@@ -1,3 +1,4 @@
+from typing import Tuple
 from LibreCisco.utils import printText, host_valid
 from LibreCisco.utils.communication import Packet
 
@@ -10,8 +11,9 @@ class Handler(object):
     The actual data maintain is by Packet class.
     """
 
-    def __init__(self, peer, pkt_type):
+    def __init__(self, peer: 'Peer', pkt_type: str) -> None:
         """Init of Handler class
+
         Args:
             peer: A Peer object to interact with its inner data.
             pkt_type: A unique string to represent this pkt in peer when proce-
@@ -21,34 +23,36 @@ class Handler(object):
         self.__pkt_type = pkt_type
 
     @property
-    def peer(self):
+    def peer(self) -> 'Peer':
         return self.__peer
 
     @property
-    def pkt_type(self):
+    def pkt_type(self) -> str:
         return self.__pkt_type
 
-    def on_send(self, target, **kwargs):
+    def on_send(self, target: Tuple[str, int], **kwargs) -> 'Packet':
         if 'reject_data' in locals()['kwargs']:
             return self.on_send_reject_pkt(target=target, **kwargs)
         else:
             return self.on_send_pkt(target=target, **kwargs)
 
-    def on_send_pkt(self, target, **kwargs):
+    def on_send_pkt(self, target: Tuple[str, int], **kwargs) -> 'Packet':
         raise NotImplementedError
 
-    def on_send_reject_pkt(self, target, reject_data, **kwargs):
+    def on_send_reject_pkt(self, target: Tuple[str, int],
+                           reject_data: object, **kwargs) -> 'Packet':
         packet = Packet(dst=target, src=self.peer.server_info.host, _hash=None,
                         _type=self.pkt_type, _data={})
         packet.set_reject(reject_data=reject_data)
         return packet
 
-    def on_recv(self, src, pkt, sock, **kwargs):
+    def on_recv(self, src: Tuple[str, int],
+                pkt: Packet, sock: 'SSLSocket', **kwargs) -> None:
         """
         Args:
-            src: A tuple of (str, int) represents source host.
+            src: Source host.
             pkt: A Packet object contains all data which recieved.
-            sock: A socket object who recv this pkt.
+            sock: A SSLSocket object who recv this pkt.
         """
         assert host_valid(src) is True
         if pkt.is_reject():
@@ -56,10 +60,12 @@ class Handler(object):
         else:
             self.on_recv_pkt(src=src, pkt=pkt, conn=sock, **kwargs)
 
-    def on_recv_pkt(self, src, pkt, conn, **kwargs):
+    def on_recv_pkt(self, src: Tuple[str, int], pkt: 'Packet',
+                    conn: 'SSLSocket', **kwargs) -> None:
         raise NotImplementedError
 
-    def on_recv_reject_pkt(self, src, pkt, conn, **kwargs):
+    def on_recv_reject_pkt(self, src: Tuple[str, int], pkt: 'Packet',
+                           conn: 'SSLSocket', **kwargs) -> None:
         reject = pkt.data['reject']
         printText('Rejected by {}, reason: {}'.format(pkt.src, reject))
         # TODO: Fit unittest empty conn in PeerInfo

@@ -1,3 +1,4 @@
+from typing import Dict
 import time
 from enum import Enum
 
@@ -16,17 +17,16 @@ class PeerStatus(object):
     time, no response count and etc.
 
     Attributes:
-        last_update_ts: A float stores last update timestamp.
-        no_response_count: A integer counter stores no response count since la-
-                           st check.
-        status: A StatusType represents current peer status.
+        last_update_ts (float): Last update timestamp.
+        no_response_count (int): No response count since last check.
+        status (StatusType): Current peer status.
     """
 
-    def __init__(self, status=StatusType.PENDING):
+    def __init__(self, status: 'StatusType' = StatusType.PENDING) -> None:
         """Init of PeerStatus
-        
+
         Args:
-            status: A StatusType to be init, default is StatusType.PENDING.
+            status: Peer status, default is StatusType.PENDING when init.
         """
         self.last_update_ts = time.time()
         self.no_response_count = 0
@@ -35,12 +35,12 @@ class PeerStatus(object):
     def __str__(self):
         return str(self.status)
 
-    def toDict(self):
+    def toDict(self) -> Dict:
         return {
             'send_ts': self.last_update_ts
         }
 
-    def update(self, status_type=StatusType.UPDATED):
+    def update(self, status_type: 'StatusType' = StatusType.UPDATED) -> None:
         if status_type == StatusType.PENDING:
             self.no_response_count += 1
         elif status_type == StatusType.UPDATED:

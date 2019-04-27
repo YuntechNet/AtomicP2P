@@ -1,3 +1,4 @@
+from typing import Union, Tuple, Dict, List
 from time import sleep
 from traceback import format_exc
 from queue import Queue
@@ -25,32 +26,33 @@ from LibreCisco.utils import printText, host_valid
 class Peer(ThreadManager):
     """
     Attributes:
-        server_info: A PeerInfo object represents this peer's peer info.
-        pkt_handlers: A dict with str key and Handler value, which contains all
-            handlers which this peer have ability to process.
-        peer_pool: A dict with tuple key with (str, int) type and PeerInfo type
-            , which contains all peers currently available in net.
+        server_info (PeerInfo): Peer's peer info.
+        pkt_handlers (Dict[str, Handler]): All handlers which peer have ability
+            to process.
+        peer_pool (Dict[Tuple[str, int], PeerInfo]): All peers currently avai-
+            lable in net.
     """
 
     @property
-    def connectlist(self):
+    def connectlist(self) -> List:
         return self.peer_pool.values()
 
     @property
-    def _hash(self):
+    def _hash(self) -> str:
         return self.__hash
 
-    def __init__(self, host, name, role, cert, _hash, loop_delay=1,
-                 output_field=None):
+    def __init__(self, host: Tuple[str, int], name: str, role: str,
+                 cert: Tuple[str, str], _hash: str, loop_delay: int = 1,
+                 output_field=None) -> None:
         """Init of PeerManager
 
         Args:
-            host: A tuple with (str, int) type, represents binding host.
-            name: A string represents this peer's name in net.
-            role: A string represents this peer's role in net.
-            cert: A tuple with (str, str) type, the cert file's path.
-            _hash: A str which is program self hash to send to packet.
-            loop_delay: A int controls while loop delay.
+            host: Binding host.
+            name: Peer's name in net.
+            role: Peer's role in net.
+            cert: Cert file's path.
+            _hash: Program self hash to send in packet.
+            loop_delay: While loop delay.
         """
         super(Peer, self).__init__(
             loopDelay=loop_delay, output_field=output_field,
@@ -75,11 +77,11 @@ class Peer(ThreadManager):
 
         self.monitor = Monitor(peer=self)
 
-    def start(self):
+    def start(self) -> None:
         super(Peer, self).start()
         self.monitor.start()
 
-    def stop(self):
+    def stop(self) -> None:
         for _, value in self.__send_queue.items():
             if value.empty() is False:
                 sleep(2)
@@ -98,10 +100,10 @@ class Peer(ThreadManager):
         self.monitor.stop()
 
     # TODO: Currently there is only one thread responsible for every fd's hand-
-    #       ling. Inside the method have few line with thread. Need benchmark 
+    #       ling. Inside the method have few line with thread. Need benchmark
     #       to decide use thread or not.
     #                                   2019/04/26
-    def run(self):
+    def run(self) -> None:
         self.__in_fds.append(self.__tcp_server)
         while (self.stopped.wait(self.loopDelay) is False or
                self.__send_queue != {}):
@@ -129,14 +131,15 @@ class Peer(ThreadManager):
         sleep(2)
         printText('{} stopped.'.format(self.server_info))
 
-    def new_tcp_long_conn(self, dst):
+    def new_tcp_long_conn(self, dst: Tuple[str, int]) -> 'SSLSocket':
         """Create a ssl-wrapped TCP socket with given destination host
 
         Args:
-            dst: A tuple(str, int) object to specified socket destination.
-        
+            dst: Specified socket destination.
+
         Returns:
-            A socket object which connected to destination host.
+            A SSLSocket object which connected to destination host with
+                non-blocking.
         """
         assert host_valid(dst) is True
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
@@ -146,38 +149,38 @@ class Peer(ThreadManager):
         sock.setblocking(False)
         return sock
 
-    def pend_socket(self, sock):
+    def pend_socket(self, sock: 'SSLSocket') -> None:
         """Pending socket into I/O list.
         Init a sending queue and put into dict for further handling of pkts.
         And the given sock will be append into I/O file descriptor list.
 
         Args:
-            sock: A socket object want to be append.
+            sock: A SSLSocket object which wants to be append.
         """
         self.__send_queue[sock] = Queue()
         self.__in_fds.append(sock)
         self.__out_fds.append(sock)
 
-    def pend_socket_to_rm(self, sock):
+    def pend_socket_to_rm(self, sock: 'SSLSocket') -> None:
         """Pending socket into rm list for remove at next thread iteration.
-        Given socket append into remove list and clear it's sending queue, 
+        Given socket append into remove list and clear it's sending queue,
         then will be remove at next iteration of thread.
-        
+
         Args:
-            sock: A socket object want to remove at next iteration.
+            sock: A SSLSocket object which wants to remove at next iteration.
         """
         self.__pend_rm_fds.append(sock)
         self.__send_queue[sock].queue.clear()
 
-    def pend_packet(self, sock, pkt, **kwargs):
+    def pend_packet(self, sock: 'SSLSocket', pkt: 'Packet', **kwargs) -> None:
         """Pending pkt's raw_data to queue's with sepecific sock.
         Any exception when wrapping handler to packet whould cause this connec-
         tion been close and thread maintaining loop terminate.
 
         Args:
-            sock: A socket which want to pend on its queue.
-            pkt: A Packet object ready to be pend.
-            kwargs: Any additional arguments needs by handler object.
+            sock: A SSLSocket which wants to pend on its queue.
+            pkt: A Packet ready to be pend.
+            **kwargs: Any additional arguments needs by handler object.
         """
         try:
             assert type(pkt) is Packet
@@ -185,14 +188,14 @@ class Peer(ThreadManager):
         except Exception:
             printText(format_exc())
 
-    def select_handler(self, pkt_type):
+    def select_handler(self, pkt_type: str) -> Union[None, 'Handler']:
         if pkt_type in self.pkt_handlers:
             return self.pkt_handlers[pkt_type]
         elif (pkt_type in self.monitor.pkt_handlers):
             return self.monitor.pkt_handlers[pkt_type]
         return None
 
-    def add_peer_in_net(self, peer_info):
+    def add_peer_in_net(self, peer_info: 'PeerInfo') -> None:
         """Add given PeerInfo into current net's peer_pool.
 
         Args:
@@ -206,7 +209,7 @@ class Peer(ThreadManager):
         else:
             raise ValueError('Parameter peer_info is not a PeerInfo object')
 
-    def del_peer_in_net(self, peer_info):
+    def del_peer_in_net(self, peer_info: 'PeerInfo') -> bool:
         """Delete given PeerInfo if exists in current net's peer_pool
 
         Args:
@@ -214,7 +217,7 @@ class Peer(ThreadManager):
 
         Return:
             True is success, or False.
-        
+
         Raises:
             ValueError: If peer_info object type is not PeerInfo.
         """
@@ -224,16 +227,16 @@ class Peer(ThreadManager):
         else:
             return False
 
-    def is_peer_in_net(self, info):
+    def is_peer_in_net(self, info: Union['PeerInfo', Tuple[str, int]]) -> bool:
         """Return if in current net pool
 
         Args:
             info: A PeerInfo object or a tuple with (str, int) type represents
                 host.
-        
+
         Returns:
             true if in net, or False.
-        
+
         Raises:
             ValueError: If peer_info's type is not PeerInfo or tuple (str, int)
         """
@@ -245,15 +248,17 @@ class Peer(ThreadManager):
             raise ValueError('Parameter peer_info should be tuple with '
                              '(str, int) or type PeerInfo')
 
-    def get_peer_info_by_host(self, host):
+    def get_peer_info_by_host(
+        self, host: Tuple[str, int]
+    ) -> Union[None, 'PeerInfo']:
         """Get PeerInfo object from current net's peer_pool if exists.
 
         Args:
             host: A tuple(str, int) object represents host in net.
-        
+
         Returns:
             A PeerInfo object get from peer_pool if exists or None.
-        
+
         Raises:
             ValueError: If a given host is not tuple(str, int) object.
         """
@@ -262,17 +267,19 @@ class Peer(ThreadManager):
         else:
             return None
 
-    def handler_unicast_packet(self, host, pkt_type, **kwargs):
+    def handler_unicast_packet(
+        self, host: Tuple[str, int], pkt_type: str, **kwargs
+    ) -> None:
         """Exported function for pending unicast pkt with specific host.
         This function is for anyother instance to make a safer packet send with
         specific host currently in peer_pool.
 
         Args:
-            host: A tuple(str, int) represents destination to recieve packet.
-                This host should be currently in peer_pool.
-            pkt_type: A Packet's unique identity str.
+            host: Destination to recieve packet. This host should be currently
+                in peer_pool.
+            pkt_type: Packet's unique identity str.
             kwargs: Any addtional arguments need by Handler.
-        
+
         Raises:
             ValueError: If given host type is not tuple(str, int).
         """
@@ -287,15 +294,17 @@ class Peer(ThreadManager):
         else:
             printText('Host not in current net.')
 
-    def handler_broadcast_packet(self, host, pkt_type, **kwargs):
+    def handler_broadcast_packet(
+        self, host: Tuple[str, int], pkt_type: str, **kwargs
+    ) -> None:
         """Exported function for pending broadcast pkt to specific peers.
         This function is for anyother instance to make a safer packet send with
         given role currently in peer_pool to broadcast.
-        
+
         Args:
-            host: A tuple(str, str), first argument will not be used. Only use 
-                second argument which represents target role to recive the pkt.
-            pkt_type: A Packet's unique identity str.
+            host: First argument in tuple will not be used. Only use second one
+                which represents target role to recive the pkt.
+            pkt_type: Packet's unique identity str.
             kwargs: Any addtional arguments need by Handler.
         """
         handler = self.select_handler(pkt_type=pkt_type)
@@ -308,17 +317,17 @@ class Peer(ThreadManager):
                     self.pend_packet(sock=value.conn, pkt=pkt)
 
     # Temporary support old calling. Will be deprecate soon. 2019/04/26
-    def onProcess(self, msg_arr, **kwargs):
+    def onProcess(self, msg_arr: list, **kwargs) -> str:
         return self.__on_command(msg_arr, **kwargs)
 
-    def __on_command(self, msg_arr, **kwargs):
+    def __on_command(self, msg_arr: list, **kwargs) -> str:
         msg_key = msg_arr[0].lower()
         msg_arr = msg_arr[1:]
         if msg_key in self.commands:
             return self.commands[msg_key].onProcess(msg_arr)
         return ''
 
-    def __on_recv(self, sock):
+    def __on_recv(self, sock: 'SSLSocket') -> None:
         try:
             raw_data = sock.recv(4096)
             if raw_data == b'':
@@ -354,7 +363,7 @@ class Peer(ThreadManager):
         except Exception:
             print(str(self.server_info) + format_exc())
 
-    def __on_send(self, sock):
+    def __on_send(self, sock: 'SSLSocket') -> None:
         try:
             q = self.__send_queue[sock]
             while q.empty() is False:
@@ -366,7 +375,7 @@ class Peer(ThreadManager):
         except Exception:
             print(format_exc())
 
-    def __on_fds_rm(self):
+    def __on_fds_rm(self) -> None:
         if len(self.__pend_rm_fds) == 0:
             return
         for each in list(self.__pend_rm_fds):
@@ -378,7 +387,7 @@ class Peer(ThreadManager):
             each.close()
         self.__pend_rm_fds.clear()
 
-    def __bind_socket(self, cert):
+    def __bind_socket(self, cert: Tuple[str, str]) -> 'SSLSocket':
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
         unwrap_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         unwrap_socket.setsockopt(SOL_SOCKET, SO_REUSEPORT, 1)
@@ -393,7 +402,7 @@ class Peer(ThreadManager):
         return wrap_socket(unwrap_socket, certfile=cert[0], keyfile=cert[1],
                            server_side=True)
 
-    def _register_handler(self):
+    def _register_handler(self) -> None:
         installing_handlers = [
             JoinHandler(self), CheckJoinHandler(self), NewMemberHandler(self),
             MessageHandler(self), AckNewMemberHandler(self),
@@ -402,7 +411,7 @@ class Peer(ThreadManager):
         for each in installing_handlers:
             self.pkt_handlers[type(each).pkt_type] = each
 
-    def _register_command(self):
+    def _register_command(self) -> None:
         self.commands = {
             'help': HelpCmd(self),
             'join': JoinCmd(self),

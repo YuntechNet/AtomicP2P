@@ -160,4 +160,4 @@ class DisconnectHandler(Handler):
         if peer_info is not None:
             self.peer.del_peer_in_net(peer_info=peer_info)
             self.peer.pend_socket_to_rm(sock=conn)
-            printText('Received Stop Signal from {} and Stopped.'.format(pkt.src))
+            printText('Received Stop Signal from {}, Stopped.'.format(pkt.src))

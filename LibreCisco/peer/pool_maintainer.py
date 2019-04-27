@@ -1,3 +1,4 @@
+from typing import Union, List, Tuple
 from dns.reversename import from_address
 from dns.resolver import Resolver, query
 
@@ -11,14 +12,15 @@ class PoolMaintainer(ThreadManager):
     vice pool.
     """
 
-    def __init__(self, ns, role, domain, loopDelay=300):
+    def __init__(self, ns: Union[str, List[str]], role: str, domain: str,
+                 loopDelay: int = 300) -> None:
         """Init of PoolMaintainer
 
         Args:
-            ns: A string or list which contains all avaiable nameservers.
-            role: A string represent current peer's service type.
-            domain: A string represent whole nets domain.
-            loopDelay: A integer controlls update period, default is 300 secs.
+            ns: All avaiable nameservers.
+            role: Current peer's service type.
+            domain: Whole net's domain.
+            loopDelay: Update period, default is 300 secs.
         """
         super(PoolMaintainer, self).__init__(loopDelay=loopDelay)
         self._ns = ns if type(ns) is list else [ns]
@@ -30,11 +32,11 @@ class PoolMaintainer(ThreadManager):
         self._globalPeerPool = []
         self._servicePeerPool = []
 
-    def run(self):
+    def run(self) -> None:
         while not self.stopped.wait(self.loopDelay):
             self.syncFromDNS()
 
-    def syncFromDNS(self):
+    def syncFromDNS(self) -> None:
         """Query from DNS fetch all records and put in pool
         Hard-code with global.[domain] will send to DNS for query. Durring pro-
         cessing each record, if any error occured, then it will be skip.
@@ -44,14 +46,14 @@ class PoolMaintainer(ThreadManager):
         records = self.forward('global.' + self._domain)
         for each in records:
             name, role, fqdn, addr = self.fqdnInfo(each)
-            # TODO: Seeking better solution at determine whether fqdnInfo() is 
-            #       valid or not, Currently each call will produce N+1 querys 
+            # TODO: Seeking better solution at determine whether fqdnInfo() is
+            #       valid or not, Currently each call will produce N+1 querys
             #       to DNS.
             priority, weight, port, srv_fqdn = tuple(self.srv(fqdn))
             if name is not None and srv_fqdn is not None:
                 peer_info = PeerInfo(name=name, role=role,
                                      host=(addr, int(port)))
-                # TODO: sevicePeerPool should be a duplicate contents of 
+                # TODO: sevicePeerPool should be a duplicate contents of
                 #       PeerInfo insides globalPeerPool.
                 if role == self._role and \
                    peer_info not in self._servicePeerPool:
@@ -59,12 +61,12 @@ class PoolMaintainer(ThreadManager):
                 elif peer_info not in self._globalPeerPool:
                     self._globalPeerPool.append(peer_info)
 
-    def fqdnInfo(self, addr):
+    def fqdnInfo(self, addr: str) -> Tuple[str, str, str, str]:
         """Get a address's fqdn and split it
 
         Args:
             addr: A IPv4 format string.
-        
+
         Returns:
             Toupe contains name, role, fqdn and original address.
             Each element would be string.
@@ -77,21 +79,21 @@ class PoolMaintainer(ThreadManager):
         except Exception:
             return None, None, None, None
 
-    def forward(self, fqdn):
+    def forward(self, fqdn: str) -> List:
         try:
             answers = self._resolver.query(fqdn, 'A')
             return [str(x) for x in answers]
         except Exception:
             return []
 
-    def reverse(self, address):
+    def reverse(self, address: str) -> List:
         try:
             answers = self._resolver.query(from_address(address), 'PTR')
             return [str(x) for x in answers]
         except Exception:
             return []
 
-    def srv(self, fqdn):
+    def srv(self, fqdn: str) -> List:
         try:
             return str(self._resolver.query(
                 '_yunnms._tcp.' + fqdn, 'SRV')[0]).split(' ')

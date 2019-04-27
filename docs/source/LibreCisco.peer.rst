@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     LibreCisco.peer.communication
+    LibreCisco.peer.entity
     LibreCisco.peer.monitor
 
 Submodules

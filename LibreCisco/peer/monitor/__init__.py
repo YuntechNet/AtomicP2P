@@ -1,4 +1,5 @@
 import traceback
+from typing import Tuple, List
 
 from LibreCisco.utils.manager import ThreadManager
 from LibreCisco.utils import printText
@@ -10,8 +11,8 @@ from LibreCisco.peer.monitor.communication import CheckHandler
 
 class Monitor(ThreadManager):
 
-    def __init__(self, peer, loopDelay=10, verbose=False,
-                 max_no_response_count=5):
+    def __init__(self, peer: 'Peer', loopDelay: int = 10,
+                 verbose: bool = False, max_no_response_count: int = 5):
         self.peer = peer
         super(Monitor, self).__init__(loopDelay=loopDelay,
                                       output_field=peer.output_field,
@@ -21,36 +22,38 @@ class Monitor(ThreadManager):
         self.pause = False
         self.max_no_response_count = max_no_response_count
 
-    def run(self):
+    def run(self) -> None:
         while not self.stopped.wait(self.loopDelay):
             if self.pause is False:
                 no_response_list = []
                 for (host, peer_info) in self.peer.peer_pool.items():
-                    self.peer.handler_unicast_packet(host=host, pkt_type=CheckHandler.pkt_type)
+                    self.peer.handler_unicast_packet(
+                        host=host, pkt_type=CheckHandler.pkt_type)
                     if peer_info.status.no_response_count >= \
                             self.max_no_response_count:
                         no_response_list.append(peer_info)
                 self.removeMonitorlist(no_response_list)
 
-    def select_handler(self, pkt_type):
+    def select_handler(self, pkt_type: str) -> 'Handler':
         if pkt_type in self.pkt_handlers:
             return self.pkt_handlers[pkt_type]
         return None
 
-    def onProcess(self, msg_arr):
+    def onProcess(self, msg_arr: List) -> str:
         msg_key = msg_arr[0].lower()
         msg_arr = msg_arr[1:]
         if msg_key in self.commands:
             return self.commands[msg_key].onProcess(msg_arr)
         return ''
 
-    def on_recv_pkt(self, addr, pkt, conn):
+    def on_recv_pkt(self, addr: Tuple[str, int],
+                    pkt: 'Packet', conn: 'SSLSocket') -> None:
         if not pkt.is_reject():
             peer_info = self.peer.get_peer_info_by_host(host=pkt.src)
             if peer_info is not None:
                 peer_info.status.update()
 
-    def removeMonitorlist(self, missing):
+    def removeMonitorlist(self, missing: List) -> None:
         for each in missing:
             try:
                 self.peer.pend_socket_to_rm(each.conn)
@@ -58,14 +61,14 @@ class Monitor(ThreadManager):
             except Exception:
                 printText(traceback.format_exc())
 
-    def _register_handler(self):
+    def _register_handler(self) -> None:
         installing_handlers = [
             CheckHandler(self)
         ]
         for each in installing_handlers:
             self.pkt_handlers[type(each).pkt_type] = each
 
-    def _register_command(self):
+    def _register_command(self) -> None:
         self.commands = {
             'help': HelpCmd(self),
             'pause': PauseCmd(self),
