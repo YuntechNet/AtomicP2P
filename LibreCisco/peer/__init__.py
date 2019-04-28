@@ -9,6 +9,7 @@ from socket import (
 )
 from threading import Thread
 
+from LibreCisco.peer.dns_resolver import DNSResolver
 from LibreCisco.peer.entity.peer_info import PeerInfo
 from LibreCisco.peer.command import (
     HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
@@ -42,8 +43,8 @@ class Peer(ThreadManager):
         return self.__hash
 
     def __init__(self, host: Tuple[str, int], name: str, role: str,
-                 cert: Tuple[str, str], _hash: str, loop_delay: int = 1,
-                 output_field=None) -> None:
+                 cert: Tuple[str, str], _hash: str, ns: str = '127.0.0.1',
+                 loop_delay: int = 1, output_field=None) -> None:
         """Init of PeerManager
 
         Args:
@@ -52,6 +53,7 @@ class Peer(ThreadManager):
             role: Peer's role in net.
             cert: Cert file's path.
             _hash: Program self hash to send in packet.
+            ns: Nameserver address for resolve DNS.
             loop_delay: While loop delay.
         """
         super(Peer, self).__init__(
@@ -69,6 +71,7 @@ class Peer(ThreadManager):
         printText('Program hash: {{{}...{}}}'.format(
             self.__hash[:6], self.__hash[-6:]))
         self.server_info = PeerInfo(host=host, name=name, role=role)
+        self.dns_resolver = DNSResolver(ns=ns, role=role)
         self.__tcp_server = self.__bind_socket(cert=self.__cert)
 
         self.peer_pool = {}

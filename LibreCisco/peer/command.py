@@ -38,7 +38,9 @@ class HelpCmd(Command):
 class JoinCmd(Command):
     """JoinCmd
         send a join request to a peer.
-        Usage in prompt: peer join [ip:port]
+        Usage in prompt:
+            peer join IP:PORT
+            peer join DOMAIN [NS1,NS2,NS3]
     """
 
     def __init__(self, peer):
@@ -46,8 +48,16 @@ class JoinCmd(Command):
         self.peer = peer
 
     def onProcess(self, msg_arr):
-        addr = msg_arr[0].split(':')
-        addr[1] = int(addr[1])
+        if ':' in msg_arr[0]:
+            addr = msg_arr[0].split(':')
+            addr[1] = int(addr[1])
+        else:
+            if len(msg_arr) == 2:
+                ns_list = msg_arr[1].split(',')
+                self.peer.dns_resolver.change_ns(ns=ns_list)
+            records = self.peer.dns_resolver.sync_from_DNS(
+                current_host=self.peer.server_info.host, domain=msg_arr[0])
+            addr = (records[0].host[0], int(records[0].host[1]))
         handler = self.peer.select_handler(pkt_type=JoinHandler.pkt_type)
         pkt = handler.on_send(target=(addr[0], addr[1]))
 

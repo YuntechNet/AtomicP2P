@@ -5,14 +5,14 @@ import time
 import pytest
 
 from LibreCisco.peer import Peer
-from LibreCisco.peer.pool_maintainer import PoolMaintainer
+from LibreCisco.peer.dns_resolver import DNSResolver
 from LibreCisco.device import DeviceManager
 from LibreCisco.utils.security import self_hash as sh, create_self_signed_cert
 
 
 @pytest.fixture(scope='session')
-def pool_maintainer():
-    return PoolMaintainer(ns='127.0.0.1', role='switch', domain='yunnms.lalala.org')
+def dns_resolver():
+    return DNSResolver(ns='127.0.0.1', role='switch')
 
 
 @pytest.fixture(scope='session')

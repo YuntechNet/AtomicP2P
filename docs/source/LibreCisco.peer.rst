@@ -21,10 +21,10 @@ LibreCisco.peer.command module
     :undoc-members:
     :show-inheritance:
 
-LibreCisco.peer.pool\_maintainer module
----------------------------------------
+LibreCisco.peer.dns\_resolver module
+------------------------------------
 
-.. automodule:: LibreCisco.peer.pool_maintainer
+.. automodule:: LibreCisco.peer.dns_resolver
     :members:
     :undoc-members:
     :show-inheritance:

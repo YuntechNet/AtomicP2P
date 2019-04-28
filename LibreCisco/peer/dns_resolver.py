@@ -1,4 +1,4 @@
-from typing import Union, List, Tuple
+from typing import Union, Dict, List, Tuple
 from dns.reversename import from_address
 from dns.resolver import Resolver, query
 
@@ -6,62 +6,60 @@ from LibreCisco.peer.entity.peer_info import PeerInfo
 from LibreCisco.utils.manager import ThreadManager
 
 
-class PoolMaintainer(ThreadManager):
+class DNSResolver(object):
     """A object responsible for keep updating peer info pool from DNS
     This object will maintain every records in DNS such as global and self-ser-
     vice pool.
     """
 
-    def __init__(self, ns: Union[str, List[str]], role: str, domain: str,
-                 loopDelay: int = 300) -> None:
-        """Init of PoolMaintainer
+    def __init__(self, ns: Union[str, List[str]], role: str) -> None:
+        """Init of DNSResolver
 
         Args:
             ns: All avaiable nameservers.
             role: Current peer's service type.
-            domain: Whole net's domain.
             loopDelay: Update period, default is 300 secs.
         """
-        super(PoolMaintainer, self).__init__(loopDelay=loopDelay)
         self._ns = ns if type(ns) is list else [ns]
         self._role = role
-        self._domain = domain
         self._resolver = Resolver(configure=False)
         self._resolver.nameservers = self._ns
 
-        self._globalPeerPool = []
-        self._servicePeerPool = []
+    def change_ns(self, ns:List[str]) -> None:
+        assert type(ns) is list
+        self._ns = ns
+        self._resolver.nameserver = self._ns
 
-    def run(self) -> None:
-        while not self.stopped.wait(self.loopDelay):
-            self.syncFromDNS()
-
-    def syncFromDNS(self) -> None:
+    def sync_from_DNS(self, current_host: Tuple[str, int],
+                      domain: str) -> List['PeerInfo']:
         """Query from DNS fetch all records and put in pool
         Hard-code with global.[domain] will send to DNS for query. Durring pro-
         cessing each record, if any error occured, then it will be skip.
         The fianl result would be all DNS record been parse to PeerInfo and put
         at each peer pool in class variable.
+
+        Args:
+            domain: Whole net's domain.
+
+        Returns:
+            Query results in list with PeerInfo from DNS.
         """
-        records = self.forward('global.' + self._domain)
+        peers = []
+        records = self.forward('global.' + domain)
         for each in records:
-            name, role, fqdn, addr = self.fqdnInfo(each)
-            # TODO: Seeking better solution at determine whether fqdnInfo() is
-            #       valid or not, Currently each call will produce N+1 querys
-            #       to DNS.
-            priority, weight, port, srv_fqdn = tuple(self.srv(fqdn))
+            name, role, fqdn, addr = self.get_fqdn_info(each)
+            # TODO: Seeking better solution determine whether get_fqdn_info()
+            #       is valid or not, Currently each call will produce N+1 
+            #       querys to DNS.
+            _, _, port, srv_fqdn = tuple(self.srv(fqdn))
             if name is not None and srv_fqdn is not None:
                 peer_info = PeerInfo(name=name, role=role,
                                      host=(addr, int(port)))
-                # TODO: sevicePeerPool should be a duplicate contents of
-                #       PeerInfo insides globalPeerPool.
-                if role == self._role and \
-                   peer_info not in self._servicePeerPool:
-                    self._servicePeerPool.append(peer_info)
-                elif peer_info not in self._globalPeerPool:
-                    self._globalPeerPool.append(peer_info)
+                if peer_info not in peers and peer_info.host != current_host:
+                    peers.append(peer_info)
+        return peers
 
-    def fqdnInfo(self, addr: str) -> Tuple[str, str, str, str]:
+    def get_fqdn_info(self, addr: str) -> Tuple[str, str, str, str]:
         """Get a address's fqdn and split it
 
         Args:
