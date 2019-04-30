@@ -64,7 +64,7 @@ def main(role, addr, target, name, cert, ns, domain):
     if target is not None:
         service['peer'].onProcess(['join', target])
     elif domain is not None:
-        if ns is None':
+        if ns is None:
             service['peer'].onProcess(['join', domain])
         else:
             service['peer'].onProcess(['join', domain, ns])

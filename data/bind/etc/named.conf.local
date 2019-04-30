@@ -11,14 +11,14 @@ zone "yunnms.lalala.org" {
     file "/etc/bind/db.yunnms.lalala.org";
 };
 
-zone "yunnms.test.org" {
+zone "yunnms.integrattest.org" {
     type master;
-    file "/etc/bind/db.yunnms.test.org";
+    file "/etc/bind/db.yunnms.integrattest.org";
 };
 
-zone "1.168.192.in-addr.arpa" {
+zone "yunnms.unittest.org" {
     type master;
-    file "/etc/bind/db.192.168.1";
+    file "/etc/bind/db.yunnms.unittest.org";
 };
 
 zone "2.168.192.in-addr.arpa" {

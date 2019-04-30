@@ -11,3 +11,12 @@ $TTL	604800
 ;
 @	IN	NS	localhost.
 1.0.0	IN	PTR	localhost.
+
+1.0.0	IN	PTR peer_1.core.yunnms.integrattest.org.;
+
+1.0.0	IN	PTR peer_1.switch.yunnms.integrattest.org.;
+
+
+1.0.0	IN	PTR peer_1.core.yunnms.lalala.org.;
+
+1.0.0	IN	PTR peer_1.switch.yunnms.lalala.org.;

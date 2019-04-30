@@ -2,6 +2,7 @@ from time import sleep
 
 from LibreCisco.utils import printText
 from LibreCisco.utils.command import Command
+from LibreCisco.utils.communication import is_ssl_socket_open
 from LibreCisco.peer.entity.peer_info import PeerInfo
 from LibreCisco.peer.communication.net import JoinHandler, DisconnectHandler
 from LibreCisco.peer.communication.msg import MessageHandler
@@ -52,18 +53,27 @@ class JoinCmd(Command):
             addr = msg_arr[0].split(':')
             addr[1] = int(addr[1])
         else:
-            if len(msg_arr) == 2:
-                ns_list = msg_arr[1].split(',')
-                self.peer.dns_resolver.change_ns(ns=ns_list)
-            records = self.peer.dns_resolver.sync_from_DNS(
-                current_host=self.peer.server_info.host, domain=msg_arr[0])
-            addr = (records[0].host[0], int(records[0].host[1]))
+            peer_info = self._get_online_peer_from_DNS(
+                domain=msg_arr[0], ns=msg_arr[1] if len(msg_arr) == 2 else None
+            )
+            addr = peer_info.host
         handler = self.peer.select_handler(pkt_type=JoinHandler.pkt_type)
         pkt = handler.on_send(target=(addr[0], addr[1]))
 
         sock = self.peer.new_tcp_long_conn(dst=(addr[0], addr[1]))
         self.peer.pend_socket(sock=sock)
         self.peer.pend_packet(sock=sock, pkt=pkt)
+
+    def _get_online_peer_from_DNS(self, domain, ns=None):
+        if ns is not None and type(ns) is not list:
+            self.peer.dns_resolver.change_ns(ns=ns.split(','))
+        records = self.peer.dns_resolver.sync_from_DNS(
+            current_host=self.peer.server_info.host, domain=domain)
+        for each in records:
+            if is_ssl_socket_open(host=each.host) is True:
+                return each
+        raise ValueError('No Online peer in dns records.')
+        
 
 
 class SendCmd(Command):

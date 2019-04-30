@@ -8,8 +8,8 @@ from LibreCisco.utils.manager import ThreadManager
 
 class DNSResolver(object):
     """A object responsible for keep updating peer info pool from DNS
-    This object will maintain every records in DNS such as global and self-ser-
-    vice pool.
+    This object will maintain every records in DNS such as global and self-
+    service pool.
     """
 
     def __init__(self, ns: Union[str, List[str]], role: str) -> None:
@@ -25,7 +25,12 @@ class DNSResolver(object):
         self._resolver = Resolver(configure=False)
         self._resolver.nameservers = self._ns
 
-    def change_ns(self, ns:List[str]) -> None:
+    def change_ns(self, ns: List[str]) -> None:
+        """Change resolver's namserver host.
+
+        Args:
+            ns: nameservers to change to.
+        """
         assert type(ns) is list
         self._ns = ns
         self._resolver.nameserver = self._ns
@@ -47,53 +52,68 @@ class DNSResolver(object):
         peers = []
         records = self.forward('global.' + domain)
         for each in records:
-            name, role, fqdn, addr = self.get_fqdn_info(each)
-            # TODO: Seeking better solution determine whether get_fqdn_info()
-            #       is valid or not, Currently each call will produce N+1 
-            #       querys to DNS.
-            _, _, port, srv_fqdn = tuple(self.srv(fqdn))
-            if name is not None and srv_fqdn is not None:
-                peer_info = PeerInfo(name=name, role=role,
-                                     host=(addr, int(port)))
-                if peer_info not in peers and peer_info.host != current_host:
-                    peers.append(peer_info)
+            for every in self.reverse(address=each):
+                split = every.split('.')
+                name, role, fqdn, addr = split[0], split[1], every, each
+                if name is None or 'localhost' in name:
+                    continue
+                # TODO: Seeking better solution determine whether get_fqdn_info()
+                #       is valid or not, Currently each call will produce N+1
+                #       querys to DNS.
+                _, _, port, srv_fqdn = self.srv(fqdn=fqdn)
+                if name is not None and srv_fqdn is not None:
+                    peer_info = PeerInfo(
+                        name=name, role=role, host=(addr, int(port)))
+                    if peer_info not in peers and peer_info.host != current_host:
+                        peers.append(peer_info)
         return peers
 
-    def get_fqdn_info(self, addr: str) -> Tuple[str, str, str, str]:
-        """Get a address's fqdn and split it
+    def forward(self, fqdn: str) -> List[str]:
+        """Wraped function to query A records.
 
         Args:
-            addr: A IPv4 format string.
+            fqdn: fqdn to be query.
 
         Returns:
-            Toupe contains name, role, fqdn and original address.
-            Each element would be string.
-            Any error cause failure will turn elements to None.
+            A records of given fqdn in list with str.
+            Exceptions occurr will return a empty list.
         """
-        try:
-            fqdn = self.reverse(addr)[0][:-1]
-            splits = fqdn.split('.')
-            return splits[0], splits[1], fqdn, addr
-        except Exception:
-            return None, None, None, None
-
-    def forward(self, fqdn: str) -> List:
         try:
             answers = self._resolver.query(fqdn, 'A')
             return [str(x) for x in answers]
         except Exception:
             return []
 
-    def reverse(self, address: str) -> List:
+    def reverse(self, address: str) -> List[str]:
+        """Wrapped function to query PTR records.
+
+        Args:
+            address: address to be query.
+
+        Returns:
+            PTR records of give address in list with str.
+            Exceptions occurr will return a empty list
+        """
         try:
             answers = self._resolver.query(from_address(address), 'PTR')
             return [str(x) for x in answers]
         except Exception:
             return []
 
-    def srv(self, fqdn: str) -> List:
+    def srv(self, fqdn: str) -> Tuple[int, int, int, str]:
+        """Wrapped function to query SRV records.
+
+        Args:
+            fqdn: fqdn to be query.
+
+        Returns:
+            Give a tuple with four varialbe with:
+            priority, weight, port, and srv_fqdn
+            Exceptions occurr will return with (0, 0, -1, None)
+        """
         try:
-            return str(self._resolver.query(
+            res = str(self._resolver.query(
                 '_yunnms._tcp.' + fqdn, 'SRV')[0]).split(' ')
-        except Exception:
-            return [0, 0, -1, None]
+            return (res[0], res[1], res[2], res[3])
+        except Exception as e:
+            return (0, 0, -1, None)

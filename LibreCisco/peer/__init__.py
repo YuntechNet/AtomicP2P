@@ -43,7 +43,7 @@ class Peer(ThreadManager):
         return self.__hash
 
     def __init__(self, host: Tuple[str, int], name: str, role: str,
-                 cert: Tuple[str, str], _hash: str, ns: str = '127.0.0.1',
+                 cert: Tuple[str, str], _hash: str, ns: str = None,
                  loop_delay: int = 1, output_field=None) -> None:
         """Init of PeerManager
 
@@ -71,7 +71,8 @@ class Peer(ThreadManager):
         printText('Program hash: {{{}...{}}}'.format(
             self.__hash[:6], self.__hash[-6:]))
         self.server_info = PeerInfo(host=host, name=name, role=role)
-        self.dns_resolver = DNSResolver(ns=ns, role=role)
+        self.dns_resolver = DNSResolver(
+            ns='127.0.0.1' if ns is None else ns, role=role)
         self.__tcp_server = self.__bind_socket(cert=self.__cert)
 
         self.peer_pool = {}
