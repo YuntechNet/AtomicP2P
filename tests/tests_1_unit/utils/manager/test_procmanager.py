@@ -6,14 +6,14 @@ def test_init(proc):
     assert proc.stopped.is_set() is False
 
 
-def test_registerHandler(proc):
+def test__register_handler(proc):
     with pytest.raises(NotImplementedError):
-        proc.registerHandler()
+        proc._register_handler()
 
 
-def test_registerCommand(proc):
+def test__register_command(proc):
     with pytest.raises(NotImplementedError):
-        proc.registerCommand()
+        proc._register_command()
 
 
 def test_start(proc):

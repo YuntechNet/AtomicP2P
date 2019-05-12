@@ -1,4 +1,5 @@
-from LibreCisco.peer.monitor.peer_status import StatusType
+from LibreCisco.peer.entity.peer_status import StatusType
+from LibreCisco.peer.monitor.communication import CheckHandler
 from LibreCisco.utils.command import Command
 
 
@@ -13,7 +14,7 @@ class HelpCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def onProcess(self, msg_arr):
+    def _on_process(self, msg_arr):
         if msg_arr != [] and msg_arr[0] in self.monitor.commands:
             return self.monitor.commands[msg_arr[0]].__doc__
         else:
@@ -40,7 +41,7 @@ class PauseCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def onProcess(self, msg_arr):
+    def _on_process(self, msg_arr):
         self.monitor.pause = not self.monitor.pause
         return 'Monitor pause: {}'.format(self.monitor.pause)
 
@@ -56,7 +57,7 @@ class PeriodCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def onProcess(self, msg_arr):
+    def _on_process(self, msg_arr):
         try:
             period = int(msg_arr[0])
             self.monitor.loopDelay = period
@@ -79,7 +80,7 @@ class ListCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def onProcess(self, msg_arr):
+    def _on_process(self, msg_arr):
         if len(self.monitor.monitorlist) == 0:
             return 'There is no peer\'s info in current list'
         else:
@@ -101,10 +102,12 @@ class ResetCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def onProcess(self, msg_arr):
+    def _on_process(self, msg_arr):
         if msg_arr == []:
-            for each in self.monitor.monitorlist:
-                each.update(status_type=StatusType.PENDING)
+            for each in self.peer.connectlist:
+                each.status.update(status_type=StatusType.PENDING)
+                self.monitor.logger.info(each.status)
+            self.monitor.logger.info("Reset success")
         else:
             pass
 
@@ -120,7 +123,7 @@ class VerboseCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def onProcess(self, msg_arr):
+    def _on_process(self, msg_arr):
         self.monitor.verbose = not self.monitor.verbose
         return 'Monitor verbose toggle to: {}'.format(self.monitor.verbose)
 
@@ -136,8 +139,14 @@ class ManualCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def onProcess(self, msg_arr):
+    def _on_process(self, msg_arr):
         host = msg_arr[0].split(':')
-        self.peer.sendMessage((host[0], host[1]), 'monitor_check')
+        try:
+            host[1] = int(host[1])
+            self.peer.handler_unicat_packet(
+                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
+        except ValueError:
+            self.peer.handler_broadcast_packet(
+                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
         if self.monitor.verbose:
             return 'Sended a monitor check to: {}'.format(host)

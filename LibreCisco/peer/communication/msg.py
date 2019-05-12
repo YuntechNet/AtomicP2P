@@ -1,22 +1,23 @@
-from LibreCisco.utils.communication import Message, Handler
+from LibreCisco.utils.communication import Packet, Handler
 
 
 class MessageHandler(Handler):
     pkt_type = 'message'
 
     def __init__(self, peer):
-        super(MessageHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer,
-                                             can_broadcast=True)
+        super(MessageHandler, self).__init__(
+            pkt_type=type(self).pkt_type, peer=peer)
 
-    def onSendPkt(self, target, msg):
+    def on_send_pkt(self, target, msg):
         data = {
             'message': msg
         }
-        return Message(_to=target, _from=self.peer.peer_info.host,
-                       _hash=self.peer._hash, _type=type(self).pkt_type, _data=data)
+        return Packet(dst=target, src=self.peer.server_info.host,
+                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      _data=data)
 
-    def onRecvPkt(self, src, pkt):
-        data = pkt._data
+    def on_recv_pkt(self, src, pkt, conn):
+        data = pkt.data
         message = 'Message from {}: {}'.format(str(src), data['message'])
         self.peer.last_output = message
-        self.logger.info(message)
+        self.peer.logger.info(message)

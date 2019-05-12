@@ -28,7 +28,9 @@ from LibreCisco.utils.security import (
 @click.option('--target', default=None, help='target addresss.')
 @click.option('--name', default='core', help='peer name.')
 @click.option('--cert', default='data/libre_cisco.pem', help='Cert path.')
-def main(role, addr, target, name, cert):
+@click.option('--ns', default=None, help='Nameserver address.')
+@click.option('--domain', default=None, help='Domain of whole net.')
+def main(role, addr, target, name, cert, ns, domain):
 
     cert_file, key_file = cssc(getcwd(), cert, cert.replace('pem', 'key'))
     hash_str = self_hash(path=join(getcwd(), 'LibreCisco'))
@@ -51,7 +53,7 @@ def main(role, addr, target, name, cert):
         'device': None
     }
     service['peer'] = Peer(host=addr, name=name, role=role,
-                           cert=(cert_file, key_file), _hash=hash_str,
+                           cert=(cert_file, key_file), _hash=hash_str, ns=ns,
                            output_field=[dashboard_field, peer_field])
     service['monitor'] = service['peer'].monitor
     service['device'] = Device(peer=service['peer'],
@@ -59,8 +61,13 @@ def main(role, addr, target, name, cert):
     service['peer'].start()
     service['device'].start()
 
-    if (target):
+    if target is not None:
         service['peer'].onProcess(['join', target])
+    elif domain is not None:
+        if ns is None:
+            service['peer'].onProcess(['join', domain])
+        else:
+            service['peer'].onProcess(['join', domain, ns])
     else:
         # printText('\x1b[1;33;40myou are first peer.\x1b[0m', output=[dashboard_field, peer_field])
         printText('you are first peer.', output=[dashboard_field, peer_field])

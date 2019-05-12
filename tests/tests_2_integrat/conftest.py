@@ -27,6 +27,7 @@ def malware_peer(cert):
     mp.start()
     yield mp
     mp.stop()
+    time.sleep(1)
 
 
 @pytest.yield_fixture(scope='function')
@@ -59,16 +60,24 @@ def switch2(cert, self_hash):
     time.sleep(1)
 
 
-@pytest.fixture(scope='session')
-def net(core1, switch1, switch2):
+@pytest.yield_fixture(scope='session')
+def net(cert, self_hash):
     nodes = {
-        'core_1': core1,
-        'sw_1': switch1,
-        'sw_2': switch2
+        'core_1': Peer(role='core', name='core01',
+                  host=('127.0.0.1', 8000), cert=cert, _hash=self_hash),
+        'switch_1': Peer(role='sw', name='switch01',
+                  host=('127.0.0.1', 8010), cert=cert, _hash=self_hash),
+        'switch_2': Peer(role='sw', name='switch02',
+                  host=('127.0.0.1', 8011), cert=cert, _hash=self_hash)
     }
 
-    nodes['sw_1'].sendMessage(('127.0.0.1', 8000), JoinHandler.pkt_type)
-    nodes['sw_2'].sendMessage(('127.0.0.1', 8000), JoinHandler.pkt_type)
+    for (_, val) in nodes.items():
+        val.start()
+
+    nodes['switch_1'].onProcess(['join', '127.0.0.1:8000'])
+    nodes['switch_2'].onProcess(['join', '127.0.0.1:8000'])
 
     time.sleep(8)
-    return nodes
+    yield nodes
+    for (_, val) in nodes.items():
+        val.stop()

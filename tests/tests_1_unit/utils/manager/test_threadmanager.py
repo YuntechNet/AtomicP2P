@@ -6,14 +6,14 @@ def test_init(thread):
     assert thread.stopped.is_set() is False
 
 
-def test_registerHandler(thread):
+def test__register_andler(thread):
     with pytest.raises(NotImplementedError):
-        thread.registerHandler()
+        thread._register_handler()
 
 
-def test_registerCommand(thread):
+def test__register_command(thread):
     with pytest.raises(NotImplementedError):
-        thread.registerCommand()
+        thread._register_command()
 
 
 def test_start(thread):

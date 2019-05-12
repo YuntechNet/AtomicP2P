@@ -1,3 +1,4 @@
+from typing import Tuple
 import hashlib
 from os import listdir, getcwd
 from os.path import join, isfile, isdir
@@ -5,8 +6,8 @@ from OpenSSL import crypto
 from os.path import exists, join
 
 
-def create_self_signed_cert(cert_dir, cert_file='myapp.crt',
-                            key_file='myapp.key'):
+def create_self_signed_cert(cert_dir: str, cert_file: str = 'myapp.crt',
+                            key_file: str = 'myapp.key') -> Tuple[str, str]:
     """
     If datacard.crt and datacard.key don't exist in cert_dir, create a new
     self-signed cert and keypair and write them into that directory.
@@ -42,7 +43,7 @@ def create_self_signed_cert(cert_dir, cert_file='myapp.crt',
     return cert_file, key_file
 
 
-def self_hash(path):
+def self_hash(path: str) -> str:
     hash_str = ''
     for each in listdir(path):
         if isdir(join(path, each)):

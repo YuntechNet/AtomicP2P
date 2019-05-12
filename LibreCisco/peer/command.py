@@ -1,5 +1,7 @@
 from LibreCisco.utils.command import Command
-from LibreCisco.peer.communication.net import JoinHandler
+from LibreCisco.utils.communication import is_ssl_socket_open
+from LibreCisco.peer.entity.peer_info import PeerInfo
+from LibreCisco.peer.communication.net import JoinHandler, DisconnectHandler
 from LibreCisco.peer.communication.msg import MessageHandler
 
 
@@ -33,7 +35,9 @@ class HelpCmd(Command):
 class JoinCmd(Command):
     """JoinCmd
         send a join request to a peer.
-        Usage in prompt: peer join [ip:port]
+        Usage in prompt:
+            peer join IP:PORT
+            peer join DOMAIN [NS1,NS2,NS3]
     """
 
     def __init__(self, peer):
@@ -41,9 +45,31 @@ class JoinCmd(Command):
         self.peer = peer
 
     def onProcess(self, msg_arr):
-        addr = msg_arr[0].split(':')
-        self.peer.sendMessage((addr[0], addr[1]), JoinHandler.pkt_type)
-        return 'Joinning...'
+        if ':' in msg_arr[0]:
+            addr = msg_arr[0].split(':')
+            addr[1] = int(addr[1])
+        else:
+            peer_info = self._get_online_peer_from_DNS(
+                domain=msg_arr[0], ns=msg_arr[1] if len(msg_arr) == 2 else None
+            )
+            addr = peer_info.host
+        handler = self.peer.select_handler(pkt_type=JoinHandler.pkt_type)
+        pkt = handler.on_send(target=(addr[0], addr[1]))
+
+        sock = self.peer.new_tcp_long_conn(dst=(addr[0], addr[1]))
+        self.peer.pend_socket(sock=sock)
+        self.peer.pend_packet(sock=sock, pkt=pkt)
+
+    def _get_online_peer_from_DNS(self, domain, ns=None):
+        if ns is not None and type(ns) is not list:
+            self.peer.dns_resolver.change_ns(ns=ns.split(','))
+        records = self.peer.dns_resolver.sync_from_DNS(
+            current_host=self.peer.server_info.host, domain=domain)
+        for each in records:
+            if is_ssl_socket_open(host=each.host) is True:
+                return each
+        raise ValueError('No Online peer in dns records.')
+        
 
 
 class SendCmd(Command):
@@ -61,7 +87,15 @@ class SendCmd(Command):
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
         mes = {'msg': msg_arr}
-        self.peer.sendMessage((addr[0], addr[1]), MessageHandler.pkt_type, **mes)
+        try:
+            addr[1] = int(addr[1])
+            self.peer.handler_unicast_packet(
+                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type,
+                **mes)
+        except ValueError:
+            self.peer.handler_broadcast_packet(
+                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type,
+                **mes)
 
 
 class ListCmd(Command):
@@ -96,7 +130,7 @@ class LeaveNetCmd(Command):
         self.peer = peer
 
     def onProcess(self, msg_arr):
-        # self.peer.sendMessage(('broadcast', 'all'), 'leavenet')
-        self.peer.connectlist.clear()
-        self.peer.monitor.monitorlist.clear()
-        return 'You left net.'
+        self.peer.handler_broadcast_packet(
+            host=('', 'all'), pkt_type=DisconnectHandler.pkt_type)
+        self.peer.peer_pool = {}
+        self.peer.logger.info('You left net.')

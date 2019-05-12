@@ -5,31 +5,31 @@ from LibreCisco.utils.logging import getLogger
 
 class ProcManager(Process):
 
-    def __init__(self, loopDelay=1, auto_register=False, logger=None):
+    def __init__(self, loopDelay: int = 1, auto_register: bool = False,
+                 logger=None):
         super(ProcManager, self).__init__()
+        self.__auto_register = auto_register
         self.logger = getLogger(__name__) if logger is None else logger
         self.loopDelay = loopDelay
         self.stopped = pEvent()
         self.started = pEvent()
 
-        if auto_register:
-            self.registerHandler()
-            self.registerCommand()
-
-    def registerHandler(self):
+    def _register_handler(self) -> None:
         raise NotImplementedError
 
-    def registerCommand(self):
+    def _register_command(self) -> None:
         raise NotImplementedError
 
-    def start(self):
+    def start(self) -> None:
         super(ProcManager, self).start()
-        self.started.set()
+        if self.__auto_register:
+            self._register_handler()
+            self._register_command()
 
-    def run(self):
+    def run(self) -> None:
         pass
 
-    def stop(self):
+    def stop(self) -> None:
         self.stopped.set()
         self.started.clear()
 
@@ -39,31 +39,31 @@ class ProcManager(Process):
 
 class ThreadManager(Thread):
 
-    def __init__(self, loopDelay=1, auto_register=False, logger=None):
+    def __init__(self, loopDelay: int = 1, auto_register: bool = False,
+                 logger=None):
         super(ThreadManager, self).__init__()
+        self.__auto_register = auto_register
         self.logger = getLogger(__name__) if logger is None else logger
         self.loopDelay = loopDelay
         self.stopped = tEvent()
         self.started = tEvent()
 
-        if auto_register:
-            self.registerHandler()
-            self.registerCommand()
-
-    def registerHandler(self):
+    def _register_handler(self) -> None:
         raise NotImplementedError
 
-    def registerCommand(self):
+    def _register_command(self) -> None:
         raise NotImplementedError
 
-    def start(self):
+    def start(self) -> None:
         super(ThreadManager, self).start()
-        self.started.set()
+        if self.__auto_register:
+            self._register_handler()
+            self._register_command()
 
-    def run(self):
+    def run(self) -> None:
         pass
 
-    def stop(self):
+    def stop(self) -> None:
         self.stopped.set()
         self.started.clear()
 
