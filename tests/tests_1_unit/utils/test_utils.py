@@ -1,4 +1,4 @@
-from LibreCisco.utils import checkNet
+from atomic_p2p.utils import checkNet
 
 
 def test_checkNet():

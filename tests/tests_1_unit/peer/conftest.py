@@ -1,7 +1,7 @@
 import pytest
 
-from LibreCisco.peer.entity.peer_info import PeerInfo
-from LibreCisco.peer.entity.peer_status import PeerStatus
+from atomic_p2p.peer.entity.peer_info import PeerInfo
+from atomic_p2p.peer.entity.peer_status import PeerStatus
 
 
 @pytest.fixture(scope='session')

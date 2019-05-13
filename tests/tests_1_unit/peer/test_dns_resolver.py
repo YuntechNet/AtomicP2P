@@ -1,4 +1,4 @@
-from LibreCisco.peer.entity.peer_info import PeerInfo
+from atomic_p2p.peer.entity.peer_info import PeerInfo
 
 
 def test_sync_from_DNS(dns_resolver):

@@ -1,5 +1,5 @@
 import logging
-from LibreCisco.utils.logging import getLogger
+from atomic_p2p.utils.logging import getLogger
 
 
 def test_getLogger():

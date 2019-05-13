@@ -1,4 +1,4 @@
-from LibreCisco.device.interface import Interface
+from atomic_p2p.device.interface import Interface
 
 
 def test_init(test_interface):

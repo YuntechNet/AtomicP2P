@@ -1,6 +1,6 @@
 import pytest
 
-from LibreCisco.utils.communication import Packet, Handler
+from atomic_p2p.utils.communication import Packet, Handler
 
 
 @pytest.fixture(scope='class')

@@ -1,5 +1,5 @@
 import pytest
-from LibreCisco.utils.manager import ProcManager, ThreadManager
+from atomic_p2p.utils.manager import ProcManager, ThreadManager
 
 
 @pytest.fixture(scope='session')

@@ -6,7 +6,7 @@ from Crypto.Cipher import AES
 from prompt_toolkit import prompt
 from prompt_toolkit.patch_stdout import patch_stdout
 
-from LibreCisco.utils.manager import ThreadManager
+from atomic_p2p.utils.manager import ThreadManager
 
 
 class LoggerRecver(ThreadManager):

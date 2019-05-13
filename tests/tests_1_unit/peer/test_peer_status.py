@@ -1,4 +1,4 @@
-from LibreCisco.peer.entity.peer_status import StatusType
+from atomic_p2p.peer.entity.peer_status import StatusType
 
 
 def test_init(peer_info, peer_status):

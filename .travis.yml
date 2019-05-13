@@ -28,4 +28,4 @@ script:
   - travis_retry bash <(curl -s https://codecov.io/bash) -cF integration
 
 after_success:
-  - pycodestyle --statistics LibreCisco
+  - pycodestyle --statistics atomic_p2p

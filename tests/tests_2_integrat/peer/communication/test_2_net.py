@@ -1,6 +1,6 @@
 import time
-from LibreCisco.peer.communication.net import JoinHandler
-from LibreCisco.peer.entity.peer_info import PeerInfo
+from atomic_p2p.peer.communication.net import JoinHandler
+from atomic_p2p.peer.entity.peer_info import PeerInfo
 
 
 def test_two_link(core1, switch1):

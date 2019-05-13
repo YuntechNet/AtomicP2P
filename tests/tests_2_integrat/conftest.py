@@ -4,14 +4,14 @@ from os.path import join
 import time
 import pytest
 
-from LibreCisco.peer import Peer
-from LibreCisco.peer.communication.net import JoinHandler
-from LibreCisco.utils.security import self_hash as sh, create_self_signed_cert
+from atomic_p2p.peer import Peer
+from atomic_p2p.peer.communication.net import JoinHandler
+from atomic_p2p.utils.security import self_hash as sh, create_self_signed_cert
 
 
 @pytest.fixture(scope='session')
 def self_hash():
-    return sh(join(os.getcwd(), 'LibreCisco'))
+    return sh(join(os.getcwd(), 'atomic_p2p'))
 
 
 @pytest.fixture(scope='session')
@@ -21,7 +21,7 @@ def cert():
 
 @pytest.yield_fixture(scope='function')
 def malware_peer(cert):
-    malware_hash = sh(join(getcwd(), 'LibreCisco', 'peer'))
+    malware_hash = sh(join(getcwd(), 'atomic_p2p', 'peer'))
     mp = Peer(role='sw', name='switch_malware', host=('127.0.0.1', 8012),
               cert=cert, _hash=malware_hash)
     mp.start()

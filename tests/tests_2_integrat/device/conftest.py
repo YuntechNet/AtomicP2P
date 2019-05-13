@@ -1,5 +1,5 @@
 import pytest
-from LibreCisco.device.connection import SSHConnection, TelnetConnection
+from atomic_p2p.device.connection import SSHConnection, TelnetConnection
 
 
 @pytest.fixture(scope='session')

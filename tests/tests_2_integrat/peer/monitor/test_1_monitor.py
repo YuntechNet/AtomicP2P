@@ -1,5 +1,5 @@
 import time
-from LibreCisco.peer.communication.net import JoinHandler
+from atomic_p2p.peer.communication.net import JoinHandler
 
 
 def test_two_dogs(core1, switch1):

@@ -1,5 +1,5 @@
 import json
-from LibreCisco.utils.communication import Packet
+from atomic_p2p.utils.communication import Packet
 
 
 def test_init(packet, default_peer, self_hash):

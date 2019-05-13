@@ -1,4 +1,4 @@
-from LibreCisco.device.device_info import DeviceInfo
+from atomic_p2p.device.device_info import DeviceInfo
 
 
 def test_init(test_device_info):

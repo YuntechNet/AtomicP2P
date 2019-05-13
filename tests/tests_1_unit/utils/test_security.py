@@ -5,7 +5,7 @@ from OpenSSL.SSL import Context, TLSv1_METHOD, Error
 from OpenSSL.crypto import (
     load_privatekey, load_certificate, FILETYPE_PEM as FP
 )
-from LibreCisco.utils.security import create_self_signed_cert as cssc
+from atomic_p2p.utils.security import create_self_signed_cert as cssc
 
 
 def test_create_self_signed_cert():

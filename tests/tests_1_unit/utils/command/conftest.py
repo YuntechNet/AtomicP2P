@@ -1,6 +1,6 @@
 
 import pytest
-from LibreCisco.utils.command import Command
+from atomic_p2p.utils.command import Command
 
 
 @pytest.fixture(scope='class')

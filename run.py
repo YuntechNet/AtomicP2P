@@ -13,10 +13,10 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea
 from prompt_toolkit.formatted_text import ANSI
 
-from LibreCisco.peer import Peer
-from LibreCisco.device import DeviceManager as Device
-from LibreCisco.utils import printText
-from LibreCisco.utils.security import (
+from atomic_p2p.peer import Peer
+from atomic_p2p.device import DeviceManager as Device
+from atomic_p2p.utils import printText
+from atomic_p2p.utils.security import (
     create_self_signed_cert as cssc, self_hash
 )
 
@@ -33,7 +33,7 @@ from LibreCisco.utils.security import (
 def main(role, addr, target, name, cert, ns, domain):
 
     cert_file, key_file = cssc(getcwd(), cert, cert.replace('pem', 'key'))
-    hash_str = self_hash(path=join(getcwd(), 'LibreCisco'))
+    hash_str = self_hash(path=join(getcwd(), 'atomic_p2p'))
 
     dashboard_text = '==================== Dashboard ====================\n'
     peer_text = '====================    Peer   ====================\n'

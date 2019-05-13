@@ -4,10 +4,10 @@ from os.path import join
 import time
 import pytest
 
-from LibreCisco.peer import Peer
-from LibreCisco.peer.dns_resolver import DNSResolver
-from LibreCisco.device import DeviceManager
-from LibreCisco.utils.security import self_hash as sh, create_self_signed_cert
+from atomic_p2p.peer import Peer
+from atomic_p2p.peer.dns_resolver import DNSResolver
+from atomic_p2p.device import DeviceManager
+from atomic_p2p.utils.security import self_hash as sh, create_self_signed_cert
 
 
 @pytest.fixture(scope='session')
@@ -17,7 +17,7 @@ def dns_resolver():
 
 @pytest.fixture(scope='session')
 def self_hash():
-    return sh(join(os.getcwd(), 'LibreCisco'))
+    return sh(join(os.getcwd(), 'atomic_p2p'))
 
 
 @pytest.fixture(scope='session')

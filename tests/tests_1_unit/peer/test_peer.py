@@ -1,5 +1,5 @@
 import pytest
-from LibreCisco.peer.monitor.communication import CheckHandler
+from atomic_p2p.peer.monitor.communication import CheckHandler
 
 
 def test_init(default_peer):
