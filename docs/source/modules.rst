@@ -1,7 +1,7 @@
-LibreCisco
+atomic_p2p
 ==========
 
 .. toctree::
    :maxdepth: 4
 
-   LibreCisco
+   atomic_p2p
