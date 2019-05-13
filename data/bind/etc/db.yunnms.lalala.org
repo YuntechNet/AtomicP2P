@@ -1,0 +1,29 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     yunnms.lalala.org. admin.yunnms.lalala.org. (
+                             12         ; Serial
+                             10         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      localhost.
+
+; Global A Record
+global.yunnms.lalala.org.  IN  A 127.0.0.1;
+
+; Core
+core.yunnms.lalala.org. IN A 127.0.0.1;
+; Core Peer
+peer_1.core.yunnms.lalala.org. IN A 127.0.0.1;
+;; Core SRV Record
+_yunnms._tcp.peer_1.core.yunnms.lalala.org. IN  SRV 0 0 8000  peer_1.core.yunnms.lalala.org.
+
+; Switch
+switch.yunnms.lalala.org. IN  A 127.0.0.1;
+; Switch Peer
+peer_1.switch.yunnms.lalala.org. IN  A 127.0.0.1;
+;; Switch SRV Record
+_yunnms._tcp.peer_1.switch.yunnms.lalala.org. IN  SRV 0 0 8001  peer_1.switch.yunnms.lalala.org.

@@ -1,17 +1,22 @@
 venv*/
+*venv/
 .pytest_cache/
 .vscode/
 __pycache__/
 htmlcov/
+prompt_test/
 
 
-.coverage
+.coverage*
 *.pyc
 *.swp
 *.swo
 *.un~
 *.sqlite
 *.log
-*log*
+*log.
+*.pem
+*.key
 
-pws.py
+!test.pem
+!test.key

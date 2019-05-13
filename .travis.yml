@@ -1,15 +1,31 @@
 language: python
 
-python: 
+env:
+  global:
+    - DOCKER_COMPOSE_VERSION=1.23.2
+
+services:
+  - docker
+
+python:
   - "3.5"
-  - "pypy3.5"
-  
+  - "3.6"
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose-bin
+  - chmod +x docker-compose-bin
+  - sudo mv docker-compose-bin /usr/local/bin/docker-compose
+
 install:
-  - pip install codecov
   - pip install -r requirements-dev.txt
-  
+
 script:
-  - python -m pytest --cov=./ --cov-report term-missing --cov-config=.coveragerc ./tests
+  - docker-compose -f ./docker-compose/docker-compose.yml up -d
+  - travis_retry python -m pytest  -s --cov=./ --cov-report term-missing --cov-config=.coveragerc  ./tests/tests_1_unit/ -v
+  - travis_retry bash <(curl -s https://codecov.io/bash) -cF unittests
+  - travis_retry python -m pytest  -s --cov=./ --cov-report term-missing --cov-config=.coveragerc  ./tests/tests_2_integrat/ -v
+  - travis_retry bash <(curl -s https://codecov.io/bash) -cF integration
 
 after_success:
-  - codecov
+  - pycodestyle --statistics LibreCisco

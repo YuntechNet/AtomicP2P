@@ -1,8 +1,8 @@
 [run]
 omit = 
-    */__init__.py
-    venv*/
+    37venv/*
+    35venv/*
     tests/*
-[report]
-exclude_lines =
-    if __name__ == .__main__.:
+    run.py
+    run_monitor.py
+    LibreCisco/__main__.py
