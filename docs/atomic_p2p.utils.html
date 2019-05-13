@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.utils package &#8212; AtomicP2P 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-utils-package">
+<h1>atomic_p2p.utils package<a class="headerlink" href="#atomic-p2p-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="atomic_p2p.utils.communication.html">atomic_p2p.utils.communication package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.communication.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.communication.html#module-atomic_p2p.utils.communication.handler">atomic_p2p.utils.communication.handler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.communication.html#module-atomic_p2p.utils.communication.packet">atomic_p2p.utils.communication.packet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.communication.html#module-atomic_p2p.utils.communication">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="atomic_p2p.utils.logging.html">atomic_p2p.utils.logging package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.logging.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.logging.html#module-atomic_p2p.utils.logging.formatters">atomic_p2p.utils.logging.formatters module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.logging.html#module-atomic_p2p.utils.logging.handlers">atomic_p2p.utils.logging.handlers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.logging.html#module-atomic_p2p.utils.logging">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.utils.command">
+<span id="atomic-p2p-utils-command-module"></span><h2>atomic_p2p.utils.command module<a class="headerlink" href="#module-atomic_p2p.utils.command" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.utils.command.Command">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.command.</code><code class="descname">Command</code><span class="sig-paren">(</span><em>cmd</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.command.Command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.utils.command.Command.onProcess">
+<code class="descname">onProcess</code><span class="sig-paren">(</span><em>msg_arr</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.command.Command.onProcess" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils.manager">
+<span id="atomic-p2p-utils-manager-module"></span><h2>atomic_p2p.utils.manager module<a class="headerlink" href="#module-atomic_p2p.utils.manager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.utils.manager.ProcManager">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.manager.</code><code class="descname">ProcManager</code><span class="sig-paren">(</span><em>loopDelay=1</em>, <em>auto_register=False</em>, <em>logger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">multiprocessing.context.Process</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.utils.manager.ProcManager.is_start">
+<code class="descname">is_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.is_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.manager.ProcManager.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to be run in sub-process; can be overridden in sub-class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.manager.ProcManager.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start child process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.manager.ProcManager.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.stop" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.utils.manager.ThreadManager">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.manager.</code><code class="descname">ThreadManager</code><span class="sig-paren">(</span><em>loopDelay=1</em>, <em>auto_register=False</em>, <em>logger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.utils.manager.ThreadManager.is_start">
+<code class="descname">is_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.is_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.manager.ThreadManager.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.manager.ThreadManager.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the thread’s activity.</p>
+<p>It must be called at most once per thread object. It arranges for the
+object’s run() method to be invoked in a separate thread of control.</p>
+<p>This method will raise a RuntimeError if called more than once on the
+same thread object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.manager.ThreadManager.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.stop" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils.security">
+<span id="atomic-p2p-utils-security-module"></span><h2>atomic_p2p.utils.security module<a class="headerlink" href="#module-atomic_p2p.utils.security" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="atomic_p2p.utils.security.create_self_signed_cert">
+<code class="descclassname">atomic_p2p.utils.security.</code><code class="descname">create_self_signed_cert</code><span class="sig-paren">(</span><em>cert_dir</em>, <em>cert_file='myapp.crt'</em>, <em>key_file='myapp.key'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.security.create_self_signed_cert" title="Permalink to this definition">¶</a></dt>
+<dd><p>If datacard.crt and datacard.key don’t exist in cert_dir, create a new
+self-signed cert and keypair and write them into that directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomic_p2p.utils.security.self_hash">
+<code class="descclassname">atomic_p2p.utils.security.</code><code class="descname">self_hash</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.security.self_hash" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="atomic_p2p.utils.checkNet">
+<code class="descclassname">atomic_p2p.utils.</code><code class="descname">checkNet</code><span class="sig-paren">(</span><em>url='https://www.google.com.tw'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.checkNet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="atomic_p2p.utils.getExternalIP">
+<code class="descclassname">atomic_p2p.utils.</code><code class="descname">getExternalIP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.getExternalIP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="atomic_p2p.utils.host_valid">
+<code class="descclassname">atomic_p2p.utils.</code><code class="descname">host_valid</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.host_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

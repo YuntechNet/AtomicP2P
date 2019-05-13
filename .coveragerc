@@ -1,7 +1,7 @@
 [run]
 omit = 
-    37venv/*
     35venv/*
+    36venv/*
     tests/*
     atomic_p2p/__main__.py
     run.py

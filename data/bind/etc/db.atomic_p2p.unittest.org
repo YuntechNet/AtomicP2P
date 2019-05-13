@@ -1,0 +1,48 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     atomic_p2p.unittest.org. admin.atomic_p2p.unittest.org. (
+                             12         ; Serial
+                             10         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      localhost.
+
+; Global A Record
+global.atomic_p2p.unittest.org.  IN  A 192.168.2.103;
+global.atomic_p2p.unittest.org.  IN  A 192.168.2.104;
+global.atomic_p2p.unittest.org.  IN  A 192.168.2.105;
+global.atomic_p2p.unittest.org.  IN  A 192.168.2.106;
+global.atomic_p2p.unittest.org.  IN  A 192.168.2.107;
+global.atomic_p2p.unittest.org.  IN  A 192.168.2.108;
+
+; Switch
+switch.atomic_p2p.unittest.org. IN  A 192.168.2.103;
+switch.atomic_p2p.unittest.org. IN  A 192.168.2.104;
+switch.atomic_p2p.unittest.org. IN  A 192.168.2.105;
+
+; Scheduler
+scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.106;
+scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.107;
+scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.108;
+
+; Switch Peer
+peer_1.switch.atomic_p2p.unittest.org. IN  A 192.168.2.103;
+peer_2.switch.atomic_p2p.unittest.org. IN  A 192.168.2.104;
+peer_3.switch.atomic_p2p.unittest.org. IN  A 192.168.2.105;
+;; Switch SRV Record
+_atomic_p2p._tcp.peer_1.switch.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_1.switch.atomic_p2p.unittest.org.
+_atomic_p2p._tcp.peer_2.switch.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_2.switch.atomic_p2p.unittest.org.
+_atomic_p2p._tcp.peer_3.switch.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_3.switch.atomic_p2p.unittest.org.
+
+; Scheduler Peer
+peer_1.scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.106;
+peer_2.scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.107;
+peer_3.scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.108;
+;; Scheduler SRV Record
+_atomic_p2p._tcp.peer_1.scheduler.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_1.scheduler.atomic_p2p.unittest.org.
+_atomic_p2p._tcp.peer_2.scheduler.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_2.scheduler.atomic_p2p.unittest.org.
+_atomic_p2p._tcp.peer_3.scheduler.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_3.scheduler.atomic_p2p.unittest.org.

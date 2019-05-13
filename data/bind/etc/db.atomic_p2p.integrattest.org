@@ -1,0 +1,31 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     atomic_p2p.integrattest.org. admin.atomic_p2p.integrattest.org. (
+                             12         ; Serial
+                             10         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      localhost.
+
+; Global A Record
+global.atomic_p2p.integrattest.org.  IN  A 127.0.0.1;
+
+; Core
+core.atomic_p2p.integrattest.org. IN A 127.0.0.1;
+; Core Peer
+peer_1.core.atomic_p2p.integrattest.org. IN A 127.0.0.1;
+;; Core SRV Record
+_atomic_p2p._tcp.peer_1.core.atomic_p2p.integrattest.org. IN  SRV 0 0 8000  peer_1.core.atomic_p2p.integrattest.org.
+
+; Switch
+switch.atomic_p2p.integrattest.org. IN  A 127.0.0.1;
+; Switch Peer
+peer_1.switch.atomic_p2p.integrattest.org. IN  A 127.0.0.1;
+peer_2.switch.atomic_p2p.integrattest.org. IN  A 127.0.0.1;
+;; Switch SRV Record
+_atomic_p2p._tcp.peer_1.switch.atomic_p2p.integrattest.org. IN  SRV 0 0 8010  peer_1.switch.atomic_p2p.integrattest.org.
+_atomic_p2p._tcp.peer_2.switch.atomic_p2p.integrattest.org. IN  SRV 0 0 8011  peer_2.switch.atomic_p2p.integrattest.org.

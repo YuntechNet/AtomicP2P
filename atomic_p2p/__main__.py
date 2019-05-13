@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('address', help='Service\'s host address.')
 parser.add_argument('-t', '--target', default='127.0.0.1:8000',
                     help='A peer address in Net.', dest='target')
-parser.add_argument('-c', '--cert', default='data/libre_cisco.pem',
+parser.add_argument('-c', '--cert', default='data/atomic_p2p.pem',
                     help='Cert file path.', dest='cert')
 parser.add_argument('-as', '--auto-start', action='store_true',
                     default=False, help='Auto start whole service.')

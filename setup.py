@@ -1,5 +1,6 @@
 import os, sys
 from setuptools import setup, find_packages
+from atomic_p2p import __version__
 
 _here = os.path.abspath(os.path.dirname(__file__))
 
@@ -9,7 +10,7 @@ with open(os.path.join(_here, 'README.md'), encoding='UTF-8') as f:
 setup(
     name = 'AtomicP2P',
     packages = find_packages(),
-    version = '0.0.1',
+    version = __version__,
     license = 'GNU Lesser General Public License v2.1', 
     description = 'A P2P framework which base on multi-process and threading with DNS syncing mechanism.',
     long_description = long_description,
@@ -17,11 +18,11 @@ setup(
     author = 'Clooooode',
     author_email = 'jackey8616@gmail.com',
     url = 'https://github.com/YuntechNet/AtomicP2P',
-    download_url = '',
+    download_url = 'https://github.com/YuntechNet/AtomicP2P/releases/tag/{}'.format(__version__),
     keywords = ['peer-to-peer', 'P2P', 'p2p', 'distribute', 'HA', 'High-Availability'],
     install_requires = [
         'dnspython==1.16.0',
-        'pycrypto==2.6.1',
+        'pycryptodome==3.8.1',
         'pyOpenSSL==19.0.0'
     ],
     classifiers = [

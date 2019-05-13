@@ -9,9 +9,24 @@ from atomic_p2p.utils.security import (
 from atomic_p2p.utils.logging import getLogger
 
 
+__version__ = '0.0.2'
+
+
 class AtomicP2P(object):
 
-    def __init__(self, role, addr, name, cert):
+    # TODO: Arguments need redefine, cause the format is not very clear enough.
+    #       Also, whole class should add type hint.
+    #                   2019/05/13
+    def __init__(self, role: str, addr: str, name: str, cert: str) -> None:
+        """Init of AtomicP2P object
+        Args:
+            role: str represents peer's role.
+            addr: str with `ip:port` format, peer server will listen on.
+            name: str represents peer's name.
+            cert: str represents cert file's path, should directly point to
+                cert file. like `data/atomic_p2p.pem`, and key file should
+                same as cert file exception sub-extension with `.key`.
+        """
         cert_file, key_file = cssc(cert_dir=getcwd(), cert_file=cert,
                                    key_file=cert.replace('.pem', '.key'))
 

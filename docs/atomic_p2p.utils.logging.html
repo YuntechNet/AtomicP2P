@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.utils.logging package &#8212; AtomicP2P 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-utils-logging-package">
+<h1>atomic_p2p.utils.logging package<a class="headerlink" href="#atomic-p2p-utils-logging-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.utils.logging.formatters">
+<span id="atomic-p2p-utils-logging-formatters-module"></span><h2>atomic_p2p.utils.logging.formatters module<a class="headerlink" href="#module-atomic_p2p.utils.logging.formatters" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.utils.logging.formatters.StdoutFormatter">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.logging.formatters.</code><code class="descname">StdoutFormatter</code><a class="headerlink" href="#atomic_p2p.utils.logging.formatters.StdoutFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.utils.logging.formatters.StdoutFormatter.format">
+<code class="descname">format</code><span class="sig-paren">(</span><em>record</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.logging.formatters.StdoutFormatter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the specified record as text.</p>
+<p>The record’s attribute dictionary is used as the operand to a
+string formatting operation which yields the returned string.
+Before formatting the dictionary, a couple of preparatory steps
+are carried out. The message attribute of the record is computed
+using LogRecord.getMessage(). If the formatting string uses the
+time (as determined by a call to usesTime(), formatTime() is
+called to format the event time. If there is exception information,
+it is formatted using formatException() and appended to the message.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils.logging.handlers">
+<span id="atomic-p2p-utils-logging-handlers-module"></span><h2>atomic_p2p.utils.logging.handlers module<a class="headerlink" href="#module-atomic_p2p.utils.logging.handlers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.utils.logging.handlers.SocketHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.logging.handlers.</code><code class="descname">SocketHandler</code><span class="sig-paren">(</span><em>name</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.logging.handlers.SocketHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Handler</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.utils.logging.handlers.SocketHandler.emit">
+<code class="descname">emit</code><span class="sig-paren">(</span><em>record</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.logging.handlers.SocketHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do whatever it takes to actually log the specified logging record.</p>
+<p>This version is intended to be implemented by subclasses and so
+raises a NotImplementedError.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.logging.handlers.SocketHandler.encrypt">
+<code class="descname">encrypt</code><span class="sig-paren">(</span><em>raw_data</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.logging.handlers.SocketHandler.encrypt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.utils.logging.handlers.StreamHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.logging.handlers.</code><code class="descname">StreamHandler</code><span class="sig-paren">(</span><em>name</em>, <em>stream=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.logging.handlers.StreamHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.StreamHandler</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils.logging">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.utils.logging" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="atomic_p2p.utils.logging.getLogger">
+<code class="descclassname">atomic_p2p.utils.logging.</code><code class="descname">getLogger</code><span class="sig-paren">(</span><em>name=None</em>, <em>level=10</em>, <em>add_monitor_pass=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.logging.getLogger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.utils.logging.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

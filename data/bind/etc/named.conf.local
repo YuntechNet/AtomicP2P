@@ -6,19 +6,19 @@
 // organization
 //include "/etc/bind/zones.rfc1918";
 
-zone "yunnms.lalala.org" {
+zone "atomic_p2p.lalala.org" {
     type master;
-    file "/etc/bind/db.yunnms.lalala.org";
+    file "/etc/bind/db.atomic_p2p.lalala.org";
 };
 
-zone "yunnms.integrattest.org" {
+zone "atomic_p2p.integrattest.org" {
     type master;
-    file "/etc/bind/db.yunnms.integrattest.org";
+    file "/etc/bind/db.atomic_p2p.integrattest.org";
 };
 
-zone "yunnms.unittest.org" {
+zone "atomic_p2p.unittest.org" {
     type master;
-    file "/etc/bind/db.yunnms.unittest.org";
+    file "/etc/bind/db.atomic_p2p.unittest.org";
 };
 
 zone "2.168.192.in-addr.arpa" {
