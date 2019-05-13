@@ -57,14 +57,15 @@ class DNSResolver(object):
                 name, role, fqdn, addr = split[0], split[1], every, each
                 if name is None or 'localhost' in name:
                     continue
-                # TODO: Seeking better solution determine whether get_fqdn_info()
-                #       is valid or not, Currently each call will produce N+1
-                #       querys to DNS.
+                # TODO: Seeking better solution determine whether
+                #       get_fqdn_info() is valid or not, Currently each call
+                #       will produce N+1 querys to DNS.
                 _, _, port, srv_fqdn = self.srv(fqdn=fqdn)
                 if name is not None and srv_fqdn is not None:
                     peer_info = PeerInfo(
                         name=name, role=role, host=(addr, int(port)))
-                    if peer_info not in peers and peer_info.host != current_host:
+                    if (peer_info not in peers and
+                            peer_info.host != current_host):
                         peers.append(peer_info)
         return peers
 

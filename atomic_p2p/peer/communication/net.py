@@ -34,8 +34,9 @@ class JoinHandler(Handler):
         self.peer.handler_broadcast_packet(
             host=('', 'all'), pkt_type=NewMemberHandler.pkt_type,
             **{'peer_info': peer_info})
-        self.peer.logger.info('Recieve new peer add request: {}, added.'.format(
-                    str(peer_info)))
+        self.peer.logger.info(
+            'Recieve new peer add request: {}, added.'.format(
+                str(peer_info)))
 
         self.peer.pend_socket(sock=conn)
         self.peer.add_peer_in_net(peer_info=peer_info)
@@ -154,4 +155,5 @@ class DisconnectHandler(Handler):
         if peer_info is not None:
             self.peer.del_peer_in_net(peer_info=peer_info)
             self.peer.pend_socket_to_rm(sock=conn)
-            self.peer.logger.info('Received Stop Signal from {}, Stopped.'.format(pkt.src))
+            self.peer.logger.info(
+                'Received Stop Signal from {}, Stopped.'.format(pkt.src))

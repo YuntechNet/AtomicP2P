@@ -3,6 +3,7 @@ omit =
     37venv/*
     35venv/*
     tests/*
+    atomic_p2p/__main__.py
     run.py
     run_monitor.py
-    LibreCisco/__main__.py
+    setup.py

@@ -346,9 +346,10 @@ class Peer(ThreadManager):
                 self.logger.info('Unknown packet type: {}'.format(pkt._type))
             elif pkt._hash != self.__hash and pkt.is_reject() is False:
                 # Invalid hash -> Dangerous peer's pkt.
-                self.logger.info('Illegal peer {} with unmatch hash {{{}...{}}}'
-                          ' try to connect to net.'.format(
-                              pkt.src, pkt._hash[:6], pkt._hash[-6:]))
+                self.logger.info(
+                    'Illegal peer {} with unmatch hash {{{}...{}}} try to '
+                    'connect to net.'.format(
+                        pkt.src, pkt._hash[:6], pkt._hash[-6:]))
                 pkt.redirect_to_host(src=self.server_info.host, dst=pkt.src)
                 pkt.set_reject(reject_data='Unmatching peer hash.')
                 self.pend_socket(sock=sock)

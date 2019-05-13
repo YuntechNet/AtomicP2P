@@ -1,6 +1,6 @@
 # AtomicP2P  
-[![PyPI version](https://badge.fury.io/py/AtomicP2P.svg)](https://badge.fury.io/py/AtomicP2P) [![Build Status](https://travis-ci.org/YuntechNet/AtomicP2P.svg?branch=fwos)](https://travis-ci.org/YuntechNet/AtomicP2P) [![codecov](https://codecov.io/gh/YuntechNet/AtomicP2P/branch/master/graph/badge.svg)](https://codecov.io/gh/YuntechNet/AtomicP2P)
-A P2P framework which base on multi-process and threading with DNS syncing mechanism.  
+[![PyPI version](https://badge.fury.io/py/AtomicP2P.svg)](https://badge.fury.io/py/AtomicP2P) [![Build Status](https://travis-ci.org/YuntechNet/AtomicP2P.svg?branch=fwos)](https://travis-ci.org/YuntechNet/AtomicP2P) [![codecov](https://codecov.io/gh/YuntechNet/AtomicP2P/branch/master/graph/badge.svg)](https://codecov.io/gh/YuntechNet/AtomicP2P) [![Maintainability](https://api.codeclimate.com/v1/badges/e02dfc9c29c0a9a053bc/maintainability)](https://codeclimate.com/github/YuntechNet/AtomicP2P/maintainability)  
+A high-availability peer-to-peer framework which base on multi-process and threading with distribute and DNS syncing mechanism.  
 
 ## Feature
   1. High-Availability with whole network.

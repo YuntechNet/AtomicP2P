@@ -69,7 +69,6 @@ class JoinCmd(Command):
             if is_ssl_socket_open(host=each.host) is True:
                 return each
         raise ValueError('No Online peer in dns records.')
-        
 
 
 class SendCmd(Command):
