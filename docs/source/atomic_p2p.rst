@@ -6,7 +6,6 @@ Subpackages
 
 .. toctree::
 
-    atomic_p2p.device
     atomic_p2p.peer
     atomic_p2p.utils
 

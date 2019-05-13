@@ -6,7 +6,6 @@ import pytest
 
 from atomic_p2p.peer import Peer
 from atomic_p2p.peer.dns_resolver import DNSResolver
-from atomic_p2p.device import DeviceManager
 from atomic_p2p.utils.security import self_hash as sh, create_self_signed_cert
 
 
@@ -44,13 +43,3 @@ def default_peer2(cert, self_hash):
     yield p
     time.sleep(1)
     p.stop()
-
-
-@pytest.yield_fixture(scope='module')
-def default_device_manager(default_peer):
-    d = DeviceManager(peer=default_peer)
-    d.start()
-
-    yield d
-    time.sleep(1)
-    d.stop()
