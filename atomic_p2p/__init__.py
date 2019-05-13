@@ -9,7 +9,7 @@ from atomic_p2p.utils.security import (
 from atomic_p2p.utils.logging import getLogger
 
 
-class atomic_p2p(object):
+class AtomicP2P(object):
 
     def __init__(self, role, addr, name, cert):
         cert_file, key_file = cssc(cert_dir=getcwd(), cert_file=cert,
@@ -61,7 +61,7 @@ def main(role, addr, target, name, cert, auto_start, auto_join_net,
          local_monitor_pass):
 
     logger = getLogger(add_monitor_pass=local_monitor_pass)
-    atomic_p2p = atomic_p2p(role=role, addr=addr, name=name, cert=cert)
+    atomic_p2p = AtomicP2P(role=role, addr=addr, name=name, cert=cert)
 
     if local_monitor_pass is not None:
         local_monitor = LocalMonitor(service=atomic_p2p,

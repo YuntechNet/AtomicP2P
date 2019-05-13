@@ -25,6 +25,7 @@ class ProcManager(Process):
         if self.__auto_register:
             self._register_handler()
             self._register_command()
+        self.started.set()
 
     def run(self) -> None:
         pass
@@ -59,6 +60,7 @@ class ThreadManager(Thread):
         if self.__auto_register:
             self._register_handler()
             self._register_command()
+        self.started.set()
 
     def run(self) -> None:
         pass

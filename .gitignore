@@ -4,7 +4,8 @@ venv*/
 .vscode/
 __pycache__/
 htmlcov/
-prompt_test/
+*.egg-info/
+dist/
 
 
 .coverage*
