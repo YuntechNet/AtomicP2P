@@ -8,10 +8,3 @@ services:
       - "../data/bind:/data/bind"
     ports:
       - "53:53/udp"
-    
-  test_ubuntu:
-    container_name: "Test_Ubuntu"
-    image: "yuntechnet/ubuntu-ssh-telnet:1.0.0"
-    ports:
-      - "127.0.0.1:7022:22"
-      - "127.0.0.1:7023:23"
