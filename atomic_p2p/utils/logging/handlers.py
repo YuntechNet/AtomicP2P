@@ -30,5 +30,5 @@ class SocketHandler(Handler):
         data = self.encrypt(log_entry)
         try:
             self.sock.sendto(data, ("localhost", 17032))
-        except Exception as e:
+        except Exception:
             pass

@@ -7,7 +7,7 @@ def checkNet(url="https://www.google.com.tw"):
     try:
         urllib.request.urlopen(url)
         return True
-    except Exception as e:
+    except Exception:
         pass
     return False
 
@@ -15,7 +15,7 @@ def checkNet(url="https://www.google.com.tw"):
 def getExternalIP():
     try:
         return urllib.request.urlopen("http://ip.42.pl/raw").read()
-    except Exception as e:
+    except Exception:
         return None
 
 
