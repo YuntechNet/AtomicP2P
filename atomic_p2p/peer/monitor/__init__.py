@@ -11,7 +11,7 @@ from atomic_p2p.utils.logging import getLogger
 
 class Monitor(ThreadManager):
 
-    def __init__(self, peer: 'Peer', loopDelay: int = 10,
+    def __init__(self, peer: "Peer", loopDelay: int = 10,
                  verbose: bool = False, max_no_response_count: int = 5):
         self.peer = peer
         super(Monitor, self).__init__(loopDelay=loopDelay, auto_register=True,
@@ -38,12 +38,12 @@ class Monitor(ThreadManager):
             msg_arr = msg_arr[1:]
             if msg_key in self.commands:
                 return self.commands[msg_key]._on_process(msg_arr)
-            return self.commands['help']._on_process(msg_arr)
+            return self.commands["help"]._on_process(msg_arr)
         except Exception:
-            return self.commands['help']._on_process(msg_arr)
+            return self.commands["help"]._on_process(msg_arr)
 
     def on_recv_pkt(self, addr: Tuple[str, int],
-                    pkt: 'Packet', conn: 'SSLSocket') -> None:
+                    pkt: "Packet", conn: "SSLSocket") -> None:
         if not pkt.is_reject():
             peer_info = self.peer.get_peer_info_by_host(host=pkt.src)
             if peer_info is not None:
@@ -53,8 +53,8 @@ class Monitor(ThreadManager):
         for each in missing:
             try:
                 self.peer.pend_socket_to_rm(each.conn)
-                self.logger.info(('{} has been remove from '
-                                  'status list.').format(each))
+                self.logger.info(("{} has been remove from "
+                                  "status list.").format(each))
             except Exception:
                 self.logger.error(traceback.format_exc())
 

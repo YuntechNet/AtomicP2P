@@ -9,11 +9,11 @@ from atomic_p2p.utils.security import create_self_signed_cert as cssc
 
 
 def test_create_self_signed_cert():
-    cert_a, cert_k = cssc(join(getcwd(), 'data'), 'a.pem', 'a.key')
-    cert_b, cert_b = cssc(join(getcwd(), 'data'), 'b.pem', 'b.key')
-    key_a = load_privatekey(FP, open(join(getcwd(), 'data', 'a.key')).read())
-    cert_a = load_certificate(FP, open(join(getcwd(), 'data', 'a.pem')).read())
-    cert_b = load_certificate(FP, open(join(getcwd(), 'data', 'b.pem')).read())
+    cert_a, cert_k = cssc(join(getcwd(), "data"), "a.pem", "a.key")
+    cert_b, cert_b = cssc(join(getcwd(), "data"), "b.pem", "b.key")
+    key_a = load_privatekey(FP, open(join(getcwd(), "data", "a.key")).read())
+    cert_a = load_certificate(FP, open(join(getcwd(), "data", "a.pem")).read())
+    cert_b = load_certificate(FP, open(join(getcwd(), "data", "b.pem")).read())
 
     ctx = Context(TLSv1_METHOD)
     ctx.use_privatekey(key_a)
@@ -23,7 +23,7 @@ def test_create_self_signed_cert():
     with pytest.raises(Error):
         ctx.check_privatekey()
 
-    remove(join(getcwd(), 'data', 'a.pem'))
-    remove(join(getcwd(), 'data', 'a.key'))
-    remove(join(getcwd(), 'data', 'b.pem'))
-    remove(join(getcwd(), 'data', 'b.key'))
+    remove(join(getcwd(), "data", "a.pem"))
+    remove(join(getcwd(), "data", "a.key"))
+    remove(join(getcwd(), "data", "b.pem"))
+    remove(join(getcwd(), "data", "b.key"))

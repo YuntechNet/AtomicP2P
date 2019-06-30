@@ -17,7 +17,7 @@ def valid_ipv4_format(address: str) -> bool:
             inet_aton(address)
         except error:
             return False
-        return address.count('.') == 3
+        return address.count(".") == 3
     except error:  # not a valid address
         return False
 

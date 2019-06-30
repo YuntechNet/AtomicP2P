@@ -15,9 +15,9 @@ class LocalMonitor(ThreadManager):
                                            logger=getLogger(__name__))
         self.service = service
         self.cipher = AES.new(password, AES.MODE_CBC,
-                              '0000000000000000'.encode())
+                              "0000000000000000".encode())
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.bind(('localhost', 17031))
+        self.sock.bind(("localhost", 17031))
 
     def registerHandler(self):
         pass
@@ -27,7 +27,7 @@ class LocalMonitor(ThreadManager):
 
     def encrypt(self, raw_data):
         if len(raw_data) % 16 != 0:
-            raw_data += ' ' * (16 - len(raw_data) % 16)
+            raw_data += " " * (16 - len(raw_data) % 16)
         return self.cipher.encrypt(raw_data)
 
     def decrypt(self, enc_data):
@@ -48,10 +48,10 @@ class LocalMonitor(ThreadManager):
         self.sock.close()
 
     def command_recv(self, enc_data, addr):
-        if enc_data is not None and enc_data != '':
+        if enc_data is not None and enc_data != "":
             raw_data = self.decrypt(enc_data=enc_data)
             result = self.service.onProcess(raw_data.decode())[1]
             enc_result = self.encrypt(raw_data=result)
             res_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            res_sock.sendto(enc_result, ('localhost', 17032))
+            res_sock.sendto(enc_result, ("localhost", 17032))
             res_sock.close()

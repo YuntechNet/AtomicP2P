@@ -70,11 +70,11 @@ class Peer(ThreadManager):
         self.__cert = cert
         self.__hash = _hash
 
-        self.logger.info('Program hash: {{{}...{}}}'.format(
+        self.logger.info("Program hash: {{{}...{}}}".format(
             self.__hash[:6], self.__hash[-6:]))
         self.server_info = PeerInfo(host=host, name=name, role=role)
         self.dns_resolver = DNSResolver(
-            ns='127.0.0.1' if ns is None else ns, role=role)
+            ns="127.0.0.1" if ns is None else ns, role=role)
         self.__tcp_server = self.__bind_socket(cert=self.__cert)
 
         self.peer_pool = {}
@@ -85,7 +85,7 @@ class Peer(ThreadManager):
         super(Peer, self).start()
         if self.monitor.is_start() is False:
             self.monitor.start()
-        self.logger.info('Peer started.')
+        self.logger.info("Peer started.")
 
     def stop(self) -> None:
         for _, value in self.__send_queue.items():
@@ -135,9 +135,9 @@ class Peer(ThreadManager):
             self.__on_fds_rm()
         self.__tcp_server.close()
         sleep(2)
-        self.logger.info('{} stopped.'.format(self.server_info))
+        self.logger.info("{} stopped.".format(self.server_info))
 
-    def new_tcp_long_conn(self, dst: Tuple[str, int]) -> 'SSLSocket':
+    def new_tcp_long_conn(self, dst: Tuple[str, int]) -> "SSLSocket":
         """Create a ssl-wrapped TCP socket with given destination host
 
         Args:
@@ -155,7 +155,7 @@ class Peer(ThreadManager):
         sock.setblocking(False)
         return sock
 
-    def pend_socket(self, sock: 'SSLSocket') -> None:
+    def pend_socket(self, sock: "SSLSocket") -> None:
         """Pending socket into I/O list.
         Init a sending queue and put into dict for further handling of pkts.
         And the given sock will be append into I/O file descriptor list.
@@ -167,7 +167,7 @@ class Peer(ThreadManager):
         self.__in_fds.append(sock)
         self.__out_fds.append(sock)
 
-    def pend_socket_to_rm(self, sock: 'SSLSocket') -> None:
+    def pend_socket_to_rm(self, sock: "SSLSocket") -> None:
         """Pending socket into rm list for remove at next thread iteration.
         Given socket append into remove list and clear it's sending queue,
         then will be remove at next iteration of thread.
@@ -178,7 +178,7 @@ class Peer(ThreadManager):
         self.__pend_rm_fds.append(sock)
         self.__send_queue[sock].queue.clear()
 
-    def pend_packet(self, sock: 'SSLSocket', pkt: 'Packet', **kwargs) -> None:
+    def pend_packet(self, sock: "SSLSocket", pkt: "Packet", **kwargs) -> None:
         """Pending pkt's raw_data to queue's with sepecific sock.
         Any exception when wrapping handler to packet whould cause this connec-
         tion been close and thread maintaining loop terminate.
@@ -194,13 +194,13 @@ class Peer(ThreadManager):
         except Exception:
             self.logger.info(format_exc())
 
-    def select_handler(self, pkt_type: str) -> Union[None, 'Handler']:
-        handler = super(Peer, self).select_handler(pkt_type=pkt_type) 
+    def select_handler(self, pkt_type: str) -> Union[None, "Handler"]:
+        handler = super(Peer, self).select_handler(pkt_type=pkt_type)
         if handler is None:
             return self.monitor.select_handler(pkt_type=pkt_type)
         return handler
 
-    def add_peer_in_net(self, peer_info: 'PeerInfo') -> None:
+    def add_peer_in_net(self, peer_info: "PeerInfo") -> None:
         """Add given PeerInfo into current net's peer_pool.
 
         Args:
@@ -212,9 +212,9 @@ class Peer(ThreadManager):
         if type(peer_info) is PeerInfo:
             self.peer_pool[peer_info.host] = peer_info
         else:
-            raise ValueError('Parameter peer_info is not a PeerInfo object')
+            raise ValueError("Parameter peer_info is not a PeerInfo object")
 
-    def del_peer_in_net(self, peer_info: 'PeerInfo') -> bool:
+    def del_peer_in_net(self, peer_info: "PeerInfo") -> bool:
         """Delete given PeerInfo if exists in current net's peer_pool
 
         Args:
@@ -232,7 +232,7 @@ class Peer(ThreadManager):
         else:
             return False
 
-    def is_peer_in_net(self, info: Union['PeerInfo', Tuple[str, int]]) -> bool:
+    def is_peer_in_net(self, info: Union["PeerInfo", Tuple[str, int]]) -> bool:
         """Return if in current net pool
 
         Args:
@@ -250,12 +250,12 @@ class Peer(ThreadManager):
         elif type(info) is PeerInfo:
             return info.host in self.peer_pool
         else:
-            raise ValueError('Parameter peer_info should be tuple with '
-                             '(str, int) or type PeerInfo')
+            raise ValueError("Parameter peer_info should be tuple with "
+                             "(str, int) or type PeerInfo")
 
     def get_peer_info_by_host(
         self, host: Tuple[str, int]
-    ) -> Union[None, 'PeerInfo']:
+    ) -> Union[None, "PeerInfo"]:
         """Get PeerInfo object from current net's peer_pool if exists.
 
         Args:
@@ -291,13 +291,13 @@ class Peer(ThreadManager):
         assert host_valid(host) is True
         handler = self.select_handler(pkt_type=pkt_type)
         if handler is None:
-            self.logger.info('Unknow handler pkt_type')
+            self.logger.info("Unknow handler pkt_type")
         elif self.is_peer_in_net(info=host):
             peer_info = self.get_peer_info_by_host(host=host)
             pkt = handler.on_send(target=host, **kwargs)
             self.pend_packet(sock=peer_info.conn, pkt=pkt)
         else:
-            self.logger.info('Host not in current net.')
+            self.logger.info("Host not in current net.")
 
     def handler_broadcast_packet(
         self, host: Tuple[str, int], pkt_type: str, **kwargs
@@ -314,10 +314,10 @@ class Peer(ThreadManager):
         """
         handler = self.select_handler(pkt_type=pkt_type)
         if handler is None:
-            self.logger.info('Unknow handler pkt_type')
+            self.logger.info("Unknow handler pkt_type")
         else:
             for (_, value) in self.peer_pool.items():
-                if host[1] == 'all' or host[1] == value.role:
+                if host[1] == "all" or host[1] == value.role:
                     pkt = handler.on_send(target=value.host, **kwargs)
                     self.pend_packet(sock=value.conn, pkt=pkt)
 
@@ -330,26 +330,26 @@ class Peer(ThreadManager):
         msg_arr = msg_arr[1:]
         if msg_key in self.commands:
             return self.commands[msg_key].onProcess(msg_arr)
-        return ''
+        return ""
 
-    def __on_recv(self, sock: 'SSLSocket') -> None:
+    def __on_recv(self, sock: "SSLSocket") -> None:
         try:
             raw_data = sock.recv(4096)
-            if raw_data == b'':
+            if raw_data == b"":
                 return
             pkt = Packet.deserilize(raw_data=raw_data)
             handler = self.select_handler(pkt_type=pkt._type)
 
             if handler is None:
-                self.logger.info('Unknown packet type: {}'.format(pkt._type))
+                self.logger.info("Unknown packet type: {}".format(pkt._type))
             elif pkt._hash != self.__hash and pkt.is_reject() is False:
-                # Invalid hash -> Dangerous peer's pkt.
+                # Invalid hash -> Dangerous peer"s pkt.
                 self.logger.info(
-                    'Illegal peer {} with unmatch hash {{{}...{}}} try to '
-                    'connect to net.'.format(
+                    "Illegal peer {} with unmatch hash {{{}...{}}} try to "
+                    "connect to net.".format(
                         pkt.src, pkt._hash[:6], pkt._hash[-6:]))
                 pkt.redirect_to_host(src=self.server_info.host, dst=pkt.src)
-                pkt.set_reject(reject_data='Unmatching peer hash.')
+                pkt.set_reject(reject_data="Unmatching peer hash.")
                 self.pend_socket(sock=sock)
                 self.pend_packet(sock=sock, pkt=pkt)
             else:
@@ -362,14 +362,14 @@ class Peer(ThreadManager):
                     handler.on_recv(src=pkt.src, pkt=pkt, sock=sock)
                     self.monitor.on_recv_pkt(addr=pkt.src, pkt=pkt, conn=sock)
                 else:  # Not in net and not exception pkt
-                    pkt.set_reject(reject_data='Not in current net.')
+                    pkt.set_reject(reject_data="Not in current net.")
                     self.pend_packet(sock=sock, pkt=pkt)
         except SSLWantReadError:
             return
         except Exception:
             print(str(self.server_info) + format_exc())
 
-    def __on_send(self, sock: 'SSLSocket') -> None:
+    def __on_send(self, sock: "SSLSocket") -> None:
         try:
             q = self.__send_queue[sock]
             while q.empty() is False:
@@ -393,7 +393,7 @@ class Peer(ThreadManager):
             each.close()
         self.__pend_rm_fds.clear()
 
-    def __bind_socket(self, cert: Tuple[str, str]) -> 'SSLSocket':
+    def __bind_socket(self, cert: Tuple[str, str]) -> "SSLSocket":
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
         unwrap_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         unwrap_socket.setsockopt(SOL_SOCKET, SO_REUSEPORT, 1)
@@ -401,11 +401,11 @@ class Peer(ThreadManager):
         unwrap_socket.listen(5)
         unwrap_socket.setblocking(False)
 
-        self.logger.info('Peer prepared')
+        self.logger.info("Peer prepared")
         self.logger.info(
-            'This peer is running with certificate at path {}'.format(
+            "This peer is running with certificate at path {}".format(
                     cert[0]))
-        self.logger.info('Please make sure other peers have same certicate.')
+        self.logger.info("Please make sure other peers have same certicate.")
         return wrap_socket(unwrap_socket, certfile=cert[0], keyfile=cert[1],
                            server_side=True)
 

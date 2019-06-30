@@ -12,7 +12,7 @@ class Command(object):
         try:
             result = self.onProcess(msg_arr, **kwargs)
             if result is None:
-                return 'Command Done'
+                return "Command Done"
             else:
                 return result
         except IndexError:
@@ -20,13 +20,13 @@ class Command(object):
                 return self.__doc__
             else:
                 error_text = \
-                    '==========\n' \
-                    'Here is Command\'s __doc__.\n' \
-                    ' if you are executing some command ' \
-                    ', but this message shows.\n' \
-                    ' it mean the command don\'t have approriate __doct__.\n' \
-                    'Make sure there is __doc__ in {{{}}} command class.\n' \
-                    '=========='
+                    "==========\n" \
+                    "Here is Command's __doc__.\n" \
+                    " if you are executing some command " \
+                    ", but this message shows.\n" \
+                    " it mean the command don't have approriate __doct__.\n" \
+                    "Make sure there is __doc__ in {{{}}} command class.\n" \
+                    "=========="
                 return error_text.format(self.cmd)
         except Exception as e:
             return format_exc()

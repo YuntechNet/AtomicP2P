@@ -11,7 +11,7 @@ class Handler(object):
     The actual data maintain is by Packet class.
     """
 
-    def __init__(self, peer: 'Peer', pkt_type: str) -> None:
+    def __init__(self, peer: "Peer", pkt_type: str) -> None:
         """Init of Handler class
 
         Args:
@@ -23,31 +23,31 @@ class Handler(object):
         self.__pkt_type = pkt_type
 
     @property
-    def peer(self) -> 'Peer':
+    def peer(self) -> "Peer":
         return self.__peer
 
     @property
     def pkt_type(self) -> str:
         return self.__pkt_type
 
-    def on_send(self, target: Tuple[str, int], **kwargs) -> 'Packet':
-        if 'reject_data' in locals()['kwargs']:
+    def on_send(self, target: Tuple[str, int], **kwargs) -> "Packet":
+        if "reject_data" in locals()["kwargs"]:
             return self.on_send_reject_pkt(target=target, **kwargs)
         else:
             return self.on_send_pkt(target=target, **kwargs)
 
-    def on_send_pkt(self, target: Tuple[str, int], **kwargs) -> 'Packet':
+    def on_send_pkt(self, target: Tuple[str, int], **kwargs) -> "Packet":
         raise NotImplementedError
 
     def on_send_reject_pkt(self, target: Tuple[str, int],
-                           reject_data: object, **kwargs) -> 'Packet':
+                           reject_data: object, **kwargs) -> "Packet":
         packet = Packet(dst=target, src=self.peer.server_info.host, _hash=None,
                         _type=self.pkt_type, _data={})
         packet.set_reject(reject_data=reject_data)
         return packet
 
     def on_recv(self, src: Tuple[str, int],
-                pkt: Packet, sock: 'SSLSocket', **kwargs) -> None:
+                pkt: Packet, sock: "SSLSocket", **kwargs) -> None:
         """
         Args:
             src: Source host.
@@ -60,14 +60,14 @@ class Handler(object):
         else:
             self.on_recv_pkt(src=src, pkt=pkt, conn=sock, **kwargs)
 
-    def on_recv_pkt(self, src: Tuple[str, int], pkt: 'Packet',
-                    conn: 'SSLSocket', **kwargs) -> None:
+    def on_recv_pkt(self, src: Tuple[str, int], pkt: "Packet",
+                    conn: "SSLSocket", **kwargs) -> None:
         raise NotImplementedError
 
-    def on_recv_reject_pkt(self, src: Tuple[str, int], pkt: 'Packet',
-                           conn: 'SSLSocket', **kwargs) -> None:
-        reject = pkt.data['reject']
-        self.__peer.logger.info('Rejected by {}, reason: {}'.format(
+    def on_recv_reject_pkt(self, src: Tuple[str, int], pkt: "Packet",
+                           conn: "SSLSocket", **kwargs) -> None:
+        reject = pkt.data["reject"]
+        self.__peer.logger.info("Rejected by {}, reason: {}".format(
             pkt.src, reject))
         # TODO: Fit unittest empty conn in PeerInfo
         #       Waiting for use mock.

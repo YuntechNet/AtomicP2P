@@ -36,7 +36,7 @@ class DNSResolver(object):
         self._resolver.nameserver = self._ns
 
     def sync_from_DNS(self, current_host: Tuple[str, int],
-                      domain: str) -> List['PeerInfo']:
+                      domain: str) -> List["PeerInfo"]:
         """Query from DNS fetch all records and put in pool
         Hard-code with global.[domain] will send to DNS for query. Durring pro-
         cessing each record, if any error occured, then it will be skip.
@@ -50,12 +50,12 @@ class DNSResolver(object):
             Query results in list with PeerInfo from DNS.
         """
         peers = []
-        records = self.forward('global.' + domain)
+        records = self.forward("global." + domain)
         for each in records:
             for every in self.reverse(address=each):
-                split = every.split('.')
+                split = every.split(".")
                 name, role, fqdn, addr = split[0], split[1], every, each
-                if name is None or 'localhost' in name:
+                if name is None or "localhost" in name:
                     continue
                 # TODO: Seeking better solution determine whether
                 #       get_fqdn_info() is valid or not, Currently each call
@@ -80,7 +80,7 @@ class DNSResolver(object):
             Exceptions occurr will return a empty list.
         """
         try:
-            answers = self._resolver.query(fqdn, 'A')
+            answers = self._resolver.query(fqdn, "A")
             return [str(x) for x in answers]
         except Exception:
             return []
@@ -96,7 +96,7 @@ class DNSResolver(object):
             Exceptions occurr will return a empty list
         """
         try:
-            answers = self._resolver.query(from_address(address), 'PTR')
+            answers = self._resolver.query(from_address(address), "PTR")
             return [str(x) for x in answers]
         except Exception:
             return []
@@ -114,7 +114,7 @@ class DNSResolver(object):
         """
         try:
             res = str(self._resolver.query(
-                '_atomic_p2p._tcp.' + fqdn, 'SRV')[0]).split(' ')
+                "_atomic_p2p._tcp." + fqdn, "SRV")[0]).split(" ")
             return (res[0], res[1], res[2], res[3])
         except Exception as e:
             return (0, 0, -1, None)

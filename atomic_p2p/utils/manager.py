@@ -17,7 +17,7 @@ class ProcManager(Process):
         self.pkt_handlers = {}
         self.commands = {}
 
-    def select_handler(self, pkt_type: str) -> 'Handler':
+    def select_handler(self, pkt_type: str) -> "Handler":
         if pkt_type in self.pkt_handlers:
             return self.pkt_handlers[pkt_type]
         return None
@@ -66,7 +66,7 @@ class ThreadManager(Thread):
         self.pkt_handlers = {}
         self.commands = {}
 
-    def select_handler(self, pkt_type: str) -> 'Handler':
+    def select_handler(self, pkt_type: str) -> "Handler":
         if pkt_type in self.pkt_handlers:
             return self.pkt_handlers[pkt_type]
         return None
