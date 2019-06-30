@@ -16,7 +16,6 @@ class Monitor(ThreadManager):
         self.peer = peer
         super(Monitor, self).__init__(loopDelay=loopDelay, auto_register=True,
                                       logger=getLogger(__name__))
-        self.pkt_handlers = {}
         self.verbose = False
         self.pause = False
         self.max_no_response_count = max_no_response_count
@@ -32,11 +31,6 @@ class Monitor(ThreadManager):
                             self.max_no_response_count:
                         no_response_list.append(peer_info)
                 self.removeMonitorlist(no_response_list)
-
-    def select_handler(self, pkt_type: str) -> 'Handler':
-        if pkt_type in self.pkt_handlers:
-            return self.pkt_handlers[pkt_type]
-        return None
 
     def onProcess(self, msg_arr):
         try:
@@ -69,15 +63,12 @@ class Monitor(ThreadManager):
             CheckHandler(self)
         ]
         for each in installing_handlers:
-            self.pkt_handlers[type(each).pkt_type] = each
+            self.register_handler(handler=each)
 
     def _register_command(self) -> None:
-        self.commands = {
-            'help': HelpCmd(self),
-            'pause': PauseCmd(self),
-            'period': PeriodCmd(self),
-            'list': ListCmd(self),
-            'reset': ResetCmd(self),
-            'verbose': VerboseCmd(self),
-            'manual': ManualCmd(self)
-        }
+        installing_commands = [
+            HelpCmd(self), PauseCmd(self), PeriodCmd(self), ListCmd(self),
+            ResetCmd(self), VerboseCmd(self), ManualCmd(self)
+        ]
+        for each in installing_commands:
+            self.register_command(command=each)

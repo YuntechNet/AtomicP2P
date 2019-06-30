@@ -45,7 +45,8 @@ class Peer(ThreadManager):
 
     def __init__(self, host: Tuple[str, int], name: str, role: str,
                  cert: Tuple[str, str], _hash: str, ns: str = None,
-                 loop_delay: int = 1) -> None:
+                 loop_delay: int = 1,
+                 logger: "logging.Logger" = getLogger(__name__)) -> None:
         """Init of PeerManager
 
         Args:
@@ -56,10 +57,10 @@ class Peer(ThreadManager):
             _hash: Program self hash to send in packet.
             ns: Nameserver address for resolve DNS.
             loop_delay: While loop delay.
+            logger: Logger for logging.
         """
         super(Peer, self).__init__(
-            loopDelay=loop_delay, auto_register=True,
-            logger=getLogger(__name__))
+            loopDelay=loop_delay, auto_register=True, logger=logger)
         self.__send_queue = {}
         self.__in_fds = []
         self.__out_fds = []
@@ -77,8 +78,6 @@ class Peer(ThreadManager):
         self.__tcp_server = self.__bind_socket(cert=self.__cert)
 
         self.peer_pool = {}
-        self.pkt_handlers = {}
-        self.commands = {}
 
         self.monitor = Monitor(peer=self)
 
@@ -196,11 +195,10 @@ class Peer(ThreadManager):
             self.logger.info(format_exc())
 
     def select_handler(self, pkt_type: str) -> Union[None, 'Handler']:
-        if pkt_type in self.pkt_handlers:
-            return self.pkt_handlers[pkt_type]
-        elif (pkt_type in self.monitor.pkt_handlers):
-            return self.monitor.pkt_handlers[pkt_type]
-        return None
+        handler = super(Peer, self).select_handler(pkt_type=pkt_type) 
+        if handler is None:
+            return self.monitor.select_handler(pkt_type=pkt_type)
+        return handler
 
     def add_peer_in_net(self, peer_info: 'PeerInfo') -> None:
         """Add given PeerInfo into current net's peer_pool.
@@ -418,13 +416,12 @@ class Peer(ThreadManager):
             DisconnectHandler(self)
         ]
         for each in installing_handlers:
-            self.pkt_handlers[type(each).pkt_type] = each
+            self.register_handler(handler=each)
 
     def _register_command(self) -> None:
-        self.commands = {
-            'help': HelpCmd(self),
-            'join': JoinCmd(self),
-            'send': SendCmd(self),
-            'list': ListCmd(self),
-            'leavenet': LeaveNetCmd(self)
-        }
+        installing_commands = [
+            HelpCmd(self), JoinCmd(self), SendCmd(self),
+            ListCmd(self), LeaveNetCmd(self)
+        ]
+        for each in installing_commands:
+            self.register_command(command=each)
