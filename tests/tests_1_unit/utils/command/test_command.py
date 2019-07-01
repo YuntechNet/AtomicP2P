@@ -6,6 +6,6 @@ def test_init(command):
     assert command.cmd is None
 
 
-def test_onProcess(command):
+def test__execute(command):
     with pytest.raises(NotImplementedError):
-        command.onProcess(None)
+        command._execute(None)

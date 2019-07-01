@@ -15,7 +15,7 @@ class HelpCmd(Command):
         super(HelpCmd, self).__init__('help')
         self.peer = peer
 
-    def onProcess(self, msg_arr):
+    def _execute(self, msg_arr):
         if msg_arr != [] and msg_arr[0] in self.peer.commands:
             return self.peer.commands[msg_arr[0]].__doc__
         else:
@@ -44,7 +44,7 @@ class JoinCmd(Command):
         super(JoinCmd, self).__init__('join')
         self.peer = peer
 
-    def onProcess(self, msg_arr):
+    def _execute(self, msg_arr):
         if ':' in msg_arr[0]:
             addr = msg_arr[0].split(':')
             addr[1] = int(addr[1])
@@ -81,7 +81,7 @@ class SendCmd(Command):
         super(SendCmd, self).__init__('send')
         self.peer = peer
 
-    def onProcess(self, msg_arr):
+    def _execute(self, msg_arr):
         msg_key = msg_arr[0]
         msg_arr = msg_arr[1:]
         addr = msg_key.split(':')
@@ -107,7 +107,7 @@ class ListCmd(Command):
         super(ListCmd, self).__init__('list')
         self.peer = peer
 
-    def onProcess(self, msg_arr):
+    def _execute(self, msg_arr):
         if len(self.peer.connectlist) == 0:
             return 'There is no peers in current net.'
         else:
@@ -128,7 +128,7 @@ class LeaveNetCmd(Command):
         super(LeaveNetCmd, self).__init__('leavenet')
         self.peer = peer
 
-    def onProcess(self, msg_arr):
+    def _execute(self, msg_arr):
         self.peer.handler_broadcast_packet(
             host=('', 'all'), pkt_type=DisconnectHandler.pkt_type)
         self.peer.peer_pool = {}

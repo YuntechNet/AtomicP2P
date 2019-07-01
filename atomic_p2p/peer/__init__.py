@@ -325,14 +325,19 @@ class Peer(ThreadManager):
 
     # Temporary support old calling. Will be deprecate soon. 2019/04/26
     def onProcess(self, msg_arr: list, **kwargs) -> str:
-        return self.__on_command(msg_arr, **kwargs)
+        self.logger.warning("[Deprecated] onProcess method is no longer maintai"
+            "n, manually send command into peer is not recommended.")
+        return self._on_command(msg_arr=msg_arr, **kwargs)
 
-    def __on_command(self, msg_arr: list, **kwargs) -> str:
-        msg_key = msg_arr[0].lower()
-        msg_arr = msg_arr[1:]
-        if msg_key in self.commands:
-            return self.commands[msg_key].onProcess(msg_arr)
-        return ''
+    def _on_command(self, msg_arr: list, **kwargs) -> str:
+        try:
+            msg_key = msg_arr[0].lower()
+            msg_arr = msg_arr[1:]
+            if msg_key in self.commands:
+                return self.commands[msg_key]._on_command_recv(msg_arr)
+            return self.commands['help']._on_command_recv(msg_arr)
+        except Exception:
+            return self.commands['help']._on_command_recv(msg_arr)
 
     def __on_recv(self, sock: 'SSLSocket') -> None:
         try:

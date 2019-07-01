@@ -2,15 +2,27 @@ from traceback import format_exc
 
 
 class Command(object):
-    """Command
-    """
 
-    def __init__(self, cmd, **kwargs):
+    def __init__(self, cmd: str, **kwargs):
+        """Init of Command class
+
+        Args:
+            cmd: unique key for command.
+        """
         self.cmd = cmd
 
-    def _on_process(self, msg_arr, **kwargs):
+    def _on_command_recv(self, msg_arr: list, **kwargs) -> str:
+        """Precheck when command is trigger
+
+        Args:
+            msg_arr: command with arguments split into array.
+        
+        Returns:
+            command's process result.
+            Any exception will cause command annotations been print.
+        """
         try:
-            result = self.onProcess(msg_arr, **kwargs)
+            result = self._execute(msg_arr, **kwargs)
             if result is None:
                 return 'Command Done'
             else:
@@ -31,5 +43,6 @@ class Command(object):
         except Exception as e:
             return format_exc()
 
-    def onProcess(self, msg_arr, **kwargs):
+    def _execute(self, msg_arr, **kwargs):
+        """Implementation of each subclass, this defines how the command actual work"""
         raise NotImplementedError

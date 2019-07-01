@@ -62,12 +62,12 @@ def main(role, addr, target, name, cert, ns, domain):
     service['device'].start()
 
     if target is not None:
-        service['peer'].onProcess(['join', target])
+        service['peer']._on_command(['join', target])
     elif domain is not None:
         if ns is None:
-            service['peer'].onProcess(['join', domain])
+            service['peer']._on_command(['join', domain])
         else:
-            service['peer'].onProcess(['join', domain, ns])
+            service['peer']._on_command(['join', domain, ns])
     else:
         # printText('\x1b[1;33;40myou are first peer.\x1b[0m', output=[dashboard_field, peer_field])
         printText('you are first peer.', output=[dashboard_field, peer_field])
@@ -103,7 +103,7 @@ def main(role, addr, target, name, cert, ns, domain):
         cmd = input_field.text.split(' ')
         service_key = cmd[0].lower()
         if service_key in service:
-            service[service_key].onProcess(cmd[1:])
+            service[service_key]._on_command(cmd[1:])
         elif service_key == 'help':
             helptips = "peer help            - See peer's help\n"\
                        "monitor help         - See monitor's help\n"\

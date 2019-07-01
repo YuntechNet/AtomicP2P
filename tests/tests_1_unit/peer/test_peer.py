@@ -7,8 +7,19 @@ def test_init(default_peer):
     assert default_peer._Peer__tcp_server.getsockname() == ('0.0.0.0', 8000)
 
 
-def test_onProcess(default_peer):
-    assert default_peer.onProcess(['test', 'test2']) == ''
+def test__on_command(default_peer):
+    assert default_peer._on_command(['test', 'test2']) == (
+        "peer [cmd] <options>\n"
+        " - join [ip:port]                                 "
+        "send a join net request to a exists net peer.\n"
+        " - send [ip:port/broadcast:role] [msg]            "
+        "send a msg to host.\n"
+        " - list                                           "
+        "list all peer's info in know peer list.\n"
+        " - leavenet                                       "
+        "leave current net.\n"
+        " - help [cmd]                                     "
+        "show help msg of sepecific command.")
 
 
 def test_select_handler(default_peer):

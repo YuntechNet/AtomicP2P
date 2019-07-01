@@ -38,15 +38,20 @@ class Monitor(ThreadManager):
             return self.pkt_handlers[pkt_type]
         return None
 
-    def onProcess(self, msg_arr):
+    def onProcess(self, msg_arr, **kwargs) -> str:
+        self.logger.warning("[Deprecated] onProcess method is no longer maintai"
+            "n, manually send command into peer is not recommended.")
+        return self._on_command(msg_arr, **kwargs)
+
+    def _on_command(self, msg_arr: list, **kwargs) -> str:
         try:
             msg_key = msg_arr[0].lower()
             msg_arr = msg_arr[1:]
             if msg_key in self.commands:
-                return self.commands[msg_key]._on_process(msg_arr)
-            return self.commands['help']._on_process(msg_arr)
+                return self.commands[msg_key]._on_command_recv(msg_arr)
+            return self.commands['help']._on_command_recv(msg_arr)
         except Exception:
-            return self.commands['help']._on_process(msg_arr)
+            return self.commands['help']._on_command_recv(msg_arr)
 
     def on_recv_pkt(self, addr: Tuple[str, int],
                     pkt: 'Packet', conn: 'SSLSocket') -> None:

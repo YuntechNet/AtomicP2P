@@ -50,7 +50,7 @@ class LocalMonitor(ThreadManager):
     def command_recv(self, enc_data, addr):
         if enc_data is not None and enc_data != '':
             raw_data = self.decrypt(enc_data=enc_data)
-            result = self.service.onProcess(raw_data.decode())[1]
+            result = self.service._on_command(raw_data.decode())[1]
             enc_result = self.encrypt(raw_data=result)
             res_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             res_sock.sendto(enc_result, ('localhost', 17032))

@@ -14,7 +14,7 @@ class HelpCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def _on_process(self, msg_arr):
+    def _execute(self, msg_arr):
         if msg_arr != [] and msg_arr[0] in self.monitor.commands:
             return self.monitor.commands[msg_arr[0]].__doc__
         else:
@@ -41,7 +41,7 @@ class PauseCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def _on_process(self, msg_arr):
+    def _execute(self, msg_arr):
         self.monitor.pause = not self.monitor.pause
         return 'Monitor pause: {}'.format(self.monitor.pause)
 
@@ -57,7 +57,7 @@ class PeriodCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def _on_process(self, msg_arr):
+    def _execute(self, msg_arr):
         try:
             period = int(msg_arr[0])
             self.monitor.loopDelay = period
@@ -80,7 +80,7 @@ class ListCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def _on_process(self, msg_arr):
+    def _execute(self, msg_arr):
         if len(self.monitor.monitorlist) == 0:
             return 'There is no peer\'s info in current list'
         else:
@@ -102,7 +102,7 @@ class ResetCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def _on_process(self, msg_arr):
+    def _execute(self, msg_arr):
         if msg_arr == []:
             for each in self.peer.connectlist:
                 each.status.update(status_type=StatusType.PENDING)
@@ -123,7 +123,7 @@ class VerboseCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def _on_process(self, msg_arr):
+    def _execute(self, msg_arr):
         self.monitor.verbose = not self.monitor.verbose
         return 'Monitor verbose toggle to: {}'.format(self.monitor.verbose)
 
@@ -139,7 +139,7 @@ class ManualCmd(Command):
         self.monitor = monitor
         self.peer = monitor.peer
 
-    def _on_process(self, msg_arr):
+    def _execute(self, msg_arr):
         host = msg_arr[0].split(':')
         try:
             host[1] = int(host[1])

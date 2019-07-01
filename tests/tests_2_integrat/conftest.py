@@ -74,8 +74,8 @@ def net(cert, self_hash):
     for (_, val) in nodes.items():
         val.start()
 
-    nodes['switch_1'].onProcess(['join', '127.0.0.1:8000'])
-    nodes['switch_2'].onProcess(['join', '127.0.0.1:8000'])
+    nodes['switch_1']._on_command(['join', '127.0.0.1:8000'])
+    nodes['switch_2']._on_command(['join', '127.0.0.1:8000'])
 
     time.sleep(8)
     yield nodes
