@@ -116,5 +116,5 @@ class DNSResolver(object):
             res = str(self._resolver.query(
                 "_atomic_p2p._tcp." + fqdn, "SRV")[0]).split(" ")
             return (res[0], res[1], res[2], res[3])
-        except Exception as e:
+        except Exception:
             return (0, 0, -1, None)
