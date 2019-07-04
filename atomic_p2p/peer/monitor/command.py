@@ -65,9 +65,7 @@ class PeriodCmd(Command):
                        change to: {} seconds.".format(period))
         except ValueError:
             return "Please input a integer: {}".format(msg_arr[0])
-        except Exception as e:
-            return e
-
+        
 
 class ListCmd(Command):
     """ListCmd
@@ -81,12 +79,12 @@ class ListCmd(Command):
         self.peer = monitor.peer
 
     def _execute(self, msg_arr):
-        if len(self.monitor.monitorlist) == 0:
+        if len(self.monitor.peer.connectlist) == 0:
             return "There is no peer's info in current list"
         else:
             output_text = "Current peers status:"
-            for each in self.monitor.monitorlist:
-                output_text += (" - " + str(each) + "\n")
+            for each in self.monitor.peer.connectlist:
+                output_text += (" - " + str(each.status) + "\n")
             output_text += "[---End of list---]"
             return output_text
 
@@ -143,7 +141,7 @@ class ManualCmd(Command):
         host = msg_arr[0].split(":")
         try:
             host[1] = int(host[1])
-            self.peer.handler_unicat_packet(
+            self.peer.handler_unicast_packet(
                 host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
         except ValueError:
             self.peer.handler_broadcast_packet(
