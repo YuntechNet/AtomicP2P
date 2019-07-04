@@ -20,6 +20,7 @@ def test__on_command(default_peer):
         "leave current net.\n"
         " - help [cmd]                                     "
         "show help msg of sepecific command.")
+    assert "JoinCmd" in default_peer._on_command(['help', 'join'])
 
 
 def test_select_handler(default_peer):
