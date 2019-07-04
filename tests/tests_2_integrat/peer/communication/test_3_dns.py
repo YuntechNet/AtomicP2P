@@ -11,7 +11,7 @@ def test_two_link(core1, switch1):
 def test_three_link(core1, switch1, switch2):
     switch1._on_command(["join", "atomic_p2p.integrattest.org"])
     switch2._on_command(["join", "atomic_p2p.integrattest.org"])
-    sleep(10)
+    sleep(12)
     assert switch1.server_info.host in core1.peer_pool
     assert switch2.server_info.host in core1.peer_pool
 

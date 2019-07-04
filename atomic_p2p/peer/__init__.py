@@ -146,6 +146,10 @@ class Peer(ThreadManager):
         Returns:
             A SSLSocket object which connected to destination host with
                 non-blocking.
+
+        Raises:
+            AssertionError:
+                If given dst variable is not in proper Tuple[str, int] type.
         """
         assert host_valid(dst) is True
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
@@ -187,9 +191,13 @@ class Peer(ThreadManager):
             sock: A SSLSocket which wants to pend on its queue.
             pkt: A Packet ready to be pend.
             **kwargs: Any additional arguments needs by handler object.
+        
+        Raises:
+            AssertionError:
+                If given pkt variable is not in proper Packet type.
         """
+        assert type(pkt) is Packet
         try:
-            assert type(pkt) is Packet
             self.__send_queue[sock].put_nowait(pkt)
         except Exception:
             self.logger.info(format_exc())
@@ -207,12 +215,11 @@ class Peer(ThreadManager):
             peer_info: A PeerInfo object to be add.
 
         Raises:
-            ValueError: if arg peer_info is not a PeerInfo object.
+            AssertionError:
+                If given peer_info variable is not in proper PeerInfo type.
         """
-        if type(peer_info) is PeerInfo:
-            self.peer_pool[peer_info.host] = peer_info
-        else:
-            raise ValueError("Parameter peer_info is not a PeerInfo object")
+        assert type(peer_info) is PeerInfo
+        self.peer_pool[peer_info.host] = peer_info
 
     def del_peer_in_net(self, peer_info: "PeerInfo") -> bool:
         """Delete given PeerInfo if exists in current net's peer_pool
@@ -286,7 +293,8 @@ class Peer(ThreadManager):
             kwargs: Any addtional arguments need by Handler.
 
         Raises:
-            ValueError: If given host type is not tuple(str, int).
+            AssertionError:
+                If given host variable is not in proper Tuple[str, int] type.
         """
         assert host_valid(host) is True
         handler = self.select_handler(pkt_type=pkt_type)

@@ -33,8 +33,8 @@ def valid_ipv6_format(address: str) -> bool:
 
 
 def is_ssl_socket_open(host: Tuple[str, int]) -> bool:
+    assert host_valid(host) is True
     try:
-        assert host_valid(host) is True
         get_server_certificate(host)
         return True
     except Exception:
