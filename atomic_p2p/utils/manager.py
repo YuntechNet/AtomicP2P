@@ -6,10 +6,10 @@ from atomic_p2p.utils.logging import getLogger
 class ProcManager(Process):
 
     def __init__(self, loopDelay: int = 1, auto_register: bool = False,
-                 logger=None):
+                 logger=getLogger(__name__)):
         super(ProcManager, self).__init__()
         self.__auto_register = auto_register
-        self.logger = getLogger(__name__) if logger is None else logger
+        self.logger = logger
         self.loopDelay = loopDelay
         self.stopped = pEvent()
         self.started = pEvent()
@@ -107,10 +107,10 @@ class ProcManager(Process):
 class ThreadManager(Thread):
 
     def __init__(self, loopDelay: int = 1, auto_register: bool = False,
-                 logger=None):
+                 logger=getLogger(__name__)):
         super(ThreadManager, self).__init__()
         self.__auto_register = auto_register
-        self.logger = getLogger(__name__) if logger is None else logger
+        self.logger = logger
         self.loopDelay = loopDelay
         self.stopped = tEvent()
         self.started = tEvent()

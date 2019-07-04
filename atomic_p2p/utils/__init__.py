@@ -1,24 +1,3 @@
-import sys
-import urllib
-import urllib.request
-
-
-def checkNet(url="https://www.google.com.tw"):
-    try:
-        urllib.request.urlopen(url)
-        return True
-    except Exception:
-        pass
-    return False
-
-
-def getExternalIP():
-    try:
-        return urllib.request.urlopen("http://ip.42.pl/raw").read()
-    except Exception:
-        return None
-
-
 def host_valid(host):
     assert type(host) == tuple
     assert len(host) == 2

@@ -2,7 +2,6 @@ from os import getcwd
 from os.path import join
 
 from atomic_p2p.peer import Peer
-from atomic_p2p.local_monitor import LocalMonitor
 from atomic_p2p.utils.security import (
     create_self_signed_cert as cssc, self_hash
 )
@@ -70,22 +69,3 @@ class AtomicP2P(object):
             return (True, None)
         else:
             return (False, None)
-
-
-def main(role, addr, target, name, cert, auto_start, auto_join_net,
-         local_monitor_pass):
-
-    logger = getLogger(add_monitor_pass=local_monitor_pass)
-    atomic_p2p = AtomicP2P(role=role, addr=addr, name=name, cert=cert)
-
-    if local_monitor_pass is not None:
-        local_monitor = LocalMonitor(service=atomic_p2p,
-                                     password=local_monitor_pass)
-        atomic_p2p.services["local_monitor"] = local_monitor
-
-    if auto_start is True:
-        atomic_p2p.start()
-    if auto_join_net is True and target is not None:
-        if auto_start is False:
-            atomic_p2p.start()
-        atomic_p2p._on_command(["peer", "join", target])
