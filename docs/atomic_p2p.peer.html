@@ -77,11 +77,6 @@
 <dd><p>Bases: <a class="reference internal" href="atomic_p2p.utils.html#atomic_p2p.utils.command.Command" title="atomic_p2p.utils.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.utils.command.Command</span></code></a></p>
 <p>show the help for peers.
 Usage in prompt: peer help [cmd]</p>
-<dl class="method">
-<dt id="atomic_p2p.peer.command.HelpCmd.onProcess">
-<code class="descname">onProcess</code><span class="sig-paren">(</span><em>msg_arr</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.HelpCmd.onProcess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -94,11 +89,6 @@ Usage in prompt:</p>
 <div><p>peer join IP:PORT
 peer join DOMAIN [NS1,NS2,NS3]</p>
 </div></blockquote>
-<dl class="method">
-<dt id="atomic_p2p.peer.command.JoinCmd.onProcess">
-<code class="descname">onProcess</code><span class="sig-paren">(</span><em>msg_arr</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.JoinCmd.onProcess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -107,11 +97,6 @@ peer join DOMAIN [NS1,NS2,NS3]</p>
 <dd><p>Bases: <a class="reference internal" href="atomic_p2p.utils.html#atomic_p2p.utils.command.Command" title="atomic_p2p.utils.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.utils.command.Command</span></code></a></p>
 <p>leave the current net, this will clear monitor list and peer list.
 Usage in prompt: peer leavenet</p>
-<dl class="method">
-<dt id="atomic_p2p.peer.command.LeaveNetCmd.onProcess">
-<code class="descname">onProcess</code><span class="sig-paren">(</span><em>msg_arr</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.LeaveNetCmd.onProcess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -120,11 +105,6 @@ Usage in prompt: peer leavenet</p>
 <dd><p>Bases: <a class="reference internal" href="atomic_p2p.utils.html#atomic_p2p.utils.command.Command" title="atomic_p2p.utils.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.utils.command.Command</span></code></a></p>
 <p>list every linked peer’s host message in prompt.
 Usage in prompt: peer list</p>
-<dl class="method">
-<dt id="atomic_p2p.peer.command.ListCmd.onProcess">
-<code class="descname">onProcess</code><span class="sig-paren">(</span><em>msg_arr</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.ListCmd.onProcess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -133,11 +113,6 @@ Usage in prompt: peer list</p>
 <dd><p>Bases: <a class="reference internal" href="atomic_p2p.utils.html#atomic_p2p.utils.command.Command" title="atomic_p2p.utils.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.utils.command.Command</span></code></a></p>
 <p>send a message to a specific peer or broadcast in prompt.
 Usage in prompt: peer send [ip:port/broadcast:all] [msg]</p>
-<dl class="method">
-<dt id="atomic_p2p.peer.command.SendCmd.onProcess">
-<code class="descname">onProcess</code><span class="sig-paren">(</span><em>msg_arr</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.SendCmd.onProcess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
@@ -264,7 +239,7 @@ at each peer pool in class variable.</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.peer" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="atomic_p2p.peer.Peer">
-<em class="property">class </em><code class="descclassname">atomic_p2p.peer.</code><code class="descname">Peer</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>_hash</em>, <em>ns=None</em>, <em>loop_delay=1</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.</code><code class="descname">Peer</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>_hash</em>, <em>ns=None</em>, <em>loop_delay=1</em>, <em>logger=&lt;Logger atomic_p2p.peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager" title="atomic_p2p.utils.manager.ThreadManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.utils.manager.ThreadManager</span></code></a></p>
 <dl class="attribute">
 <dt id="atomic_p2p.peer.Peer.server_info">
@@ -303,7 +278,7 @@ lable in net.</p>
 
 <dl class="method">
 <dt id="atomic_p2p.peer.Peer.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>_hash</em>, <em>ns=None</em>, <em>loop_delay=1</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>_hash</em>, <em>ns=None</em>, <em>loop_delay=1</em>, <em>logger=&lt;Logger atomic_p2p.peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Init of PeerManager</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -313,12 +288,13 @@ lable in net.</p>
 <li><p><strong>role</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Peer’s role in net.</p></li>
 <li><p><strong>cert</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Cert file’s path.</p></li>
 <li><p><strong>_hash</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Program self hash to send in packet.</p></li>
-<li><p><strong>ns</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Nameserver address for resolve DNS.</p></li>
+<li><p><strong>ns</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Nameserver address for resolve DNS.</p></li>
 <li><p><strong>loop_delay</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – While loop delay.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger for logging.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -332,7 +308,7 @@ lable in net.</p>
 <dd class="field-odd"><p><strong>peer_info</strong> (<a class="reference internal" href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_info.PeerInfo" title="atomic_p2p.peer.entity.peer_info.PeerInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeerInfo</span></code></a>) – A PeerInfo object to be add.</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – if arg peer_info is not a PeerInfo object.</p>
+<dd class="field-even"><p><strong>AssertionError</strong> – If given peer_info variable is not in proper PeerInfo type.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
@@ -427,7 +403,7 @@ in peer_pool.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If given host type is not tuple(str, int).</p>
+<dd class="field-even"><p><strong>AssertionError</strong> – If given host variable is not in proper Tuple[str, int] type.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
@@ -474,6 +450,9 @@ host.</p>
 </dl>
 </p>
 </dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If given dst variable is not in proper Tuple[str, int] type.</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -501,8 +480,11 @@ tion been close and thread maintaining loop terminate.</p>
 <li><p><strong>**kwargs</strong> – Any additional arguments needs by handler object.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If given pkt variable is not in proper Packet type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>

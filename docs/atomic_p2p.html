@@ -160,9 +160,27 @@ from the args and kwargs arguments, respectively.</p>
 <em class="property">class </em><code class="descclassname">atomic_p2p.</code><code class="descname">AtomicP2P</code><span class="sig-paren">(</span><em>role</em>, <em>addr</em>, <em>name</em>, <em>cert</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.AtomicP2P" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
-<dt id="atomic_p2p.AtomicP2P.onProcess">
-<code class="descname">onProcess</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.AtomicP2P.onProcess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="atomic_p2p.AtomicP2P.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>role</em>, <em>addr</em>, <em>name</em>, <em>cert</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.AtomicP2P.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of AtomicP2P object
+:type role: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>
+:param role: str represents peer’s role.
+:type addr: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>
+:param addr: str with <cite>ip:port</cite> format, peer server will listen on.
+:type name: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>
+:param name: str represents peer’s name.
+:type cert: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>
+:param cert: str represents cert file’s path, should directly point to</p>
+<blockquote>
+<div><p>cert file. like <cite>data/atomic_p2p.pem</cite>, and key file should
+same as cert file exception sub-extension with <cite>.key</cite>.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="atomic_p2p.AtomicP2P.start">
@@ -175,11 +193,6 @@ from the args and kwargs arguments, respectively.</p>
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="function">
-<dt id="atomic_p2p.main">
-<code class="descclassname">atomic_p2p.</code><code class="descname">main</code><span class="sig-paren">(</span><em>role</em>, <em>addr</em>, <em>target</em>, <em>name</em>, <em>cert</em>, <em>auto_start</em>, <em>auto_join_net</em>, <em>local_monitor_pass</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 </div>

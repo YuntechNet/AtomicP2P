@@ -24,3 +24,9 @@ $ grep '__version__ = ' atomic_p2p/__init__.py | cut -d "'" -f 2 | xargs git tag
 # Remove a tag.
 $ grep '__version__ = ' atomic_p2p/__init__.py | cut -d "'" -f 2 | xargs git tag -d
 ```
+
+## Doc Update
+```sh
+$ sphinx-apidoc -o ./docs/source/ ./atomic_p2p/ -f
+$ sphinx-build -b html ./docs/source/ ./docs
+```
