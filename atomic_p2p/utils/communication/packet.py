@@ -8,19 +8,19 @@ class Packet(object):
     """This class is about how actual information been parse to datas"""
 
     @staticmethod
-    def serilize(obj: 'Packet') -> bytes:
+    def serilize(obj: "Packet") -> bytes:
         raw_data = dumps(obj.to_dict())
-        return bytes(raw_data, encoding='utf-8')
+        return bytes(raw_data, encoding="utf-8")
 
     @staticmethod
-    def deserilize(raw_data: Union[Dict, str]) -> 'Packet':
+    def deserilize(raw_data: Union[Dict, str]) -> "Packet":
         """This is serilizer convert data from utf-8 format string to Packet"""
         data = raw_data if type(raw_data) is dict else loads(
-                str(raw_data, encoding='utf-8'))
-        return Packet(dst=(data['to']['ip'], int(data['to']['port'])),
-                      src=(data['from']['ip'], int(data['from']['port'])),
-                      _hash=data['hash'], _type=data['type'],
-                      _data=data['data'])
+                str(raw_data, encoding="utf-8"))
+        return Packet(dst=(data["to"]["ip"], int(data["to"]["port"])),
+                      src=(data["from"]["ip"], int(data["from"]["port"])),
+                      _hash=data["hash"], _type=data["type"],
+                      _data=data["data"])
 
     def __init__(self, dst: Tuple[str, int], src: Tuple[str, int], _hash: str,
                  _type: str, _data: Dict):
@@ -70,10 +70,10 @@ class Packet(object):
         return self.__data
 
     def __str__(self):
-        return 'Packet<DST={} SRC={} TYP={}>'.format(
+        return "Packet<DST={} SRC={} TYP={}>".format(
                 self.__dst, self.__src, self.__type)
 
-    def clone(self) -> 'Packet':
+    def clone(self) -> "Packet":
         return Packet(dst=self.__dst, src=self.__src, _hash=self.__hash,
                       _type=self.__type, _data=self.__data)
 
@@ -86,21 +86,21 @@ class Packet(object):
     def set_reject(self, reject_data: object, maintain_data: bool = False,
                    maintain_secret: bool = False) -> None:
         if maintain_data is True:
-            self.__data['reject'] = reject_data
+            self.__data["reject"] = reject_data
         else:
-            self.__data = {'reject': reject_data}
+            self.__data = {"reject": reject_data}
 
         if maintain_secret is False:
             self.__hash = None
 
     def is_reject(self) -> bool:
-        return 'reject' in self.__data
+        return "reject" in self.__data
 
     def to_dict(self) -> Dict[str, object]:
         return {
-            'to': {'ip': self.__dst[0], 'port': self.__dst[1]},
-            'from': {'ip': self.__src[0], 'port': self.__src[1]},
-            'hash': self.__hash,
-            'type': self.__type,
-            'data': self.__data
+            "to": {"ip": self.__dst[0], "port": self.__dst[1]},
+            "from": {"ip": self.__src[0], "port": self.__src[1]},
+            "hash": self.__hash,
+            "type": self.__type,
+            "data": self.__data
         }

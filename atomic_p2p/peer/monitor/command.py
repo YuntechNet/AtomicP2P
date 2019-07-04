@@ -10,7 +10,7 @@ class HelpCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(HelpCmd, self).__init__('help')
+        super(HelpCmd, self).__init__("help")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -37,13 +37,13 @@ class PauseCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(PauseCmd, self).__init__('pause')
+        super(PauseCmd, self).__init__("pause")
         self.monitor = monitor
         self.peer = monitor.peer
 
     def _execute(self, msg_arr):
         self.monitor.pause = not self.monitor.pause
-        return 'Monitor pause: {}'.format(self.monitor.pause)
+        return "Monitor pause: {}".format(self.monitor.pause)
 
 
 class PeriodCmd(Command):
@@ -53,7 +53,7 @@ class PeriodCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(PeriodCmd, self).__init__('period')
+        super(PeriodCmd, self).__init__("period")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -61,10 +61,10 @@ class PeriodCmd(Command):
         try:
             period = int(msg_arr[0])
             self.monitor.loopDelay = period
-            return ('Monitor check sending period \
-                       change to: {} seconds.'.format(period))
+            return ("Monitor check sending period \
+                       change to: {} seconds.".format(period))
         except ValueError:
-            return 'Please input a integer: {}'.format(msg_arr[0])
+            return "Please input a integer: {}".format(msg_arr[0])
         except Exception as e:
             return e
 
@@ -76,18 +76,18 @@ class ListCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(ListCmd, self).__init__('list')
+        super(ListCmd, self).__init__("list")
         self.monitor = monitor
         self.peer = monitor.peer
 
     def _execute(self, msg_arr):
         if len(self.monitor.monitorlist) == 0:
-            return 'There is no peer\'s info in current list'
+            return "There is no peer's info in current list"
         else:
-            output_text = 'Current peers status:'
+            output_text = "Current peers status:"
             for each in self.monitor.monitorlist:
-                output_text += (' - ' + str(each) + '\n')
-            output_text += '[---End of list---]'
+                output_text += (" - " + str(each) + "\n")
+            output_text += "[---End of list---]"
             return output_text
 
 
@@ -98,7 +98,7 @@ class ResetCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(ResetCmd, self).__init__('reset')
+        super(ResetCmd, self).__init__("reset")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -119,13 +119,13 @@ class VerboseCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(VerboseCmd, self).__init__('verbose')
+        super(VerboseCmd, self).__init__("verbose")
         self.monitor = monitor
         self.peer = monitor.peer
 
     def _execute(self, msg_arr):
         self.monitor.verbose = not self.monitor.verbose
-        return 'Monitor verbose toggle to: {}'.format(self.monitor.verbose)
+        return "Monitor verbose toggle to: {}".format(self.monitor.verbose)
 
 
 class ManualCmd(Command):
@@ -135,12 +135,12 @@ class ManualCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(ManualCmd, self).__init__('manual')
+        super(ManualCmd, self).__init__("manual")
         self.monitor = monitor
         self.peer = monitor.peer
 
     def _execute(self, msg_arr):
-        host = msg_arr[0].split(':')
+        host = msg_arr[0].split(":")
         try:
             host[1] = int(host[1])
             self.peer.handler_unicat_packet(
@@ -149,4 +149,4 @@ class ManualCmd(Command):
             self.peer.handler_broadcast_packet(
                 host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
         if self.monitor.verbose:
-            return 'Sended a monitor check to: {}'.format(host)
+            return "Sended a monitor check to: {}".format(host)

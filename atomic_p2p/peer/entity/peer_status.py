@@ -4,10 +4,10 @@ from enum import Enum
 
 
 class StatusType(Enum):
-    PENDING = 'pending'
-    UPDATED = 'updated'
-    NO_RESP = 'no_resp'
-    UNKNOWN = 'unknown'
+    PENDING = "pending"
+    UPDATED = "updated"
+    NO_RESP = "no_resp"
+    UNKNOWN = "unknown"
 
 
 class PeerStatus(object):
@@ -22,7 +22,7 @@ class PeerStatus(object):
         status (StatusType): Current peer status.
     """
 
-    def __init__(self, status: 'StatusType' = StatusType.PENDING) -> None:
+    def __init__(self, status: "StatusType" = StatusType.PENDING) -> None:
         """Init of PeerStatus
 
         Args:
@@ -37,10 +37,10 @@ class PeerStatus(object):
 
     def toDict(self) -> Dict:
         return {
-            'send_ts': self.last_update_ts
+            "send_ts": self.last_update_ts
         }
 
-    def update(self, status_type: 'StatusType' = StatusType.UPDATED) -> None:
+    def update(self, status_type: "StatusType" = StatusType.UPDATED) -> None:
         if status_type == StatusType.PENDING:
             self.no_response_count += 1
         elif status_type == StatusType.UPDATED:

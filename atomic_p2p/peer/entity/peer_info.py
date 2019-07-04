@@ -18,6 +18,6 @@ class PeerInfo(object):
         return self.__eq__(item)
 
     def __str__(self):
-        return 'PeerInfo<name={0}, role={1}, host={2}>'.format(self.name,
+        return "PeerInfo<name={0}, role={1}, host={2}>".format(self.name,
                                                                self.role,
                                                                str(self.host))

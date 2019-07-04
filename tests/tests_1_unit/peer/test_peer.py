@@ -4,11 +4,11 @@ from atomic_p2p.peer.monitor.communication import CheckHandler
 
 def test_init(default_peer):
     assert default_peer.stopped.is_set() is False
-    assert default_peer._Peer__tcp_server.getsockname() == ('0.0.0.0', 8000)
+    assert default_peer._Peer__tcp_server.getsockname() == ("0.0.0.0", 8000)
 
 
 def test__on_command(default_peer):
-    assert default_peer._on_command(['test', 'test2']) == (
+    assert default_peer._on_command(["test", "test2"]) == (
         "peer [cmd] <options>\n"
         " - join [ip:port]                                 "
         "send a join net request to a exists net peer.\n"
@@ -27,11 +27,11 @@ def test_select_handler(default_peer):
     for (key, value) in default_peer.pkt_handlers.items():
         assert default_peer.select_handler(key) == value
     assert default_peer.select_handler(CheckHandler.pkt_type) is not None
-    assert default_peer.select_handler('this must be none') is None
+    assert default_peer.select_handler("this must be none") is None
 
 
 def test_handler_unicast_packet(default_peer):
-    default_peer.handler_unicast_packet(('1.2.3.4', 1234), 'None')
+    default_peer.handler_unicast_packet(("1.2.3.4", 1234), "None")
 
 
 def test_add_peer_in_net(default_peer, peer_info):

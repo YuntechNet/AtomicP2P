@@ -12,7 +12,7 @@ class HelpCmd(Command):
     """
 
     def __init__(self, peer):
-        super(HelpCmd, self).__init__('help')
+        super(HelpCmd, self).__init__("help")
         self.peer = peer
 
     def _execute(self, msg_arr):
@@ -41,12 +41,12 @@ class JoinCmd(Command):
     """
 
     def __init__(self, peer):
-        super(JoinCmd, self).__init__('join')
+        super(JoinCmd, self).__init__("join")
         self.peer = peer
 
     def _execute(self, msg_arr):
-        if ':' in msg_arr[0]:
-            addr = msg_arr[0].split(':')
+        if ":" in msg_arr[0]:
+            addr = msg_arr[0].split(":")
             addr[1] = int(addr[1])
         else:
             peer_info = self._get_online_peer_from_DNS(
@@ -62,13 +62,13 @@ class JoinCmd(Command):
 
     def _get_online_peer_from_DNS(self, domain, ns=None):
         if ns is not None and type(ns) is not list:
-            self.peer.dns_resolver.change_ns(ns=ns.split(','))
+            self.peer.dns_resolver.change_ns(ns=ns.split(","))
         records = self.peer.dns_resolver.sync_from_DNS(
             current_host=self.peer.server_info.host, domain=domain)
         for each in records:
             if is_ssl_socket_open(host=each.host) is True:
                 return each
-        raise ValueError('No Online peer in dns records.')
+        raise ValueError("No Online peer in dns records.")
 
 
 class SendCmd(Command):
@@ -78,14 +78,14 @@ class SendCmd(Command):
     """
 
     def __init__(self, peer):
-        super(SendCmd, self).__init__('send')
+        super(SendCmd, self).__init__("send")
         self.peer = peer
 
     def _execute(self, msg_arr):
         msg_key = msg_arr[0]
         msg_arr = msg_arr[1:]
-        addr = msg_key.split(':')
-        mes = {'msg': msg_arr}
+        addr = msg_key.split(":")
+        mes = {"msg": msg_arr}
         try:
             addr[1] = int(addr[1])
             self.peer.handler_unicast_packet(
@@ -104,17 +104,17 @@ class ListCmd(Command):
     """
 
     def __init__(self, peer):
-        super(ListCmd, self).__init__('list')
+        super(ListCmd, self).__init__("list")
         self.peer = peer
 
     def _execute(self, msg_arr):
         if len(self.peer.connectlist) == 0:
-            return 'There is no peers in current net.'
+            return "There is no peers in current net."
         else:
-            output_text = 'Current peers info:'
+            output_text = "Current peers info:"
             for each in self.peer.connectlist:
-                output_text += (' - ' + str(each) + '\n')
-            output_text += '[---End of list---]'
+                output_text += (" - " + str(each) + "\n")
+            output_text += "[---End of list---]"
             return output_text
 
 
@@ -125,11 +125,11 @@ class LeaveNetCmd(Command):
     """
 
     def __init__(self, peer):
-        super(LeaveNetCmd, self).__init__('leavenet')
+        super(LeaveNetCmd, self).__init__("leavenet")
         self.peer = peer
 
     def _execute(self, msg_arr):
         self.peer.handler_broadcast_packet(
-            host=('', 'all'), pkt_type=DisconnectHandler.pkt_type)
+            host=("", "all"), pkt_type=DisconnectHandler.pkt_type)
         self.peer.peer_pool = {}
-        self.peer.logger.info('You left net.')
+        self.peer.logger.info("You left net.")

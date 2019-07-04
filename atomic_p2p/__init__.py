@@ -9,7 +9,7 @@ from atomic_p2p.utils.security import (
 from atomic_p2p.utils.logging import getLogger
 
 
-__version__ = '0.0.3'
+__version__ = "0.0.3"
 
 
 class AtomicP2P(object):
@@ -28,24 +28,24 @@ class AtomicP2P(object):
                 same as cert file exception sub-extension with `.key`.
         """
         cert_file, key_file = cssc(cert_dir=getcwd(), cert_file=cert,
-                                   key_file=cert.replace('.pem', '.key'))
+                                   key_file=cert.replace(".pem", ".key"))
 
         self.logger = getLogger(__name__)
 
-        hash_str = self_hash(path=join(getcwd(), 'atomic_p2p'))
-        addr = addr.split(':') if type(addr) is str else addr
+        hash_str = self_hash(path=join(getcwd(), "atomic_p2p"))
+        addr = addr.split(":") if type(addr) is str else addr
 
         self.services = {
-            'peer': Peer(host=addr, name=name, role=role, _hash=hash_str,
+            "peer": Peer(host=addr, name=name, role=role, _hash=hash_str,
                          cert=(cert_file, key_file))
         }
-        self.services['monitor'] = self.services['peer'].monitor
+        self.services["monitor"] = self.services["peer"].monitor
 
     def start(self):
         for each in self.services:
             if self.services[each].is_start() is False:
                 self.services[each].start()
-        self.logger.info('Platform started.')
+        self.logger.info("Platform started.")
 
     def stop(self):
         for each in self.services:
@@ -53,19 +53,19 @@ class AtomicP2P(object):
 
     def _on_command(self, cmd):
         if type(cmd) != list and type(cmd) == str:
-            cmd = cmd.split(' ')
+            cmd = cmd.split(" ")
 
         service_key = cmd[0].lower()
         if service_key in self.services:
             return (True, self.services[service_key]._on_command(cmd[1:]))
-        elif service_key in ['help', '?']:
-            help_tips = 'peer help            - See peer\'s help\n'\
-                        'monitor help        - See monitor\'s help\n'\
-                        'exit/stop            - exit the whole program.\n'
+        elif service_key in ["help", "?"]:
+            help_tips = "peer help            - See peer's help\n"\
+                        "monitor help        - See monitor's help\n"\
+                        "exit/stop            - exit the whole program.\n"
             return (True, help_tips)
-        elif service_key == 'monitor':
-            return (True, self.services['peer']._on_command(cmd[1:]))
-        elif service_key == 'stop':
+        elif service_key == "monitor":
+            return (True, self.services["peer"]._on_command(cmd[1:]))
+        elif service_key == "stop":
             self.stop()
             return (True, None)
         else:
@@ -81,11 +81,11 @@ def main(role, addr, target, name, cert, auto_start, auto_join_net,
     if local_monitor_pass is not None:
         local_monitor = LocalMonitor(service=atomic_p2p,
                                      password=local_monitor_pass)
-        atomic_p2p.services['local_monitor'] = local_monitor
+        atomic_p2p.services["local_monitor"] = local_monitor
 
     if auto_start is True:
         atomic_p2p.start()
     if auto_join_net is True and target is not None:
         if auto_start is False:
             atomic_p2p.start()
-        atomic_p2p._on_command(['peer', 'join', target])
+        atomic_p2p._on_command(["peer", "join", target])

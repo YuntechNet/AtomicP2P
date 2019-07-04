@@ -11,7 +11,7 @@ def test_str(peer_status):
 
 def test_toDict(peer_status):
     _dict = peer_status.toDict()
-    assert _dict['send_ts'] == peer_status.last_update_ts
+    assert _dict["send_ts"] == peer_status.last_update_ts
 
 
 def test_update(peer_status):
