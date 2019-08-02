@@ -8,7 +8,7 @@ from atomic_p2p.utils.security import (
 from atomic_p2p.utils.logging import getLogger
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 class AtomicP2P(object):

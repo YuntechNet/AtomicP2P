@@ -18,11 +18,11 @@ $ pip install AtomicP2P
 Tag a commit with AtomicP2P's `__version__`.
 ```sh
 # Add a simple tag.
-$ grep '__version__ = ' atomic_p2p/__init__.py | cut -d "'" -f 2 | xargs git tag
+$ grep "__version__ = " atomic_p2p/__init__.py | cut -d '"' -f 2 | xargs git tag
 # Add a tag with messages.
-$ grep '__version__ = ' atomic_p2p/__init__.py | cut -d "'" -f 2 | xargs git tag -a
+$ grep "__version__ = " atomic_p2p/__init__.py | cut -d '"' -f 2 | xargs git tag -a
 # Remove a tag.
-$ grep '__version__ = ' atomic_p2p/__init__.py | cut -d "'" -f 2 | xargs git tag -d
+$ grep "__version__ = " atomic_p2p/__init__.py | cut -d '"' -f 2 | xargs git tag -d
 ```
 
 ## Doc Update

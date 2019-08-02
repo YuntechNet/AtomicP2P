@@ -22,13 +22,14 @@ class ProcManager(Process):
             return self.pkt_handlers[pkt_type]
         return None
 
-    def register_handler(self, handler: "Handler", force=False) -> bool:
+    def register_handler(self, handler: "Handler",
+                         force: bool = False) -> bool:
         """Register the handler with it's pkt_type to pkt_handlers
-        
+
         Args:
             handler: The handler to be register.
             force: If handler is exists, weather override it or not.
-        
+
         Returns:
             True if handler been set, False is fail.
         """
@@ -39,10 +40,10 @@ class ProcManager(Process):
 
     def unregister_handler(self, pkt_type: str) -> bool:
         """Unregister a handler in pkt_handlers
-        
+
         Args:
             pkt_type: Target handler's pkt_type to unregister.
-        
+
         Returns:
             True if remove success, False means not exists.
         """
@@ -54,13 +55,14 @@ class ProcManager(Process):
     def _register_handler(self) -> None:
         raise NotImplementedError
 
-    def register_command(self, command: "Command", force=False) -> bool:
+    def register_command(self, command: "Command",
+                         force: bool = False) -> bool:
         """Register the command with it's cmd to commands
-        
+
         Args:
             command: The command to be register.
             force: If command is exists, weather override it or not.
-        
+
         Returns:
             True if command been set, False is fail.
         """
@@ -71,10 +73,10 @@ class ProcManager(Process):
 
     def unregister_command(self, cmd: str) -> bool:
         """Unregister a command in commands
-        
+
         Args:
             cmd: Target command's key cmd to unregister.
-        
+
         Returns:
             True if remove success, False means not exists.
         """
@@ -100,7 +102,7 @@ class ProcManager(Process):
         self.stopped.set()
         self.started.clear()
 
-    def is_start(self):
+    def is_start(self) -> bool:
         return self.started.is_set()
 
 
@@ -123,13 +125,14 @@ class ThreadManager(Thread):
             return self.pkt_handlers[pkt_type]
         return None
 
-    def register_handler(self, handler: "Handler", force=False) -> bool:
+    def register_handler(self, handler: "Handler",
+                         force: bool = False) -> bool:
         """Register the handler with it's pkt_type to pkt_handlers
-        
+
         Args:
             handler: The handler to be register.
             force: If handler is exists, weather override it or not.
-        
+
         Returns:
             True if handler been set, False is fail.
         """
@@ -140,10 +143,10 @@ class ThreadManager(Thread):
 
     def unregister_handler(self, pkt_type: str) -> bool:
         """Unregister a handler in pkt_handlers
-        
+
         Args:
             pkt_type: Target handler's pkt_type to unregister.
-        
+
         Returns:
             True if remove success, False means not exists.
         """
@@ -155,13 +158,14 @@ class ThreadManager(Thread):
     def _register_handler(self) -> None:
         raise NotImplementedError
 
-    def register_command(self, command: "Command", force=False) -> bool:
+    def register_command(self, command: "Command",
+                         force: bool = False) -> bool:
         """Register the command with it's cmd to commands
-        
+
         Args:
             command: The command to be register.
             force: If command is exists, weather override it or not.
-        
+
         Returns:
             True if command been set, False is fail.
         """
@@ -172,10 +176,10 @@ class ThreadManager(Thread):
 
     def unregister_command(self, cmd: str) -> bool:
         """Unregister a command in commands
-        
+
         Args:
             cmd: Target command's key cmd to unregister.
-        
+
         Returns:
             True if remove success, False means not exists.
         """
@@ -201,5 +205,5 @@ class ThreadManager(Thread):
         self.stopped.set()
         self.started.clear()
 
-    def is_start(self):
+    def is_start(self) -> bool:
         return self.started.is_set()
