@@ -48,17 +48,13 @@ class JoinCmd(Command):
         if ":" in msg_arr[0]:
             addr = msg_arr[0].split(":")
             addr[1] = int(addr[1])
+            addr = (addr[0], addr[1])
         else:
             peer_info = self._get_online_peer_from_DNS(
                 domain=msg_arr[0], ns=msg_arr[1] if len(msg_arr) == 2 else None
             )
             addr = peer_info.host
-        handler = self.peer.select_handler(pkt_type=JoinHandler.pkt_type)
-        pkt = handler.on_send(target=(addr[0], addr[1]))
-
-        sock = self.peer.new_tcp_long_conn(dst=(addr[0], addr[1]))
-        self.peer.pend_socket(sock=sock)
-        self.peer.pend_packet(sock=sock, pkt=pkt)
+        self.peer.join_net(host=addr)
 
     def _get_online_peer_from_DNS(self, domain, ns=None):
         if ns is not None and type(ns) is not list:

@@ -208,6 +208,23 @@ class Peer(ThreadManager):
             return self.monitor.select_handler(pkt_type=pkt_type)
         return handler
 
+    def join_net(self, host: Tuple[str, int]) -> None:
+        """Join into a net with known host.
+        This is method is use to join a net with known host while current peer
+        is not in any net yet.
+
+        Args:
+            host: A tuple with address in str at position 0 and port in int at
+                  positon 1.
+        """
+        assert host_valid(host) is True
+        handler = self.select_handler(pkt_type=JoinHandler.pkt_type)
+        pkt = handler.on_send(target=host)
+
+        sock = self.new_tcp_long_conn(dst=host)
+        self.pend_socket(sock=sock)
+        self.pend_packet(sock=sock, pkt=pkt)
+
     def add_peer_in_net(self, peer_info: "PeerInfo") -> None:
         """Add given PeerInfo into current net's peer_pool.
 
