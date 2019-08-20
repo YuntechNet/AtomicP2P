@@ -6,7 +6,7 @@ from atomic_p2p.utils.logging import getLogger
 class ProcManager(Process):
 
     def __init__(self, loopDelay: int = 1, auto_register: bool = False,
-                 logger=getLogger(__name__)):
+                 logger: "logging.Logger" = getLogger(__name__)):
         super(ProcManager, self).__init__()
         self.__auto_register = auto_register
         self.logger = logger
@@ -109,7 +109,7 @@ class ProcManager(Process):
 class ThreadManager(Thread):
 
     def __init__(self, loopDelay: int = 1, auto_register: bool = False,
-                 logger=getLogger(__name__)):
+                 logger: "logging.Logger" = getLogger(__name__)):
         super(ThreadManager, self).__init__()
         self.__auto_register = auto_register
         self.logger = logger

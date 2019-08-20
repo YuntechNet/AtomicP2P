@@ -13,7 +13,7 @@ class LoggerRecver(ThreadManager):
 
     def __init__(self, password):
         super(LoggerRecver, self).__init__(loopDelay=0.1, auto_register=False,
-                                           logger=None)
+                                           logger: "logging.Logger" = None)
         self.cipher = AES.new(password, AES.MODE_CBC,
                               "0000000000000000".encode())
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

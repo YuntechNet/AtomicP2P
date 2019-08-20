@@ -37,12 +37,13 @@ auto_start = args.auto_start
 auto_join_net = args.auto_join_net
 local_monitor_pass = args.local_monitor_pass
     
-logger = getLogger(add_monitor_pass=local_monitor_pass)
-atomic_p2p = AtomicP2P(role=role, addr=address, name=name, cert=cert)
+logger = getLogger(name="AtomicP2P", add_monitor_pass=local_monitor_pass)
+atomic_p2p = AtomicP2P(
+    role=role, addr=address, name=name, cert=cert, logger=logger)
 
 if local_monitor_pass is not None:
     local_monitor = LocalMonitor(
-        service=atomic_p2p, password=local_monitor_pass)
+        service=atomic_p2p, password=local_monitor_pass, logger=logger)
     atomic_p2p.services["local_monitor"] = local_monitor
 
 if auto_start is True:

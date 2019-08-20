@@ -27,8 +27,10 @@ def getLogger(name=None, level=DEBUG, add_monitor_pass=None):
             if key == "monitor" and add_monitor_pass is not None:
                 handler = SocketHandler(name="monitor",
                                         password=add_monitor_pass)
-            else:
+            elif key == "stdout":
                 handler = StreamHandler(name="stdout", stream=stdout)
+            else:
+                continue
 
             handler.setLevel(DEBUG)
             handler.setFormatter(formatter)

@@ -16,7 +16,8 @@ class AtomicP2P(object):
     # TODO: Arguments need redefine, cause the format is not very clear enough.
     #       Also, whole class should add type hint.
     #                   2019/05/13
-    def __init__(self, role: str, addr: str, name: str, cert: str) -> None:
+    def __init__(self, role: str, addr: str, name: str,
+                 cert: str, logger: "logging.Logger") -> None:
         """Init of AtomicP2P object
         Args:
             role: str represents peer's role.
@@ -29,14 +30,14 @@ class AtomicP2P(object):
         cert_file, key_file = cssc(cert_dir=getcwd(), cert_file=cert,
                                    key_file=cert.replace(".pem", ".key"))
 
-        self.logger = getLogger(__name__)
+        self.logger = logger
 
         hash_str = self_hash(path=join(getcwd(), "atomic_p2p"))
         addr = addr.split(":") if type(addr) is str else addr
 
         self.services = {
             "peer": Peer(host=addr, name=name, role=role, _hash=hash_str,
-                         cert=(cert_file, key_file))
+                         cert=(cert_file, key_file), logger=self.logger)
         }
         self.services["monitor"] = self.services["peer"].monitor
 

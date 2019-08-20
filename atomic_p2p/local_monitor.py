@@ -10,9 +10,10 @@ from atomic_p2p.utils.logging import getLogger
 
 class LocalMonitor(ThreadManager):
 
-    def __init__(self, service, password):
+    def __init__(self, service, password,
+                 logger: "logging.Logger" = getLogger(__name__)):
         super(LocalMonitor, self).__init__(loopDelay=0.5, auto_register=False,
-                                           logger=getLogger(__name__))
+                                           logger=logger)
         self.service = service
         self.cipher = AES.new(password, AES.MODE_CBC,
                               "0000000000000000".encode())
