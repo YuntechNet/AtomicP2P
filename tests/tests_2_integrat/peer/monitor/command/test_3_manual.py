@@ -4,7 +4,7 @@ from atomic_p2p.peer.entity.peer_status import StatusType
 
 
 def test_two_peer(switch1, switch2):
-    switch1._on_command(["join", "127.0.0.1:{}".format(switch2.server_info.host[1])])
+    switch1.join_net(host=switch2.server_info.host)
     sleep(3)
 
     switch1.monitor.verbose = True
@@ -15,8 +15,8 @@ def test_two_peer(switch1, switch2):
         
 
 def test_three_peer(core1, switch1, switch2):
-    switch1._on_command(["join", "127.0.0.1:{}".format(core1.server_info.host[1])])
-    switch2._on_command(["join", "127.0.0.1:{}".format(core1.server_info.host[1])])
+    switch1.join_net(host=core1.server_info.host)
+    switch2.join_net(host=core1.server_info.host)
     sleep(5)
 
     switch1.monitor.verbose = True

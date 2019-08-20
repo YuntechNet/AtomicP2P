@@ -3,7 +3,7 @@ from atomic_p2p.peer.communication.net import JoinHandler
 
 
 def test_send(core1, switch1):
-    switch1._on_command(["join", "127.0.0.1:{}".format(core1.server_info.host[1])])
+    switch1.join_net(host=core1.server_info.host)
     time.sleep(5)
     switch1._on_command(["send", "127.0.0.1:{}".format(core1.server_info.host[1]),
                        "123"])
@@ -12,8 +12,8 @@ def test_send(core1, switch1):
 
 
 def test_broadcast(core1, switch1, switch2):
-    switch1._on_command(["join", "127.0.0.1:{}".format(core1.server_info.host[1])])
-    switch2._on_command(["join", "127.0.0.1:{}".format(core1.server_info.host[1])])
+    switch1.join_net(host=core1.server_info.host)
+    switch2.join_net(host=core1.server_info.host)
     time.sleep(5)
 
     core1._on_command(["send", "broadcast:sw", "ttt"])
