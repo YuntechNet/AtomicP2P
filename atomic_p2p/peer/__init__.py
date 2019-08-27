@@ -20,7 +20,7 @@ from atomic_p2p.peer.communication import (
 )
 from atomic_p2p.peer.monitor import Monitor
 from atomic_p2p.utils.manager import ThreadManager
-from atomic_p2p.utils.communication import Packet
+from atomic_p2p.utils.communication import Packet, is_ssl_socket_open
 from atomic_p2p.utils.logging import getLogger
 from atomic_p2p.utils import host_valid
 
@@ -210,8 +210,8 @@ class Peer(ThreadManager):
 
     def join_net(self, host: Tuple[str, int]) -> None:
         """Join into a net with known host.
-        This is method is use to join a net with known host while current peer
-        is not in any net yet.
+        This method is use to join a net with known host while current peer is
+         not in any net yet.
 
         Args:
             host: A tuple with address in str at position 0 and port in int at
@@ -224,6 +224,29 @@ class Peer(ThreadManager):
         sock = self.new_tcp_long_conn(dst=host)
         self.pend_socket(sock=sock)
         self.pend_packet(sock=sock, pkt=pkt)
+
+    def join_net_by_DNS(self, domain: str, ns: List[str] = None) -> None:
+        """Join into a net with known domain.
+        This method is use to join a net with known domain while current peer 
+          is not in any net yet.
+        The domain can point to single or multiple exists host in net.
+
+        Args:
+            domain: The domain point to any host currently in net.
+            ns: A list with str, specified which DNS server to query.
+
+        Raises:
+            ValueError:
+                No any valid record after given domain.
+        """
+        if ns is not None and type(ns) is list:
+            self.dns_resolver.change_ns(ns=ns)
+        records = self.dns_resolver.sync_from_DNS(
+            current_host=self.server_info.host, domain=domain)
+        for each in records:
+            if is_ssl_socket_open(host=each.host) is True:
+                return self.join_net(host=each.host)
+        raise ValueError("No Online peer in DNS records.")
 
     def add_peer_in_net(self, peer_info: "PeerInfo") -> None:
         """Add given PeerInfo into current net's peer_pool.

@@ -1,5 +1,4 @@
 from atomic_p2p.utils.command import Command
-from atomic_p2p.utils.communication import is_ssl_socket_open
 from atomic_p2p.peer.entity.peer_info import PeerInfo
 from atomic_p2p.peer.communication.net import JoinHandler, DisconnectHandler
 from atomic_p2p.peer.communication.msg import MessageHandler
@@ -49,22 +48,11 @@ class JoinCmd(Command):
             addr = msg_arr[0].split(":")
             addr[1] = int(addr[1])
             addr = (addr[0], addr[1])
+            self.peer.join_net(host=addr)
         else:
-            peer_info = self._get_online_peer_from_DNS(
-                domain=msg_arr[0], ns=msg_arr[1] if len(msg_arr) == 2 else None
-            )
-            addr = peer_info.host
-        self.peer.join_net(host=addr)
-
-    def _get_online_peer_from_DNS(self, domain, ns=None):
-        if ns is not None and type(ns) is not list:
-            self.peer.dns_resolver.change_ns(ns=ns.split(","))
-        records = self.peer.dns_resolver.sync_from_DNS(
-            current_host=self.peer.server_info.host, domain=domain)
-        for each in records:
-            if is_ssl_socket_open(host=each.host) is True:
-                return each
-        raise ValueError("No Online peer in dns records.")
+            self.peer.join_net_by_DNS(
+                domain=msg_arr[0],
+                ns=msg_arr[1].split(",") if len(msg_arr) == 2 else None)
 
 
 class SendCmd(Command):
