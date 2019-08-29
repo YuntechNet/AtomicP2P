@@ -4,7 +4,7 @@ from os.path import join
 import time
 import pytest
 
-from atomic_p2p.peer import Peer
+from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.peer.dns_resolver import DNSResolver
 from atomic_p2p.utils.security import self_hash as sh, create_self_signed_cert
 
@@ -26,8 +26,8 @@ def cert():
 
 @pytest.yield_fixture(scope="module")
 def default_peer(cert, self_hash):
-    p = Peer(host=("0.0.0.0", 8000), name="name", role="role", cert=cert,
-             _hash=self_hash)
+    p = ThreadPeer(host=("0.0.0.0", 8000), name="name", role="role",
+                    cert=cert, program_hash=self_hash, auto_register=True)
     p.start()
 
     yield p
@@ -37,8 +37,8 @@ def default_peer(cert, self_hash):
 
 @pytest.yield_fixture(scope="module")
 def default_peer2(cert, self_hash):
-    p = Peer(host=("0.0.0.0", 8001), name="name2", role="role", cert=cert,
-             _hash=self_hash)
+    p = ThreadPeer(host=("0.0.0.0", 8001), name="name2", role="role",
+                    cert=cert, program_hash=self_hash, auto_register=True)
     p.start()
     yield p
     time.sleep(1)

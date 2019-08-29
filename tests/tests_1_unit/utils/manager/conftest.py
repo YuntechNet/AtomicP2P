@@ -17,13 +17,11 @@ def command(default_peer):
 
 @pytest.fixture(scope="function")
 def proc():
-    p = ProcManager(auto_register=False)
-    p.pkt_handlers["select_handler"] = "handler"
+    p = ProcManager()
     return p
 
 
 @pytest.fixture(scope="function")
 def thread():
-    t = ThreadManager(auto_register=False)
-    t.pkt_handlers["select_handler"] = "handler"
+    t = ThreadManager()
     return t
