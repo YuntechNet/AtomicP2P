@@ -19,35 +19,35 @@ class Packet(object):
                 str(raw_data, encoding="utf-8"))
         return Packet(dst=(data["to"]["ip"], int(data["to"]["port"])),
                       src=(data["from"]["ip"], int(data["from"]["port"])),
-                      _hash=data["hash"], _type=data["type"],
+                      program_hash=data["hash"], _type=data["type"],
                       _data=data["data"])
 
-    def __init__(self, dst: Tuple[str, int], src: Tuple[str, int], _hash: str,
+    def __init__(self, dst: Tuple[str, int], src: Tuple[str, int], program_hash: str,
                  _type: str, _data: Dict):
         """Init of Packet class
 
         Args:
             dst: Packet is made by who.
             src: Packet is sending to where.
-            _hash: Sender's security hash.
+            program_hash: Sender's security hash.
                 None means it's a reject packet need to hide security hash.
             _type: Unique handler key to determine packet made by what handler.
             _data: A dict object to payload on.
         """
         assert host_valid(dst) is True
         assert host_valid(src) is True
-        assert type(_hash) == str or _hash is None
+        assert type(program_hash) == str or program_hash is None
         assert type(_type) == str
         assert type(_data) == dict
         self.__dst = dst
         self.__src = src
-        self.__hash = _hash
+        self.__program_hash = program_hash
         self.__type = _type
         self.__data = _data
 
     @property
     def export(self):
-        return self.__dst, self.__src, self.__hash, self.__type, self.__data
+        return self.__dst, self.__src, self.__program_hash, self.__type, self.__data
 
     @property
     def dst(self):
@@ -58,8 +58,8 @@ class Packet(object):
         return self.__src
 
     @property
-    def _hash(self):
-        return self.__hash
+    def program_hash(self):
+        return self.__program_hash
 
     @property
     def _type(self):
@@ -74,7 +74,7 @@ class Packet(object):
                 self.__dst, self.__src, self.__type)
 
     def clone(self) -> "Packet":
-        return Packet(dst=self.__dst, src=self.__src, _hash=self.__hash,
+        return Packet(dst=self.__dst, src=self.__src, program_hash=self.program_hash,
                       _type=self.__type, _data=self.__data)
 
     def redirect_to_host(
@@ -91,7 +91,7 @@ class Packet(object):
             self.__data = {"reject": reject_data}
 
         if maintain_secret is False:
-            self.__hash = None
+            self._hash = None
 
     def is_reject(self) -> bool:
         return "reject" in self.__data
@@ -100,7 +100,7 @@ class Packet(object):
         return {
             "to": {"ip": self.__dst[0], "port": self.__dst[1]},
             "from": {"ip": self.__src[0], "port": self.__src[1]},
-            "hash": self.__hash,
+            "hash": self.program_hash,
             "type": self.__type,
             "data": self.__data
         }

@@ -41,7 +41,7 @@ class Handler(object):
 
     def on_send_reject_pkt(self, target: Tuple[str, int],
                            reject_data: object, **kwargs) -> "Packet":
-        packet = Packet(dst=target, src=self.peer.server_info.host, _hash=None,
+        packet = Packet(dst=target, src=self.peer.server_info.host, program_hash=None,
                         _type=self.pkt_type, _data={})
         packet.set_reject(reject_data=reject_data)
         return packet

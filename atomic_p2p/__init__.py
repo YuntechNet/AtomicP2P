@@ -1,7 +1,7 @@
 from os import getcwd
 from os.path import join
 
-from atomic_p2p.peer import Peer
+from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.utils.security import (
     create_self_signed_cert as cssc, self_hash
 )
@@ -36,8 +36,10 @@ class AtomicP2P(object):
         addr = addr.split(":") if type(addr) is str else addr
 
         self.services = {
-            "peer": Peer(host=addr, name=name, role=role, _hash=hash_str,
-                         cert=(cert_file, key_file), logger=self.logger)
+            "peer": ThreadPeer(
+                host=addr, name=name, role=role, program_hash=hash_str,
+                ns=None, cert=(cert_file, key_file),
+                auto_register=True, logger=self.logger)
         }
         self.services["monitor"] = self.services["peer"].monitor
 

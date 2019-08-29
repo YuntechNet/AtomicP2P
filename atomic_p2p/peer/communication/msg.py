@@ -13,7 +13,7 @@ class MessageHandler(Handler):
             "message": msg
         }
         return Packet(dst=target, src=self.peer.server_info.host,
-                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      program_hash=self.peer.program_hash, _type=type(self).pkt_type,
                       _data=data)
 
     def on_recv_pkt(self, src, pkt, conn):

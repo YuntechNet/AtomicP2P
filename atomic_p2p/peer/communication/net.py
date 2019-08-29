@@ -20,7 +20,7 @@ class JoinHandler(Handler):
            "role": self.peer.server_info.role
         }
         return Packet(dst=target, src=self.peer.server_info.host,
-                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      program_hash=self.peer.program_hash, _type=type(self).pkt_type,
                       _data=data)
 
     def on_recv_pkt(self, src, pkt, conn):
@@ -58,7 +58,7 @@ class CheckJoinHandler(Handler):
             "role": self.peer.server_info.role
         }
         return Packet(dst=target, src=self.peer.server_info.host,
-                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      program_hash=self.peer.program_hash, _type=type(self).pkt_type,
                       _data=data)
 
     def on_recv_pkt(self, src, pkt, conn):
@@ -87,7 +87,7 @@ class NewMemberHandler(Handler):
             "role": peer_info.role
         }
         return Packet(dst=target, src=self.peer.server_info.host,
-                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      program_hash=self.peer.program_hash, _type=type(self).pkt_type,
                       _data=data)
 
     def on_recv_pkt(self, src, pkt, conn):
@@ -123,7 +123,7 @@ class AckNewMemberHandler(Handler):
             "listen_port": int(self.peer.server_info.host[1])
         }
         return Packet(dst=target, src=self.peer.server_info.host,
-                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      program_hash=self.peer.program_hash, _type=type(self).pkt_type,
                       _data=data)
 
     def on_recv_pkt(self, src, pkt, conn):
@@ -147,7 +147,7 @@ class DisconnectHandler(Handler):
 
     def on_send_pkt(self, target):
         return Packet(dst=target, src=self.peer.server_info.host,
-                      _hash=self.peer._hash, _type=type(self).pkt_type,
+                      program_hash=self.peer.program_hash, _type=type(self).pkt_type,
                       _data={})
 
     def on_recv_pkt(self, src, pkt, conn):
