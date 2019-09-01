@@ -1,4 +1,5 @@
 from typing import Tuple
+
 from atomic_p2p.utils import host_valid
 from atomic_p2p.utils.communication import Packet
 

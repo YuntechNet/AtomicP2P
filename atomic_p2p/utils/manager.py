@@ -1,5 +1,6 @@
 from multiprocessing import Process, Event as pEvent
 from threading import Thread, Event as tEvent
+
 from atomic_p2p.utils.logging import getLogger
 
 

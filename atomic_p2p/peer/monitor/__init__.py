@@ -2,15 +2,15 @@ import traceback
 from typing import Tuple, List
 from threading import Thread, Event as tEvent
 
-from atomic_p2p.utils.manager import ThreadManager
 from atomic_p2p.peer.monitor.command import (
     HelpCmd, PauseCmd, PeriodCmd, ListCmd, ResetCmd, VerboseCmd, ManualCmd
 )
 from atomic_p2p.peer.monitor.communication import CheckHandler
 from atomic_p2p.utils.logging import getLogger
+from atomic_p2p.utils.mixin import CommandableMixin, HandleableMixin
 
 
-class Monitor(Thread):
+class Monitor(Thread, CommandableMixin, HandleableMixin):
 
     def __init__(self, peer: "Peer", loop_delay: int = 10,
                  verbose: bool = False, max_no_response_count: int = 5,
@@ -31,8 +31,8 @@ class Monitor(Thread):
 
     def start(self) -> None:
         super().start()
-        self._register_handler()
-        self._register_command()
+        self._preregister_handler()
+        self._preregister_command()
         self.started.set()
 
     def stop(self) -> None:
@@ -54,26 +54,6 @@ class Monitor(Thread):
                         no_response_list.append(peer_info)
                 self.removeMonitorlist(no_response_list)
 
-    def select_handler(self, pkt_type: str) -> "Handler":
-        if pkt_type in self.pkt_handlers:
-            return self.pkt_handlers[pkt_type]
-        return None
-
-    def onProcess(self, msg_arr, **kwargs) -> str:
-        self.logger.warning("[Deprecated] onProcess method is no longer maintai"
-            "n, manually send command into peer is not recommended.")
-        return self._on_command(msg_arr, **kwargs)
-
-    def _on_command(self, msg_arr: list, **kwargs) -> str:
-        try:
-            msg_key = msg_arr[0].lower()
-            msg_arr = msg_arr[1:]
-            if msg_key in self.commands:
-                return self.commands[msg_key]._on_command_recv(msg_arr)
-            return self.commands["help"]._on_command_recv(msg_arr)
-        except Exception:
-            return self.commands["help"]._on_command_recv(msg_arr)
-
     def on_recv_pkt(self, addr: Tuple[str, int],
                     pkt: "Packet", conn: "SSLSocket") -> None:
         if not pkt.is_reject():
@@ -90,46 +70,14 @@ class Monitor(Thread):
             except Exception:
                 self.logger.error(traceback.format_exc())
 
-    def register_handler(self, handler: "Handler",
-                         force: bool = False) -> bool:
-        """Register the handler with it's pkt_type to pkt_handlers
-
-        Args:
-            handler: The handler to be register.
-            force: If handler is exists, weather override it or not.
-
-        Returns:
-            True if handler been set, False is fail.
-        """
-        if handler.pkt_type not in self.pkt_handlers or force is True:
-            self.pkt_handlers[type(handler).pkt_type] = handler
-            return True
-        return False
-
-    def _register_handler(self) -> None:
+    def _preregister_handler(self) -> None:
         installing_handlers = [
             CheckHandler(self)
         ]
         for each in installing_handlers:
             self.register_handler(handler=each)
 
-    def register_command(self, command: "Command",
-                         force: bool = False) -> bool:
-        """Register the command with it's cmd to commands
-
-        Args:
-            command: The command to be register.
-            force: If command is exists, weather override it or not.
-
-        Returns:
-            True if command been set, False is fail.
-        """
-        if command.cmd not in self.commands or force is True:
-            self.commands[command.cmd] = command
-            return True
-        return False
-
-    def _register_command(self) -> None:
+    def _preregister_command(self) -> None:
         installing_commands = [
             HelpCmd(self), PauseCmd(self), PeriodCmd(self), ListCmd(self),
             ResetCmd(self), VerboseCmd(self), ManualCmd(self)

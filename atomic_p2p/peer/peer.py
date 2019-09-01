@@ -8,23 +8,24 @@ from socket import (
 )
 from select import select
 
-from .monitor import Monitor
-from .dns_resolver import DNSResolver
-from .entity.peer_info import PeerInfo
-from .communication import (
+from atomic_p2p.peer.monitor import Monitor
+from atomic_p2p.peer.dns_resolver import DNSResolver
+from atomic_p2p.peer.entity.peer_info import PeerInfo
+from atomic_p2p.peer.communication import (
     JoinHandler, CheckJoinHandler, AckNewMemberHandler, NewMemberHandler,
     MessageHandler, DisconnectHandler
 )
-from .command import (
+from atomic_p2p.peer.command import (
     HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
 )
 
-from ..utils import host_valid
-from ..utils.logging import getLogger
-from ..utils.communication import Packet
+from atomic_p2p.utils import host_valid
+from atomic_p2p.utils.mixin import CommandableMixin, HandleableMixin
+from atomic_p2p.utils.logging import getLogger
+from atomic_p2p.utils.communication import Packet
 
 
-class Peer(object):
+class Peer(HandleableMixin, CommandableMixin):
     """
     Attributes:
         server_info (PeerInfo): Peer's peer info.
@@ -167,12 +168,6 @@ class Peer(object):
         except Exception:
             self.logger.info(format_exc())
 
-    def select_handler(self, pkt_type: str) -> Union[None, "Handler"]:
-        if pkt_type in self.pkt_handlers:
-            return self.pkt_handlers[pkt_type]
-        else:
-            return self.monitor.select_handler(pkt_type=pkt_type)
-
     def add_peer_in_net(self, peer_info: "PeerInfo") -> None:
         """Add given PeerInfo into current net's peer_pool.
 
@@ -295,22 +290,6 @@ class Peer(object):
                     pkt = handler.on_send(target=value.host, **kwargs)
                     self.pend_packet(sock=value.conn, pkt=pkt)
 
-    # Temporary support old calling. Will be deprecate soon. 2019/04/26
-    def onProcess(self, msg_arr: list, **kwargs) -> str:
-        self.logger.warning("[Deprecated] onProcess method is no longer maintai"
-            "n, manually send command into peer is not recommended.")
-        return self._on_command(msg_arr=msg_arr, **kwargs)
-
-    def _on_command(self, msg_arr: list, **kwargs) -> str:
-        try:
-            msg_key = msg_arr[0].lower()
-            msg_arr = msg_arr[1:]
-            if msg_key in self.commands:
-                return self.commands[msg_key]._on_command_recv(msg_arr)
-            return self.commands["help"]._on_command_recv(msg_arr)
-        except Exception:
-            return self.commands["help"]._on_command_recv(msg_arr)
-
     def __on_recv(self, sock: "SSLSocket") -> None:
         try:
             raw_data = sock.recv(4096)
@@ -388,37 +367,7 @@ class Peer(object):
         return wrap_socket(unwrap_socket, certfile=cert[0], keyfile=cert[1],
                            server_side=True)
 
-    def register_handler(self, handler: "Handler",
-                         force: bool = False) -> bool:
-        """Register the handler with it's pkt_type to pkt_handlers
-
-        Args:
-            handler: The handler to be register.
-            force: If handler is exists, weather override it or not.
-
-        Returns:
-            True if handler been set, False is fail.
-        """
-        if handler.pkt_type not in self.pkt_handlers or force is True:
-            self.pkt_handlers[type(handler).pkt_type] = handler
-            return True
-        return False
-
-    def unregister_handler(self, pkt_type: str) -> bool:
-        """Unregister a handler in pkt_handlers
-
-        Args:
-            pkt_type: Target handler's pkt_type to unregister.
-
-        Returns:
-            True if remove success, False means not exists.
-        """
-        if pkt_type in self.pkt_handlers:
-            del self.pkt_handlers[pkt_type]
-            return True
-        return False
-
-    def _register_handler(self) -> None:
+    def _preregister_handler(self) -> None:
         installing_handlers = [
             JoinHandler(self), CheckJoinHandler(self), NewMemberHandler(self),
             MessageHandler(self), AckNewMemberHandler(self),
@@ -427,37 +376,7 @@ class Peer(object):
         for each in installing_handlers:
             self.register_handler(handler=each)
 
-    def register_command(self, command: "Command",
-                         force: bool = False) -> bool:
-        """Register the command with it's cmd to commands
-
-        Args:
-            command: The command to be register.
-            force: If command is exists, weather override it or not.
-
-        Returns:
-            True if command been set, False is fail.
-        """
-        if command.cmd not in self.commands or force is True:
-            self.commands[command.cmd] = command
-            return True
-        return False
-
-    def unregister_command(self, cmd: str) -> bool:
-        """Unregister a command in commands
-
-        Args:
-            cmd: Target command's key cmd to unregister.
-
-        Returns:
-            True if remove success, False means not exists.
-        """
-        if cmd in self.commands:
-            del self.commands[cmd]
-            return True
-        return False
-
-    def _register_command(self) -> None:
+    def _preregister_command(self) -> None:
         installing_commands = [
             HelpCmd(self), JoinCmd(self), SendCmd(self),
             ListCmd(self), LeaveNetCmd(self)
@@ -469,8 +388,8 @@ class Peer(object):
         self.logger.info(self.server_info)
         self.__in_fds.append(self.__tcp_server)
         if self.__auto_register is True:
-            self._register_handler()
-            self._register_command()
+            self._preregister_handler()
+            self._preregister_command()
 
         if self.monitor.is_start() is False:
             self.monitor.start()
