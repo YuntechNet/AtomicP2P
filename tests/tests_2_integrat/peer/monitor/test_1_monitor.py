@@ -3,7 +3,7 @@ from atomic_p2p.peer.communication.net import JoinHandler
 
 
 def test_two_dogs(core1, switch1):
-    switch1._on_command(["join", "127.0.0.1:{}".format(core1.server_info.host[1])])
+    switch1.join_net(host=core1.server_info.host)
     time.sleep(4)
     assert core1.get_peer_info_by_host(host=switch1.server_info.host) is not None
     assert switch1.get_peer_info_by_host(host=core1.server_info.host) is not None
@@ -18,8 +18,8 @@ def test_two_dogs(core1, switch1):
 
 
 def test_three_dogs(core1, switch1, switch2):
-    switch1._on_command(["join", "127.0.0.1:{}".format(core1.server_info.host[1])])
-    switch2._on_command(["join", "127.0.0.1:{}".format(core1.server_info.host[1])])
+    switch1.join_net(host=core1.server_info.host)
+    switch2.join_net(host=core1.server_info.host)
     time.sleep(8)
     assert core1.get_peer_info_by_host(host=switch1.server_info.host) is not None
     assert core1.get_peer_info_by_host(host=switch2.server_info.host) is not None
