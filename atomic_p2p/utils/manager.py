@@ -5,9 +5,11 @@ from atomic_p2p.utils.logging import getLogger
 
 
 class ProcManager(Process):
-
-    def __init__(self, loopDelay: int = 1,
-                 logger: "logging.Logger" = getLogger(__name__)):
+    def __init__(
+        self,
+        loopDelay: int = 1,
+        logger: "logging.Logger" = getLogger(__name__),
+    ):
         super(ProcManager, self).__init__()
         self.logger = logger
         self.loopDelay = loopDelay
@@ -30,9 +32,11 @@ class ProcManager(Process):
 
 
 class ThreadManager(Thread):
-
-    def __init__(self, loopDelay: int = 1,
-                 logger: "logging.Logger" = getLogger(__name__)):
+    def __init__(
+        self,
+        loopDelay: int = 1,
+        logger: "logging.Logger" = getLogger(__name__),
+    ):
         super(ThreadManager, self).__init__()
         self.logger = logger
         self.loopDelay = loopDelay

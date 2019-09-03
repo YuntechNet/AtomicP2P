@@ -35,8 +35,9 @@ class DNSResolver(object):
         self._ns = ns
         self._resolver.nameserver = self._ns
 
-    def sync_from_DNS(self, current_host: Tuple[str, int],
-                      domain: str) -> List["PeerInfo"]:
+    def sync_from_DNS(
+        self, current_host: Tuple[str, int], domain: str
+    ) -> List["PeerInfo"]:
         """Query from DNS fetch all records and put in pool
         Hard-code with global.[domain] will send to DNS for query. Durring pro-
         cessing each record, if any error occured, then it will be skip.
@@ -63,9 +64,12 @@ class DNSResolver(object):
                 _, _, port, srv_fqdn = self.srv(fqdn=fqdn)
                 if name is not None and srv_fqdn is not None:
                     peer_info = PeerInfo(
-                        name=name, role=role, host=(addr, int(port)))
-                    if (peer_info not in peers and
-                            peer_info.host != current_host):
+                        name=name, role=role, host=(addr, int(port))
+                    )
+                    if (
+                        peer_info not in peers
+                        and peer_info.host != current_host
+                    ):
                         peers.append(peer_info)
         return peers
 
@@ -113,8 +117,9 @@ class DNSResolver(object):
             Exceptions occurr will return with (0, 0, -1, None)
         """
         try:
-            res = str(self._resolver.query(
-                "_atomic_p2p._tcp." + fqdn, "SRV")[0]).split(" ")
+            res = str(
+                self._resolver.query("_atomic_p2p._tcp." + fqdn, "SRV")[0]
+            ).split(" ")
             return (res[0], res[1], res[2], res[3])
         except Exception:
             return (0, 0, -1, None)

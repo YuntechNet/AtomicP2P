@@ -6,15 +6,17 @@ from OpenSSL import crypto
 from os.path import exists, join
 
 
-def create_self_signed_cert(cert_dir: str, cert_file: str = "myapp.crt",
-                            key_file: str = "myapp.key") -> Tuple[str, str]:
+def create_self_signed_cert(
+    cert_dir: str, cert_file: str = "myapp.crt", key_file: str = "myapp.key"
+) -> Tuple[str, str]:
     """
     If datacard.crt and datacard.key don't exist in cert_dir, create a new
     self-signed cert and keypair and write them into that directory.
     """
 
-    if not exists(join(cert_dir, cert_file)) \
-            or not exists(join(cert_dir, key_file)):
+    if not exists(join(cert_dir, cert_file)) or not exists(
+        join(cert_dir, key_file)
+    ):
         # create a key pair
         k = crypto.PKey()
         k.generate_key(crypto.TYPE_RSA, 1024)

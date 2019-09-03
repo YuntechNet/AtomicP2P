@@ -16,14 +16,23 @@ class Packet(object):
     def deserilize(raw_data: Union[Dict, str]) -> "Packet":
         """This is serilizer convert data from utf-8 format string to Packet"""
         data = raw_data if type(raw_data) is dict else loads(
-                str(raw_data, encoding="utf-8"))
-        return Packet(dst=(data["to"]["ip"], int(data["to"]["port"])),
-                      src=(data["from"]["ip"], int(data["from"]["port"])),
-                      program_hash=data["hash"], _type=data["type"],
-                      _data=data["data"])
+            str(raw_data, encoding="utf-8"))
+        return Packet(
+            dst=(data["to"]["ip"], int(data["to"]["port"])),
+            src=(data["from"]["ip"], int(data["from"]["port"])),
+            program_hash=data["hash"],
+            _type=data["type"],
+            _data=data["data"],
+        )
 
-    def __init__(self, dst: Tuple[str, int], src: Tuple[str, int], program_hash: str,
-                 _type: str, _data: Dict):
+    def __init__(
+        self,
+        dst: Tuple[str, int],
+        src: Tuple[str, int],
+        program_hash: str,
+        _type: str,
+        _data: Dict,
+    ):
         """Init of Packet class
 
         Args:
@@ -47,7 +56,13 @@ class Packet(object):
 
     @property
     def export(self):
-        return self.__dst, self.__src, self.__program_hash, self.__type, self.__data
+        return (
+            self.__dst,
+            self.__src,
+            self.__program_hash,
+            self.__type,
+            self.__data,
+        )
 
     @property
     def dst(self):
@@ -71,11 +86,17 @@ class Packet(object):
 
     def __str__(self):
         return "Packet<DST={} SRC={} TYP={}>".format(
-                self.__dst, self.__src, self.__type)
+            self.__dst, self.__src, self.__type
+        )
 
     def clone(self) -> "Packet":
-        return Packet(dst=self.__dst, src=self.__src, program_hash=self.program_hash,
-                      _type=self.__type, _data=self.__data)
+        return Packet(
+            dst=self.__dst,
+            src=self.__src,
+            program_hash=self.program_hash,
+            _type=self.__type,
+            _data=self.__data,
+        )
 
     def redirect_to_host(
         self, src: Tuple[str, int], dst: Tuple[str, int]
@@ -83,8 +104,12 @@ class Packet(object):
         self.__src = src
         self.__dst = dst
 
-    def set_reject(self, reject_data: object, maintain_data: bool = False,
-                   maintain_secret: bool = False) -> None:
+    def set_reject(
+        self,
+        reject_data: object,
+        maintain_data: bool = False,
+        maintain_secret: bool = False,
+    ) -> None:
         if maintain_data is True:
             self.__data["reject"] = reject_data
         else:
@@ -102,5 +127,5 @@ class Packet(object):
             "from": {"ip": self.__src[0], "port": self.__src[1]},
             "hash": self.program_hash,
             "type": self.__type,
-            "data": self.__data
+            "data": self.__data,
         }

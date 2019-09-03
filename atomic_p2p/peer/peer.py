@@ -4,7 +4,12 @@ from time import sleep
 from queue import Queue
 from ssl import wrap_socket, CERT_REQUIRED, SSLWantReadError
 from socket import (
-    socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_REUSEPORT
+    socket,
+    AF_INET,
+    SOCK_STREAM,
+    SOL_SOCKET,
+    SO_REUSEADDR,
+    SO_REUSEPORT,
 )
 from select import select
 
@@ -12,11 +17,19 @@ from atomic_p2p.peer.monitor import Monitor
 from atomic_p2p.peer.dns_resolver import DNSResolver
 from atomic_p2p.peer.entity.peer_info import PeerInfo
 from atomic_p2p.peer.communication import (
-    JoinHandler, CheckJoinHandler, AckNewMemberHandler, NewMemberHandler,
-    MessageHandler, DisconnectHandler
+    JoinHandler,
+    CheckJoinHandler,
+    AckNewMemberHandler,
+    NewMemberHandler,
+    MessageHandler,
+    DisconnectHandler,
 )
 from atomic_p2p.peer.command import (
-    HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
+    HelpCmd,
+    JoinCmd,
+    SendCmd,
+    ListCmd,
+    LeaveNetCmd,
 )
 
 from atomic_p2p.utils import host_valid
@@ -55,10 +68,17 @@ class Peer(HandleableMixin, CommandableMixin):
     def tcp_server(self) -> "SSLSocket":
         return self.__tcp_server
 
-    def __init__(self, host: Tuple[str, int], name: str, role: str,
-                 cert: Tuple[str, str], program_hash: str, ns: str,
-                 auto_register: bool = False,
-                 logger: "logging.Logger" = getLogger(__name__)) -> None:
+    def __init__(
+        self,
+        host: Tuple[str, int],
+        name: str,
+        role: str,
+        cert: Tuple[str, str],
+        program_hash: str,
+        ns: str,
+        auto_register: bool = False,
+        logger: "logging.Logger" = getLogger(__name__),
+    ) -> None:
         """Init of PeerManager
 
         Args:
@@ -87,10 +107,14 @@ class Peer(HandleableMixin, CommandableMixin):
         self.pkt_handlers = {}
         self.commands = {}
 
-        self.logger.info("Program hash: {{{}...{}}}".format(
-            self.__program_hash[:6], self.__program_hash[-6:]))
+        self.logger.info(
+            "Program hash: {{{}...{}}}".format(
+                self.__program_hash[:6], self.__program_hash[-6:]
+            )
+        )
         self.dns_resolver = DNSResolver(
-            ns="127.0.0.1" if ns is None else ns, role=role)
+            ns="127.0.0.1" if ns is None else ns, role=role
+        )
 
         self.peer_pool = {}
 
@@ -98,9 +122,12 @@ class Peer(HandleableMixin, CommandableMixin):
 
         if self.__auto_register is False:
             self.logger.warning(
-                ("auto_register parameter is set to False,\n You may need to r"
-                 "egister them through _register_command & _register_handler m"
-                 "ethod."))
+                (
+                    "auto_register parameter is set to False,\n You may need to r"
+                    "egister them through _register_command & _register_handler m"
+                    "ethod."
+                )
+            )
 
     def new_tcp_long_conn(self, dst: Tuple[str, int]) -> "SSLSocket":
         """Create a ssl-wrapped TCP socket with given destination host
@@ -118,9 +145,10 @@ class Peer(HandleableMixin, CommandableMixin):
         """
         assert host_valid(dst) is True
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
-        sock = wrap_socket(unwrap_socket, cert_reqs=CERT_REQUIRED,
-                           ca_certs=self.__cert[0])
-        
+        sock = wrap_socket(
+            unwrap_socket, cert_reqs=CERT_REQUIRED, ca_certs=self.__cert[0]
+        )
+
         sock.connect(dst)
         sock.setblocking(False)
         return sock
@@ -217,8 +245,10 @@ class Peer(HandleableMixin, CommandableMixin):
         elif type(info) is PeerInfo:
             return info.host in self.peer_pool
         else:
-            raise ValueError("Parameter peer_info should be tuple with "
-                             "(str, int) or type PeerInfo")
+            raise ValueError(
+                "Parameter peer_info should be tuple with "
+                "(str, int) or type PeerInfo"
+            )
 
     def get_peer_info_by_host(
         self, host: Tuple[str, int]
@@ -300,12 +330,17 @@ class Peer(HandleableMixin, CommandableMixin):
 
             if handler is None:
                 self.logger.info("Unknown packet type: {}".format(pkt._type))
-            elif pkt.program_hash != self.__program_hash and pkt.is_reject() is False:
+            elif (
+                pkt.program_hash != self.__program_hash
+                and pkt.is_reject() is False
+            ):
                 # Invalid hash -> Dangerous peer"s pkt.
                 self.logger.info(
                     "Illegal peer {} with unmatch hash {{{}...{}}} try to "
                     "connect to net.".format(
-                        pkt.src, pkt.program_hash[:6], pkt.program_hash[-6:]))
+                        pkt.src, pkt.program_hash[:6], pkt.program_hash[-6:]
+                    )
+                )
                 pkt.redirect_to_host(src=self.server_info.host, dst=pkt.src)
                 pkt.set_reject(reject_data="Unmatching peer hash.")
                 self.pend_socket(sock=sock)
@@ -313,8 +348,11 @@ class Peer(HandleableMixin, CommandableMixin):
             else:
                 in_net = self.is_peer_in_net(info=pkt.src)
                 if in_net is True or type(handler) in [
-                        JoinHandler, AckNewMemberHandler, CheckJoinHandler,
-                        DisconnectHandler]:
+                    JoinHandler,
+                    AckNewMemberHandler,
+                    CheckJoinHandler,
+                    DisconnectHandler,
+                ]:
                     # In_net or A join / check_join pkt send.
                     # The exception pkt will be process whether reject or not.
                     handler.on_recv(src=pkt.src, pkt=pkt, sock=sock)
@@ -361,25 +399,32 @@ class Peer(HandleableMixin, CommandableMixin):
 
         self.logger.info("Peer prepared")
         self.logger.info(
-            "This peer is running with certificate at path {}".format(
-                    cert[0]))
+            "This peer is running with certificate at path {}".format(cert[0])
+        )
         self.logger.info("Please make sure other peers have same certicate.")
-        return wrap_socket(unwrap_socket, certfile=cert[0], keyfile=cert[1],
-                           server_side=True)
+        return wrap_socket(
+            unwrap_socket, certfile=cert[0], keyfile=cert[1], server_side=True
+        )
 
     def _preregister_handler(self) -> None:
         installing_handlers = [
-            JoinHandler(self), CheckJoinHandler(self), NewMemberHandler(self),
-            MessageHandler(self), AckNewMemberHandler(self),
-            DisconnectHandler(self)
+            JoinHandler(self),
+            CheckJoinHandler(self),
+            NewMemberHandler(self),
+            MessageHandler(self),
+            AckNewMemberHandler(self),
+            DisconnectHandler(self),
         ]
         for each in installing_handlers:
             self.register_handler(handler=each)
 
     def _preregister_command(self) -> None:
         installing_commands = [
-            HelpCmd(self), JoinCmd(self), SendCmd(self),
-            ListCmd(self), LeaveNetCmd(self)
+            HelpCmd(self),
+            JoinCmd(self),
+            SendCmd(self),
+            ListCmd(self),
+            LeaveNetCmd(self),
         ]
         for each in installing_commands:
             self.register_command(command=each)
@@ -419,7 +464,8 @@ class Peer(HandleableMixin, CommandableMixin):
     #                                   2019/04/26
     def loop(self) -> None:
         readable, writable, exceptional = select(
-            self.__in_fds, self.__out_fds, self.__ex_fds, 0)
+            self.__in_fds, self.__out_fds, self.__ex_fds, 0
+        )
         for sock in readable:
             if sock is self.__tcp_server:
                 conn, _ = sock.accept()

@@ -11,10 +11,7 @@ def getLogger(name=None, level=DEBUG, add_monitor_pass=None):
     else:
         logger = get_logger(name)
     logger.setLevel(level)
-    toggle = {
-        "stdout": True,
-        "monitor": True
-    }
+    toggle = {"stdout": True, "monitor": True}
 
     formatter = StdoutFormatter()
 
@@ -25,8 +22,9 @@ def getLogger(name=None, level=DEBUG, add_monitor_pass=None):
     for (key, value) in toggle.items():
         if value is True:
             if key == "monitor" and add_monitor_pass is not None:
-                handler = SocketHandler(name="monitor",
-                                        password=add_monitor_pass)
+                handler = SocketHandler(
+                    name="monitor", password=add_monitor_pass
+                )
             elif key == "stdout":
                 handler = StreamHandler(name="stdout", stream=stdout)
             else:

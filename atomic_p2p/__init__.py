@@ -3,7 +3,8 @@ from os.path import join
 
 from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.utils.security import (
-    create_self_signed_cert as cssc, self_hash
+    create_self_signed_cert as cssc,
+    self_hash,
 )
 from atomic_p2p.utils.logging import getLogger
 
@@ -16,8 +17,14 @@ class AtomicP2P(object):
     # TODO: Arguments need redefine, cause the format is not very clear enough.
     #       Also, whole class should add type hint.
     #                   2019/05/13
-    def __init__(self, role: str, addr: str, name: str,
-                 cert: str, logger: "logging.Logger") -> None:
+    def __init__(
+        self,
+        role: str,
+        addr: str,
+        name: str,
+        cert: str,
+        logger: "logging.Logger",
+    ) -> None:
         """Init of AtomicP2P object
         Args:
             role: str represents peer's role.
@@ -27,8 +34,11 @@ class AtomicP2P(object):
                 cert file. like `data/atomic_p2p.pem`, and key file should
                 same as cert file exception sub-extension with `.key`.
         """
-        cert_file, key_file = cssc(cert_dir=getcwd(), cert_file=cert,
-                                   key_file=cert.replace(".pem", ".key"))
+        cert_file, key_file = cssc(
+            cert_dir=getcwd(),
+            cert_file=cert,
+            key_file=cert.replace(".pem", ".key"),
+        )
 
         self.logger = logger
 
@@ -37,9 +47,15 @@ class AtomicP2P(object):
 
         self.services = {
             "peer": ThreadPeer(
-                host=addr, name=name, role=role, program_hash=hash_str,
-                ns=None, cert=(cert_file, key_file),
-                auto_register=True, logger=self.logger)
+                host=addr,
+                name=name,
+                role=role,
+                program_hash=hash_str,
+                ns=None,
+                cert=(cert_file, key_file),
+                auto_register=True,
+                logger=self.logger,
+            )
         }
         self.services["monitor"] = self.services["peer"].monitor
 
@@ -61,9 +77,11 @@ class AtomicP2P(object):
         if service_key in self.services:
             return (True, self.services[service_key]._on_command(cmd[1:]))
         elif service_key in ["help", "?"]:
-            help_tips = "peer help            - See peer's help\n"\
-                        "monitor help        - See monitor's help\n"\
-                        "exit/stop            - exit the whole program.\n"
+            help_tips = (
+                "peer help            - See peer's help\n"
+                "monitor help        - See monitor's help\n"
+                "exit/stop            - exit the whole program.\n"
+            )
             return (True, help_tips)
         elif service_key == "monitor":
             return (True, self.services["peer"]._on_command(cmd[1:]))

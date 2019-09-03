@@ -36,9 +36,7 @@ class PeerStatus(object):
         return str(self.status)
 
     def toDict(self) -> Dict:
-        return {
-            "send_ts": self.last_update_ts
-        }
+        return {"send_ts": self.last_update_ts}
 
     def update(self, status_type: "StatusType" = StatusType.UPDATED) -> None:
         if status_type == StatusType.PENDING:

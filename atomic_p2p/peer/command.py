@@ -19,17 +19,19 @@ class HelpCmd(Command):
         if msg_arr != [] and msg_arr[0] in self.peer.commands:
             return self.peer.commands[msg_arr[0]].__doc__
         else:
-            return ("peer [cmd] <options>\n"
-                    " - join [ip:port]                                 "
-                    "send a join net request to a exists net peer.\n"
-                    " - send [ip:port/broadcast:role] [msg]            "
-                    "send a msg to host.\n"
-                    " - list                                           "
-                    "list all peer's info in know peer list.\n"
-                    " - leavenet                                       "
-                    "leave current net.\n"
-                    " - help [cmd]                                     "
-                    "show help msg of sepecific command.")
+            return (
+                "peer [cmd] <options>\n"
+                " - join [ip:port]                                 "
+                "send a join net request to a exists net peer.\n"
+                " - send [ip:port/broadcast:role] [msg]            "
+                "send a msg to host.\n"
+                " - list                                           "
+                "list all peer's info in know peer list.\n"
+                " - leavenet                                       "
+                "leave current net.\n"
+                " - help [cmd]                                     "
+                "show help msg of sepecific command."
+            )
 
 
 class JoinCmd(Command):
@@ -64,7 +66,8 @@ class JoinCmd(Command):
         if ns is not None and type(ns) is not list:
             self.peer.dns_resolver.change_ns(ns=ns.split(","))
         records = self.peer.dns_resolver.sync_from_DNS(
-            current_host=self.peer.server_info.host, domain=domain)
+            current_host=self.peer.server_info.host, domain=domain
+        )
         for each in records:
             if is_ssl_socket_open(host=each.host) is True:
                 return each
@@ -89,12 +92,16 @@ class SendCmd(Command):
         try:
             addr[1] = int(addr[1])
             self.peer.handler_unicast_packet(
-                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type,
-                **mes)
+                host=(addr[0], addr[1]),
+                pkt_type=MessageHandler.pkt_type,
+                **mes,
+            )
         except ValueError:
             self.peer.handler_broadcast_packet(
-                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type,
-                **mes)
+                host=(addr[0], addr[1]),
+                pkt_type=MessageHandler.pkt_type,
+                **mes,
+            )
 
 
 class ListCmd(Command):
@@ -113,7 +120,7 @@ class ListCmd(Command):
         else:
             output_text = "Current peers info:"
             for each in self.peer.connectlist:
-                output_text += (" - " + str(each) + "\n")
+                output_text += " - " + str(each) + "\n"
             output_text += "[---End of list---]"
             return output_text
 
@@ -130,6 +137,7 @@ class LeaveNetCmd(Command):
 
     def _execute(self, msg_arr):
         self.peer.handler_broadcast_packet(
-            host=("", "all"), pkt_type=DisconnectHandler.pkt_type)
+            host=("", "all"), pkt_type=DisconnectHandler.pkt_type
+        )
         self.peer.peer_pool = {}
         self.peer.logger.info("You left net.")

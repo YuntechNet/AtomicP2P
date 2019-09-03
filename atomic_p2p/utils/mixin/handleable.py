@@ -2,22 +2,26 @@ from typing import Union
 from types import FunctionType, MethodType
 from inspect import currentframe
 
+from atomic_p2p.utils.communication import Handler
+
 
 class HandleableMixin(object):
     """HandleableMixin for anything which needs handle ability.
-    The class inherits this mixin, should contains a dict named pkt_handlers.
+    The class which needs communication through Peer class should inherits this
+     mixin, and contains a dict named pkt_handlers.
 
     Attributes:
         pkt_handlers: dict variable to stroe / register handles.
     """
 
-    def register_handler(self, handler: "Handler",
-                         force: bool = False) -> bool:
+    def register_handler(
+        self, handler: "Handler", force: bool = False
+    ) -> bool:
         """Register the handler with it's pkt_type to pkt_handlers
 
         Args:
             handler: The handler to be register.
-            force: If handler is exists, weather override it or not.
+            force: If handler is exists, whether override it or not.
 
         Returns:
             True if handler been set, False is fail.
@@ -40,7 +44,7 @@ class HandleableMixin(object):
             del self.pkt_handlers[pkt_type]
             return True
         return False
-    
+
     def select_handler(self, pkt_type: str) -> Union[None, "Handler"]:
         """select a handler with given packet handler type.
         If current class's pkt_handlers is not match, will iterate each va-
@@ -59,8 +63,10 @@ class HandleableMixin(object):
             for (_, val) in vars(self).items():
                 if isinstance(val, HandleableMixin) is True:
                     if "self" in currentframe().f_back.f_locals:
-                        return val.select_handler(pkt_type=pkt_type) if (
-                            val != currentframe().f_back.f_locals["self"]
-                        ) else None
+                        return (
+                            val.select_handler(pkt_type=pkt_type)
+                            if (val != currentframe().f_back.f_locals["self"])
+                            else None
+                        )
                     return val.select_handler(pkt_type=pkt_type)
             return None

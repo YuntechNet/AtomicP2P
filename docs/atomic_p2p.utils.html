@@ -50,6 +50,13 @@
 <li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.logging.html#module-atomic_p2p.utils.logging">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="atomic_p2p.utils.mixin.html">atomic_p2p.utils.mixin package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.mixin.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin.commandable">atomic_p2p.utils.mixin.commandable module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin.handleable">atomic_p2p.utils.mixin.handleable module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -104,7 +111,7 @@ Any exception will cause command annotations been print.</p>
 <span id="atomic-p2p-utils-manager-module"></span><h2>atomic_p2p.utils.manager module<a class="headerlink" href="#module-atomic_p2p.utils.manager" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="atomic_p2p.utils.manager.ProcManager">
-<em class="property">class </em><code class="descclassname">atomic_p2p.utils.manager.</code><code class="descname">ProcManager</code><span class="sig-paren">(</span><em>loopDelay=1</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.utils.manager (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.manager.</code><code class="descname">ProcManager</code><span class="sig-paren">(</span><em>loopDelay=1</em>, <em>logger=&lt;Logger atomic_p2p.utils.manager (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">multiprocessing.context.Process</span></code></p>
 <dl class="method">
 <dt id="atomic_p2p.utils.manager.ProcManager.is_start">
@@ -117,62 +124,12 @@ Any exception will cause command annotations been print.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="atomic_p2p.utils.manager.ProcManager.register_command">
-<code class="descname">register_command</code><span class="sig-paren">(</span><em>command</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.register_command" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register the command with it’s cmd to commands</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>command</strong> (<a class="reference internal" href="#atomic_p2p.utils.command.Command" title="atomic_p2p.utils.command.Command"><em>Command</em></a>) – The command to be register.</p></li>
-<li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If command is exists, weather override it or not.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if command been set, False is fail.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ProcManager.register_handler">
-<code class="descname">register_handler</code><span class="sig-paren">(</span><em>handler</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.register_handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register the handler with it’s pkt_type to pkt_handlers</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>handler</strong> (<a class="reference internal" href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler" title="atomic_p2p.utils.communication.handler.Handler"><em>Handler</em></a>) – The handler to be register.</p></li>
-<li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If handler is exists, weather override it or not.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if handler been set, False is fail.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="atomic_p2p.utils.manager.ProcManager.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to be run in sub-process; can be overridden in sub-class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ProcManager.select_handler">
-<code class="descname">select_handler</code><span class="sig-paren">(</span><em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.select_handler" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler" title="atomic_p2p.utils.communication.handler.Handler">Handler</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -198,45 +155,11 @@ Any exception will cause command annotations been print.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ProcManager.unregister_command">
-<code class="descname">unregister_command</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.unregister_command" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unregister a command in commands</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cmd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target command’s key cmd to unregister.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if remove success, False means not exists.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ProcManager.unregister_handler">
-<code class="descname">unregister_handler</code><span class="sig-paren">(</span><em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ProcManager.unregister_handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unregister a handler in pkt_handlers</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pkt_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target handler’s pkt_type to unregister.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if remove success, False means not exists.</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="atomic_p2p.utils.manager.ThreadManager">
-<em class="property">class </em><code class="descclassname">atomic_p2p.utils.manager.</code><code class="descname">ThreadManager</code><span class="sig-paren">(</span><em>loopDelay=1</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.utils.manager (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.manager.</code><code class="descname">ThreadManager</code><span class="sig-paren">(</span><em>loopDelay=1</em>, <em>logger=&lt;Logger atomic_p2p.utils.manager (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></p>
 <dl class="method">
 <dt id="atomic_p2p.utils.manager.ThreadManager.is_start">
@@ -244,46 +167,6 @@ Any exception will cause command annotations been print.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ThreadManager.register_command">
-<code class="descname">register_command</code><span class="sig-paren">(</span><em>command</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.register_command" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register the command with it’s cmd to commands</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>command</strong> (<a class="reference internal" href="#atomic_p2p.utils.command.Command" title="atomic_p2p.utils.command.Command"><em>Command</em></a>) – The command to be register.</p></li>
-<li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If command is exists, weather override it or not.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if command been set, False is fail.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ThreadManager.register_handler">
-<code class="descname">register_handler</code><span class="sig-paren">(</span><em>handler</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.register_handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Register the handler with it’s pkt_type to pkt_handlers</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>handler</strong> (<a class="reference internal" href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler" title="atomic_p2p.utils.communication.handler.Handler"><em>Handler</em></a>) – The handler to be register.</p></li>
-<li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If handler is exists, weather override it or not.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if handler been set, False is fail.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -299,16 +182,6 @@ from the args and kwargs arguments, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ThreadManager.select_handler">
-<code class="descname">select_handler</code><span class="sig-paren">(</span><em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.select_handler" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler" title="atomic_p2p.utils.communication.handler.Handler">Handler</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -334,40 +207,6 @@ same thread object.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ThreadManager.unregister_command">
-<code class="descname">unregister_command</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.unregister_command" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unregister a command in commands</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cmd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target command’s key cmd to unregister.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if remove success, False means not exists.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomic_p2p.utils.manager.ThreadManager.unregister_handler">
-<code class="descname">unregister_handler</code><span class="sig-paren">(</span><em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.manager.ThreadManager.unregister_handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unregister a handler in pkt_handlers</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pkt_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target handler’s pkt_type to unregister.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if remove success, False means not exists.</p>
 </dd>
 </dl>
 </dd></dl>

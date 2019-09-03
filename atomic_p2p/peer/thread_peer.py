@@ -8,15 +8,28 @@ from atomic_p2p.utils.logging import getLogger
 
 
 class ThreadPeer(Peer, Thread):
-
-    def __init__(self, host: Tuple[str, int], name: str, role: str,
-                 cert: Tuple[str, str], program_hash: str, ns: str = None,
-                 loop_delay: int = 1, auto_register: bool = False,
-                 logger: "logging.Logger" = getLogger(__name__)):
+    def __init__(
+        self,
+        host: Tuple[str, int],
+        name: str,
+        role: str,
+        cert: Tuple[str, str],
+        program_hash: str,
+        ns: str = None,
+        loop_delay: int = 1,
+        auto_register: bool = False,
+        logger: "logging.Logger" = getLogger(__name__),
+    ):
         super().__init__(
-            host=host, name=name, role=role, cert=cert,
-            program_hash=program_hash, ns=ns, auto_register=auto_register,
-            logger=logger)
+            host=host,
+            name=name,
+            role=role,
+            cert=cert,
+            program_hash=program_hash,
+            ns=ns,
+            auto_register=auto_register,
+            logger=logger,
+        )
         self.logger = logger
         self.loopDelay = loop_delay
         self.stopped = Event()
@@ -36,8 +49,9 @@ class ThreadPeer(Peer, Thread):
         self.started.clear()
 
     def run(self) -> None:
-        while (self.stopped.wait(self.loopDelay) is False or
-               self.send_queue != {}):
+        while (
+            self.stopped.wait(self.loopDelay) is False or self.send_queue != {}
+        ):
             self.loop()
         self.tcp_server.close()
         sleep(2)

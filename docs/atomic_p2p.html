@@ -53,15 +53,9 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="atomic_p2p.peer.monitor.html">atomic_p2p.peer.monitor package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="atomic_p2p.peer.monitor.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="atomic_p2p.peer.monitor.communication.html">atomic_p2p.peer.monitor.communication package</a><ul>
-<li class="toctree-l6"><a class="reference internal" href="atomic_p2p.peer.monitor.communication.html#module-atomic_p2p.peer.monitor.communication">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toctree-l4"><a class="reference internal" href="atomic_p2p.peer.monitor.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor.command">atomic_p2p.peer.monitor.command module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor.communication">atomic_p2p.peer.monitor.communication module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor">Module contents</a></li>
 </ul>
 </li>
@@ -70,6 +64,9 @@
 <li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.html#module-atomic_p2p.peer.command">atomic_p2p.peer.command module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.html#module-atomic_p2p.peer.dns_resolver">atomic_p2p.peer.dns_resolver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.html#module-atomic_p2p.peer.peer">atomic_p2p.peer.peer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.html#module-atomic_p2p.peer.process_peer">atomic_p2p.peer.process_peer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.html#module-atomic_p2p.peer.thread_peer">atomic_p2p.peer.thread_peer module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.html#module-atomic_p2p.peer">Module contents</a></li>
 </ul>
 </li>
@@ -87,6 +84,13 @@
 <li class="toctree-l4"><a class="reference internal" href="atomic_p2p.utils.logging.html#module-atomic_p2p.utils.logging.formatters">atomic_p2p.utils.logging.formatters module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="atomic_p2p.utils.logging.html#module-atomic_p2p.utils.logging.handlers">atomic_p2p.utils.logging.handlers module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="atomic_p2p.utils.logging.html#module-atomic_p2p.utils.logging">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="atomic_p2p.utils.mixin.html">atomic_p2p.utils.mixin package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="atomic_p2p.utils.mixin.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin.commandable">atomic_p2p.utils.mixin.commandable module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin.handleable">atomic_p2p.utils.mixin.handleable module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -108,7 +112,7 @@
 <span id="atomic-p2p-local-monitor-module"></span><h2>atomic_p2p.local_monitor module<a class="headerlink" href="#module-atomic_p2p.local_monitor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="atomic_p2p.local_monitor.LocalMonitor">
-<em class="property">class </em><code class="descclassname">atomic_p2p.local_monitor.</code><code class="descname">LocalMonitor</code><span class="sig-paren">(</span><em>service</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.local_monitor.LocalMonitor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">atomic_p2p.local_monitor.</code><code class="descname">LocalMonitor</code><span class="sig-paren">(</span><em>service</em>, <em>password</em>, <em>logger=&lt;Logger atomic_p2p.local_monitor (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.local_monitor.LocalMonitor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager" title="atomic_p2p.utils.manager.ThreadManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.utils.manager.ThreadManager</span></code></a></p>
 <dl class="method">
 <dt id="atomic_p2p.local_monitor.LocalMonitor.command_recv">
@@ -157,11 +161,11 @@ from the args and kwargs arguments, respectively.</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="atomic_p2p.AtomicP2P">
-<em class="property">class </em><code class="descclassname">atomic_p2p.</code><code class="descname">AtomicP2P</code><span class="sig-paren">(</span><em>role</em>, <em>addr</em>, <em>name</em>, <em>cert</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.AtomicP2P" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">atomic_p2p.</code><code class="descname">AtomicP2P</code><span class="sig-paren">(</span><em>role</em>, <em>addr</em>, <em>name</em>, <em>cert</em>, <em>logger</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.AtomicP2P" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="atomic_p2p.AtomicP2P.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>role</em>, <em>addr</em>, <em>name</em>, <em>cert</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.AtomicP2P.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>role</em>, <em>addr</em>, <em>name</em>, <em>cert</em>, <em>logger</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.AtomicP2P.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Init of AtomicP2P object
 :type role: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>
 :param role: str represents peer’s role.
@@ -177,7 +181,7 @@ same as cert file exception sub-extension with <cite>.key</cite>.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>

@@ -40,15 +40,22 @@ class Handler(object):
     def on_send_pkt(self, target: Tuple[str, int], **kwargs) -> "Packet":
         raise NotImplementedError
 
-    def on_send_reject_pkt(self, target: Tuple[str, int],
-                           reject_data: object, **kwargs) -> "Packet":
-        packet = Packet(dst=target, src=self.peer.server_info.host, program_hash=None,
-                        _type=self.pkt_type, _data={})
+    def on_send_reject_pkt(
+        self, target: Tuple[str, int], reject_data: object, **kwargs
+    ) -> "Packet":
+        packet = Packet(
+            dst=target,
+            src=self.peer.server_info.host,
+            program_hash=None,
+            _type=self.pkt_type,
+            _data={},
+        )
         packet.set_reject(reject_data=reject_data)
         return packet
 
-    def on_recv(self, src: Tuple[str, int],
-                pkt: Packet, sock: "SSLSocket", **kwargs) -> None:
+    def on_recv(
+        self, src: Tuple[str, int], pkt: Packet, sock: "SSLSocket", **kwargs
+    ) -> None:
         """
         Args:
             src: Source host.
@@ -61,15 +68,18 @@ class Handler(object):
         else:
             self.on_recv_pkt(src=src, pkt=pkt, conn=sock, **kwargs)
 
-    def on_recv_pkt(self, src: Tuple[str, int], pkt: "Packet",
-                    conn: "SSLSocket", **kwargs) -> None:
+    def on_recv_pkt(
+        self, src: Tuple[str, int], pkt: "Packet", conn: "SSLSocket", **kwargs
+    ) -> None:
         raise NotImplementedError
 
-    def on_recv_reject_pkt(self, src: Tuple[str, int], pkt: "Packet",
-                           conn: "SSLSocket", **kwargs) -> None:
+    def on_recv_reject_pkt(
+        self, src: Tuple[str, int], pkt: "Packet", conn: "SSLSocket", **kwargs
+    ) -> None:
         reject = pkt.data["reject"]
-        self.__peer.logger.info("Rejected by {}, reason: {}".format(
-            pkt.src, reject))
+        self.__peer.logger.info(
+            "Rejected by {}, reason: {}".format(pkt.src, reject)
+        )
         # TODO: Fit unittest empty conn in PeerInfo
         #       Waiting for use mock.
         #                      - 2019/04/13

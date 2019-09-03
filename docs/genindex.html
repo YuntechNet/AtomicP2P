@@ -69,6 +69,8 @@
 </li>
         <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_status.PeerStatus.__init__">(atomic_p2p.peer.entity.peer_status.PeerStatus method)</a>
 </li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.__init__">(atomic_p2p.peer.peer.Peer method)</a>
+</li>
         <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.command.Command.__init__">(atomic_p2p.utils.command.Command method)</a>
 </li>
         <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler.__init__">(atomic_p2p.utils.communication.handler.Handler method)</a>
@@ -91,7 +93,11 @@
       <li><a href="atomic_p2p.peer.communication.html#atomic_p2p.peer.communication.net.AckNewMemberHandler">AckNewMemberHandler (class in atomic_p2p.peer.communication.net)</a>
 </li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.add_peer_in_net">add_peer_in_net() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.add_peer_in_net">(atomic_p2p.peer.peer.Peer method)</a>
 </li>
+      </ul></li>
       <li><a href="atomic_p2p.html#module-atomic_p2p">atomic_p2p (module)</a>
 </li>
       <li><a href="atomic_p2p.html#module-atomic_p2p.local_monitor">atomic_p2p.local_monitor (module)</a>
@@ -114,13 +120,19 @@
 </li>
       <li><a href="atomic_p2p.peer.entity.html#module-atomic_p2p.peer.entity.peer_status">atomic_p2p.peer.entity.peer_status (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor">atomic_p2p.peer.monitor (module)</a>
 </li>
       <li><a href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor.command">atomic_p2p.peer.monitor.command (module)</a>
 </li>
-      <li><a href="atomic_p2p.peer.monitor.communication.html#module-atomic_p2p.peer.monitor.communication">atomic_p2p.peer.monitor.communication (module)</a>
+      <li><a href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor.communication">atomic_p2p.peer.monitor.communication (module)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="atomic_p2p.peer.html#module-atomic_p2p.peer.peer">atomic_p2p.peer.peer (module)</a>
+</li>
+      <li><a href="atomic_p2p.peer.html#module-atomic_p2p.peer.process_peer">atomic_p2p.peer.process_peer (module)</a>
+</li>
+      <li><a href="atomic_p2p.peer.html#module-atomic_p2p.peer.thread_peer">atomic_p2p.peer.thread_peer (module)</a>
 </li>
       <li><a href="atomic_p2p.utils.html#module-atomic_p2p.utils">atomic_p2p.utils (module)</a>
 </li>
@@ -140,6 +152,12 @@
 </li>
       <li><a href="atomic_p2p.utils.html#module-atomic_p2p.utils.manager">atomic_p2p.utils.manager (module)</a>
 </li>
+      <li><a href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin">atomic_p2p.utils.mixin (module)</a>
+</li>
+      <li><a href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin.commandable">atomic_p2p.utils.mixin.commandable (module)</a>
+</li>
+      <li><a href="atomic_p2p.utils.mixin.html#module-atomic_p2p.utils.mixin.handleable">atomic_p2p.utils.mixin.handleable (module)</a>
+</li>
       <li><a href="atomic_p2p.utils.html#module-atomic_p2p.utils.security">atomic_p2p.utils.security (module)</a>
 </li>
       <li><a href="atomic_p2p.html#atomic_p2p.AtomicP2P">AtomicP2P (class in atomic_p2p)</a>
@@ -152,20 +170,36 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.dns_resolver.DNSResolver.change_ns">change_ns() (atomic_p2p.peer.dns_resolver.DNSResolver method)</a>
 </li>
-      <li><a href="atomic_p2p.peer.monitor.communication.html#atomic_p2p.peer.monitor.communication.CheckHandler">CheckHandler (class in atomic_p2p.peer.monitor.communication)</a>
+      <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.communication.CheckHandler">CheckHandler (class in atomic_p2p.peer.monitor.communication)</a>
 </li>
       <li><a href="atomic_p2p.peer.communication.html#atomic_p2p.peer.communication.net.CheckJoinHandler">CheckJoinHandler (class in atomic_p2p.peer.communication.net)</a>
 </li>
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.clone">clone() (atomic_p2p.utils.communication.packet.Packet method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.command.Command">Command (class in atomic_p2p.utils.command)</a>
 </li>
       <li><a href="atomic_p2p.html#atomic_p2p.local_monitor.LocalMonitor.command_recv">command_recv() (atomic_p2p.local_monitor.LocalMonitor method)</a>
 </li>
-      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.connectlist">connectlist (atomic_p2p.peer.Peer attribute)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.CommandableMixin">CommandableMixin (class in atomic_p2p.utils.mixin)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.commandable.CommandableMixin">(class in atomic_p2p.utils.mixin.commandable)</a>
 </li>
+      </ul></li>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.commandable.CommandableMixin.commands">commands (atomic_p2p.utils.mixin.commandable.CommandableMixin attribute)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.CommandableMixin.commands">(atomic_p2p.utils.mixin.CommandableMixin attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.connectlist">connectlist (atomic_p2p.peer.Peer attribute)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.connectlist">(atomic_p2p.peer.peer.Peer attribute)</a>
+</li>
+      </ul></li>
       <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.security.create_self_signed_cert">create_self_signed_cert() (in module atomic_p2p.utils.security)</a>
 </li>
   </ul></td>
@@ -179,7 +213,11 @@
       <li><a href="atomic_p2p.html#atomic_p2p.local_monitor.LocalMonitor.decrypt">decrypt() (atomic_p2p.local_monitor.LocalMonitor method)</a>
 </li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.del_peer_in_net">del_peer_in_net() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.del_peer_in_net">(atomic_p2p.peer.peer.Peer method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.deserilize">deserilize() (atomic_p2p.utils.communication.packet.Packet static method)</a>
@@ -227,7 +265,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.get_peer_info_by_host">get_peer_info_by_host() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.get_peer_info_by_host">(atomic_p2p.peer.peer.Peer method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.utils.logging.html#atomic_p2p.utils.logging.getLogger">getLogger() (in module atomic_p2p.utils.logging)</a>
@@ -238,14 +280,28 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.HandleableMixin">HandleableMixin (class in atomic_p2p.utils.mixin)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.handleable.HandleableMixin">(class in atomic_p2p.utils.mixin.handleable)</a>
+</li>
+      </ul></li>
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler">Handler (class in atomic_p2p.utils.communication.handler)</a>
 </li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.handler_broadcast_packet">handler_broadcast_packet() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.handler_broadcast_packet">(atomic_p2p.peer.peer.Peer method)</a>
 </li>
-      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.handler_unicast_packet">handler_unicast_packet() (atomic_p2p.peer.Peer method)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.handler_unicast_packet">handler_unicast_packet() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.handler_unicast_packet">(atomic_p2p.peer.peer.Peer method)</a>
+</li>
+      </ul></li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.command.HelpCmd">HelpCmd (class in atomic_p2p.peer.command)</a>
 
       <ul>
@@ -261,16 +317,28 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.is_peer_in_net">is_peer_in_net() (atomic_p2p.peer.Peer method)</a>
-</li>
-      <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.is_reject">is_reject() (atomic_p2p.utils.communication.packet.Packet method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.is_ssl_socket_open">is_ssl_socket_open() (in module atomic_p2p.utils.communication)</a>
-</li>
-      <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.is_start">is_start() (atomic_p2p.utils.manager.ProcManager method)</a>
 
       <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.is_peer_in_net">(atomic_p2p.peer.peer.Peer method)</a>
+</li>
+      </ul></li>
+      <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.is_reject">is_reject() (atomic_p2p.utils.communication.packet.Packet method)</a>
+</li>
+      <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.is_ssl_socket_open">is_ssl_socket_open() (in module atomic_p2p.utils.communication)</a>
+</li>
+      <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.Monitor.is_start">is_start() (atomic_p2p.peer.monitor.Monitor method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ProcessPeer.is_start">(atomic_p2p.peer.ProcessPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ThreadPeer.is_start">(atomic_p2p.peer.ThreadPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.process_peer.ProcessPeer.is_start">(atomic_p2p.peer.process_peer.ProcessPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.thread_peer.ThreadPeer.is_start">(atomic_p2p.peer.thread_peer.ThreadPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.is_start">(atomic_p2p.utils.manager.ProcManager method)</a>
+</li>
         <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager.is_start">(atomic_p2p.utils.manager.ThreadManager method)</a>
 </li>
       </ul></li>
@@ -296,8 +364,6 @@
 </li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.command.LeaveNetCmd">LeaveNetCmd (class in atomic_p2p.peer.command)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.command.ListCmd">ListCmd (class in atomic_p2p.peer.command)</a>
 
       <ul>
@@ -306,6 +372,26 @@
       </ul></li>
       <li><a href="atomic_p2p.html#atomic_p2p.local_monitor.LocalMonitor">LocalMonitor (class in atomic_p2p.local_monitor)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.loop">loop() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.loop">(atomic_p2p.peer.peer.Peer method)</a>
+</li>
+      </ul></li>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.loop_start">loop_start() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.loop_start">(atomic_p2p.peer.peer.Peer method)</a>
+</li>
+      </ul></li>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.loop_stop">loop_stop() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.loop_stop">(atomic_p2p.peer.peer.Peer method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -327,11 +413,15 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.new_tcp_long_conn">new_tcp_long_conn() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.new_tcp_long_conn">(atomic_p2p.peer.peer.Peer method)</a>
 </li>
-      <li><a href="atomic_p2p.peer.communication.html#atomic_p2p.peer.communication.net.NewMemberHandler">NewMemberHandler (class in atomic_p2p.peer.communication.net)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="atomic_p2p.peer.communication.html#atomic_p2p.peer.communication.net.NewMemberHandler">NewMemberHandler (class in atomic_p2p.peer.communication.net)</a>
+</li>
       <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_status.StatusType.NO_RESP">NO_RESP (atomic_p2p.peer.entity.peer_status.StatusType attribute)</a>
 </li>
       <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_status.PeerStatus.no_response_count">no_response_count (atomic_p2p.peer.entity.peer_status.PeerStatus attribute)</a>
@@ -359,12 +449,12 @@
 </li>
         <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.Monitor.on_recv_pkt">(atomic_p2p.peer.monitor.Monitor method)</a>
 </li>
-        <li><a href="atomic_p2p.peer.monitor.communication.html#atomic_p2p.peer.monitor.communication.CheckHandler.on_recv_pkt">(atomic_p2p.peer.monitor.communication.CheckHandler method)</a>
+        <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.communication.CheckHandler.on_recv_pkt">(atomic_p2p.peer.monitor.communication.CheckHandler method)</a>
 </li>
         <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler.on_recv_pkt">(atomic_p2p.utils.communication.handler.Handler method)</a>
 </li>
       </ul></li>
-      <li><a href="atomic_p2p.peer.monitor.communication.html#atomic_p2p.peer.monitor.communication.CheckHandler.on_recv_reject_pkt">on_recv_reject_pkt() (atomic_p2p.peer.monitor.communication.CheckHandler method)</a>
+      <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.communication.CheckHandler.on_recv_reject_pkt">on_recv_reject_pkt() (atomic_p2p.peer.monitor.communication.CheckHandler method)</a>
 
       <ul>
         <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler.on_recv_reject_pkt">(atomic_p2p.utils.communication.handler.Handler method)</a>
@@ -387,17 +477,17 @@
 </li>
         <li><a href="atomic_p2p.peer.communication.html#atomic_p2p.peer.communication.net.NewMemberHandler.on_send_pkt">(atomic_p2p.peer.communication.net.NewMemberHandler method)</a>
 </li>
-        <li><a href="atomic_p2p.peer.monitor.communication.html#atomic_p2p.peer.monitor.communication.CheckHandler.on_send_pkt">(atomic_p2p.peer.monitor.communication.CheckHandler method)</a>
+        <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.communication.CheckHandler.on_send_pkt">(atomic_p2p.peer.monitor.communication.CheckHandler method)</a>
 </li>
         <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler.on_send_pkt">(atomic_p2p.utils.communication.handler.Handler method)</a>
 </li>
       </ul></li>
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler.on_send_reject_pkt">on_send_reject_pkt() (atomic_p2p.utils.communication.handler.Handler method)</a>
 </li>
-      <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.Monitor.onProcess">onProcess() (atomic_p2p.peer.monitor.Monitor method)</a>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.commandable.CommandableMixin.onProcess">onProcess() (atomic_p2p.utils.mixin.commandable.CommandableMixin method)</a>
 
       <ul>
-        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.onProcess">(atomic_p2p.peer.Peer method)</a>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.CommandableMixin.onProcess">(atomic_p2p.utils.mixin.CommandableMixin method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -413,27 +503,55 @@
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler.peer">peer (atomic_p2p.utils.communication.handler.Handler attribute)</a>
 </li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer">Peer (class in atomic_p2p.peer)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer">(class in atomic_p2p.peer.peer)</a>
 </li>
+      </ul></li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.peer_pool">peer_pool (atomic_p2p.peer.Peer attribute)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.peer_pool">(atomic_p2p.peer.peer.Peer attribute)</a>
 </li>
+      </ul></li>
       <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_info.PeerInfo">PeerInfo (class in atomic_p2p.peer.entity.peer_info)</a>
 </li>
       <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_status.PeerStatus">PeerStatus (class in atomic_p2p.peer.entity.peer_status)</a>
 </li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.pend_packet">pend_packet() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.pend_packet">(atomic_p2p.peer.peer.Peer method)</a>
 </li>
+      </ul></li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.pend_socket">pend_socket() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.pend_socket">(atomic_p2p.peer.peer.Peer method)</a>
 </li>
+      </ul></li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.pend_socket_to_rm">pend_socket_to_rm() (atomic_p2p.peer.Peer method)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.pend_socket_to_rm">(atomic_p2p.peer.peer.Peer method)</a>
 </li>
+      </ul></li>
       <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_status.StatusType.PENDING">PENDING (atomic_p2p.peer.entity.peer_status.StatusType attribute)</a>
+</li>
+      <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.command.PeriodCmd">PeriodCmd (class in atomic_p2p.peer.monitor.command)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.command.PeriodCmd">PeriodCmd (class in atomic_p2p.peer.monitor.command)</a>
-</li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.pkt_handlers">pkt_handlers (atomic_p2p.peer.Peer attribute)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.pkt_handlers">(atomic_p2p.peer.peer.Peer attribute)</a>
 </li>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.HandleableMixin.pkt_handlers">(atomic_p2p.utils.mixin.HandleableMixin attribute)</a>
+</li>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.handleable.HandleableMixin.pkt_handlers">(atomic_p2p.utils.mixin.handleable.HandleableMixin attribute)</a>
+</li>
+      </ul></li>
       <li><a href="atomic_p2p.peer.communication.html#atomic_p2p.peer.communication.msg.MessageHandler.pkt_type">pkt_type (atomic_p2p.peer.communication.msg.MessageHandler attribute)</a>
 
       <ul>
@@ -447,13 +565,27 @@
 </li>
         <li><a href="atomic_p2p.peer.communication.html#atomic_p2p.peer.communication.net.NewMemberHandler.pkt_type">(atomic_p2p.peer.communication.net.NewMemberHandler attribute)</a>
 </li>
-        <li><a href="atomic_p2p.peer.monitor.communication.html#atomic_p2p.peer.monitor.communication.CheckHandler.pkt_type">(atomic_p2p.peer.monitor.communication.CheckHandler attribute)</a>
+        <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.communication.CheckHandler.pkt_type">(atomic_p2p.peer.monitor.communication.CheckHandler attribute)</a>
 </li>
         <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler.pkt_type">(atomic_p2p.utils.communication.handler.Handler attribute)</a>
 </li>
       </ul></li>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ProcessPeer">ProcessPeer (class in atomic_p2p.peer)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.process_peer.ProcessPeer">(class in atomic_p2p.peer.process_peer)</a>
+</li>
+      </ul></li>
       <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager">ProcManager (class in atomic_p2p.utils.manager)</a>
 </li>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.program_hash">program_hash (atomic_p2p.peer.Peer attribute)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.program_hash">(atomic_p2p.peer.peer.Peer attribute)</a>
+</li>
+        <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.program_hash">(atomic_p2p.utils.communication.packet.Packet attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -462,36 +594,42 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.redirect_to_host">redirect_to_host() (atomic_p2p.utils.communication.packet.Packet method)</a>
 </li>
-      <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.register_command">register_command() (atomic_p2p.utils.manager.ProcManager method)</a>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.commandable.CommandableMixin.register_command">register_command() (atomic_p2p.utils.mixin.commandable.CommandableMixin method)</a>
 
       <ul>
-        <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager.register_command">(atomic_p2p.utils.manager.ThreadManager method)</a>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.CommandableMixin.register_command">(atomic_p2p.utils.mixin.CommandableMixin method)</a>
 </li>
       </ul></li>
-      <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.register_handler">register_handler() (atomic_p2p.utils.manager.ProcManager method)</a>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.handleable.HandleableMixin.register_handler">register_handler() (atomic_p2p.utils.mixin.handleable.HandleableMixin method)</a>
 
       <ul>
-        <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager.register_handler">(atomic_p2p.utils.manager.ThreadManager method)</a>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.HandleableMixin.register_handler">(atomic_p2p.utils.mixin.HandleableMixin method)</a>
 </li>
       </ul></li>
       <li><a href="atomic_p2p.html#atomic_p2p.local_monitor.LocalMonitor.registerCommand">registerCommand() (atomic_p2p.local_monitor.LocalMonitor method)</a>
 </li>
       <li><a href="atomic_p2p.html#atomic_p2p.local_monitor.LocalMonitor.registerHandler">registerHandler() (atomic_p2p.local_monitor.LocalMonitor method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.Monitor.removeMonitorlist">removeMonitorlist() (atomic_p2p.peer.monitor.Monitor method)</a>
 </li>
       <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.command.ResetCmd">ResetCmd (class in atomic_p2p.peer.monitor.command)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.dns_resolver.DNSResolver.reverse">reverse() (atomic_p2p.peer.dns_resolver.DNSResolver method)</a>
 </li>
       <li><a href="atomic_p2p.html#atomic_p2p.local_monitor.LocalMonitor.run">run() (atomic_p2p.local_monitor.LocalMonitor method)</a>
 
       <ul>
-        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.run">(atomic_p2p.peer.Peer method)</a>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ProcessPeer.run">(atomic_p2p.peer.ProcessPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ThreadPeer.run">(atomic_p2p.peer.ThreadPeer method)</a>
 </li>
         <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.Monitor.run">(atomic_p2p.peer.monitor.Monitor method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.process_peer.ProcessPeer.run">(atomic_p2p.peer.process_peer.ProcessPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.thread_peer.ThreadPeer.run">(atomic_p2p.peer.thread_peer.ThreadPeer method)</a>
 </li>
         <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.run">(atomic_p2p.utils.manager.ProcManager method)</a>
 </li>
@@ -504,24 +642,30 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.Monitor.select_handler">select_handler() (atomic_p2p.peer.monitor.Monitor method)</a>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.handleable.HandleableMixin.select_handler">select_handler() (atomic_p2p.utils.mixin.handleable.HandleableMixin method)</a>
 
       <ul>
-        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.select_handler">(atomic_p2p.peer.Peer method)</a>
-</li>
-        <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.select_handler">(atomic_p2p.utils.manager.ProcManager method)</a>
-</li>
-        <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager.select_handler">(atomic_p2p.utils.manager.ThreadManager method)</a>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.HandleableMixin.select_handler">(atomic_p2p.utils.mixin.HandleableMixin method)</a>
 </li>
       </ul></li>
       <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.security.self_hash">self_hash() (in module atomic_p2p.utils.security)</a>
 </li>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.send_queue">send_queue (atomic_p2p.peer.Peer attribute)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.send_queue">(atomic_p2p.peer.peer.Peer attribute)</a>
+</li>
+      </ul></li>
       <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.command.SendCmd">SendCmd (class in atomic_p2p.peer.command)</a>
 </li>
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.serilize">serilize() (atomic_p2p.utils.communication.packet.Packet static method)</a>
 </li>
-      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.server_info">server_info (atomic_p2p.peer.Peer attribute)</a>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.server_info">server_info (atomic_p2p.peer.Peer attribute)</a>, <a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.server_info">[1]</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.server_info">(atomic_p2p.peer.peer.Peer attribute)</a>, <a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.server_info">[1]</a>
 </li>
+      </ul></li>
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.set_reject">set_reject() (atomic_p2p.utils.communication.packet.Packet method)</a>
 </li>
       <li><a href="atomic_p2p.utils.logging.html#atomic_p2p.utils.logging.handlers.SocketHandler">SocketHandler (class in atomic_p2p.utils.logging.handlers)</a>
@@ -533,7 +677,15 @@
       <li><a href="atomic_p2p.html#atomic_p2p.AtomicP2P.start">start() (atomic_p2p.AtomicP2P method)</a>
 
       <ul>
-        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.start">(atomic_p2p.peer.Peer method)</a>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ProcessPeer.start">(atomic_p2p.peer.ProcessPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ThreadPeer.start">(atomic_p2p.peer.ThreadPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.Monitor.start">(atomic_p2p.peer.monitor.Monitor method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.process_peer.ProcessPeer.start">(atomic_p2p.peer.process_peer.ProcessPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.thread_peer.ThreadPeer.start">(atomic_p2p.peer.thread_peer.ThreadPeer method)</a>
 </li>
         <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.start">(atomic_p2p.utils.manager.ProcManager method)</a>
 </li>
@@ -553,7 +705,15 @@
       <ul>
         <li><a href="atomic_p2p.html#atomic_p2p.local_monitor.LocalMonitor.stop">(atomic_p2p.local_monitor.LocalMonitor method)</a>
 </li>
-        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.stop">(atomic_p2p.peer.Peer method)</a>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ProcessPeer.stop">(atomic_p2p.peer.ProcessPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ThreadPeer.stop">(atomic_p2p.peer.ThreadPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.monitor.html#atomic_p2p.peer.monitor.Monitor.stop">(atomic_p2p.peer.monitor.Monitor method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.process_peer.ProcessPeer.stop">(atomic_p2p.peer.process_peer.ProcessPeer method)</a>
+</li>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.thread_peer.ThreadPeer.stop">(atomic_p2p.peer.thread_peer.ThreadPeer method)</a>
 </li>
         <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.stop">(atomic_p2p.utils.manager.ProcManager method)</a>
 </li>
@@ -570,10 +730,22 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.Peer.tcp_server">tcp_server (atomic_p2p.peer.Peer attribute)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer.tcp_server">(atomic_p2p.peer.peer.Peer attribute)</a>
+</li>
+      </ul></li>
       <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager">ThreadManager (class in atomic_p2p.utils.manager)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.ThreadPeer">ThreadPeer (class in atomic_p2p.peer)</a>
+
+      <ul>
+        <li><a href="atomic_p2p.peer.html#atomic_p2p.peer.thread_peer.ThreadPeer">(class in atomic_p2p.peer.thread_peer)</a>
+</li>
+      </ul></li>
       <li><a href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.packet.Packet.to_dict">to_dict() (atomic_p2p.utils.communication.packet.Packet method)</a>
 </li>
       <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_status.PeerStatus.toDict">toDict() (atomic_p2p.peer.entity.peer_status.PeerStatus method)</a>
@@ -586,18 +758,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_status.StatusType.UNKNOWN">UNKNOWN (atomic_p2p.peer.entity.peer_status.StatusType attribute)</a>
 </li>
-      <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.unregister_command">unregister_command() (atomic_p2p.utils.manager.ProcManager method)</a>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.commandable.CommandableMixin.unregister_command">unregister_command() (atomic_p2p.utils.mixin.commandable.CommandableMixin method)</a>
 
       <ul>
-        <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager.unregister_command">(atomic_p2p.utils.manager.ThreadManager method)</a>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.CommandableMixin.unregister_command">(atomic_p2p.utils.mixin.CommandableMixin method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ProcManager.unregister_handler">unregister_handler() (atomic_p2p.utils.manager.ProcManager method)</a>
+      <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.handleable.HandleableMixin.unregister_handler">unregister_handler() (atomic_p2p.utils.mixin.handleable.HandleableMixin method)</a>
 
       <ul>
-        <li><a href="atomic_p2p.utils.html#atomic_p2p.utils.manager.ThreadManager.unregister_handler">(atomic_p2p.utils.manager.ThreadManager method)</a>
+        <li><a href="atomic_p2p.utils.mixin.html#atomic_p2p.utils.mixin.HandleableMixin.unregister_handler">(atomic_p2p.utils.mixin.HandleableMixin method)</a>
 </li>
       </ul></li>
       <li><a href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_status.PeerStatus.update">update() (atomic_p2p.peer.entity.peer_status.PeerStatus method)</a>

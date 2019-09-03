@@ -8,6 +8,7 @@ Subpackages
 
     atomic_p2p.utils.communication
     atomic_p2p.utils.logging
+    atomic_p2p.utils.mixin
 
 Submodules
 ----------
