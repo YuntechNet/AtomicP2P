@@ -4,8 +4,8 @@ from atomic_p2p.peer.monitor.communication import CheckHandler
 
 def test_init(self_hash, default_peer):
     assert default_peer.stopped.is_set() is False
-    assert default_peer._Peer__tcp_server.getsockname() == ("0.0.0.0", 8000)
-    assert default_peer._hash == self_hash
+    assert default_peer.tcp_server.getsockname() == ("0.0.0.0", 8000)
+    assert default_peer.program_hash == self_hash
 
 
 def test__on_command(default_peer):

@@ -2,7 +2,6 @@ from logging import Formatter
 
 
 class StdoutFormatter(Formatter):
-
     def __init__(self):
         fmt = "%(asctime)s - %(name)12s - %(levelname)s - %(message)s"
         super(StdoutFormatter, self).__init__(fmt)

@@ -8,19 +8,26 @@ class CheckHandler(Handler):
     pkt_type = "monitor-check"
 
     def __init__(self, monitor):
-        super(CheckHandler, self).__init__(pkt_type=type(self).pkt_type,
-                                           peer=monitor.peer)
+        super(CheckHandler, self).__init__(
+            pkt_type=type(self).pkt_type, peer=monitor.peer
+        )
         self.monitor = monitor
 
     def on_send_pkt(self, target):
         data = {"send_ts": time.time()}
-        return Packet(dst=target, src=self.peer.server_info.host,
-                      _hash=self.peer._hash, _type=self.pkt_type, _data=data)
+        return Packet(
+            dst=target,
+            src=self.peer.server_info.host,
+            program_hash=self.peer.program_hash,
+            _type=self.pkt_type,
+            _data=data,
+        )
 
     def on_recv_pkt(self, src, pkt, conn):
         data = pkt.data
-        message = "WatchDog check from {}: send ts {}".format(pkt.src,
-                                                              data["send_ts"])
+        message = "WatchDog check from {}: send ts {}".format(
+            pkt.src, data["send_ts"]
+        )
         if self.monitor.verbose:
             self.monitor.logger.warning(message)
 

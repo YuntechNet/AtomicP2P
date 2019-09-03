@@ -5,19 +5,18 @@ from logging import Handler, StreamHandler as SHandler
 
 
 class StreamHandler(SHandler):
-
     def __init__(self, name, stream=None):
         super(StreamHandler, self).__init__(stream)
         self.name = name
 
 
 class SocketHandler(Handler):
-
     def __init__(self, name, password):
         super(SocketHandler, self).__init__()
         self.name = name
-        self.cipher = AES.new(password, AES.MODE_CBC,
-                              "0000000000000000".encode())
+        self.cipher = AES.new(
+            password, AES.MODE_CBC, "0000000000000000".encode()
+        )
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def encrypt(self, raw_data):

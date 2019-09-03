@@ -2,7 +2,6 @@ from traceback import format_exc
 
 
 class Command(object):
-
     def __init__(self, cmd: str, **kwargs):
         """Init of Command class
 
@@ -31,14 +30,15 @@ class Command(object):
             if self.__doc__ is not None:
                 return self.__doc__
             else:
-                error_text = \
-                    "==========\n" \
-                    "Here is Command's __doc__.\n" \
-                    " if you are executing some command " \
-                    ", but this message shows.\n" \
-                    " it mean the command don't have approriate __doct__.\n" \
-                    "Make sure there is __doc__ in {{{}}} command class.\n" \
+                error_text = (
+                    "==========\n"
+                    "Here is Command's __doc__.\n"
+                    " if you are executing some command "
+                    ", but this message shows.\n"
+                    " it mean the command don't have approriate __doct__.\n"
+                    "Make sure there is __doc__ in {{{}}} command class.\n"
                     "=========="
+                )
                 return error_text.format(self.cmd)
         except Exception:
             return format_exc()

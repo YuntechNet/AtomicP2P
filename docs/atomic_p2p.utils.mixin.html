@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.utils.mixin package &#8212; AtomicP2P 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-utils-mixin-package">
+<h1>atomic_p2p.utils.mixin package<a class="headerlink" href="#atomic-p2p-utils-mixin-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.utils.mixin.commandable">
+<span id="atomic-p2p-utils-mixin-commandable-module"></span><h2>atomic_p2p.utils.mixin.commandable module<a class="headerlink" href="#module-atomic_p2p.utils.mixin.commandable" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.utils.mixin.commandable.CommandableMixin">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.mixin.commandable.</code><code class="descname">CommandableMixin</code><a class="headerlink" href="#atomic_p2p.utils.mixin.commandable.CommandableMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>CommandableMixin for anything which needs command ability.
+The class inherits this mixin, should contains a dict named to commands.</p>
+<dl class="attribute">
+<dt id="atomic_p2p.utils.mixin.commandable.CommandableMixin.commands">
+<code class="descname">commands</code><a class="headerlink" href="#atomic_p2p.utils.mixin.commandable.CommandableMixin.commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict variable to stroe / register commands.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.commandable.CommandableMixin.onProcess">
+<code class="descname">onProcess</code><span class="sig-paren">(</span><em>msg_arr</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.commandable.CommandableMixin.onProcess" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.commandable.CommandableMixin.register_command">
+<code class="descname">register_command</code><span class="sig-paren">(</span><em>command</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.commandable.CommandableMixin.register_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the command with it’s cmd to commands</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> (<a class="reference internal" href="atomic_p2p.utils.html#atomic_p2p.utils.command.Command" title="atomic_p2p.utils.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code></a>) – The command to be register.</p></li>
+<li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If command is exists, weather override it or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if command been set, False is fail.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.commandable.CommandableMixin.unregister_command">
+<code class="descname">unregister_command</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.commandable.CommandableMixin.unregister_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unregister a command in commands</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cmd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target command’s key cmd to unregister.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if remove success, False means not exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils.mixin.handleable">
+<span id="atomic-p2p-utils-mixin-handleable-module"></span><h2>atomic_p2p.utils.mixin.handleable module<a class="headerlink" href="#module-atomic_p2p.utils.mixin.handleable" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.utils.mixin.handleable.HandleableMixin">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.mixin.handleable.</code><code class="descname">HandleableMixin</code><a class="headerlink" href="#atomic_p2p.utils.mixin.handleable.HandleableMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>HandleableMixin for anything which needs handle ability.
+The class which needs communication through Peer class should inherits this</p>
+<blockquote>
+<div><p>mixin, and contains a dict named pkt_handlers.</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="atomic_p2p.utils.mixin.handleable.HandleableMixin.pkt_handlers">
+<code class="descname">pkt_handlers</code><a class="headerlink" href="#atomic_p2p.utils.mixin.handleable.HandleableMixin.pkt_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict variable to stroe / register handles.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.handleable.HandleableMixin.register_handler">
+<code class="descname">register_handler</code><span class="sig-paren">(</span><em>handler</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.handleable.HandleableMixin.register_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the handler with it’s pkt_type to pkt_handlers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handler</strong> (<a class="reference internal" href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler" title="atomic_p2p.utils.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></a>) – The handler to be register.</p></li>
+<li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If handler is exists, weather override it or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if handler been set, False is fail.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.handleable.HandleableMixin.select_handler">
+<code class="descname">select_handler</code><span class="sig-paren">(</span><em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.handleable.HandleableMixin.select_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>select a handler with given packet handler type.
+If current class’s pkt_handlers is not match, will iterate each va-
+riable which inherits HandleableMixin class. Also it will prevent
+circular interact in case a instance that passing parent instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pkt_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target handler’s pkt_type to get.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference internal" href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler" title="atomic_p2p.utils.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Handler which match given pkt_type or None if not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.handleable.HandleableMixin.unregister_handler">
+<code class="descname">unregister_handler</code><span class="sig-paren">(</span><em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.handleable.HandleableMixin.unregister_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unregister a handler in pkt_handlers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pkt_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target handler’s pkt_type to unregister.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if remove success, False means not exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils.mixin">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.utils.mixin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.utils.mixin.CommandableMixin">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.mixin.</code><code class="descname">CommandableMixin</code><a class="headerlink" href="#atomic_p2p.utils.mixin.CommandableMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>CommandableMixin for anything which needs command ability.
+The class inherits this mixin, should contains a dict named to commands.</p>
+<dl class="attribute">
+<dt id="atomic_p2p.utils.mixin.CommandableMixin.commands">
+<code class="descname">commands</code><a class="headerlink" href="#atomic_p2p.utils.mixin.CommandableMixin.commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict variable to stroe / register commands.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.CommandableMixin.onProcess">
+<code class="descname">onProcess</code><span class="sig-paren">(</span><em>msg_arr</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.CommandableMixin.onProcess" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.CommandableMixin.register_command">
+<code class="descname">register_command</code><span class="sig-paren">(</span><em>command</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.CommandableMixin.register_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the command with it’s cmd to commands</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> (<a class="reference internal" href="atomic_p2p.utils.html#atomic_p2p.utils.command.Command" title="atomic_p2p.utils.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code></a>) – The command to be register.</p></li>
+<li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If command is exists, weather override it or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if command been set, False is fail.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.CommandableMixin.unregister_command">
+<code class="descname">unregister_command</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.CommandableMixin.unregister_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unregister a command in commands</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cmd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target command’s key cmd to unregister.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if remove success, False means not exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.utils.mixin.HandleableMixin">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.mixin.</code><code class="descname">HandleableMixin</code><a class="headerlink" href="#atomic_p2p.utils.mixin.HandleableMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>HandleableMixin for anything which needs handle ability.
+The class which needs communication through Peer class should inherits this</p>
+<blockquote>
+<div><p>mixin, and contains a dict named pkt_handlers.</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="atomic_p2p.utils.mixin.HandleableMixin.pkt_handlers">
+<code class="descname">pkt_handlers</code><a class="headerlink" href="#atomic_p2p.utils.mixin.HandleableMixin.pkt_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict variable to stroe / register handles.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.HandleableMixin.register_handler">
+<code class="descname">register_handler</code><span class="sig-paren">(</span><em>handler</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.HandleableMixin.register_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the handler with it’s pkt_type to pkt_handlers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handler</strong> (<a class="reference internal" href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler" title="atomic_p2p.utils.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></a>) – The handler to be register.</p></li>
+<li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If handler is exists, weather override it or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if handler been set, False is fail.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.HandleableMixin.select_handler">
+<code class="descname">select_handler</code><span class="sig-paren">(</span><em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.HandleableMixin.select_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>select a handler with given packet handler type.
+If current class’s pkt_handlers is not match, will iterate each va-
+riable which inherits HandleableMixin class. Also it will prevent
+circular interact in case a instance that passing parent instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pkt_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target handler’s pkt_type to get.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference internal" href="atomic_p2p.utils.communication.html#atomic_p2p.utils.communication.handler.Handler" title="atomic_p2p.utils.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Handler</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Handler which match given pkt_type or None if not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.mixin.HandleableMixin.unregister_handler">
+<code class="descname">unregister_handler</code><span class="sig-paren">(</span><em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.mixin.HandleableMixin.unregister_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unregister a handler in pkt_handlers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pkt_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target handler’s pkt_type to unregister.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if remove success, False means not exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.utils.mixin.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

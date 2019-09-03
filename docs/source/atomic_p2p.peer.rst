@@ -29,6 +29,30 @@ atomic\_p2p.peer.dns\_resolver module
     :undoc-members:
     :show-inheritance:
 
+atomic\_p2p.peer.peer module
+----------------------------
+
+.. automodule:: atomic_p2p.peer.peer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+atomic\_p2p.peer.process\_peer module
+-------------------------------------
+
+.. automodule:: atomic_p2p.peer.process_peer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+atomic\_p2p.peer.thread\_peer module
+------------------------------------
+
+.. automodule:: atomic_p2p.peer.thread_peer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

@@ -9,14 +9,16 @@ from atomic_p2p.utils.logging import getLogger
 
 
 class LocalMonitor(ThreadManager):
-
-    def __init__(self, service, password,
-                 logger: "logging.Logger" = getLogger(__name__)):
-        super(LocalMonitor, self).__init__(loopDelay=0.5, auto_register=False,
-                                           logger=logger)
+    def __init__(
+        self, service, password, logger: "logging.Logger" = getLogger(__name__)
+    ):
+        super(LocalMonitor, self).__init__(
+            loopDelay=0.5, auto_register=False, logger=logger
+        )
         self.service = service
-        self.cipher = AES.new(password, AES.MODE_CBC,
-                              "0000000000000000".encode())
+        self.cipher = AES.new(
+            password, AES.MODE_CBC, "0000000000000000".encode()
+        )
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("localhost", 17031))
 

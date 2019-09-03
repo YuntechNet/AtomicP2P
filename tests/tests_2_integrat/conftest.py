@@ -4,7 +4,7 @@ from os.path import join
 import time
 import pytest
 
-from atomic_p2p.peer import Peer
+from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.peer.communication.net import JoinHandler
 from atomic_p2p.utils.security import self_hash as sh, create_self_signed_cert
 
@@ -22,8 +22,8 @@ def cert():
 @pytest.yield_fixture(scope="function")
 def malware_peer(cert):
     malware_hash = sh(join(getcwd(), "atomic_p2p", "peer"))
-    mp = Peer(role="sw", name="switch_malware", host=("127.0.0.1", 8012),
-              cert=cert, _hash=malware_hash)
+    mp = ThreadPeer(role="sw", name="switch_malware", host=("127.0.0.1", 8012),
+              ns=None, cert=cert, program_hash=malware_hash, auto_register=True)
     mp.start()
     yield mp
     mp.stop()
@@ -32,8 +32,8 @@ def malware_peer(cert):
 
 @pytest.yield_fixture(scope="function")
 def core1(cert, self_hash):
-    core = Peer(role="core", name="core01",
-                host=("127.0.0.1", 8000), cert=cert, _hash=self_hash)
+    core = ThreadPeer(role="core", name="core01", host=("127.0.0.1", 8000),
+                ns=None, cert=cert, program_hash=self_hash, auto_register=True)
     core.start()
     yield core
     core.stop()
@@ -42,8 +42,9 @@ def core1(cert, self_hash):
 
 @pytest.yield_fixture(scope="function")
 def switch1(cert, self_hash):
-    switch = Peer(role="sw", name="switch01",
-                  host=("127.0.0.1", 8010), cert=cert, _hash=self_hash)
+    switch = ThreadPeer(role="sw", name="switch01", host=("127.0.0.1", 8010),
+                         ns=None, cert=cert, program_hash=self_hash,
+                         auto_register=True)
     switch.start()
     yield switch
     switch.stop()
@@ -52,8 +53,9 @@ def switch1(cert, self_hash):
 
 @pytest.yield_fixture(scope="function")
 def switch2(cert, self_hash):
-    switch = Peer(role="sw", name="switch02",
-                  host=("127.0.0.1", 8011), cert=cert, _hash=self_hash)
+    switch = ThreadPeer(role="sw", name="switch02", host=("127.0.0.1", 8011),
+                         ns=None, cert=cert, program_hash=self_hash,
+                         auto_register=True)
     switch.start()
     yield switch
     switch.stop()
@@ -63,12 +65,15 @@ def switch2(cert, self_hash):
 @pytest.yield_fixture(scope="session")
 def net(cert, self_hash):
     nodes = {
-        "core_1": Peer(role="core", name="core01",
-                  host=("127.0.0.1", 8000), cert=cert, _hash=self_hash),
-        "switch_1": Peer(role="sw", name="switch01",
-                  host=("127.0.0.1", 8010), cert=cert, _hash=self_hash),
-        "switch_2": Peer(role="sw", name="switch02",
-                  host=("127.0.0.1", 8011), cert=cert, _hash=self_hash)
+        "core_1": ThreadPeer(
+            role="core", name="core01", host=("127.0.0.1", 8000), ns=None,
+            cert=cert, program_hash=self_hash, auto_register=True),
+        "switch_1": ThreadPeer(
+            role="sw", name="switch01", host=("127.0.0.1", 8010), ns=None,
+            cert=cert, program_hash=self_hash, auto_register=True),
+        "switch_2": ThreadPeer(
+            role="sw", name="switch02", host=("127.0.0.1", 8011), ns=None,
+            cert=cert, program_hash=self_hash, auto_register=True)
     }
 
     for (_, val) in nodes.items():

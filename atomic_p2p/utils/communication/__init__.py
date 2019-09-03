@@ -1,7 +1,13 @@
 from typing import Tuple
 from ssl import get_server_certificate
 from socket import (
-    inet_pton, inet_aton, AF_INET, AF_INET6, error, socket, SOCK_STREAM
+    inet_pton,
+    inet_aton,
+    AF_INET,
+    AF_INET6,
+    error,
+    socket,
+    SOCK_STREAM,
 )
 
 from atomic_p2p.utils import host_valid

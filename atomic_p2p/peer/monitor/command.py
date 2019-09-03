@@ -18,16 +18,18 @@ class HelpCmd(Command):
         if msg_arr != [] and msg_arr[0] in self.monitor.commands:
             return self.monitor.commands[msg_arr[0]].__doc__
         else:
-            return ("monitor [cmd] <options>\n"
-                    " - pause                                          "
-                    "pause monitor's main loop thread.\n"
-                    " - period [seconds]                               "
-                    "change monitor's loop period to another second.\n"
-                    " - list                                           "
-                    "list each statuses in list.\n"
-                    " - reset [peer name/role/all]                     "
-                    "reset all or specific name or role's peer status t"
-                    "o PENDING.")
+            return (
+                "monitor [cmd] <options>\n"
+                " - pause                                          "
+                "pause monitor's main loop thread.\n"
+                " - period [seconds]                               "
+                "change monitor's loop period to another second.\n"
+                " - list                                           "
+                "list each statuses in list.\n"
+                " - reset [peer name/role/all]                     "
+                "reset all or specific name or role's peer status t"
+                "o PENDING."
+            )
 
 
 class PauseCmd(Command):
@@ -61,11 +63,13 @@ class PeriodCmd(Command):
         try:
             period = int(msg_arr[0])
             self.monitor.loopDelay = period
-            return ("Monitor check sending period \
-                       change to: {} seconds.".format(period))
+            return "Monitor check sending period \
+                       change to: {} seconds.".format(
+                period
+            )
         except ValueError:
             return "Please input a integer: {}".format(msg_arr[0])
-        
+
 
 class ListCmd(Command):
     """ListCmd
@@ -84,7 +88,7 @@ class ListCmd(Command):
         else:
             output_text = "Current peers status:"
             for each in self.monitor.peer.connectlist:
-                output_text += (" - " + str(each.status) + "\n")
+                output_text += " - " + str(each.status) + "\n"
             output_text += "[---End of list---]"
             return output_text
 
@@ -142,9 +146,11 @@ class ManualCmd(Command):
         try:
             host[1] = int(host[1])
             self.peer.handler_unicast_packet(
-                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
+                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type
+            )
         except ValueError:
             self.peer.handler_broadcast_packet(
-                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type)
+                host=(host[0], host[1]), pkt_type=CheckHandler.pkt_type
+            )
         if self.monitor.verbose:
             return "Sended a monitor check to: {}".format(host)
