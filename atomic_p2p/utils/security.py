@@ -14,9 +14,7 @@ def create_self_signed_cert(
     self-signed cert and keypair and write them into that directory.
     """
 
-    if not exists(join(cert_dir, cert_file)) or not exists(
-        join(cert_dir, key_file)
-    ):
+    if not exists(join(cert_dir, cert_file)) or not exists(join(cert_dir, key_file)):
         # create a key pair
         k = crypto.PKey()
         k.generate_key(crypto.TYPE_RSA, 1024)

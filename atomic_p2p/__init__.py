@@ -2,14 +2,11 @@ from os import getcwd
 from os.path import join
 
 from atomic_p2p.peer import ThreadPeer
-from atomic_p2p.utils.security import (
-    create_self_signed_cert as cssc,
-    self_hash,
-)
+from atomic_p2p.utils.security import create_self_signed_cert as cssc, self_hash
 from atomic_p2p.utils.logging import getLogger
 
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 
 class AtomicP2P(object):
@@ -18,12 +15,7 @@ class AtomicP2P(object):
     #       Also, whole class should add type hint.
     #                   2019/05/13
     def __init__(
-        self,
-        role: str,
-        addr: str,
-        name: str,
-        cert: str,
-        logger: "logging.Logger",
+        self, role: str, addr: str, name: str, cert: str, logger: "logging.Logger"
     ) -> None:
         """Init of AtomicP2P object
         Args:
@@ -35,9 +27,7 @@ class AtomicP2P(object):
                 same as cert file exception sub-extension with `.key`.
         """
         cert_file, key_file = cssc(
-            cert_dir=getcwd(),
-            cert_file=cert,
-            key_file=cert.replace(".pem", ".key"),
+            cert_dir=getcwd(), cert_file=cert, key_file=cert.replace(".pem", ".key")
         )
 
         self.logger = logger

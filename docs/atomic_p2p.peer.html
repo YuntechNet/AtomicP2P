@@ -427,6 +427,50 @@ host.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.join_net">
+<code class="descname">join_net</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.join_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join into a net with known host.
+This method is use to join a net with known host while current peer is</p>
+<blockquote>
+<div><p>not in any net yet.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>host</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – A tuple with address in str at position 0 and port in int at
+positon 1.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.join_net_by_DNS">
+<code class="descname">join_net_by_DNS</code><span class="sig-paren">(</span><em>domain</em>, <em>ns=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.join_net_by_DNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join into a net with known domain.
+This method is use to join a net with known domain while current peer</p>
+<blockquote>
+<div><p>is not in any net yet.</p>
+</div></blockquote>
+<p>The domain can point to single or multiple exists host in net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The domain point to any host currently in net.</p></li>
+<li><p><strong>ns</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – A list with str, specified which DNS server to query.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – No any valid record after given domain.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="atomic_p2p.peer.peer.Peer.loop">
 <code class="descname">loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.loop" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -871,6 +915,50 @@ host.</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If peer_info’s type is not PeerInfo or tuple (str, int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.join_net">
+<code class="descname">join_net</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.join_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join into a net with known host.
+This method is use to join a net with known host while current peer is</p>
+<blockquote>
+<div><p>not in any net yet.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>host</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – A tuple with address in str at position 0 and port in int at
+positon 1.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.join_net_by_DNS">
+<code class="descname">join_net_by_DNS</code><span class="sig-paren">(</span><em>domain</em>, <em>ns=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.join_net_by_DNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join into a net with known domain.
+This method is use to join a net with known domain while current peer</p>
+<blockquote>
+<div><p>is not in any net yet.</p>
+</div></blockquote>
+<p>The domain can point to single or multiple exists host in net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The domain point to any host currently in net.</p></li>
+<li><p><strong>ns</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – A list with str, specified which DNS server to query.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – No any valid record after given domain.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>

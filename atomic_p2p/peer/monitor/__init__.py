@@ -60,10 +60,7 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
                     self.peer.handler_unicast_packet(
                         host=host, pkt_type=CheckHandler.pkt_type
                     )
-                    if (
-                        peer_info.status.no_response_count
-                        >= self.max_no_response_count
-                    ):
+                    if peer_info.status.no_response_count >= self.max_no_response_count:
                         no_response_list.append(peer_info)
                 self.removeMonitorlist(no_response_list)
 

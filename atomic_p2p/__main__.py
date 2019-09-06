@@ -22,11 +22,7 @@ parser.add_argument(
     dest="target",
 )
 parser.add_argument(
-    "-c",
-    "--cert",
-    default="data/atomic_p2p.pem",
-    help="Cert file path.",
-    dest="cert",
+    "-c", "--cert", default="data/atomic_p2p.pem", help="Cert file path.", dest="cert"
 )
 parser.add_argument(
     "-as",
@@ -63,9 +59,7 @@ auto_join_net = args.auto_join_net
 local_monitor_pass = args.local_monitor_pass
 
 logger = getLogger(name="AtomicP2P", add_monitor_pass=local_monitor_pass)
-atomic_p2p = AtomicP2P(
-    role=role, addr=address, name=name, cert=cert, logger=logger
-)
+atomic_p2p = AtomicP2P(role=role, addr=address, name=name, cert=cert, logger=logger)
 
 if local_monitor_pass is not None:
     local_monitor = LocalMonitor(

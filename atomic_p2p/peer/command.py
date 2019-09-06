@@ -54,7 +54,8 @@ class JoinCmd(Command):
         else:
             self.peer.join_net_by_DNS(
                 domain=msg_arr[0],
-                ns=msg_arr[1].split(",") if len(msg_arr) == 2 else None)
+                ns=msg_arr[1].split(",") if len(msg_arr) == 2 else None,
+            )
 
 
 class SendCmd(Command):
@@ -75,15 +76,11 @@ class SendCmd(Command):
         try:
             addr[1] = int(addr[1])
             self.peer.handler_unicast_packet(
-                host=(addr[0], addr[1]),
-                pkt_type=MessageHandler.pkt_type,
-                **mes,
+                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type, **mes
             )
         except ValueError:
             self.peer.handler_broadcast_packet(
-                host=(addr[0], addr[1]),
-                pkt_type=MessageHandler.pkt_type,
-                **mes,
+                host=(addr[0], addr[1]), pkt_type=MessageHandler.pkt_type, **mes
             )
 
 

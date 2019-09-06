@@ -77,9 +77,7 @@ class Handler(object):
         self, src: Tuple[str, int], pkt: "Packet", conn: "SSLSocket", **kwargs
     ) -> None:
         reject = pkt.data["reject"]
-        self.__peer.logger.info(
-            "Rejected by {}, reason: {}".format(pkt.src, reject)
-        )
+        self.__peer.logger.info("Rejected by {}, reason: {}".format(pkt.src, reject))
         # TODO: Fit unittest empty conn in PeerInfo
         #       Waiting for use mock.
         #                      - 2019/04/13

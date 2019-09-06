@@ -25,9 +25,7 @@ class CheckHandler(Handler):
 
     def on_recv_pkt(self, src, pkt, conn):
         data = pkt.data
-        message = "WatchDog check from {}: send ts {}".format(
-            pkt.src, data["send_ts"]
-        )
+        message = "WatchDog check from {}: send ts {}".format(pkt.src, data["send_ts"])
         if self.monitor.verbose:
             self.monitor.logger.warning(message)
 

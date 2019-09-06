@@ -16,9 +16,7 @@ class LocalMonitor(ThreadManager):
             loopDelay=0.5, auto_register=False, logger=logger
         )
         self.service = service
-        self.cipher = AES.new(
-            password, AES.MODE_CBC, "0000000000000000".encode()
-        )
+        self.cipher = AES.new(password, AES.MODE_CBC, "0000000000000000".encode())
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("localhost", 17031))
 

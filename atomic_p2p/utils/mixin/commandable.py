@@ -9,9 +9,7 @@ class CommandableMixin(object):
         commands: dict variable to stroe / register commands.
     """
 
-    def register_command(
-        self, command: "Command", force: bool = False
-    ) -> bool:
+    def register_command(self, command: "Command", force: bool = False) -> bool:
         """Register the command with it's cmd to commands
 
         Args:

@@ -3,14 +3,7 @@ from traceback import format_exc
 from time import sleep
 from queue import Queue
 from ssl import wrap_socket, CERT_REQUIRED, SSLWantReadError
-from socket import (
-    socket,
-    AF_INET,
-    SOCK_STREAM,
-    SOL_SOCKET,
-    SO_REUSEADDR,
-    SO_REUSEPORT,
-)
+from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_REUSEPORT
 from select import select
 
 from atomic_p2p.peer.monitor import Monitor
@@ -24,13 +17,7 @@ from atomic_p2p.peer.communication import (
     MessageHandler,
     DisconnectHandler,
 )
-from atomic_p2p.peer.command import (
-    HelpCmd,
-    JoinCmd,
-    SendCmd,
-    ListCmd,
-    LeaveNetCmd,
-)
+from atomic_p2p.peer.command import HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
 
 from atomic_p2p.utils import host_valid
 from atomic_p2p.utils.mixin import CommandableMixin, HandleableMixin
@@ -112,9 +99,7 @@ class Peer(HandleableMixin, CommandableMixin):
                 self.__program_hash[:6], self.__program_hash[-6:]
             )
         )
-        self.dns_resolver = DNSResolver(
-            ns="127.0.0.1" if ns is None else ns, role=role
-        )
+        self.dns_resolver = DNSResolver(ns="127.0.0.1" if ns is None else ns, role=role)
 
         self.peer_pool = {}
 
@@ -230,7 +215,8 @@ class Peer(HandleableMixin, CommandableMixin):
         if ns is not None and type(ns) is list:
             self.dns_resolver.change_ns(ns=ns)
         records = self.dns_resolver.sync_from_DNS(
-            current_host=self.server_info.host, domain=domain)
+            current_host=self.server_info.host, domain=domain
+        )
         for each in records:
             if is_ssl_socket_open(host=each.host) is True:
                 return self.join_net(host=each.host)
@@ -290,9 +276,7 @@ class Peer(HandleableMixin, CommandableMixin):
                 "(str, int) or type PeerInfo"
             )
 
-    def get_peer_info_by_host(
-        self, host: Tuple[str, int]
-    ) -> Union[None, "PeerInfo"]:
+    def get_peer_info_by_host(self, host: Tuple[str, int]) -> Union[None, "PeerInfo"]:
         """Get PeerInfo object from current net's peer_pool if exists.
 
         Args:
@@ -370,10 +354,7 @@ class Peer(HandleableMixin, CommandableMixin):
 
             if handler is None:
                 self.logger.info("Unknown packet type: {}".format(pkt._type))
-            elif (
-                pkt.program_hash != self.__program_hash
-                and pkt.is_reject() is False
-            ):
+            elif pkt.program_hash != self.__program_hash and pkt.is_reject() is False:
                 # Invalid hash -> Dangerous peer"s pkt.
                 self.logger.info(
                     "Illegal peer {} with unmatch hash {{{}...{}}} try to "

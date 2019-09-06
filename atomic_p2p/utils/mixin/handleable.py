@@ -14,9 +14,7 @@ class HandleableMixin(object):
         pkt_handlers: dict variable to stroe / register handles.
     """
 
-    def register_handler(
-        self, handler: "Handler", force: bool = False
-    ) -> bool:
+    def register_handler(self, handler: "Handler", force: bool = False) -> bool:
         """Register the handler with it's pkt_type to pkt_handlers
 
         Args:

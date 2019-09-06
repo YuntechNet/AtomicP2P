@@ -8,9 +8,7 @@ class JoinHandler(Handler):
     pkt_type = "peer-join"
 
     def __init__(self, peer):
-        super(JoinHandler, self).__init__(
-            pkt_type=type(self).pkt_type, peer=peer
-        )
+        super(JoinHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer)
         self.last_join_host = None
 
     def on_send_pkt(self, target):
@@ -57,9 +55,7 @@ class CheckJoinHandler(Handler):
     pkt_type = "peer-checkjoin"
 
     def __init__(self, peer):
-        super(CheckJoinHandler, self).__init__(
-            pkt_type=type(self).pkt_type, peer=peer
-        )
+        super(CheckJoinHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer)
 
     def on_send_pkt(self, target):
         data = {
@@ -91,9 +87,7 @@ class NewMemberHandler(Handler):
     pkt_type = "peer-new-member"
 
     def __init__(self, peer):
-        super(NewMemberHandler, self).__init__(
-            pkt_type=type(self).pkt_type, peer=peer
-        )
+        super(NewMemberHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer)
 
     def on_send_pkt(self, target, peer_info):
         data = {
@@ -118,9 +112,7 @@ class NewMemberHandler(Handler):
         role = data["role"]
 
         sock = self.peer.new_tcp_long_conn(dst=(addr, listen_port))
-        peer_info = PeerInfo(
-            name=name, role=role, host=(addr, listen_port), conn=sock
-        )
+        peer_info = PeerInfo(name=name, role=role, host=(addr, listen_port), conn=sock)
 
         self.peer.pend_socket(sock=sock)
         self.peer.add_peer_in_net(peer_info=peer_info)
@@ -170,9 +162,7 @@ class DisconnectHandler(Handler):
     pkt_type = "peer-disconnect"
 
     def __init__(self, peer):
-        super(DisconnectHandler, self).__init__(
-            pkt_type=type(self).pkt_type, peer=peer
-        )
+        super(DisconnectHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer)
 
     def on_send_pkt(self, target):
         return Packet(

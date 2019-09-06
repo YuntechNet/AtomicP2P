@@ -15,8 +15,11 @@ class Packet(object):
     @staticmethod
     def deserilize(raw_data: Union[Dict, str]) -> "Packet":
         """This is serilizer convert data from utf-8 format string to Packet"""
-        data = raw_data if type(raw_data) is dict else loads(
-            str(raw_data, encoding="utf-8"))
+        data = (
+            raw_data
+            if type(raw_data) is dict
+            else loads(str(raw_data, encoding="utf-8"))
+        )
         return Packet(
             dst=(data["to"]["ip"], int(data["to"]["port"])),
             src=(data["from"]["ip"], int(data["from"]["port"])),
@@ -56,13 +59,7 @@ class Packet(object):
 
     @property
     def export(self):
-        return (
-            self.__dst,
-            self.__src,
-            self.__program_hash,
-            self.__type,
-            self.__data,
-        )
+        return (self.__dst, self.__src, self.__program_hash, self.__type, self.__data)
 
     @property
     def dst(self):
@@ -98,9 +95,7 @@ class Packet(object):
             _data=self.__data,
         )
 
-    def redirect_to_host(
-        self, src: Tuple[str, int], dst: Tuple[str, int]
-    ) -> None:
+    def redirect_to_host(self, src: Tuple[str, int], dst: Tuple[str, int]) -> None:
         self.__src = src
         self.__dst = dst
 
