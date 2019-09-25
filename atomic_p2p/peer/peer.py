@@ -4,7 +4,7 @@ from time import sleep
 from queue import Queue
 from ssl import wrap_socket, CERT_REQUIRED, SSLWantReadError
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_REUSEPORT
-from select import select
+from selectors import DefaultSelector, EVENT_READ, EVENT_WRITE
 
 from atomic_p2p.peer.monitor import Monitor
 from atomic_p2p.peer.dns_resolver import DNSResolver
@@ -51,10 +51,6 @@ class Peer(HandleableMixin, CommandableMixin):
     def server_info(self) -> "PeerInfo":
         return self.__server_info
 
-    @property
-    def tcp_server(self) -> "SSLSocket":
-        return self.__tcp_server
-
     def __init__(
         self,
         host: Tuple[str, int],
@@ -81,9 +77,7 @@ class Peer(HandleableMixin, CommandableMixin):
         self.__auto_register = auto_register
         self.logger = getLogger(name)
         self.__send_queue = {}
-        self.__in_fds = []
-        self.__out_fds = []
-        self.__ex_fds = []
+        self.__selector = DefaultSelector()
         self.__pend_rm_fds = []
 
         self.__cert = cert
@@ -103,7 +97,7 @@ class Peer(HandleableMixin, CommandableMixin):
 
         self.peer_pool = {}
 
-        self.monitor = Monitor(peer=self)
+        self.monitor = Monitor(peer=self, logger=getLogger(name + ".MONITOR"))
 
         if self.__auto_register is False:
             self.logger.warning(
@@ -147,8 +141,7 @@ class Peer(HandleableMixin, CommandableMixin):
             sock: A SSLSocket object which wants to be append.
         """
         self.__send_queue[sock] = Queue()
-        self.__in_fds.append(sock)
-        self.__out_fds.append(sock)
+        self.__selector.register(sock, EVENT_READ | EVENT_WRITE, self.__handle)
 
     def pend_socket_to_rm(self, sock: "SSLSocket") -> None:
         """Pending socket into rm list for remove at next thread iteration.
@@ -344,7 +337,7 @@ class Peer(HandleableMixin, CommandableMixin):
                     pkt = handler.on_send(target=value.host, **kwargs)
                     self.pend_packet(sock=value.conn, pkt=pkt)
 
-    def __on_recv(self, sock: "SSLSocket") -> None:
+    def __on_recv(self, sock: "SSLSocket", mask) -> None:
         try:
             raw_data = sock.recv(4096)
             if raw_data == b"":
@@ -364,7 +357,6 @@ class Peer(HandleableMixin, CommandableMixin):
                 )
                 pkt.redirect_to_host(src=self.server_info.host, dst=pkt.src)
                 pkt.set_reject(reject_data="Unmatching peer hash.")
-                self.pend_socket(sock=sock)
                 self.pend_packet(sock=sock, pkt=pkt)
             else:
                 in_net = self.is_peer_in_net(info=pkt.src)
@@ -386,7 +378,7 @@ class Peer(HandleableMixin, CommandableMixin):
         except Exception:
             self.logger.warning(str(self.server_info) + format_exc())
 
-    def __on_send(self, sock: "SSLSocket") -> None:
+    def __on_send(self, sock: "SSLSocket", mask) -> None:
         try:
             q = self.__send_queue[sock]
             while q.empty() is False:
@@ -403,10 +395,7 @@ class Peer(HandleableMixin, CommandableMixin):
             return
         for each in list(self.__pend_rm_fds):
             del self.__send_queue[each]
-            self.__in_fds.remove(each)
-            self.__out_fds.remove(each)
-            if each in self.__ex_fds:
-                self.__ex_fds.remove(each)
+            self.__selector.unregister(each)
             each.close()
         self.__pend_rm_fds.clear()
 
@@ -452,7 +441,7 @@ class Peer(HandleableMixin, CommandableMixin):
 
     def loop_start(self):
         self.logger.info(self.server_info)
-        self.__in_fds.append(self.__tcp_server)
+        self.__selector.register(self.__tcp_server, EVENT_READ, self.__accept)
         if self.__auto_register is True:
             self._preregister_handler()
             self._preregister_command()
@@ -468,7 +457,7 @@ class Peer(HandleableMixin, CommandableMixin):
                 sleep(2)
                 return self.loop_stop()
 
-        self.__in_fds.remove(self.__tcp_server)
+        self.__selector.unregister(self.__tcp_server)
         handler = self.select_handler(pkt_type=DisconnectHandler.pkt_type)
         for each in self.peer_pool.values():
             if each.conn is None:
@@ -479,29 +468,28 @@ class Peer(HandleableMixin, CommandableMixin):
 
         self.monitor.stop()
 
+    def loop_stop_post(self):
+        self.__tcp_server.close()
+        self.__selector.close()
+
+    def __accept(self, sock, mask) -> None:
+        conn, _ = sock.accept()
+        conn.setblocking(False)
+        self.pend_socket(sock=conn)
+
+    def __handle(self, sock, mask) -> None:
+        if mask & EVENT_READ == EVENT_READ:
+            self.__on_recv(sock=sock, mask=mask)
+        elif mask & EVENT_WRITE == EVENT_WRITE:
+            self.__on_send(sock=sock, mask=mask)
+
     # TODO: Currently there is only one thread responsible for every fd's hand-
     #       ling. Inside the method have few line with thread. Need benchmark
     #       to decide use thread or not.
     #                                   2019/04/26
     def loop(self) -> None:
-        readable, writable, exceptional = select(
-            self.__in_fds, self.__out_fds, self.__ex_fds, 0
-        )
-        for sock in readable:
-            if sock is self.__tcp_server:
-                conn, _ = sock.accept()
-                sock = conn
-            self.__on_recv(sock=sock)
-            # t = Thread(target=self.__on_recv, args=(sock.recv(4096)))
-            # t.start()
-
-        for sock in writable:
-            if sock in self.__send_queue:
-                self.__on_send(sock=sock)
-                # t = Thread(target=self.__on_send, args=(sock))
-                # t.start()
-
-        for sock in exceptional:
-            pass
-
+        events = self.__selector.select(timeout=0)
+        for key, mask in events:
+            if callable(key.data):
+                key.data(key.fileobj, mask)
         self.__on_fds_rm()

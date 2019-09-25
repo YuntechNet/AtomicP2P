@@ -30,7 +30,6 @@ class ThreadPeer(Peer, Thread):
             auto_register=auto_register,
             logger=logger,
         )
-        self.logger = logger
         self.loopDelay = loop_delay
         self.stopped = Event()
         self.started = Event()
@@ -51,6 +50,6 @@ class ThreadPeer(Peer, Thread):
     def run(self) -> None:
         while self.stopped.wait(self.loopDelay) is False or self.send_queue != {}:
             self.loop()
-        self.tcp_server.close()
+        self.loop_stop_post()
         sleep(2)
         self.logger.info("{} stopped.".format(self.server_info))

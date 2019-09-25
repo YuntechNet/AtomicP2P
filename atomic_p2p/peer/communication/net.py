@@ -44,7 +44,6 @@ class JoinHandler(Handler):
             "Recieve new peer add request: {}, added.".format(str(peer_info))
         )
 
-        self.peer.pend_socket(sock=conn)
         self.peer.add_peer_in_net(peer_info=peer_info)
         self.peer.handler_unicast_packet(
             host=(src[0], listen_port), pkt_type=CheckJoinHandler.pkt_type
@@ -154,7 +153,6 @@ class AckNewMemberHandler(Handler):
             name=name, role=role, host=(src[0], listen_port), conn=conn
         )
         self.peer.add_peer_in_net(peer_info=peer_info)
-        self.peer.pend_socket(sock=conn)
         self.peer.logger.info("ACK new member join net: {}".format(peer_info))
 
 

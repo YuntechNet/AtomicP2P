@@ -14,6 +14,8 @@ class CheckHandler(Handler):
         self.monitor = monitor
 
     def on_send_pkt(self, target):
+        peer_info = self.monitor.peer.get_peer_info_by_host(host=target)
+        peer_info.status.update(status_type=StatusType.PENDING)
         data = {"send_ts": time.time()}
         return Packet(
             dst=target,
@@ -32,6 +34,6 @@ class CheckHandler(Handler):
     def on_recv_reject_pkt(self, src, pkt, conn):
         if self.monitor.verbose:
             super(CheckHandler, self).on_recv_reject_pkt(src, pkt, conn)
-        peer_info = self.monitor.peer.ge_peer_info_by_host(host=pkt.src)
+        peer_info = self.monitor.peer.get_peer_info_by_host(host=pkt.src)
         if peer_info is not None:
             peer_info.status.update(status_type=StatusType.PENDING)

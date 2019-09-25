@@ -75,6 +75,7 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
     def removeMonitorlist(self, missing: List) -> None:
         for each in missing:
             try:
+                self.peer.del_peer_in_net(peer_info=each)
                 self.peer.pend_socket_to_rm(each.conn)
                 self.logger.info(
                     ("{} has been remove from " "status list.").format(each)
