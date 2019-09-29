@@ -2,7 +2,7 @@ import traceback
 from typing import Tuple, List
 from threading import Thread, Event as tEvent
 
-from atomic_p2p.mixin.peer import CommandableMixin, HandleableMixin
+from atomic_p2p.mixin import CommandableMixin, HandleableMixin
 from atomic_p2p.logging import getLogger
 from atomic_p2p.peer.entity import StatusType
 

@@ -11,7 +11,7 @@ from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_RE
 from atomic_p2p.utils import host_valid
 from atomic_p2p.logging import getLogger
 from atomic_p2p.communication import Packet
-from atomic_p2p.mixin.peer import (
+from atomic_p2p.mixin import (
     HandleableMixin,
     CommandableMixin,
     DefaultAuthenticatorMixin,
