@@ -1,31 +1,33 @@
-from typing import Union, List, Dict, Tuple
+from typing import Tuple, List
 from traceback import format_exc
-from time import sleep
-from queue import Queue
-from ssl import wrap_socket, CERT_REQUIRED, SSLWantReadError
-from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_REUSEPORT
 from selectors import DefaultSelector, EVENT_READ, EVENT_WRITE
-
-from atomic_p2p.peer.monitor import Monitor
-from atomic_p2p.peer.dns_resolver import DNSResolver
-from atomic_p2p.peer.entity.peer_info import PeerInfo
-from atomic_p2p.peer.communication import (
-    JoinHandler,
-    CheckJoinHandler,
-    AckNewMemberHandler,
-    NewMemberHandler,
-    MessageHandler,
-    DisconnectHandler,
-)
-from atomic_p2p.peer.command import HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
+from errno import ECONNRESET
+from socket import error as sock_error
+from ssl import wrap_socket, CERT_REQUIRED, SSLWantReadError
+from queue import Queue
+from time import sleep
+from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_REUSEPORT
 
 from atomic_p2p.utils import host_valid
-from atomic_p2p.utils.mixin import CommandableMixin, HandleableMixin
-from atomic_p2p.utils.logging import getLogger
-from atomic_p2p.utils.communication import Packet, is_ssl_socket_open
+from atomic_p2p.logging import getLogger
+from atomic_p2p.communication import Packet
+from atomic_p2p.mixin.peer import (
+    HandleableMixin,
+    CommandableMixin,
+    DefaultAuthenticatorMixin,
+)
+
+from .entity import PeerInfo, StatusType
+from .topology import LanTopologyMixin
+from .dns_resolver import DNSResolver
+from .command import HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
+from .communication import MessageHandler
+from .monitor import Monitor
 
 
-class Peer(HandleableMixin, CommandableMixin):
+class Peer(
+    HandleableMixin, CommandableMixin, LanTopologyMixin, DefaultAuthenticatorMixin
+):
     """
     Attributes:
         server_info (PeerInfo): Peer's peer info.
@@ -34,22 +36,22 @@ class Peer(HandleableMixin, CommandableMixin):
         peer_pool (Dict[Tuple[str, int], PeerInfo]): All peers currently avai-
             lable in net.
     """
+    @property
+    def server_info(self):
+        return self.__server_info
 
     @property
-    def connectlist(self) -> List:
-        return self.peer_pool.values()
-
-    @property
-    def program_hash(self) -> str:
+    def program_hash(self):
         return self.__program_hash
 
     @property
-    def send_queue(self) -> Queue:
-        return self.__send_queue
+    def send_queue(self):
+        # def packet_queue(self):
+        return self.__packet_queue
 
     @property
-    def server_info(self) -> "PeerInfo":
-        return self.__server_info
+    def connectlist(self) -> List:  # Remember to remove `List` import.
+        return self.peer_pool.values()
 
     def __init__(
         self,
@@ -74,17 +76,17 @@ class Peer(HandleableMixin, CommandableMixin):
             logger: Logger for logging.
         """
         super().__init__()
-        self.__auto_register = auto_register
         self.logger = getLogger(name)
-        self.__send_queue = {}
+        self.__auto_register = auto_register
         self.__selector = DefaultSelector()
-        self.__pend_rm_fds = []
+        self.__packet_queue = {}
 
         self.__cert = cert
         self.__program_hash = program_hash
         self.__server_info = PeerInfo(host=host, name=name, role=role)
         self.__tcp_server = self.__bind_socket(cert=self.__cert)
 
+        self.peer_pool = {}
         self.pkt_handlers = {}
         self.commands = {}
 
@@ -94,9 +96,6 @@ class Peer(HandleableMixin, CommandableMixin):
             )
         )
         self.dns_resolver = DNSResolver(ns="127.0.0.1" if ns is None else ns, role=role)
-
-        self.peer_pool = {}
-
         self.monitor = Monitor(peer=self, logger=getLogger(name + ".MONITOR"))
 
         if self.__auto_register is False:
@@ -107,6 +106,67 @@ class Peer(HandleableMixin, CommandableMixin):
                     "ethod."
                 )
             )
+
+    def _preregister_handler(self) -> None:
+        self.topology_register_handler()
+        installing_handlers = [MessageHandler(self)]
+        for each in installing_handlers:
+            self.register_handler(handler=each)
+
+    def _preregister_command(self) -> None:
+        installing_commands = [
+            HelpCmd(self),
+            JoinCmd(self),
+            SendCmd(self),
+            ListCmd(self),
+            LeaveNetCmd(self),
+        ]
+        for each in installing_commands:
+            self.register_command(command=each)
+
+    def pend_packet(self, sock: "Socket", pkt: "Packet", **kwargs) -> None:
+        """Pending pkt's raw_data to queue's with sepecific sock.
+        Any exception when wrapping handler to packet whould cause this connec-
+        tion been close and thread maintaining loop terminate.
+
+        Args:
+            sock: A Socket which wants to pend on its queue.
+            pkt: A Packet ready to be pend.
+            **kwargs: Any additional arguments needs by handler object.
+        
+        Raises:
+            AssertionError:
+                If given pkt variable is not in proper Packet type.
+        """
+        assert type(pkt) is Packet
+        try:
+            self.__packet_queue[sock].put_nowait(pkt)
+        except Exception:
+            self.logger.info(format_exc())
+
+    def register_socket(self, sock: "Socket") -> None:
+        """Register a new socket with packet queue & selector.
+        Init a packet queue and put into dict for further handling of packets.
+        And the given socket will be register in selector for IO process.
+
+        Args:
+            sock: A Socket object which wants to be register.
+        """
+        self.__packet_queue[sock] = Queue()
+        self.__selector.register(sock, EVENT_READ | EVENT_WRITE, self.__on_handle)
+
+    def unregister_socket(self, sock: "Socket") -> None:
+        del self.__packet_queue[sock]
+        self.__selector.unregister(sock)
+
+    def _on_packet(self, sock: "Socket", pkt: "Packet", handler: "Handler") -> None:
+        """Method use to process passed packet to higher application layer.
+        This method will call by AuthenticatorMixin when a packet is passed examination.
+        
+        This is 3rd layer to process packet to handler. This is last layer to application layer.
+        """
+        handler.on_recv(src=pkt.src, pkt=pkt, sock=sock)
+        self.monitor.on_recv_pkt(addr=pkt.src, pkt=pkt, conn=sock)
 
     def new_tcp_long_conn(self, dst: Tuple[str, int]) -> "SSLSocket":
         """Create a ssl-wrapped TCP socket with given destination host
@@ -132,278 +192,50 @@ class Peer(HandleableMixin, CommandableMixin):
         sock.setblocking(False)
         return sock
 
-    def pend_socket(self, sock: "SSLSocket") -> None:
-        """Pending socket into I/O list.
-        Init a sending queue and put into dict for further handling of pkts.
-        And the given sock will be append into I/O file descriptor list.
+    def loop_start(self):
+        self.logger.info(self.__server_info)
+        self.__selector.register(self.__tcp_server, EVENT_READ, self.__on_accept)
+        if self.__auto_register is True:
+            self._preregister_handler()
+            self._preregister_command()
 
-        Args:
-            sock: A SSLSocket object which wants to be append.
+        if self.monitor.is_start() is False:
+            self.monitor.start()
+
+        self.logger.info("Peer started.")
+
+    def loop(self):
+        return self._loop()
+
+    def _loop(self):
+        """Called inside infinite loop from outside inherited class.
+        It's use to call the method which given event is triggered.
         """
-        self.__send_queue[sock] = Queue()
-        self.__selector.register(sock, EVENT_READ | EVENT_WRITE, self.__handle)
+        events = self.__selector.select(timeout=0)
+        for key, mask in events:
+            if callable(key.data):
+                key.data(key.fileobj, mask)
 
-    def pend_socket_to_rm(self, sock: "SSLSocket") -> None:
-        """Pending socket into rm list for remove at next thread iteration.
-        Given socket append into remove list and clear it's sending queue,
-        then will be remove at next iteration of thread.
+    def loop_stop(self):
+        for _, value in self.__packet_queue.items():
+            if value.empty() is False:
+                sleep(2)
+                return self.loop_stop()
 
-        Args:
-            sock: A SSLSocket object which wants to remove at next iteration.
-        """
-        self.__pend_rm_fds.append(sock)
-        self.__send_queue[sock].queue.clear()
+        self.__selector.unregister(self.__tcp_server)
+        self.leave_net()
 
-    def pend_packet(self, sock: "SSLSocket", pkt: "Packet", **kwargs) -> None:
-        """Pending pkt's raw_data to queue's with sepecific sock.
-        Any exception when wrapping handler to packet whould cause this connec-
-        tion been close and thread maintaining loop terminate.
+        self.monitor.stop()
 
-        Args:
-            sock: A SSLSocket which wants to pend on its queue.
-            pkt: A Packet ready to be pend.
-            **kwargs: Any additional arguments needs by handler object.
-        
-        Raises:
-            AssertionError:
-                If given pkt variable is not in proper Packet type.
-        """
-        assert type(pkt) is Packet
-        try:
-            self.__send_queue[sock].put_nowait(pkt)
-        except Exception:
-            self.logger.info(format_exc())
-
-    def join_net(self, host: Tuple[str, int]) -> None:
-        """Join into a net with known host.
-        This method is use to join a net with known host while current peer is
-         not in any net yet.
-
-        Args:
-            host: A tuple with address in str at position 0 and port in int at
-                  positon 1.
-        """
-        assert host_valid(host) is True
-        handler = self.select_handler(pkt_type=JoinHandler.pkt_type)
-        pkt = handler.on_send(target=host)
-
-        sock = self.new_tcp_long_conn(dst=host)
-        self.pend_socket(sock=sock)
-        self.pend_packet(sock=sock, pkt=pkt)
-
-    def join_net_by_DNS(self, domain: str, ns: List[str] = None) -> None:
-        """Join into a net with known domain.
-        This method is use to join a net with known domain while current peer 
-          is not in any net yet.
-        The domain can point to single or multiple exists host in net.
-
-        Args:
-            domain: The domain point to any host currently in net.
-            ns: A list with str, specified which DNS server to query.
-
-        Raises:
-            ValueError:
-                No any valid record after given domain.
-        """
-        if ns is not None and type(ns) is list:
-            self.dns_resolver.change_ns(ns=ns)
-        records = self.dns_resolver.sync_from_DNS(
-            current_host=self.server_info.host, domain=domain
-        )
-        for each in records:
-            if is_ssl_socket_open(host=each.host) is True:
-                return self.join_net(host=each.host)
-        raise ValueError("No Online peer in DNS records.")
-
-    def add_peer_in_net(self, peer_info: "PeerInfo") -> None:
-        """Add given PeerInfo into current net's peer_pool.
-
-        Args:
-            peer_info: A PeerInfo object to be add.
-
-        Raises:
-            AssertionError:
-                If given peer_info variable is not in proper PeerInfo type.
-        """
-        assert type(peer_info) is PeerInfo
-        self.peer_pool[peer_info.host] = peer_info
-
-    def del_peer_in_net(self, peer_info: "PeerInfo") -> bool:
-        """Delete given PeerInfo if exists in current net's peer_pool
-
-        Args:
-            peer_info: A PeerInfo object to be delete.
-
-        Return:
-            True is success, or False.
-
-        Raises:
-            ValueError: If peer_info object type is not PeerInfo.
-        """
-        if self.is_peer_in_net(info=peer_info) is True:
-            del self.peer_pool[peer_info.host]
-            return True
-        else:
-            return False
-
-    def is_peer_in_net(self, info: Union["PeerInfo", Tuple[str, int]]) -> bool:
-        """Return if in current net pool
-
-        Args:
-            info: A PeerInfo object or a tuple with (str, int) type represents
-                host.
-
-        Returns:
-            true if in net, or False.
-
-        Raises:
-            ValueError: If peer_info's type is not PeerInfo or tuple (str, int)
-        """
-        if type(info) is tuple:
-            return info in self.peer_pool
-        elif type(info) is PeerInfo:
-            return info.host in self.peer_pool
-        else:
-            raise ValueError(
-                "Parameter peer_info should be tuple with "
-                "(str, int) or type PeerInfo"
-            )
-
-    def get_peer_info_by_host(self, host: Tuple[str, int]) -> Union[None, "PeerInfo"]:
-        """Get PeerInfo object from current net's peer_pool if exists.
-
-        Args:
-            host: A tuple(str, int) object represents host in net.
-
-        Returns:
-            A PeerInfo object get from peer_pool if exists or None.
-
-        Raises:
-            ValueError: If a given host is not tuple(str, int) object.
-        """
-        if self.is_peer_in_net(info=host) is True:
-            return self.peer_pool[host]
-        else:
-            return None
-
-    def handler_unicast_packet(
-        self, host: Tuple[str, int], pkt_type: str, **kwargs
-    ) -> None:
-        """Exported function for pending unicast pkt with specific host.
-        This function is for anyother instance to make a safer packet send with
-        specific host currently in peer_pool.
-
-        Args:
-            host: Destination to recieve packet. This host should be currently
-                in peer_pool.
-            pkt_type: Packet's unique identity str.
-            kwargs: Any addtional arguments need by Handler.
-
-        Raises:
-            AssertionError:
-                If given host variable is not in proper Tuple[str, int] type.
-        """
-        assert host_valid(host) is True
-        handler = self.select_handler(pkt_type=pkt_type)
-        if handler is None:
-            self.logger.info("Unknow handler pkt_type")
-        elif self.is_peer_in_net(info=host):
-            peer_info = self.get_peer_info_by_host(host=host)
-            pkt = handler.on_send(target=host, **kwargs)
-            self.pend_packet(sock=peer_info.conn, pkt=pkt)
-        else:
-            self.logger.info("Host not in current net.")
-
-    def handler_broadcast_packet(
-        self, host: Tuple[str, int], pkt_type: str, **kwargs
-    ) -> None:
-        """Exported function for pending broadcast pkt to specific peers.
-        This function is for anyother instance to make a safer packet send with
-        given role currently in peer_pool to broadcast.
-
-        Args:from atomic_p2p.utils.logging import getLogger
-
-            host: First argument in tuple will not be used. Only use second one
-                which represents target role to recive the pkt.
-            pkt_type: Packet's unique identity str.
-            kwargs: Any addtional arguments need by Handler.
-        """
-        handler = self.select_handler(pkt_type=pkt_type)
-        if handler is None:
-            self.logger.info("Unknow handler pkt_type")
-        else:
-            for (_, value) in self.peer_pool.items():
-                if host[1] == "all" or host[1] == value.role:
-                    pkt = handler.on_send(target=value.host, **kwargs)
-                    self.pend_packet(sock=value.conn, pkt=pkt)
-
-    def __on_recv(self, sock: "SSLSocket", mask) -> None:
-        try:
-            raw_data = sock.recv(4096)
-            if raw_data == b"":
-                return
-            pkt = Packet.deserilize(raw_data=raw_data)
-            handler = self.select_handler(pkt_type=pkt._type)
-
-            if handler is None:
-                self.logger.info("Unknown packet type: {}".format(pkt._type))
-            elif pkt.program_hash != self.__program_hash and pkt.is_reject() is False:
-                # Invalid hash -> Dangerous peer"s pkt.
-                self.logger.info(
-                    "Illegal peer {} with unmatch hash {{{}...{}}} try to "
-                    "connect to net.".format(
-                        pkt.src, pkt.program_hash[:6], pkt.program_hash[-6:]
-                    )
-                )
-                pkt.redirect_to_host(src=self.server_info.host, dst=pkt.src)
-                pkt.set_reject(reject_data="Unmatching peer hash.")
-                self.pend_packet(sock=sock, pkt=pkt)
-            else:
-                in_net = self.is_peer_in_net(info=pkt.src)
-                if in_net is True or type(handler) in [
-                    JoinHandler,
-                    AckNewMemberHandler,
-                    CheckJoinHandler,
-                    DisconnectHandler,
-                ]:
-                    # In_net or A join / check_join pkt send.
-                    # The exception pkt will be process whether reject or not.
-                    handler.on_recv(src=pkt.src, pkt=pkt, sock=sock)
-                    self.monitor.on_recv_pkt(addr=pkt.src, pkt=pkt, conn=sock)
-                else:  # Not in net and not exception pkt
-                    pkt.set_reject(reject_data="Not in current net.")
-                    self.pend_packet(sock=sock, pkt=pkt)
-        except SSLWantReadError:
-            return
-        except Exception:
-            self.logger.warning(str(self.server_info) + format_exc())
-
-    def __on_send(self, sock: "SSLSocket", mask) -> None:
-        try:
-            q = self.__send_queue[sock]
-            while q.empty() is False:
-                pkt = q.get_nowait()
-                data = Packet.serilize(obj=pkt)
-                sock.send(data)
-                if pkt._type == DisconnectHandler.pkt_type or pkt.is_reject():
-                    self.pend_socket_to_rm(sock)
-        except Exception:
-            self.logger.warning(format_exc())
-
-    def __on_fds_rm(self) -> None:
-        if len(self.__pend_rm_fds) == 0:
-            return
-        for each in list(self.__pend_rm_fds):
-            del self.__send_queue[each]
-            self.__selector.unregister(each)
-            each.close()
-        self.__pend_rm_fds.clear()
+    def loop_stop_post(self):
+        self.__tcp_server.close()
+        self.__selector.close()
 
     def __bind_socket(self, cert: Tuple[str, str]) -> "SSLSocket":
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
         unwrap_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         unwrap_socket.setsockopt(SOL_SOCKET, SO_REUSEPORT, 1)
-        unwrap_socket.bind(self.server_info.host)
+        unwrap_socket.bind(self.__server_info.host)
         unwrap_socket.listen(5)
         unwrap_socket.setblocking(False)
 
@@ -416,80 +248,67 @@ class Peer(HandleableMixin, CommandableMixin):
             unwrap_socket, certfile=cert[0], keyfile=cert[1], server_side=True
         )
 
-    def _preregister_handler(self) -> None:
-        installing_handlers = [
-            JoinHandler(self),
-            CheckJoinHandler(self),
-            NewMemberHandler(self),
-            MessageHandler(self),
-            AckNewMemberHandler(self),
-            DisconnectHandler(self),
-        ]
-        for each in installing_handlers:
-            self.register_handler(handler=each)
-
-    def _preregister_command(self) -> None:
-        installing_commands = [
-            HelpCmd(self),
-            JoinCmd(self),
-            SendCmd(self),
-            ListCmd(self),
-            LeaveNetCmd(self),
-        ]
-        for each in installing_commands:
-            self.register_command(command=each)
-
-    def loop_start(self):
-        self.logger.info(self.server_info)
-        self.__selector.register(self.__tcp_server, EVENT_READ, self.__accept)
-        if self.__auto_register is True:
-            self._preregister_handler()
-            self._preregister_command()
-
-        if self.monitor.is_start() is False:
-            self.monitor.start()
-
-        self.logger.info("Peer started.")
-
-    def loop_stop(self):
-        for _, value in self.__send_queue.items():
-            if value.empty() is False:
-                sleep(2)
-                return self.loop_stop()
-
-        self.__selector.unregister(self.__tcp_server)
-        handler = self.select_handler(pkt_type=DisconnectHandler.pkt_type)
-        for each in self.peer_pool.values():
-            if each.conn is None:
-                continue
-            pkt = handler.on_send(target=each.host)
-            self.pend_packet(sock=each.conn, pkt=pkt)
-        self.peer_pool = {}
-
-        self.monitor.stop()
-
-    def loop_stop_post(self):
-        self.__tcp_server.close()
-        self.__selector.close()
-
-    def __accept(self, sock, mask) -> None:
+    def __on_accept(self, sock: "Socket", mask, **kwargs):
+        """Call when a new socket is connection by waiter socket.
+        This will accept all sockets from outside, but it doesn't mean every socket's
+         packet be process by higher layer.
+        This is the 1st layer to process sockets.
+        """
         conn, _ = sock.accept()
         conn.setblocking(False)
-        self.pend_socket(sock=conn)
+        self.register_socket(sock=conn)
 
-    def __handle(self, sock, mask) -> None:
+    def __on_handle(self, sock: "Socket", mask, **kwargs):
+        """Decide whether send or recv."""
         if mask & EVENT_READ == EVENT_READ:
-            self.__on_recv(sock=sock, mask=mask)
-        elif mask & EVENT_WRITE == EVENT_WRITE:
-            self.__on_send(sock=sock, mask=mask)
+            self.__on_recv(sock=sock, mask=mask, **kwargs)
+        if mask & EVENT_WRITE == EVENT_WRITE:
+            self.__on_send(sock=sock, mask=mask, **kwargs)
 
-    # TODO: Currently there is only one thread responsible for every fd's hand-
-    #       ling. Inside the method have few line with thread. Need benchmark
-    #       to decide use thread or not.
-    #                                   2019/04/26
-    def loop(self) -> None:
-        events = self.__selector.select(timeout=0)
-        for key, mask in events:
-            if callable(key.data):
-                key.data(key.fileobj, mask)
-        self.__on_fds_rm()
+    def __on_recv(self, sock: "Socket", mask, **kwargs):
+        """Method use when recieve socket data.
+        This is 2th layer to process Packets.
+        """
+        try:
+            raw_data = sock.recv(4096)
+            if raw_data == b"":
+                return
+            pkt = Packet.deserilize(raw_data=raw_data)
+            return self._authenticate_packet(sock=sock, pkt=pkt)
+        except SSLWantReadError:
+            return
+        except sock_error as sock_err:
+            if sock_err.errno == ECONNRESET:
+                peer_info = self.get_peer_info_by_conn(conn=sock)
+                if peer_info is not None:
+                    peer_info.status.update(status_type=StatusType.NO_RESP)
+                    self.logger.warning(
+                        "Peer {} Connection Reseted.".format(peer_info.host)
+                    )
+            else:
+                raise sock_err
+        except Exception:
+            self.logger.warning(str(self.server_info) + format_exc())
+
+    def __on_send(self, sock: "Socket", mask, **kwargs):
+        """Method use when sending data to socket."""
+        q = self.__packet_queue[sock] if sock in self.__packet_queue else None
+        while q is not None and q.empty() is False:
+            try:
+                pkt = q.get_nowait()
+                handler = self.select_handler(pkt_type=pkt._type)
+                handler.pre_send(pkt=pkt)
+                data = Packet.serilize(obj=pkt)
+                sock.send(data)
+                handler.post_send(pkt=pkt, sock=sock)
+            except sock_error as sock_err:
+                if sock_err.errno == ECONNRESET:
+                    q.put_nowait(pkt)
+                    self.monitor.peer_status_update_by_host(
+                        host=pkt.src, status_type=StatusType.NO_RESP
+                    )
+                    self.logger.warning("Peer {} Connection Reseted.".format(pkt.src))
+                else:
+                    raise sock_err
+            except Exception:
+                self.logger.warning(format_exc())

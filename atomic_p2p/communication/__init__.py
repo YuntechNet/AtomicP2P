@@ -1,10 +1,10 @@
-from typing import Tuple
-from ssl import get_server_certificate
-from socket import inet_pton, inet_aton, AF_INET, AF_INET6, error, socket, SOCK_STREAM
+from socket import inet_pton, inet_aton, AF_INET, AF_INET6, error, socket
 
-from atomic_p2p.utils import host_valid
-from atomic_p2p.utils.communication.packet import Packet
-from atomic_p2p.utils.communication.handler import Handler
+from .command import Command
+from .handler import Handler
+from .packet import Packet
+
+__all__ = ["Command", "Handler", "Packet", "valid_ipv4_format", "valid_ipv6_format"]
 
 
 def valid_ipv4_format(address: str) -> bool:
@@ -28,12 +28,3 @@ def valid_ipv6_format(address: str) -> bool:
     except error:  # not a valid address
         return False
     return True
-
-
-def is_ssl_socket_open(host: Tuple[str, int]) -> bool:
-    assert host_valid(host) is True
-    try:
-        get_server_certificate(host)
-        return True
-    except Exception:
-        return False

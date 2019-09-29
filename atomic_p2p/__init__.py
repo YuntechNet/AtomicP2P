@@ -1,9 +1,9 @@
 from os import getcwd
 from os.path import join
 
+from atomic_p2p.logging import getLogger
 from atomic_p2p.peer import ThreadPeer
-from atomic_p2p.utils.security import create_self_signed_cert as cssc, self_hash
-from atomic_p2p.utils.logging import getLogger
+from atomic_p2p.utils import create_self_signed_cert as cssc, self_hash
 
 
 __version__ = "0.0.5"

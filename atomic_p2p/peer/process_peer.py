@@ -2,9 +2,8 @@ from typing import Tuple
 from time import sleep
 from multiprocessing import Process, Event
 
-from atomic_p2p.peer import Peer
-from atomic_p2p.peer.communication import DisconnectHandler
-from atomic_p2p.utils.logging import getLogger
+from atomic_p2p.logging import getLogger
+from .peer import Peer
 
 
 class ProcessPeer(Peer, Process):

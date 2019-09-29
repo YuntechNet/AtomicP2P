@@ -1,7 +1,8 @@
-from atomic_p2p.utils.command import Command
-from atomic_p2p.peer.entity.peer_info import PeerInfo
-from atomic_p2p.peer.communication.net import JoinHandler, DisconnectHandler
-from atomic_p2p.peer.communication.msg import MessageHandler
+from atomic_p2p.communication.command import Command
+
+from .entity.peer_info import PeerInfo
+from .topology.lan.handler import JoinHandler, DisconnectHandler
+from .communication.msg import MessageHandler
 
 
 class HelpCmd(Command):
@@ -119,5 +120,4 @@ class LeaveNetCmd(Command):
         self.peer.handler_broadcast_packet(
             host=("", "all"), pkt_type=DisconnectHandler.pkt_type
         )
-        self.peer.peer_pool = {}
         self.peer.logger.info("You left net.")

@@ -1,6 +1,4 @@
-import pytest
-
-from atomic_p2p.utils.manager import ProcManager
+from atomic_p2p.manager import ProcManager
 
 
 def test_init(proc):

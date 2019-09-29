@@ -1,5 +1,6 @@
-import json
-from atomic_p2p.utils.communication import Packet
+from json import loads
+
+from atomic_p2p.communication import Packet
 
 
 def test_init(packet, default_peer, self_hash):
@@ -53,7 +54,7 @@ def test_to_dict(packet, default_peer):
 
 def test_serilize(packet):
     send_data = str(Packet.serilize(packet), encoding="utf-8")
-    data = json.loads(send_data)
+    data = loads(send_data)
     assert data["to"]["ip"] == packet.dst[0]
     assert data["to"]["port"] == int(packet.dst[1])
     assert data["type"] == packet._type

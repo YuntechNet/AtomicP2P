@@ -1,6 +1,8 @@
+from atomic_p2p.communication.command import Command
+
 from atomic_p2p.peer.entity.peer_status import StatusType
-from atomic_p2p.peer.monitor.communication import CheckHandler
-from atomic_p2p.utils.command import Command
+
+from .communication import CheckHandler
 
 
 class HelpCmd(Command):

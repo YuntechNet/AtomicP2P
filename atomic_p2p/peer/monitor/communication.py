@@ -1,7 +1,7 @@
 import time
 
+from atomic_p2p.communication import Packet, Handler
 from atomic_p2p.peer.entity.peer_status import StatusType
-from atomic_p2p.utils.communication import Packet, Handler
 
 
 class CheckHandler(Handler):
@@ -14,8 +14,7 @@ class CheckHandler(Handler):
         self.monitor = monitor
 
     def on_send_pkt(self, target):
-        peer_info = self.monitor.peer.get_peer_info_by_host(host=target)
-        peer_info.status.update(status_type=StatusType.PENDING)
+        self.monitor.peer_status_update_by_host(host=target)
         data = {"send_ts": time.time()}
         return Packet(
             dst=target,
@@ -34,6 +33,4 @@ class CheckHandler(Handler):
     def on_recv_reject_pkt(self, src, pkt, conn):
         if self.monitor.verbose:
             super(CheckHandler, self).on_recv_reject_pkt(src, pkt, conn)
-        peer_info = self.monitor.peer.get_peer_info_by_host(host=pkt.src)
-        if peer_info is not None:
-            peer_info.status.update(status_type=StatusType.PENDING)
+        self.monitor.peer_status_update_by_host(host=pkt.src)

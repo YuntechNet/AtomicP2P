@@ -4,9 +4,9 @@ from os.path import join
 import time
 import pytest
 
+from atomic_p2p.utils import self_hash as sh, create_self_signed_cert
 from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.peer.dns_resolver import DNSResolver
-from atomic_p2p.utils.security import self_hash as sh, create_self_signed_cert
 
 
 @pytest.fixture(scope="session")
