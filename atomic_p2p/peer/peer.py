@@ -8,18 +8,17 @@ from queue import Queue
 from time import sleep
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_REUSEPORT
 
-from atomic_p2p.utils import host_valid
+from atomic_p2p.utils import host_valid, DNSResolver
 from atomic_p2p.logging import getLogger
 from atomic_p2p.communication import Packet
 from atomic_p2p.mixin import (
     HandleableMixin,
     CommandableMixin,
     DefaultAuthenticatorMixin,
+    LanTopologyMixin,
 )
 
 from .entity import PeerInfo, StatusType
-from .topology import LanTopologyMixin
-from .dns_resolver import DNSResolver
 from .command import HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
 from .communication import MessageHandler
 from .monitor import Monitor
@@ -36,6 +35,7 @@ class Peer(
         peer_pool (Dict[Tuple[str, int], PeerInfo]): All peers currently avai-
             lable in net.
     """
+
     @property
     def server_info(self):
         return self.__server_info

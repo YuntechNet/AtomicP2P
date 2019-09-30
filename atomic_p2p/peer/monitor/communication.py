@@ -8,7 +8,7 @@ class CheckHandler(Handler):
     pkt_type = "monitor-check"
 
     def __init__(self, monitor):
-        super(CheckHandler, self).__init__(
+        super().__init__(
             pkt_type=type(self).pkt_type, peer=monitor.peer
         )
         self.monitor = monitor
@@ -32,5 +32,5 @@ class CheckHandler(Handler):
 
     def on_recv_reject_pkt(self, src, pkt, conn):
         if self.monitor.verbose:
-            super(CheckHandler, self).on_recv_reject_pkt(src, pkt, conn)
+            super().on_recv_reject_pkt(src, pkt, conn)
         self.monitor.peer_status_update_by_host(host=pkt.src)

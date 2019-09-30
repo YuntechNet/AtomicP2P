@@ -28,7 +28,7 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
         logger: "logging.Logger" = getLogger(__name__),
     ):
         self.peer = peer
-        super(Monitor, self).__init__()
+        super().__init__()
         self.logger = logger
         self.loopDelay = loop_delay
         self.stopped = tEvent()

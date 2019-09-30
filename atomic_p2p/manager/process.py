@@ -7,14 +7,14 @@ class ProcManager(Process):
     def __init__(
         self, loopDelay: int = 1, logger: "logging.Logger" = getLogger(__name__)
     ):
-        super(ProcManager, self).__init__()
+        super().__init__()
         self.logger = logger
         self.loopDelay = loopDelay
         self.stopped = Event()
         self.started = Event()
 
     def start(self) -> None:
-        super(ProcManager, self).start()
+        super().start()
         self.started.set()
 
     def run(self) -> None:

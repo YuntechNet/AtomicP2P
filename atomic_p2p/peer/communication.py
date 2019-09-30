@@ -5,7 +5,7 @@ class MessageHandler(Handler):
     pkt_type = "message"
 
     def __init__(self, peer):
-        super(MessageHandler, self).__init__(pkt_type=type(self).pkt_type, peer=peer)
+        super().__init__(pkt_type=type(self).pkt_type, peer=peer)
 
     def on_send_pkt(self, target, msg):
         data = {"message": msg}
