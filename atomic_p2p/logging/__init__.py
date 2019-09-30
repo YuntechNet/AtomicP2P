@@ -1,8 +1,8 @@
 from sys import stdout
 from logging import basicConfig, DEBUG, getLogger as get_logger
 
-from atomic_p2p.utils.logging.handlers import StreamHandler, SocketHandler
-from atomic_p2p.utils.logging.formatters import StdoutFormatter
+from .handlers import StreamHandler, SocketHandler
+from .formatters import StdoutFormatter
 
 
 def getLogger(name=None, level=DEBUG, add_monitor_pass=None):

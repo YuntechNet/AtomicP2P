@@ -1,6 +1,8 @@
+from atomic_p2p.communication.command import Command
+
 from atomic_p2p.peer.entity.peer_status import StatusType
-from atomic_p2p.peer.monitor.communication import CheckHandler
-from atomic_p2p.utils.command import Command
+
+from .communication import CheckHandler
 
 
 class HelpCmd(Command):
@@ -10,7 +12,7 @@ class HelpCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(HelpCmd, self).__init__("help")
+        super().__init__("help")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -39,7 +41,7 @@ class PauseCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(PauseCmd, self).__init__("pause")
+        super().__init__("pause")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -55,7 +57,7 @@ class PeriodCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(PeriodCmd, self).__init__("period")
+        super().__init__("period")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -78,7 +80,7 @@ class ListCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(ListCmd, self).__init__("list")
+        super().__init__("list")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -100,7 +102,7 @@ class ResetCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(ResetCmd, self).__init__("reset")
+        super().__init__("reset")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -121,7 +123,7 @@ class VerboseCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(VerboseCmd, self).__init__("verbose")
+        super().__init__("verbose")
         self.monitor = monitor
         self.peer = monitor.peer
 
@@ -137,7 +139,7 @@ class ManualCmd(Command):
     """
 
     def __init__(self, monitor):
-        super(ManualCmd, self).__init__("manual")
+        super().__init__("manual")
         self.monitor = monitor
         self.peer = monitor.peer
 

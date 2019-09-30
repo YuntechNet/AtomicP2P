@@ -2,8 +2,8 @@ from typing import Union, Dict, List, Tuple
 from dns.reversename import from_address
 from dns.resolver import Resolver, query
 
+from atomic_p2p.manager import ThreadManager
 from atomic_p2p.peer.entity.peer_info import PeerInfo
-from atomic_p2p.utils.manager import ThreadManager
 
 
 class DNSResolver(object):

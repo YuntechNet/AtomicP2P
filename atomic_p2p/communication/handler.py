@@ -1,7 +1,8 @@
 from typing import Tuple
 
 from atomic_p2p.utils import host_valid
-from atomic_p2p.utils.communication import Packet
+
+from .packet import Packet
 
 
 class Handler(object):
@@ -31,6 +32,9 @@ class Handler(object):
     def pkt_type(self) -> str:
         return self.__pkt_type
 
+    def pre_send(self, pkt: "Packet", **kwargs) -> None:
+        pass
+
     def on_send(self, target: Tuple[str, int], **kwargs) -> "Packet":
         if "reject_data" in locals()["kwargs"]:
             return self.on_send_reject_pkt(target=target, **kwargs)
@@ -39,6 +43,9 @@ class Handler(object):
 
     def on_send_pkt(self, target: Tuple[str, int], **kwargs) -> "Packet":
         raise NotImplementedError
+
+    def post_send(self, pkt: "Packet", sock: "Socket", **kwargs) -> None:
+        pass
 
     def on_send_reject_pkt(
         self, target: Tuple[str, int], reject_data: object, **kwargs
@@ -82,4 +89,4 @@ class Handler(object):
         #       Waiting for use mock.
         #                      - 2019/04/13
         if conn is not None:
-            self.peer.pend_socket_to_rm(sock=conn)
+            self.__peer.unregister_socket(sock=conn)

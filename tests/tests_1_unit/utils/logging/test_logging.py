@@ -1,5 +1,6 @@
 import logging
-from atomic_p2p.utils.logging import getLogger
+
+from atomic_p2p.logging import getLogger
 
 
 def test_getLogger():

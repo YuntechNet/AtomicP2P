@@ -1,5 +1,6 @@
-import pytest
-from atomic_p2p.utils.command import Command
+from pytest import raises
+
+from atomic_p2p.communication.command import Command
 
 
 def test_init(command):
@@ -7,5 +8,5 @@ def test_init(command):
 
 
 def test__execute(command):
-    with pytest.raises(NotImplementedError):
+    with raises(NotImplementedError):
         command._execute(None)
