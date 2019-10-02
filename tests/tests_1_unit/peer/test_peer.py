@@ -36,14 +36,14 @@ def test_handler_unicast_packet(default_peer):
 
 
 def test_add_peer_in_net(default_peer, peer_info):
-    assert len(default_peer.connectlist) == 0
-    default_peer.add_peer_in_net(peer_info)
-    assert peer_info in default_peer.connectlist
+    assert default_peer.peer_pool == {}
+    default_peer.add_peer_in_net(sock=None, peer_info=peer_info)
+    assert default_peer.peer_pool[peer_info.host] == (None, peer_info)
 
 
 def test_del_peer_in_net(default_peer, peer_info):
-    assert peer_info in default_peer.connectlist
+    assert peer_info.host in default_peer.peer_pool
     assert default_peer.del_peer_in_net(peer_info) is True
-    assert peer_info not in default_peer.connectlist
+    assert peer_info.host not in default_peer.peer_pool
     assert default_peer.del_peer_in_net(peer_info) is False
-    assert peer_info not in default_peer.connectlist
+    assert peer_info.host not in default_peer.peer_pool

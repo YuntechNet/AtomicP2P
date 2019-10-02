@@ -19,9 +19,9 @@ class DisconnectHandler(Handler):
         )
 
     def __disconnect_unregister(self, host: Tuple[str, int]) -> bool:
-        peer_info = self.peer.get_peer_info_by_host(host=host)
+        sock, peer_info = self.peer.get_peer_info_by_host(host=host)
         if peer_info is not None:
-            self.peer.unregister_socket(sock=peer_info.conn)
+            self.peer.unregister_socket(sock=sock)
             self.peer.del_peer_in_net(peer_info=peer_info)
             return True
         return False

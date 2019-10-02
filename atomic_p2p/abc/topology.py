@@ -59,7 +59,7 @@ class TopologyABC(ABC):
         pass
 
     @abstractmethod
-    def add_peer_in_net(self, peer_info: "PeerInfo", **kwargs) -> None:
+    def add_peer_in_net(self, sock: "Socket", peer_info: "PeerInfo", **kwargs) -> None:
         pass
 
     @abstractmethod

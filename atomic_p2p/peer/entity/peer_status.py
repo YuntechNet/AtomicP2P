@@ -23,7 +23,7 @@ class PeerStatus(object):
         status (StatusType): Current peer status.
     """
 
-    def __init__(self, status: "StatusType" = StatusType.PENDING) -> None:
+    def __init__(self, status: "StatusType" = StatusType.PENDING, **kwargs) -> None:
         """Init of PeerStatus
 
         Args:

@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple
 from traceback import format_exc
 from selectors import DefaultSelector, EVENT_READ, EVENT_WRITE
 from errno import ECONNRESET
@@ -45,13 +45,8 @@ class Peer(
         return self.__program_hash
 
     @property
-    def send_queue(self):
-        # def packet_queue(self):
+    def packet_queue(self):
         return self.__packet_queue
-
-    @property
-    def connectlist(self) -> List:  # Remember to remove `List` import.
-        return self.peer_pool.values()
 
     def __init__(
         self,
@@ -279,7 +274,7 @@ class Peer(
             return
         except sock_error as sock_err:
             if sock_err.errno == ECONNRESET:
-                peer_info = self.get_peer_info_by_conn(conn=sock)
+                _, peer_info = self.get_peer_info_by_conn(conn=sock)
                 if peer_info is not None:
                     peer_info.status.update(status_type=StatusType.NO_RESP)
                     self.logger.warning(

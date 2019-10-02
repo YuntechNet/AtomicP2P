@@ -27,8 +27,6 @@ class CheckJoinHandler(Handler):
         name = data["name"]
         listen_port = int(data["listen_port"])
         role = data["role"]
-        peer_info = PeerInfo(
-            name=name, role=role, host=(src[0], listen_port), conn=conn
-        )
+        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
         self.peer.logger.info("Added peer:" + str(peer_info))
-        self.peer.add_peer_in_net(peer_info=peer_info)
+        self.peer.add_peer_in_net(sock=conn, peer_info=peer_info)

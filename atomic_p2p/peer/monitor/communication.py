@@ -8,9 +8,7 @@ class CheckHandler(Handler):
     pkt_type = "monitor-check"
 
     def __init__(self, monitor):
-        super().__init__(
-            pkt_type=type(self).pkt_type, peer=monitor.peer
-        )
+        super().__init__(pkt_type=type(self).pkt_type, peer=monitor.peer)
         self.monitor = monitor
 
     def on_send_pkt(self, target):

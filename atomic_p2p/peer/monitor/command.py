@@ -85,12 +85,12 @@ class ListCmd(Command):
         self.peer = monitor.peer
 
     def _execute(self, msg_arr):
-        if len(self.monitor.peer.connectlist) == 0:
+        if self.monitor.peer.peer_pool == {}:
             return "There is no peer's info in current list"
         else:
             output_text = "Current peers status:"
-            for each in self.monitor.peer.connectlist:
-                output_text += " - " + str(each.status) + "\n"
+            for (_, (_, peer_info)) in self.monitor.peer.peer_pool.items():
+                output_text += " - " + str(peer_info.status) + "\n"
             output_text += "[---End of list---]"
             return output_text
 
@@ -108,9 +108,9 @@ class ResetCmd(Command):
 
     def _execute(self, msg_arr):
         if msg_arr == []:
-            for each in self.peer.connectlist:
-                each.status.update(status_type=StatusType.PENDING)
-                self.monitor.logger.info(each.status)
+            for (_, (_, peer_info)) in self.peer.peer_pool.items():
+                peer_info.status.update(status_type=StatusType.PENDING)
+                self.monitor.logger.info(peer_info.status)
             self.monitor.logger.info("Reset success")
         else:
             pass

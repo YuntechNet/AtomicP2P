@@ -58,12 +58,12 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
         while not self.stopped.wait(self.loopDelay):
             if self.pause is False:
                 no_response_list = []
-                for (host, peer_info) in self.peer.peer_pool.items():
+                for (host, (sock, peer_info)) in self.peer.peer_pool.items():
                     self.peer.handler_unicast_packet(
                         host=host, pkt_type=CheckHandler.pkt_type
                     )
                     if peer_info.status.no_response_count >= self.max_no_response_count:
-                        no_response_list.append(peer_info)
+                        no_response_list.append((sock, peer_info))
                 self.removeMonitorlist(no_response_list)
 
     def on_recv_pkt(
@@ -77,17 +77,17 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
     def peer_status_update_by_host(
         self, host, status_type: "StatusType" = StatusType.PENDING
     ):
-        peer_info = self.peer.get_peer_info_by_host(host=host)
+        _, peer_info = self.peer.get_peer_info_by_host(host=host)
         if peer_info is not None:
             peer_info.status.update(status_type=status_type)
 
     def removeMonitorlist(self, missing: List) -> None:
-        for each in missing:
+        for (sock, peer_info) in missing:
             try:
-                self.peer.del_peer_in_net(peer_info=each)
-                self.peer.unregister_socket(sock=each.conn)
+                self.peer.del_peer_in_net(peer_info=peer_info)
+                self.peer.unregister_socket(sock=sock)
                 self.logger.info(
-                    ("{} has been remove from " "status list.").format(each)
+                    ("{} has been remove from " "status list.").format(peer_info)
                 )
             except Exception:
                 self.logger.error(traceback.format_exc())

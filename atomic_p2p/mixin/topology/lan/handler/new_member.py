@@ -33,10 +33,10 @@ class NewMemberHandler(Handler):
         role = data["role"]
 
         sock = self.peer.new_tcp_long_conn(dst=(addr, listen_port))
-        peer_info = PeerInfo(name=name, role=role, host=(addr, listen_port), conn=sock)
+        peer_info = PeerInfo(name=name, role=role, host=(addr, listen_port))
 
         self.peer.register_socket(sock=sock)
-        self.peer.add_peer_in_net(peer_info=peer_info)
+        self.peer.add_peer_in_net(sock=sock, peer_info=peer_info)
         self.peer.handler_unicast_packet(
             host=(addr, listen_port), pkt_type=AckNewMemberHandler.pkt_type
         )

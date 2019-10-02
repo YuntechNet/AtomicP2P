@@ -96,12 +96,12 @@ class ListCmd(Command):
         self.peer = peer
 
     def _execute(self, msg_arr):
-        if len(self.peer.connectlist) == 0:
+        if self.peer.peer_pool == {}:
             return "There is no peers in current net."
         else:
             output_text = "Current peers info:"
-            for each in self.peer.connectlist:
-                output_text += " - " + str(each) + "\n"
+            for (_, (_, peer_info)) in self.peer.peer_pool.items():
+                output_text += " - " + str(peer_info) + "\n"
             output_text += "[---End of list---]"
             return output_text
 

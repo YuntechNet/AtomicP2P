@@ -1,13 +1,21 @@
+from typing import Tuple
+
 from atomic_p2p.peer.entity.peer_status import PeerStatus, StatusType
 
 
 class PeerInfo(object):
-    def __init__(self, name, role, host, status=StatusType.PENDING, conn=None):
+    def __init__(
+        self,
+        name: str,
+        role: str,
+        host: Tuple[str, int],
+        status: "StatusType" = StatusType.PENDING,
+        **kwargs
+    ):
         self.name = name
         self.role = role
         self.host = (host[0], int(host[1]))
         self.status = PeerStatus(status=status)
-        self.conn = conn
 
     def __eq__(self, other):
         return (

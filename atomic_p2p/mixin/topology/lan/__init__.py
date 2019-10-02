@@ -49,7 +49,7 @@ class LanTopologyMixin(TopologyABC):
 
     def get_peer_info_by_host(
         self, host: Tuple[str, int], **kwargs
-    ) -> Union[None, "PeerInfo"]:
+    ) -> Union[None, Tuple["Socket", "PeerInfo"]]:
         """Get PeerInfo object from current net's peer_pool if exists.
 
         Args:
@@ -64,15 +64,15 @@ class LanTopologyMixin(TopologyABC):
         if self.is_peer_in_net(info=host) is True:
             return self.peer_pool[host]
         else:
-            return None
+            return (None, None)
 
     def get_peer_info_by_conn(
         self, conn: "Socket", **kwargs
-    ) -> Union[None, "PeerInfo"]:
-        for (host, peer_info) in self.peer_pool.items():
-            if peer_info.conn == conn:
-                return peer_info
-        return None
+    ) -> Union[None, Tuple["Socket", "PeerInfo"]]:
+        for (_, (sock, peer_info)) in self.peer_pool.items():
+            if sock == conn:
+                return (sock, peer_info)
+        return (None, None)
 
     def is_peer_in_net(
         self, info: Union["PeerInfo", Tuple[str, int]], **kwargs
@@ -99,10 +99,11 @@ class LanTopologyMixin(TopologyABC):
                 "(str, int) or type PeerInfo"
             )
 
-    def add_peer_in_net(self, peer_info: "PeerInfo", **kwargs) -> None:
+    def add_peer_in_net(self, sock: "Socket", peer_info: "PeerInfo", **kwargs) -> None:
         """Add given PeerInfo into current net's peer_pool.
 
         Args:
+            sock: A Socket object to be add.
             peer_info: A PeerInfo object to be add.
 
         Raises:
@@ -110,7 +111,7 @@ class LanTopologyMixin(TopologyABC):
                 If given peer_info variable is not in proper PeerInfo type.
         """
         assert type(peer_info) is PeerInfo
-        self.peer_pool[peer_info.host] = peer_info
+        self.peer_pool[peer_info.host] = (sock, peer_info)
 
     def del_peer_in_net(self, peer_info: "PeerInfo", **kwargs) -> bool:
         """Delete given PeerInfo if exists in current net's peer_pool
@@ -152,9 +153,9 @@ class LanTopologyMixin(TopologyABC):
         if handler is None:
             self.logger.info("Unknow handler pkt_type")
         elif self.is_peer_in_net(info=host) is True:
-            peer_info = self.get_peer_info_by_host(host=host)
+            sock, _ = self.get_peer_info_by_host(host=host)
             pkt = handler.on_send(target=host, **kwargs)
-            self.pend_packet(sock=peer_info.conn, pkt=pkt)
+            self.pend_packet(sock=sock, pkt=pkt)
         else:
             self.logger.info("Host not in current net.")
 
@@ -176,10 +177,10 @@ class LanTopologyMixin(TopologyABC):
         if handler is None:
             self.logger.info("Unknow handler pkt_type")
         else:
-            for (_, value) in self.peer_pool.items():
-                if host[1] == "all" or host[1] == value.role:
-                    pkt = handler.on_send(target=value.host, **kwargs)
-                    self.pend_packet(sock=value.conn, pkt=pkt)
+            for (_, (sock, peer_info)) in self.peer_pool.items():
+                if host[1] == "all" or host[1] == peer_info.role:
+                    pkt = handler.on_send(target=peer_info.host, **kwargs)
+                    self.pend_packet(sock=sock, pkt=pkt)
 
     def join_net(self, host: Tuple[str, int], **kwargs) -> None:
         """Join into a net with known host.
@@ -230,6 +231,6 @@ class LanTopologyMixin(TopologyABC):
         raise ValueError("No Online peer in DNS records.")
 
     def leave_net(self, **kwargs) -> None:
-        for (_, peer_info) in self.peer_pool.items():
-            self.unregister_socket(sock=peer_info.conn)
+        for (_, (sock, _)) in self.peer_pool.items():
+            self.unregister_socket(sock=sock)
         self.peer_pool = {}

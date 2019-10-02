@@ -47,7 +47,7 @@ class ProcessPeer(Peer, Process):
         self.started.clear()
 
     def run(self) -> None:
-        while self.stopped.wait(self.loopDelay) is False or self.send_queue != {}:
+        while self.stopped.wait(self.loopDelay) is False or self.packet_queue != {}:
             self.loop()
         self.loop_stop_post()
         sleep(2)

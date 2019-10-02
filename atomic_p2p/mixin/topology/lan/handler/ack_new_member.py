@@ -28,8 +28,6 @@ class AckNewMemberHandler(Handler):
         role = data["role"]
         listen_port = int(data["listen_port"])
 
-        peer_info = PeerInfo(
-            name=name, role=role, host=(src[0], listen_port), conn=conn
-        )
-        self.peer.add_peer_in_net(peer_info=peer_info)
+        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
+        self.peer.add_peer_in_net(sock=conn, peer_info=peer_info)
         self.peer.logger.info("ACK new member join net: {}".format(peer_info))

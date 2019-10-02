@@ -36,9 +36,7 @@ class JoinHandler(Handler):
         name = data["name"]
         listen_port = int(data["listen_port"])
         role = data["role"]
-        peer_info = PeerInfo(
-            name=name, role=role, host=(src[0], listen_port), conn=conn
-        )
+        peer_info = PeerInfo(name=name, role=role, host=(src[0], listen_port))
 
         self.peer.handler_broadcast_packet(
             host=("", "all"),
@@ -49,7 +47,7 @@ class JoinHandler(Handler):
             "Recieve new peer add request: {}, added.".format(str(peer_info))
         )
 
-        self.peer.add_peer_in_net(peer_info=peer_info)
+        self.peer.add_peer_in_net(sock=conn, peer_info=peer_info)
         self.peer.handler_unicast_packet(
             host=(src[0], listen_port), pkt_type=CheckJoinHandler.pkt_type
         )

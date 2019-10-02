@@ -8,8 +8,9 @@ def test_empty_list(switch1, switch2):
     sleep(3)
 
     switch1.monitor._on_command(["reset"])
-    assert switch1.get_peer_info_by_host(
-        host=switch2.server_info.host).status.status == StatusType.PENDING
+    _, peer_info = switch1.get_peer_info_by_host(
+        host=switch2.server_info.host)
+    assert peer_info.status.status == StatusType.PENDING
     
 
 def test_not_empty_list(switch1, switch2):
