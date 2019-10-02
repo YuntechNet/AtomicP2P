@@ -27,7 +27,7 @@ class JoinHandler(Handler):
             _data=data,
         )
 
-    def post_send(self, pkt: "Packet", sock: "Socket"):
+    def post_send(self, pkt: "Packet", sock: "SSLSocket"):
         if pkt.is_reject() is True and "Unmatching peer hash." in pkt.data["reject"]:
             self.peer.unregister_socket(sock=sock)
 

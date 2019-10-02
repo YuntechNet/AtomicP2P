@@ -29,27 +29,16 @@ class LanTopologyMixin(TopologyABC):
         for each in installing_handlers:
             self.register_handler(handler=each)
 
-    def on_packet_to_route(self, sock: "Socket", pkt: "Packet", **kwargs) -> None:
+    def on_packet_to_route(self, sock: "SSLSocket", pkt: "SSLSocket", **kwargs) -> None:
         handler = self.select_handler(pkt_type=pkt._type)
         if handler is None:
             self.logger.info("Unknown packet type: {}".format(pkt._type))
-        elif self.is_peer_in_net(info=pkt.src) is True:
-            return self._on_packet(sock=sock, pkt=pkt, handler=handler)
-        elif type(handler) in [
-            JoinHandler,
-            CheckJoinHandler,
-            NewMemberHandler,
-            AckNewMemberHandler,
-            DisconnectHandler,
-        ]:
-            return handler.on_recv(src=pkt.src, pkt=pkt, sock=sock)
         else:
-            pkt.set_reject(reject_data="Not in current net.")
-            self.pend_packet(sock=sock, pkt=pkt)
+            return self._on_packet(sock=sock, pkt=pkt, handler=handler)
 
     def get_peer_info_by_host(
         self, host: Tuple[str, int], **kwargs
-    ) -> Union[None, Tuple["Socket", "PeerInfo"]]:
+    ) -> Union[None, Tuple["SSLSocket", "PeerInfo"]]:
         """Get PeerInfo object from current net's peer_pool if exists.
 
         Args:
@@ -67,8 +56,8 @@ class LanTopologyMixin(TopologyABC):
             return (None, None)
 
     def get_peer_info_by_conn(
-        self, conn: "Socket", **kwargs
-    ) -> Union[None, Tuple["Socket", "PeerInfo"]]:
+        self, conn: "SSLSocket", **kwargs
+    ) -> Union[None, Tuple["SSLSocket", "PeerInfo"]]:
         for (_, (sock, peer_info)) in self.peer_pool.items():
             if sock == conn:
                 return (sock, peer_info)
@@ -99,11 +88,13 @@ class LanTopologyMixin(TopologyABC):
                 "(str, int) or type PeerInfo"
             )
 
-    def add_peer_in_net(self, sock: "Socket", peer_info: "PeerInfo", **kwargs) -> None:
+    def add_peer_in_net(
+        self, sock: "SSLSocket", peer_info: "PeerInfo", **kwargs
+    ) -> None:
         """Add given PeerInfo into current net's peer_pool.
 
         Args:
-            sock: A Socket object to be add.
+            sock: A SSLSocket object to be add.
             peer_info: A PeerInfo object to be add.
 
         Raises:

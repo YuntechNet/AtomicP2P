@@ -26,7 +26,7 @@ class DisconnectHandler(Handler):
             return True
         return False
 
-    def post_send(self, pkt: "Packet", sock: "Socket"):
+    def post_send(self, pkt: "Packet", sock: "SSLSocket"):
         if self.__disconnect_unregister(host=pkt.dst) is True:
             self.peer.logger.info("Sended Stop Signal to {}, Stopped.".format(pkt.dst))
         else:
