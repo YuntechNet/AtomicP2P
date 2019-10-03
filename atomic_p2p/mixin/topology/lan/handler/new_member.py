@@ -10,7 +10,7 @@ class NewMemberHandler(Handler):
     def __init__(self, peer):
         super().__init__(pkt_type=type(self).pkt_type, peer=peer)
 
-    def on_send_pkt(self, target, peer_info):
+    def _build_accept_packet(self, target, peer_info):
         data = {
             "name": peer_info.name,
             "addr": peer_info.host[0],

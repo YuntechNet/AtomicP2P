@@ -11,7 +11,7 @@ class CheckHandler(Handler):
         super().__init__(pkt_type=type(self).pkt_type, peer=monitor.peer)
         self.monitor = monitor
 
-    def on_send_pkt(self, target):
+    def _build_accept_packet(self, target):
         self.monitor.peer_status_update_by_host(host=target)
         data = {"send_ts": time.time()}
         return Packet(

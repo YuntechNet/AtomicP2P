@@ -145,7 +145,7 @@ class LanTopologyMixin(TopologyABC):
             self.logger.info("Unknow handler pkt_type")
         elif self.is_peer_in_net(info=host) is True:
             sock, _ = self.get_peer_info_by_host(host=host)
-            pkt = handler.on_send(target=host, **kwargs)
+            pkt = handler.build_packet(target=host, **kwargs)
             self.pend_packet(sock=sock, pkt=pkt)
         else:
             self.logger.info("Host not in current net.")
@@ -170,7 +170,7 @@ class LanTopologyMixin(TopologyABC):
         else:
             for (_, (sock, peer_info)) in self.peer_pool.items():
                 if host[1] == "all" or host[1] == peer_info.role:
-                    pkt = handler.on_send(target=peer_info.host, **kwargs)
+                    pkt = handler.build_packet(target=peer_info.host, **kwargs)
                     self.pend_packet(sock=sock, pkt=pkt)
 
     def join_net(self, host: Tuple[str, int], **kwargs) -> None:
@@ -184,7 +184,7 @@ class LanTopologyMixin(TopologyABC):
         """
         assert host_valid(host) is True
         handler = self.select_handler(pkt_type=JoinHandler.pkt_type)
-        pkt = handler.on_send(target=host)
+        pkt = handler.build_packet(target=host)
 
         sock = self.new_tcp_long_conn(dst=host)
         self.register_socket(sock=sock)

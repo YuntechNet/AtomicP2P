@@ -33,23 +33,28 @@ class Handler(object):
         return self.__pkt_type
 
     def pre_send(self, pkt: "Packet", **kwargs) -> None:
+        """Call before a packet been sent with given socket."""
         pass
 
-    def on_send(self, target: Tuple[str, int], **kwargs) -> "Packet":
+    def build_packet(self, target: Tuple[str, int], **kwargs) -> "Packet":
+        """Call by application layer to build packet for its Handler."""
         if "reject_data" in locals()["kwargs"]:
-            return self.on_send_reject_pkt(target=target, **kwargs)
+            return self._build_reject_packet(target=target, **kwargs)
         else:
-            return self.on_send_pkt(target=target, **kwargs)
+            return self._build_accept_packet(target=target, **kwargs)
 
-    def on_send_pkt(self, target: Tuple[str, int], **kwargs) -> "Packet":
+    def _build_accept_packet(self, target: Tuple[str, int], **kwargs) -> "Packet":
+        """Call by build_packet method to build a accept packet.
+        This method should be overide.
+        """
         raise NotImplementedError
 
-    def post_send(self, pkt: "Packet", sock: "Socket", **kwargs) -> None:
-        pass
-
-    def on_send_reject_pkt(
+    def _build_reject_packet(
         self, target: Tuple[str, int], reject_data: object, **kwargs
     ) -> "Packet":
+        """Call by build_packet method to build a reject packet.
+        This method can be override, but it is optional.
+        """
         packet = Packet(
             dst=target,
             src=self.peer.server_info.host,
@@ -60,14 +65,18 @@ class Handler(object):
         packet.set_reject(reject_data=reject_data)
         return packet
 
+    def post_send(self, pkt: "Packet", sock: "Socket", **kwargs) -> None:
+        """Call after a packet been sent with given socket."""
+        pass
+
     def on_recv(
-        self, src: Tuple[str, int], pkt: Packet, sock: "SSLSocket", **kwargs
+        self, src: Tuple[str, int], pkt: Packet, sock: "Socket", **kwargs
     ) -> None:
         """
         Args:
             src: Source host.
             pkt: A Packet object contains all data which recieved.
-            sock: A SSLSocket object who recv this pkt.
+            sock: A Socket object who recv this pkt.
         """
         assert host_valid(src) is True
         if pkt.is_reject():
@@ -76,12 +85,12 @@ class Handler(object):
             self.on_recv_pkt(src=src, pkt=pkt, conn=sock, **kwargs)
 
     def on_recv_pkt(
-        self, src: Tuple[str, int], pkt: "Packet", conn: "SSLSocket", **kwargs
+        self, src: Tuple[str, int], pkt: "Packet", conn: "Socket", **kwargs
     ) -> None:
         raise NotImplementedError
 
     def on_recv_reject_pkt(
-        self, src: Tuple[str, int], pkt: "Packet", conn: "SSLSocket", **kwargs
+        self, src: Tuple[str, int], pkt: "Packet", conn: "Socket", **kwargs
     ) -> None:
         reject = pkt.data["reject"]
         self.__peer.logger.info("Rejected by {}, reason: {}".format(pkt.src, reject))

@@ -9,7 +9,7 @@ class DisconnectHandler(Handler):
     def __init__(self, peer):
         super().__init__(pkt_type=type(self).pkt_type, peer=peer)
 
-    def on_send_pkt(self, target):
+    def _build_accept_packet(self, target):
         return Packet(
             dst=target,
             src=self.peer.server_info.host,

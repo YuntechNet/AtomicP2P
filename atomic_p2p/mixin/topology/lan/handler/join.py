@@ -12,7 +12,7 @@ class JoinHandler(Handler):
         super().__init__(pkt_type=type(self).pkt_type, peer=peer)
         self.last_join_host = None
 
-    def on_send_pkt(self, target):
+    def _build_accept_packet(self, target):
         self.peer.logger.info("Joining net to:{}".format(str(target)))
         data = {
             "name": self.peer.server_info.name,
