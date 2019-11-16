@@ -2,10 +2,9 @@ from typing import Tuple, Union, List
 from errno import ECONNREFUSED
 from socket import error as socket_error
 
-from atomic_p2p.abc import TopologyABC
-from atomic_p2p.utils import host_valid
-from atomic_p2p.peer.entity import PeerInfo
-
+from ....abc import TopologyABC
+from ....utils import host_valid
+from ....peer.entity import PeerInfo
 from .handler import (
     JoinHandler,
     CheckJoinHandler,

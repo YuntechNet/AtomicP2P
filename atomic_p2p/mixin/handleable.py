@@ -2,7 +2,7 @@ from typing import Union
 from types import FunctionType, MethodType
 from inspect import currentframe
 
-from atomic_p2p.communication import Handler
+from ..communication import Handler
 
 
 class HandleableMixin(object):

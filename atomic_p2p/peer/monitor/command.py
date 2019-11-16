@@ -1,7 +1,5 @@
-from atomic_p2p.communication.command import Command
-
-from atomic_p2p.peer.entity.peer_status import StatusType
-
+from ...communication.command import Command
+from ..entity.peer_status import StatusType
 from .communication import CheckHandler
 
 

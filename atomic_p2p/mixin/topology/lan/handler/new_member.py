@@ -1,6 +1,5 @@
-from atomic_p2p.communication import Handler, Packet
-from atomic_p2p.peer.entity import PeerInfo
-
+from .....communication import Handler, Packet
+from .....peer.entity import PeerInfo
 from .ack_new_member import AckNewMemberHandler
 
 

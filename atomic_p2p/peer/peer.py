@@ -8,16 +8,15 @@ from queue import Queue
 from time import sleep
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_REUSEPORT
 
-from atomic_p2p.utils import host_valid, DNSResolver
-from atomic_p2p.logging import getLogger
-from atomic_p2p.communication import Packet
-from atomic_p2p.mixin import (
+from ..utils import host_valid, DNSResolver
+from ..logging import getLogger
+from ..communication import Packet
+from ..mixin import (
     HandleableMixin,
     CommandableMixin,
     DefaultAuthenticatorMixin,
     LanTopologyMixin,
 )
-
 from .entity import PeerInfo, StatusType
 from .command import HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
 from .communication import MessageHandler

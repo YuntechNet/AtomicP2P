@@ -1,6 +1,6 @@
 from multiprocessing import Process, Event
 
-from atomic_p2p.logging import getLogger
+from ..logging import getLogger
 
 
 class ProcManager(Process):

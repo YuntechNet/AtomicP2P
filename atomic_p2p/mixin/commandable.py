@@ -1,4 +1,4 @@
-from atomic_p2p.communication import Command
+from ..communication import Command
 
 
 class CommandableMixin(object):

@@ -1,6 +1,5 @@
-from atomic_p2p.communication.command import Command
-from atomic_p2p.mixin.topology.lan.handler import JoinHandler, DisconnectHandler
-
+from ..communication.command import Command
+from ..mixin.topology.lan.handler import JoinHandler, DisconnectHandler
 from .entity.peer_info import PeerInfo
 from .communication import MessageHandler
 

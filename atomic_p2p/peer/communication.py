@@ -1,4 +1,4 @@
-from atomic_p2p.communication import Packet, Handler
+from ..communication import Packet, Handler
 
 
 class MessageHandler(Handler):

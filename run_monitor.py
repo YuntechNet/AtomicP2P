@@ -3,19 +3,14 @@ import socket
 import base64
 from threading import Thread
 from Crypto.Cipher import AES
-from prompt_toolkit import prompt
-from prompt_toolkit.patch_stdout import patch_stdout
 
-from atomic_p2p.utils.manager import ThreadManager
+from atomic_p2p.manager import ThreadManager
 
 
-class LoggerRecver(ThreadManager):
-
+class LoggerReceiver(ThreadManager):
     def __init__(self, password):
-        super(LoggerRecver, self).__init__(loopDelay=0.1, auto_register=False,
-                                           logger: "logging.Logger" = None)
-        self.cipher = AES.new(password, AES.MODE_CBC,
-                              "0000000000000000".encode())
+        super().__init__(loopDelay=0.1, logger=None)
+        self.password = password
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("localhost", 17032))
 
@@ -25,13 +20,16 @@ class LoggerRecver(ThreadManager):
     def registerCommand(self):
         pass
 
+    def new_cipher(self, key: str):
+        return AES.new(key.encode(), AES.MODE_CBC, "0000000000000000".encode())
+
     def encrypt(self, raw_data):
         if len(raw_data) % 16 != 0:
             raw_data += " " * (16 - len(raw_data) % 16)
-        return self.cipher.encrypt(raw_data)
+        return self.new_cipher(key=self.password).encrypt(raw_data.encode())
 
     def decrypt(self, enc_data):
-        return self.cipher.decrypt(enc_data)
+        return self.new_cipher(key=self.password).decrypt(enc_data)
 
     def run(self):
         while not self.stopped.wait(self.loopDelay):
@@ -58,23 +56,22 @@ if __name__ == "__main__":
     parser.add_argument("password", type=min_length)
     arg = parser.parse_args()
 
-    logRecver = LoggerRecver(password=arg.password)
+    logRecver = LoggerReceiver(password=arg.password)
     logRecver.start()
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     while True:
         try:
-            with patch_stdout():
-                user_input = prompt("> ")
-                if user_input.upper() == "C:CLOSE":
-                    sock.close()
-                elif user_input.upper() == "C:STOP":
-                    logRecver.stop()
-                    break
-                else:
-                    enc_data = logRecver.encrypt(raw_data=user_input)
-                    sock.sendto(enc_data, ("localhost", 17031))
+            user_input = input("> ")
+            if user_input.upper() == "C:CLOSE":
+                sock.close()
+            elif user_input.upper() == "C:STOP":
+                logRecver.stop()
+                break
+            else:
+                enc_data = logRecver.encrypt(raw_data=user_input)
+                sock.sendto(enc_data, ("localhost", 17031))
         except KeyboardInterrupt:
             sock.close()
             logRecver.stop()

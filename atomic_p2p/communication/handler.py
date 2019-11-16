@@ -1,7 +1,6 @@
 from typing import Tuple
 
-from atomic_p2p.utils import host_valid
-
+from ..utils import host_valid
 from .packet import Packet
 
 

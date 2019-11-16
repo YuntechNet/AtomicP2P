@@ -1,4 +1,4 @@
-from atomic_p2p.abc import AuthenticatorABC
+from ...abc import AuthenticatorABC
 
 
 class DefaultAuthenticatorMixin(AuthenticatorABC):

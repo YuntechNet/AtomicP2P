@@ -1,5 +1,5 @@
-from atomic_p2p.communication import Handler, Packet
-from atomic_p2p.peer.entity import PeerInfo
+from .....communication import Handler, Packet
+from .....peer.entity import PeerInfo
 
 
 class CheckJoinHandler(Handler):

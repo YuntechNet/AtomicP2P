@@ -1,7 +1,7 @@
 from typing import Union, Dict, Tuple
 from json import loads, dumps
 
-from atomic_p2p.utils import host_valid
+from ..utils import host_valid
 
 
 class Packet(object):

@@ -2,8 +2,7 @@ from typing import Tuple
 from time import sleep
 from threading import Thread, Event
 
-from atomic_p2p.logging import getLogger
-
+from ..logging import getLogger
 from .peer import Peer
 
 
