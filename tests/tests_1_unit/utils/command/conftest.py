@@ -1,8 +1,9 @@
 
-import pytest
-from atomic_p2p.utils.command import Command
+from pytest import fixture
+
+from atomic_p2p.communication.command import Command
 
 
-@pytest.fixture(scope="class")
+@fixture(scope="class")
 def command():
     return Command(None)

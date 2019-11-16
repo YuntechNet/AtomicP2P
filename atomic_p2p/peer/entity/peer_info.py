@@ -1,4 +1,4 @@
-from atomic_p2p.peer.entity.peer_status import PeerStatus, StatusType
+from .peer_status import PeerStatus, StatusType
 
 
 class PeerInfo(object):

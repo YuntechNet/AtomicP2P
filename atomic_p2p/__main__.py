@@ -1,8 +1,8 @@
 from argparse import ArgumentParser
 
-from atomic_p2p import AtomicP2P
-from atomic_p2p.local_monitor import LocalMonitor
-from atomic_p2p.utils.logging import getLogger
+from . import AtomicP2P
+from .logging import getLogger
+from .local_monitor import LocalMonitor
 
 
 def min_length(data):

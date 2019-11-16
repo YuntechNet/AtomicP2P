@@ -1,9 +1,9 @@
 from os import getcwd
 from os.path import join
 
+from atomic_p2p.logging import getLogger
 from atomic_p2p.peer import ThreadPeer
-from atomic_p2p.utils.security import create_self_signed_cert as cssc, self_hash
-from atomic_p2p.utils.logging import getLogger
+from atomic_p2p.utils import create_self_signed_cert as cssc, self_hash
 
 
 __version__ = "0.0.5"
@@ -66,17 +66,15 @@ class AtomicP2P(object):
         service_key = cmd[0].lower()
         if service_key in self.services:
             return (True, self.services[service_key]._on_command(cmd[1:]))
-        elif service_key in ["help", "?"]:
-            help_tips = (
-                "peer help            - See peer's help\n"
-                "monitor help        - See monitor's help\n"
-                "exit/stop            - exit the whole program.\n"
-            )
-            return (True, help_tips)
         elif service_key == "monitor":
             return (True, self.services["peer"]._on_command(cmd[1:]))
         elif service_key == "stop":
             self.stop()
             return (True, None)
         else:
-            return (False, None)
+            help_tips = (
+                "peer help            - See peer's help\n"
+                "monitor help        - See monitor's help\n"
+                "exit/stop            - exit the whole program.\n"
+            )
+            return (True, help_tips)

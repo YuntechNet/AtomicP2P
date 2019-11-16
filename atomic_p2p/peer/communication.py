@@ -1,0 +1,24 @@
+from ..communication import Packet, Handler
+
+
+class MessageHandler(Handler):
+    pkt_type = "message"
+
+    def __init__(self, peer):
+        super().__init__(pkt_type=type(self).pkt_type, peer=peer)
+
+    def on_send_pkt(self, target, msg):
+        data = {"message": msg}
+        return Packet(
+            dst=target,
+            src=self.peer.server_info.host,
+            program_hash=self.peer.program_hash,
+            _type=type(self).pkt_type,
+            _data=data,
+        )
+
+    def on_recv_pkt(self, src, pkt, conn):
+        data = pkt.data
+        message = "Message from {}: {}".format(str(src), data["message"])
+        self.peer.last_output = message
+        self.peer.logger.info(message)

@@ -1,9 +1,8 @@
 from typing import Tuple
 import hashlib
 from os import listdir, getcwd
-from os.path import join, isfile, isdir
+from os.path import join, isfile, isdir, exists, join
 from OpenSSL import crypto
-from os.path import exists, join
 
 
 def create_self_signed_cert(

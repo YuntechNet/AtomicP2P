@@ -17,7 +17,7 @@ def test_two_peer(switch1, switch2):
 def test_three_peer(core1, switch1, switch2):
     switch1.join_net(host=core1.server_info.host)
     switch2.join_net(host=core1.server_info.host)
-    sleep(5)
+    sleep(8)
 
     switch1.monitor.verbose = True
     verbose = switch1.monitor._on_command(["manual", "None:sw"])

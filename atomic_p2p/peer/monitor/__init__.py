@@ -2,7 +2,10 @@ import traceback
 from typing import Tuple, List
 from threading import Thread, Event as tEvent
 
-from atomic_p2p.peer.monitor.command import (
+from ...mixin import CommandableMixin, HandleableMixin
+from ...logging import getLogger
+from ..entity import StatusType
+from .command import (
     HelpCmd,
     PauseCmd,
     PeriodCmd,
@@ -11,9 +14,7 @@ from atomic_p2p.peer.monitor.command import (
     VerboseCmd,
     ManualCmd,
 )
-from atomic_p2p.peer.monitor.communication import CheckHandler
-from atomic_p2p.utils.logging import getLogger
-from atomic_p2p.utils.mixin import CommandableMixin, HandleableMixin
+from .communication import CheckHandler
 
 
 class Monitor(Thread, CommandableMixin, HandleableMixin):
@@ -26,7 +27,7 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
         logger: "logging.Logger" = getLogger(__name__),
     ):
         self.peer = peer
-        super(Monitor, self).__init__()
+        super().__init__()
         self.logger = logger
         self.loopDelay = loop_delay
         self.stopped = tEvent()
@@ -68,14 +69,22 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
         self, addr: Tuple[str, int], pkt: "Packet", conn: "SSLSocket"
     ) -> None:
         if not pkt.is_reject():
-            peer_info = self.peer.get_peer_info_by_host(host=pkt.src)
-            if peer_info is not None:
-                peer_info.status.update()
+            self.peer_status_update_by_host(
+                host=pkt.src, status_type=StatusType.UPDATED
+            )
+
+    def peer_status_update_by_host(
+        self, host, status_type: "StatusType" = StatusType.PENDING
+    ):
+        peer_info = self.peer.get_peer_info_by_host(host=host)
+        if peer_info is not None:
+            peer_info.status.update(status_type=status_type)
 
     def removeMonitorlist(self, missing: List) -> None:
         for each in missing:
             try:
-                self.peer.pend_socket_to_rm(each.conn)
+                self.peer.del_peer_in_net(peer_info=each)
+                self.peer.unregister_socket(sock=each.conn)
                 self.logger.info(
                     ("{} has been remove from " "status list.").format(each)
                 )

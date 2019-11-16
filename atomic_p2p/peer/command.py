@@ -1,7 +1,7 @@
-from atomic_p2p.utils.command import Command
-from atomic_p2p.peer.entity.peer_info import PeerInfo
-from atomic_p2p.peer.communication.net import JoinHandler, DisconnectHandler
-from atomic_p2p.peer.communication.msg import MessageHandler
+from ..communication.command import Command
+from ..mixin.topology.lan.handler import JoinHandler, DisconnectHandler
+from .entity.peer_info import PeerInfo
+from .communication import MessageHandler
 
 
 class HelpCmd(Command):
@@ -11,7 +11,7 @@ class HelpCmd(Command):
     """
 
     def __init__(self, peer):
-        super(HelpCmd, self).__init__("help")
+        super().__init__("help")
         self.peer = peer
 
     def _execute(self, msg_arr):
@@ -42,7 +42,7 @@ class JoinCmd(Command):
     """
 
     def __init__(self, peer):
-        super(JoinCmd, self).__init__("join")
+        super().__init__("join")
         self.peer = peer
 
     def _execute(self, msg_arr):
@@ -65,7 +65,7 @@ class SendCmd(Command):
     """
 
     def __init__(self, peer):
-        super(SendCmd, self).__init__("send")
+        super().__init__("send")
         self.peer = peer
 
     def _execute(self, msg_arr):
@@ -91,7 +91,7 @@ class ListCmd(Command):
     """
 
     def __init__(self, peer):
-        super(ListCmd, self).__init__("list")
+        super().__init__("list")
         self.peer = peer
 
     def _execute(self, msg_arr):
@@ -112,12 +112,11 @@ class LeaveNetCmd(Command):
     """
 
     def __init__(self, peer):
-        super(LeaveNetCmd, self).__init__("leavenet")
+        super().__init__("leavenet")
         self.peer = peer
 
     def _execute(self, msg_arr):
         self.peer.handler_broadcast_packet(
             host=("", "all"), pkt_type=DisconnectHandler.pkt_type
         )
-        self.peer.peer_pool = {}
         self.peer.logger.info("You left net.")
