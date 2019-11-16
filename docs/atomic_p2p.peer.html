@@ -1,0 +1,877 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.peer package &#8212; AtomicP2P 0.0.6 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-peer-package">
+<h1>atomic_p2p.peer package<a class="headerlink" href="#atomic-p2p-peer-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="atomic_p2p.peer.entity.html">atomic_p2p.peer.entity package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.entity.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.entity.html#module-atomic_p2p.peer.entity.peer_info">atomic_p2p.peer.entity.peer_info module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.entity.html#module-atomic_p2p.peer.entity.peer_status">atomic_p2p.peer.entity.peer_status module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.entity.html#module-atomic_p2p.peer.entity">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="atomic_p2p.peer.monitor.html">atomic_p2p.peer.monitor package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.monitor.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor.command">atomic_p2p.peer.monitor.command module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor.communication">atomic_p2p.peer.monitor.communication module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atomic_p2p.peer.monitor.html#module-atomic_p2p.peer.monitor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.peer.command">
+<span id="atomic-p2p-peer-command-module"></span><h2>atomic_p2p.peer.command module<a class="headerlink" href="#module-atomic_p2p.peer.command" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.command.HelpCmd">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.command.</code><code class="descname">HelpCmd</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.HelpCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.command.Command" title="atomic_p2p.communication.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.command.Command</span></code></a></p>
+<p>show the help for peers.
+Usage in prompt: peer help [cmd]</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.command.JoinCmd">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.command.</code><code class="descname">JoinCmd</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.JoinCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.command.Command" title="atomic_p2p.communication.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.command.Command</span></code></a></p>
+<p>send a join request to a peer.
+Usage in prompt:</p>
+<blockquote>
+<div><p>peer join IP:PORT
+peer join DOMAIN [NS1,NS2,NS3]</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.command.LeaveNetCmd">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.command.</code><code class="descname">LeaveNetCmd</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.LeaveNetCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.command.Command" title="atomic_p2p.communication.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.command.Command</span></code></a></p>
+<p>leave the current net, this will clear monitor list and peer list.
+Usage in prompt: peer leavenet</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.command.ListCmd">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.command.</code><code class="descname">ListCmd</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.ListCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.command.Command" title="atomic_p2p.communication.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.command.Command</span></code></a></p>
+<p>list every linked peer’s host message in prompt.
+Usage in prompt: peer list</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.command.SendCmd">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.command.</code><code class="descname">SendCmd</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.command.SendCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.command.Command" title="atomic_p2p.communication.command.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.command.Command</span></code></a></p>
+<p>send a message to a specific peer or broadcast in prompt.
+Usage in prompt: peer send [ip:port/broadcast:all] [msg]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.peer.communication">
+<span id="atomic-p2p-peer-communication-module"></span><h2>atomic_p2p.peer.communication module<a class="headerlink" href="#module-atomic_p2p.peer.communication" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.communication.MessageHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.communication.</code><code class="descname">MessageHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.communication.MessageHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.peer.communication.MessageHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.communication.MessageHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.communication.MessageHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em>, <em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.communication.MessageHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.communication.MessageHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'message'</em><a class="headerlink" href="#atomic_p2p.peer.communication.MessageHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.peer.peer">
+<span id="atomic-p2p-peer-peer-module"></span><h2>atomic_p2p.peer.peer module<a class="headerlink" href="#module-atomic_p2p.peer.peer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.peer.Peer">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.peer.</code><code class="descname">Peer</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>program_hash</em>, <em>ns</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.peer.peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.mixin.html#atomic_p2p.mixin.handleable.HandleableMixin" title="atomic_p2p.mixin.handleable.HandleableMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.mixin.handleable.HandleableMixin</span></code></a>, <a class="reference internal" href="atomic_p2p.mixin.html#atomic_p2p.mixin.commandable.CommandableMixin" title="atomic_p2p.mixin.commandable.CommandableMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.mixin.commandable.CommandableMixin</span></code></a>, <a class="reference internal" href="atomic_p2p.mixin.topology.lan.html#atomic_p2p.mixin.topology.lan.LanTopologyMixin" title="atomic_p2p.mixin.topology.lan.LanTopologyMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.mixin.topology.lan.LanTopologyMixin</span></code></a>, <a class="reference internal" href="atomic_p2p.mixin.authenticator.html#atomic_p2p.mixin.authenticator.default_authenticator.DefaultAuthenticatorMixin" title="atomic_p2p.mixin.authenticator.default_authenticator.DefaultAuthenticatorMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.mixin.authenticator.default_authenticator.DefaultAuthenticatorMixin</span></code></a></p>
+<dl class="attribute">
+<dt id="atomic_p2p.peer.peer.Peer.server_info">
+<code class="descname">server_info</code><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.server_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Peer’s peer info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_info.PeerInfo" title="atomic_p2p.peer.entity.peer_info.PeerInfo">PeerInfo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.peer.Peer.pkt_handlers">
+<code class="descname">pkt_handlers</code><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.pkt_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>All handlers which peer have ability
+to process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[str, <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler">Handler</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.peer.Peer.peer_pool">
+<code class="descname">peer_pool</code><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.peer_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>All peers currently avai-
+lable in net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[Tuple[str, int], <a class="reference internal" href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_info.PeerInfo" title="atomic_p2p.peer.entity.peer_info.PeerInfo">PeerInfo</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer._Peer__on_accept">
+<code class="descname">_Peer__on_accept</code><span class="sig-paren">(</span><em>sock</em>, <em>mask</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer._Peer__on_accept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call when a new socket is connection by waiter socket.
+This will accept all sockets from outside, but it doesn’t mean every socket’s</p>
+<blockquote>
+<div><p>packet be process by higher layer.</p>
+</div></blockquote>
+<p>This is the 1st layer to process sockets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer._Peer__on_handle">
+<code class="descname">_Peer__on_handle</code><span class="sig-paren">(</span><em>sock</em>, <em>mask</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer._Peer__on_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide whether send or recv.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer._Peer__on_recv">
+<code class="descname">_Peer__on_recv</code><span class="sig-paren">(</span><em>sock</em>, <em>mask</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer._Peer__on_recv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method use when recieve socket data.
+This is 2th layer to process Packets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer._Peer__on_send">
+<code class="descname">_Peer__on_send</code><span class="sig-paren">(</span><em>sock</em>, <em>mask</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer._Peer__on_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method use when sending data to socket.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>program_hash</em>, <em>ns</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.peer.peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of PeerManager</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Binding host.</p></li>
+<li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Peer’s name in net.</p></li>
+<li><p><strong>role</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Peer’s role in net.</p></li>
+<li><p><strong>cert</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Cert file’s path.</p></li>
+<li><p><strong>program_hash</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Program self hash to send in packet.</p></li>
+<li><p><strong>ns</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Nameserver address for resolve DNS.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger for logging.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer._loop">
+<code class="descname">_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer._loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called inside infinite loop from outside inherited class.
+It’s use to call the method which given event is triggered.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer._on_packet">
+<code class="descname">_on_packet</code><span class="sig-paren">(</span><em>sock</em>, <em>pkt</em>, <em>handler</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer._on_packet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method use to process passed packet to higher application layer.
+This method will call by AuthenticatorMixin when a packet is passed examination.</p>
+<p>This is 3rd layer to process packet to handler. This is last layer to application layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.peer.Peer.connectlist">
+<code class="descname">connectlist</code><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.connectlist" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[~T]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.loop">
+<code class="descname">loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.loop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.loop_start">
+<code class="descname">loop_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.loop_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.loop_stop">
+<code class="descname">loop_stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.loop_stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.loop_stop_post">
+<code class="descname">loop_stop_post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.loop_stop_post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.new_tcp_long_conn">
+<code class="descname">new_tcp_long_conn</code><span class="sig-paren">(</span><em>dst</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.new_tcp_long_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a ssl-wrapped TCP socket with given destination host</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dst</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Specified socket destination.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>SSLSocket</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>A SSLSocket object which connected to destination host with</dt><dd><p>non-blocking.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If given dst variable is not in proper Tuple[str, int] type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.pend_packet">
+<code class="descname">pend_packet</code><span class="sig-paren">(</span><em>sock</em>, <em>pkt</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.pend_packet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pending pkt’s raw_data to queue’s with sepecific sock.
+Any exception when wrapping handler to packet whould cause this connec-
+tion been close and thread maintaining loop terminate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sock</strong> (<em>Socket</em>) – A Socket which wants to pend on its queue.</p></li>
+<li><p><strong>pkt</strong> (<a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><em>Packet</em></a>) – A Packet ready to be pend.</p></li>
+<li><p><strong>**kwargs</strong> – Any additional arguments needs by handler object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If given pkt variable is not in proper Packet type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.peer.Peer.program_hash">
+<code class="descname">program_hash</code><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.program_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.register_socket">
+<code class="descname">register_socket</code><span class="sig-paren">(</span><em>sock</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.register_socket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a new socket with packet queue &amp; selector.
+Init a packet queue and put into dict for further handling of packets.
+And the given socket will be register in selector for IO process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sock</strong> (<em>Socket</em>) – A Socket object which wants to be register.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.peer.Peer.send_queue">
+<code class="descname">send_queue</code><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.send_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">server_info</code></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.peer.Peer.unregister_socket">
+<code class="descname">unregister_socket</code><span class="sig-paren">(</span><em>sock</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.peer.Peer.unregister_socket" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.peer.process_peer">
+<span id="atomic-p2p-peer-process-peer-module"></span><h2>atomic_p2p.peer.process_peer module<a class="headerlink" href="#module-atomic_p2p.peer.process_peer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.process_peer.ProcessPeer">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.process_peer.</code><code class="descname">ProcessPeer</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>program_hash</em>, <em>ns=None</em>, <em>loop_delay=1</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.peer.process_peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.process_peer.ProcessPeer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atomic_p2p.peer.peer.Peer" title="atomic_p2p.peer.peer.Peer"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.peer.peer.Peer</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">multiprocessing.context.Process</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.peer.process_peer.ProcessPeer.is_start">
+<code class="descname">is_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.process_peer.ProcessPeer.is_start" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.process_peer.ProcessPeer.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.process_peer.ProcessPeer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to be run in sub-process; can be overridden in sub-class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.process_peer.ProcessPeer.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.process_peer.ProcessPeer.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start child process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.process_peer.ProcessPeer.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.process_peer.ProcessPeer.stop" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.peer.thread_peer">
+<span id="atomic-p2p-peer-thread-peer-module"></span><h2>atomic_p2p.peer.thread_peer module<a class="headerlink" href="#module-atomic_p2p.peer.thread_peer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.thread_peer.ThreadPeer">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.thread_peer.</code><code class="descname">ThreadPeer</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>program_hash</em>, <em>ns=None</em>, <em>loop_delay=1</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.peer.thread_peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.thread_peer.ThreadPeer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atomic_p2p.peer.peer.Peer" title="atomic_p2p.peer.peer.Peer"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.peer.peer.Peer</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.peer.thread_peer.ThreadPeer.is_start">
+<code class="descname">is_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.thread_peer.ThreadPeer.is_start" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.thread_peer.ThreadPeer.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.thread_peer.ThreadPeer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.thread_peer.ThreadPeer.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.thread_peer.ThreadPeer.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the thread’s activity.</p>
+<p>It must be called at most once per thread object. It arranges for the
+object’s run() method to be invoked in a separate thread of control.</p>
+<p>This method will raise a RuntimeError if called more than once on the
+same thread object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.thread_peer.ThreadPeer.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.thread_peer.ThreadPeer.stop" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.peer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.peer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.Peer">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.</code><code class="descname">Peer</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>program_hash</em>, <em>ns</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.peer.peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.mixin.html#atomic_p2p.mixin.handleable.HandleableMixin" title="atomic_p2p.mixin.handleable.HandleableMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.mixin.handleable.HandleableMixin</span></code></a>, <a class="reference internal" href="atomic_p2p.mixin.html#atomic_p2p.mixin.commandable.CommandableMixin" title="atomic_p2p.mixin.commandable.CommandableMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.mixin.commandable.CommandableMixin</span></code></a>, <a class="reference internal" href="atomic_p2p.mixin.topology.lan.html#atomic_p2p.mixin.topology.lan.LanTopologyMixin" title="atomic_p2p.mixin.topology.lan.LanTopologyMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.mixin.topology.lan.LanTopologyMixin</span></code></a>, <a class="reference internal" href="atomic_p2p.mixin.authenticator.html#atomic_p2p.mixin.authenticator.default_authenticator.DefaultAuthenticatorMixin" title="atomic_p2p.mixin.authenticator.default_authenticator.DefaultAuthenticatorMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.mixin.authenticator.default_authenticator.DefaultAuthenticatorMixin</span></code></a></p>
+<dl class="attribute">
+<dt id="atomic_p2p.peer.Peer.server_info">
+<code class="descname">server_info</code><a class="headerlink" href="#atomic_p2p.peer.Peer.server_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Peer’s peer info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_info.PeerInfo" title="atomic_p2p.peer.entity.peer_info.PeerInfo">PeerInfo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.Peer.pkt_handlers">
+<code class="descname">pkt_handlers</code><a class="headerlink" href="#atomic_p2p.peer.Peer.pkt_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>All handlers which peer have ability
+to process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[str, <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler">Handler</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.Peer.peer_pool">
+<code class="descname">peer_pool</code><a class="headerlink" href="#atomic_p2p.peer.Peer.peer_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>All peers currently avai-
+lable in net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[Tuple[str, int], <a class="reference internal" href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_info.PeerInfo" title="atomic_p2p.peer.entity.peer_info.PeerInfo">PeerInfo</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer._Peer__on_accept">
+<code class="descname">_Peer__on_accept</code><span class="sig-paren">(</span><em>sock</em>, <em>mask</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer._Peer__on_accept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call when a new socket is connection by waiter socket.
+This will accept all sockets from outside, but it doesn’t mean every socket’s</p>
+<blockquote>
+<div><p>packet be process by higher layer.</p>
+</div></blockquote>
+<p>This is the 1st layer to process sockets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer._Peer__on_handle">
+<code class="descname">_Peer__on_handle</code><span class="sig-paren">(</span><em>sock</em>, <em>mask</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer._Peer__on_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide whether send or recv.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer._Peer__on_recv">
+<code class="descname">_Peer__on_recv</code><span class="sig-paren">(</span><em>sock</em>, <em>mask</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer._Peer__on_recv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method use when recieve socket data.
+This is 2th layer to process Packets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer._Peer__on_send">
+<code class="descname">_Peer__on_send</code><span class="sig-paren">(</span><em>sock</em>, <em>mask</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer._Peer__on_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method use when sending data to socket.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>program_hash</em>, <em>ns</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.peer.peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of PeerManager</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Binding host.</p></li>
+<li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Peer’s name in net.</p></li>
+<li><p><strong>role</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Peer’s role in net.</p></li>
+<li><p><strong>cert</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Cert file’s path.</p></li>
+<li><p><strong>program_hash</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Program self hash to send in packet.</p></li>
+<li><p><strong>ns</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Nameserver address for resolve DNS.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger for logging.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer._loop">
+<code class="descname">_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer._loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called inside infinite loop from outside inherited class.
+It’s use to call the method which given event is triggered.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer._on_packet">
+<code class="descname">_on_packet</code><span class="sig-paren">(</span><em>sock</em>, <em>pkt</em>, <em>handler</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer._on_packet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method use to process passed packet to higher application layer.
+This method will call by AuthenticatorMixin when a packet is passed examination.</p>
+<p>This is 3rd layer to process packet to handler. This is last layer to application layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.Peer.connectlist">
+<code class="descname">connectlist</code><a class="headerlink" href="#atomic_p2p.peer.Peer.connectlist" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[~T]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.loop">
+<code class="descname">loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.loop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.loop_start">
+<code class="descname">loop_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.loop_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.loop_stop">
+<code class="descname">loop_stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.loop_stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.loop_stop_post">
+<code class="descname">loop_stop_post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.loop_stop_post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.new_tcp_long_conn">
+<code class="descname">new_tcp_long_conn</code><span class="sig-paren">(</span><em>dst</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.new_tcp_long_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a ssl-wrapped TCP socket with given destination host</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dst</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Specified socket destination.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>SSLSocket</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>A SSLSocket object which connected to destination host with</dt><dd><p>non-blocking.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If given dst variable is not in proper Tuple[str, int] type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.pend_packet">
+<code class="descname">pend_packet</code><span class="sig-paren">(</span><em>sock</em>, <em>pkt</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.pend_packet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pending pkt’s raw_data to queue’s with sepecific sock.
+Any exception when wrapping handler to packet whould cause this connec-
+tion been close and thread maintaining loop terminate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sock</strong> (<em>Socket</em>) – A Socket which wants to pend on its queue.</p></li>
+<li><p><strong>pkt</strong> (<a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><em>Packet</em></a>) – A Packet ready to be pend.</p></li>
+<li><p><strong>**kwargs</strong> – Any additional arguments needs by handler object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If given pkt variable is not in proper Packet type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.Peer.program_hash">
+<code class="descname">program_hash</code><a class="headerlink" href="#atomic_p2p.peer.Peer.program_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.register_socket">
+<code class="descname">register_socket</code><span class="sig-paren">(</span><em>sock</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.register_socket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a new socket with packet queue &amp; selector.
+Init a packet queue and put into dict for further handling of packets.
+And the given socket will be register in selector for IO process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sock</strong> (<em>Socket</em>) – A Socket object which wants to be register.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.Peer.send_queue">
+<code class="descname">send_queue</code><a class="headerlink" href="#atomic_p2p.peer.Peer.send_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">server_info</code></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.Peer.unregister_socket">
+<code class="descname">unregister_socket</code><span class="sig-paren">(</span><em>sock</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.Peer.unregister_socket" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.ThreadPeer">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.</code><code class="descname">ThreadPeer</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>program_hash</em>, <em>ns=None</em>, <em>loop_delay=1</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.peer.thread_peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ThreadPeer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atomic_p2p.peer.peer.Peer" title="atomic_p2p.peer.peer.Peer"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.peer.peer.Peer</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.peer.ThreadPeer.is_start">
+<code class="descname">is_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ThreadPeer.is_start" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.ThreadPeer.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ThreadPeer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.ThreadPeer.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ThreadPeer.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the thread’s activity.</p>
+<p>It must be called at most once per thread object. It arranges for the
+object’s run() method to be invoked in a separate thread of control.</p>
+<p>This method will raise a RuntimeError if called more than once on the
+same thread object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.ThreadPeer.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ThreadPeer.stop" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.ProcessPeer">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.</code><code class="descname">ProcessPeer</code><span class="sig-paren">(</span><em>host</em>, <em>name</em>, <em>role</em>, <em>cert</em>, <em>program_hash</em>, <em>ns=None</em>, <em>loop_delay=1</em>, <em>auto_register=False</em>, <em>logger=&lt;Logger atomic_p2p.peer.process_peer (DEBUG)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ProcessPeer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atomic_p2p.peer.peer.Peer" title="atomic_p2p.peer.peer.Peer"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.peer.peer.Peer</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">multiprocessing.context.Process</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.peer.ProcessPeer.is_start">
+<code class="descname">is_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ProcessPeer.is_start" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.ProcessPeer.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ProcessPeer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to be run in sub-process; can be overridden in sub-class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.ProcessPeer.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ProcessPeer.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start child process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.ProcessPeer.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.ProcessPeer.stop" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.peer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

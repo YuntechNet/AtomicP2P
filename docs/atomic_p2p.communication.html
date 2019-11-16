@@ -1,0 +1,729 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.communication package &#8212; AtomicP2P 0.0.6 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-communication-package">
+<h1>atomic_p2p.communication package<a class="headerlink" href="#atomic-p2p-communication-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.communication.command">
+<span id="atomic-p2p-communication-command-module"></span><h2>atomic_p2p.communication.command module<a class="headerlink" href="#module-atomic_p2p.communication.command" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.communication.command.Command">
+<em class="property">class </em><code class="descclassname">atomic_p2p.communication.command.</code><code class="descname">Command</code><span class="sig-paren">(</span><em>cmd</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.command.Command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.communication.command.Command.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>cmd</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.command.Command.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of Command class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cmd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – unique key for command.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.command.Command._execute">
+<code class="descname">_execute</code><span class="sig-paren">(</span><em>msg_arr</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.command.Command._execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of each subclass, this defines how the command actual work</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.command.Command._on_command_recv">
+<code class="descname">_on_command_recv</code><span class="sig-paren">(</span><em>msg_arr</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.command.Command._on_command_recv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Precheck when command is trigger</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg_arr</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>) – command with arguments split into array.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>command’s process result.
+Any exception will cause command annotations been print.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.communication.handler">
+<span id="atomic-p2p-communication-handler-module"></span><h2>atomic_p2p.communication.handler module<a class="headerlink" href="#module-atomic_p2p.communication.handler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.communication.handler.Handler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.communication.handler.</code><code class="descname">Handler</code><span class="sig-paren">(</span><em>peer</em>, <em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for every handler
+This class responsible for wrapping / handler pkt send and recieve.
+Including accepted or rejected packet.</p>
+<p>The actual data maintain is by Packet class.</p>
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>peer</em>, <em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of Handler class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peer</strong> (<a class="reference internal" href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer" title="atomic_p2p.peer.peer.Peer"><em>Peer</em></a>) – A Peer object to interact with its inner data.</p></li>
+<li><p><strong>pkt_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – A unique string to represent this pkt in peer when proce-
+ssing packets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.on_recv">
+<code class="descname">on_recv</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>sock</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.on_recv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Source host.</p></li>
+<li><p><strong>pkt</strong> (<a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a>) – A Packet object contains all data which recieved.</p></li>
+<li><p><strong>sock</strong> (<em>SSLSocket</em>) – A SSLSocket object who recv this pkt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.on_recv_reject_pkt">
+<code class="descname">on_recv_reject_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.on_recv_reject_pkt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.on_send">
+<code class="descname">on_send</code><span class="sig-paren">(</span><em>target</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.on_send" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.on_send_reject_pkt">
+<code class="descname">on_send_reject_pkt</code><span class="sig-paren">(</span><em>target</em>, <em>reject_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.on_send_reject_pkt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.handler.Handler.peer">
+<code class="descname">peer</code><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.peer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer" title="atomic_p2p.peer.peer.Peer">Peer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.handler.Handler.pkt_type">
+<code class="descname">pkt_type</code><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.post_send">
+<code class="descname">post_send</code><span class="sig-paren">(</span><em>pkt</em>, <em>sock</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.post_send" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.handler.Handler.pre_send">
+<code class="descname">pre_send</code><span class="sig-paren">(</span><em>pkt</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.handler.Handler.pre_send" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.communication.packet">
+<span id="atomic-p2p-communication-packet-module"></span><h2>atomic_p2p.communication.packet module<a class="headerlink" href="#module-atomic_p2p.communication.packet" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.communication.packet.Packet">
+<em class="property">class </em><code class="descclassname">atomic_p2p.communication.packet.</code><code class="descname">Packet</code><span class="sig-paren">(</span><em>dst</em>, <em>src</em>, <em>program_hash</em>, <em>_type</em>, <em>_data</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is about how actual information been parse to datas</p>
+<dl class="method">
+<dt id="atomic_p2p.communication.packet.Packet.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>dst</em>, <em>src</em>, <em>program_hash</em>, <em>_type</em>, <em>_data</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of Packet class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dst</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Packet is made by who.</p></li>
+<li><p><strong>src</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Packet is sending to where.</p></li>
+<li><p><strong>program_hash</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Sender’s security hash.
+None means it’s a reject packet need to hide security hash.</p></li>
+<li><p><strong>_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Unique handler key to determine packet made by what handler.</p></li>
+<li><p><strong>_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[~KT, ~VT]) – A dict object to payload on.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.packet.Packet.clone">
+<code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.clone" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.packet.Packet.data">
+<code class="descname">data</code><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="atomic_p2p.communication.packet.Packet.deserilize">
+<em class="property">static </em><code class="descname">deserilize</code><span class="sig-paren">(</span><em>raw_data</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.deserilize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is serilizer convert data from utf-8 format string to Packet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.packet.Packet.dst">
+<code class="descname">dst</code><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.dst" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.packet.Packet.export">
+<code class="descname">export</code><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.export" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.packet.Packet.is_reject">
+<code class="descname">is_reject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.is_reject" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.packet.Packet.program_hash">
+<code class="descname">program_hash</code><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.program_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.packet.Packet.redirect_to_host">
+<code class="descname">redirect_to_host</code><span class="sig-paren">(</span><em>src</em>, <em>dst</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.redirect_to_host" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="atomic_p2p.communication.packet.Packet.serilize">
+<em class="property">static </em><code class="descname">serilize</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.serilize" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.packet.Packet.set_reject">
+<code class="descname">set_reject</code><span class="sig-paren">(</span><em>reject_data</em>, <em>maintain_data=False</em>, <em>maintain_secret=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.set_reject" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.packet.Packet.src">
+<code class="descname">src</code><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.src" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.packet.Packet.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.packet.Packet.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.communication">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.communication" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.communication.Command">
+<em class="property">class </em><code class="descclassname">atomic_p2p.communication.</code><code class="descname">Command</code><span class="sig-paren">(</span><em>cmd</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="atomic_p2p.communication.Command.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>cmd</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Command.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of Command class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cmd</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – unique key for command.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Command._execute">
+<code class="descname">_execute</code><span class="sig-paren">(</span><em>msg_arr</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Command._execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of each subclass, this defines how the command actual work</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Command._on_command_recv">
+<code class="descname">_on_command_recv</code><span class="sig-paren">(</span><em>msg_arr</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Command._on_command_recv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Precheck when command is trigger</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg_arr</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>) – command with arguments split into array.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>command’s process result.
+Any exception will cause command annotations been print.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.communication.Handler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.communication.</code><code class="descname">Handler</code><span class="sig-paren">(</span><em>peer</em>, <em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for every handler
+This class responsible for wrapping / handler pkt send and recieve.
+Including accepted or rejected packet.</p>
+<p>The actual data maintain is by Packet class.</p>
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>peer</em>, <em>pkt_type</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of Handler class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peer</strong> (<a class="reference internal" href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer" title="atomic_p2p.peer.peer.Peer"><em>Peer</em></a>) – A Peer object to interact with its inner data.</p></li>
+<li><p><strong>pkt_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – A unique string to represent this pkt in peer when proce-
+ssing packets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.on_recv">
+<code class="descname">on_recv</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>sock</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.on_recv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Source host.</p></li>
+<li><p><strong>pkt</strong> (<a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a>) – A Packet object contains all data which recieved.</p></li>
+<li><p><strong>sock</strong> (<em>SSLSocket</em>) – A SSLSocket object who recv this pkt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.on_recv_reject_pkt">
+<code class="descname">on_recv_reject_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.on_recv_reject_pkt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.on_send">
+<code class="descname">on_send</code><span class="sig-paren">(</span><em>target</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.on_send" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.on_send_reject_pkt">
+<code class="descname">on_send_reject_pkt</code><span class="sig-paren">(</span><em>target</em>, <em>reject_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.on_send_reject_pkt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.Handler.peer">
+<code class="descname">peer</code><a class="headerlink" href="#atomic_p2p.communication.Handler.peer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atomic_p2p.peer.html#atomic_p2p.peer.peer.Peer" title="atomic_p2p.peer.peer.Peer">Peer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.Handler.pkt_type">
+<code class="descname">pkt_type</code><a class="headerlink" href="#atomic_p2p.communication.Handler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.post_send">
+<code class="descname">post_send</code><span class="sig-paren">(</span><em>pkt</em>, <em>sock</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.post_send" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Handler.pre_send">
+<code class="descname">pre_send</code><span class="sig-paren">(</span><em>pkt</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Handler.pre_send" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.communication.Packet">
+<em class="property">class </em><code class="descclassname">atomic_p2p.communication.</code><code class="descname">Packet</code><span class="sig-paren">(</span><em>dst</em>, <em>src</em>, <em>program_hash</em>, <em>_type</em>, <em>_data</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is about how actual information been parse to datas</p>
+<dl class="method">
+<dt id="atomic_p2p.communication.Packet.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>dst</em>, <em>src</em>, <em>program_hash</em>, <em>_type</em>, <em>_data</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of Packet class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dst</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Packet is made by who.</p></li>
+<li><p><strong>src</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Packet is sending to where.</p></li>
+<li><p><strong>program_hash</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Sender’s security hash.
+None means it’s a reject packet need to hide security hash.</p></li>
+<li><p><strong>_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Unique handler key to determine packet made by what handler.</p></li>
+<li><p><strong>_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[~KT, ~VT]) – A dict object to payload on.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Packet.clone">
+<code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet.clone" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.Packet.data">
+<code class="descname">data</code><a class="headerlink" href="#atomic_p2p.communication.Packet.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="atomic_p2p.communication.Packet.deserilize">
+<em class="property">static </em><code class="descname">deserilize</code><span class="sig-paren">(</span><em>raw_data</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet.deserilize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is serilizer convert data from utf-8 format string to Packet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.communication.packet.Packet" title="atomic_p2p.communication.packet.Packet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Packet</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.Packet.dst">
+<code class="descname">dst</code><a class="headerlink" href="#atomic_p2p.communication.Packet.dst" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.Packet.export">
+<code class="descname">export</code><a class="headerlink" href="#atomic_p2p.communication.Packet.export" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Packet.is_reject">
+<code class="descname">is_reject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet.is_reject" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.Packet.program_hash">
+<code class="descname">program_hash</code><a class="headerlink" href="#atomic_p2p.communication.Packet.program_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Packet.redirect_to_host">
+<code class="descname">redirect_to_host</code><span class="sig-paren">(</span><em>src</em>, <em>dst</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet.redirect_to_host" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="atomic_p2p.communication.Packet.serilize">
+<em class="property">static </em><code class="descname">serilize</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet.serilize" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Packet.set_reject">
+<code class="descname">set_reject</code><span class="sig-paren">(</span><em>reject_data</em>, <em>maintain_data=False</em>, <em>maintain_secret=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet.set_reject" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.communication.Packet.src">
+<code class="descname">src</code><a class="headerlink" href="#atomic_p2p.communication.Packet.src" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.communication.Packet.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.Packet.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="atomic_p2p.communication.valid_ipv4_format">
+<code class="descclassname">atomic_p2p.communication.</code><code class="descname">valid_ipv4_format</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.valid_ipv4_format" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomic_p2p.communication.valid_ipv6_format">
+<code class="descclassname">atomic_p2p.communication.</code><code class="descname">valid_ipv6_format</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.communication.valid_ipv6_format" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.communication.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

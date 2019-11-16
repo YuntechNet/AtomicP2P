@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.mixin.authenticator package &#8212; AtomicP2P 0.0.6 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-mixin-authenticator-package">
+<h1>atomic_p2p.mixin.authenticator package<a class="headerlink" href="#atomic-p2p-mixin-authenticator-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.mixin.authenticator.default_authenticator">
+<span id="atomic-p2p-mixin-authenticator-default-authenticator-module"></span><h2>atomic_p2p.mixin.authenticator.default_authenticator module<a class="headerlink" href="#module-atomic_p2p.mixin.authenticator.default_authenticator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.mixin.authenticator.default_authenticator.DefaultAuthenticatorMixin">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.authenticator.default_authenticator.</code><code class="descname">DefaultAuthenticatorMixin</code><a class="headerlink" href="#atomic_p2p.mixin.authenticator.default_authenticator.DefaultAuthenticatorMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.abc.html#atomic_p2p.abc.authenticator.AuthenticatorABC" title="atomic_p2p.abc.authenticator.AuthenticatorABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.abc.authenticator.AuthenticatorABC</span></code></a></p>
+<dl>
+<dt>This class provide a peer’s ability to decide a packet is allow to be process</dt><dd><p>by higer layer in Peer or not.</p>
+</dd>
+<dt>The class which inherit this mixin should contain some fileds and methods:</dt><dd><ol class="upperalpha">
+<li><p>fields:
+(1) program_hash: a hash str for recognize packet is safe or not.</p>
+<blockquote>
+<div><p>Usually a hash of whole program can prevent Man-in-Middle attack.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>logger: logger for everything.</p></li>
+</ol>
+</li>
+<li><p>methods:
+(1) _on_packet: The method to keep process packet to higher level when</p>
+<blockquote>
+<div><p>authenticate success.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>pend_packet: The method to queue a socket to process schedule of a Peer.</p></li>
+</ol>
+</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.mixin.authenticator">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.mixin.authenticator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.mixin.authenticator.DefaultAuthenticatorMixin">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.authenticator.</code><code class="descname">DefaultAuthenticatorMixin</code><a class="headerlink" href="#atomic_p2p.mixin.authenticator.DefaultAuthenticatorMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.abc.html#atomic_p2p.abc.authenticator.AuthenticatorABC" title="atomic_p2p.abc.authenticator.AuthenticatorABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.abc.authenticator.AuthenticatorABC</span></code></a></p>
+<dl>
+<dt>This class provide a peer’s ability to decide a packet is allow to be process</dt><dd><p>by higer layer in Peer or not.</p>
+</dd>
+<dt>The class which inherit this mixin should contain some fileds and methods:</dt><dd><ol class="upperalpha">
+<li><p>fields:
+(1) program_hash: a hash str for recognize packet is safe or not.</p>
+<blockquote>
+<div><p>Usually a hash of whole program can prevent Man-in-Middle attack.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>logger: logger for everything.</p></li>
+</ol>
+</li>
+<li><p>methods:
+(1) _on_packet: The method to keep process packet to higher level when</p>
+<blockquote>
+<div><p>authenticate success.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>pend_packet: The method to queue a socket to process schedule of a Peer.</p></li>
+</ol>
+</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.mixin.authenticator.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

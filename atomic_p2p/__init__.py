@@ -6,7 +6,7 @@ from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.utils import create_self_signed_cert as cssc, self_hash
 
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 
 class AtomicP2P(object):

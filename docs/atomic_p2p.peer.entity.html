@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.peer.entity package &#8212; AtomicP2P 0.0.6 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-peer-entity-package">
+<h1>atomic_p2p.peer.entity package<a class="headerlink" href="#atomic-p2p-peer-entity-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.peer.entity.peer_info">
+<span id="atomic-p2p-peer-entity-peer-info-module"></span><h2>atomic_p2p.peer.entity.peer_info module<a class="headerlink" href="#module-atomic_p2p.peer.entity.peer_info" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.entity.peer_info.PeerInfo">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.entity.peer_info.</code><code class="descname">PeerInfo</code><span class="sig-paren">(</span><em>name</em>, <em>role</em>, <em>host</em>, <em>status=&lt;StatusType.PENDING: 'pending'&gt;</em>, <em>conn=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.peer_info.PeerInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.peer.entity.peer_status">
+<span id="atomic-p2p-peer-entity-peer-status-module"></span><h2>atomic_p2p.peer.entity.peer_status module<a class="headerlink" href="#module-atomic_p2p.peer.entity.peer_status" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.entity.peer_status.PeerStatus">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.entity.peer_status.</code><code class="descname">PeerStatus</code><span class="sig-paren">(</span><em>status=&lt;StatusType.PENDING: 'pending'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.PeerStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Handling status of a PeerInfo
+This class is responsible to handling all detail when Monitor class is in-
+teracting with PeerInfo during packet delivering. Including last update
+time, no response count and etc.</p>
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.peer_status.PeerStatus.last_update_ts">
+<code class="descname">last_update_ts</code><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.PeerStatus.last_update_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last update timestamp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.peer_status.PeerStatus.no_response_count">
+<code class="descname">no_response_count</code><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.PeerStatus.no_response_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>No response count since last check.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.peer_status.PeerStatus.status">
+<code class="descname">status</code><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.PeerStatus.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current peer status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.peer.entity.peer_status.StatusType" title="atomic_p2p.peer.entity.peer_status.StatusType">StatusType</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.entity.peer_status.PeerStatus.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>status=&lt;StatusType.PENDING: 'pending'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.PeerStatus.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of PeerStatus</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>status</strong> (<a class="reference internal" href="#atomic_p2p.peer.entity.peer_status.StatusType" title="atomic_p2p.peer.entity.peer_status.StatusType"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusType</span></code></a>) – Peer status, default is StatusType.PENDING when init.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.entity.peer_status.PeerStatus.toDict">
+<code class="descname">toDict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.PeerStatus.toDict" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[~KT, ~VT]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.entity.peer_status.PeerStatus.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>status_type=&lt;StatusType.UPDATED: 'updated'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.PeerStatus.update" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.entity.peer_status.StatusType">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.entity.peer_status.</code><code class="descname">StatusType</code><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.StatusType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.peer_status.StatusType.NO_RESP">
+<code class="descname">NO_RESP</code><em class="property"> = 'no_resp'</em><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.StatusType.NO_RESP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.peer_status.StatusType.PENDING">
+<code class="descname">PENDING</code><em class="property"> = 'pending'</em><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.StatusType.PENDING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.peer_status.StatusType.UNKNOWN">
+<code class="descname">UNKNOWN</code><em class="property"> = 'unknown'</em><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.StatusType.UNKNOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.peer_status.StatusType.UPDATED">
+<code class="descname">UPDATED</code><em class="property"> = 'updated'</em><a class="headerlink" href="#atomic_p2p.peer.entity.peer_status.StatusType.UPDATED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.peer.entity">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.peer.entity" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.peer.entity.PeerInfo">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.entity.</code><code class="descname">PeerInfo</code><span class="sig-paren">(</span><em>name</em>, <em>role</em>, <em>host</em>, <em>status=&lt;StatusType.PENDING: 'pending'&gt;</em>, <em>conn=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.PeerInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.entity.StatusType">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.entity.</code><code class="descname">StatusType</code><a class="headerlink" href="#atomic_p2p.peer.entity.StatusType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.StatusType.NO_RESP">
+<code class="descname">NO_RESP</code><em class="property"> = 'no_resp'</em><a class="headerlink" href="#atomic_p2p.peer.entity.StatusType.NO_RESP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.StatusType.PENDING">
+<code class="descname">PENDING</code><em class="property"> = 'pending'</em><a class="headerlink" href="#atomic_p2p.peer.entity.StatusType.PENDING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.StatusType.UNKNOWN">
+<code class="descname">UNKNOWN</code><em class="property"> = 'unknown'</em><a class="headerlink" href="#atomic_p2p.peer.entity.StatusType.UNKNOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.StatusType.UPDATED">
+<code class="descname">UPDATED</code><em class="property"> = 'updated'</em><a class="headerlink" href="#atomic_p2p.peer.entity.StatusType.UPDATED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.peer.entity.PeerStatus">
+<em class="property">class </em><code class="descclassname">atomic_p2p.peer.entity.</code><code class="descname">PeerStatus</code><span class="sig-paren">(</span><em>status=&lt;StatusType.PENDING: 'pending'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.PeerStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Handling status of a PeerInfo
+This class is responsible to handling all detail when Monitor class is in-
+teracting with PeerInfo during packet delivering. Including last update
+time, no response count and etc.</p>
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.PeerStatus.last_update_ts">
+<code class="descname">last_update_ts</code><a class="headerlink" href="#atomic_p2p.peer.entity.PeerStatus.last_update_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last update timestamp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.PeerStatus.no_response_count">
+<code class="descname">no_response_count</code><a class="headerlink" href="#atomic_p2p.peer.entity.PeerStatus.no_response_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>No response count since last check.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.peer.entity.PeerStatus.status">
+<code class="descname">status</code><a class="headerlink" href="#atomic_p2p.peer.entity.PeerStatus.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current peer status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomic_p2p.peer.entity.peer_status.StatusType" title="atomic_p2p.peer.entity.peer_status.StatusType">StatusType</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.entity.PeerStatus.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>status=&lt;StatusType.PENDING: 'pending'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.PeerStatus.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of PeerStatus</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>status</strong> (<a class="reference internal" href="#atomic_p2p.peer.entity.peer_status.StatusType" title="atomic_p2p.peer.entity.peer_status.StatusType"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusType</span></code></a>) – Peer status, default is StatusType.PENDING when init.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.entity.PeerStatus.toDict">
+<code class="descname">toDict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.PeerStatus.toDict" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[~KT, ~VT]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.peer.entity.PeerStatus.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>status_type=&lt;StatusType.UPDATED: 'updated'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.peer.entity.PeerStatus.update" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.peer.entity.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

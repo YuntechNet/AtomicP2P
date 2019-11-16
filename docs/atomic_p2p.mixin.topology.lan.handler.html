@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.mixin.topology.lan.handler package &#8212; AtomicP2P 0.0.6 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-mixin-topology-lan-handler-package">
+<h1>atomic_p2p.mixin.topology.lan.handler package<a class="headerlink" href="#atomic-p2p-mixin-topology-lan-handler-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.mixin.topology.lan.handler.ack_new_member">
+<span id="atomic-p2p-mixin-topology-lan-handler-ack-new-member-module"></span><h2>atomic_p2p.mixin.topology.lan.handler.ack_new_member module<a class="headerlink" href="#module-atomic_p2p.mixin.topology.lan.handler.ack_new_member" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.ack_new_member.AckNewMemberHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.ack_new_member.</code><code class="descname">AckNewMemberHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.ack_new_member.AckNewMemberHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.ack_new_member.AckNewMemberHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.ack_new_member.AckNewMemberHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.ack_new_member.AckNewMemberHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.ack_new_member.AckNewMemberHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.ack_new_member.AckNewMemberHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-ack-new-memeber'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.ack_new_member.AckNewMemberHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.mixin.topology.lan.handler.check_join">
+<span id="atomic-p2p-mixin-topology-lan-handler-check-join-module"></span><h2>atomic_p2p.mixin.topology.lan.handler.check_join module<a class="headerlink" href="#module-atomic_p2p.mixin.topology.lan.handler.check_join" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.check_join.CheckJoinHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.check_join.</code><code class="descname">CheckJoinHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.check_join.CheckJoinHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.check_join.CheckJoinHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.check_join.CheckJoinHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.check_join.CheckJoinHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.check_join.CheckJoinHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.check_join.CheckJoinHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-checkjoin'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.check_join.CheckJoinHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.mixin.topology.lan.handler.disconnect">
+<span id="atomic-p2p-mixin-topology-lan-handler-disconnect-module"></span><h2>atomic_p2p.mixin.topology.lan.handler.disconnect module<a class="headerlink" href="#module-atomic_p2p.mixin.topology.lan.handler.disconnect" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.disconnect.</code><code class="descname">DisconnectHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-disconnect'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler.post_send">
+<code class="descname">post_send</code><span class="sig-paren">(</span><em>pkt</em>, <em>sock</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.disconnect.DisconnectHandler.post_send" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.mixin.topology.lan.handler.join">
+<span id="atomic-p2p-mixin-topology-lan-handler-join-module"></span><h2>atomic_p2p.mixin.topology.lan.handler.join module<a class="headerlink" href="#module-atomic_p2p.mixin.topology.lan.handler.join" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.join.JoinHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.join.</code><code class="descname">JoinHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.join.JoinHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.join.JoinHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.join.JoinHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.join.JoinHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.join.JoinHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.join.JoinHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-join'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.join.JoinHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.join.JoinHandler.post_send">
+<code class="descname">post_send</code><span class="sig-paren">(</span><em>pkt</em>, <em>sock</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.join.JoinHandler.post_send" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.mixin.topology.lan.handler.new_member">
+<span id="atomic-p2p-mixin-topology-lan-handler-new-member-module"></span><h2>atomic_p2p.mixin.topology.lan.handler.new_member module<a class="headerlink" href="#module-atomic_p2p.mixin.topology.lan.handler.new_member" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.new_member.NewMemberHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.new_member.</code><code class="descname">NewMemberHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.new_member.NewMemberHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.new_member.NewMemberHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.new_member.NewMemberHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.new_member.NewMemberHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em>, <em>peer_info</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.new_member.NewMemberHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.new_member.NewMemberHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-new-member'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.new_member.NewMemberHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.mixin.topology.lan.handler">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.mixin.topology.lan.handler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.JoinHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.</code><code class="descname">JoinHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.JoinHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.JoinHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.JoinHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.JoinHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.JoinHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.JoinHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-join'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.JoinHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.JoinHandler.post_send">
+<code class="descname">post_send</code><span class="sig-paren">(</span><em>pkt</em>, <em>sock</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.JoinHandler.post_send" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.CheckJoinHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.</code><code class="descname">CheckJoinHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.CheckJoinHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.CheckJoinHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.CheckJoinHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.CheckJoinHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.CheckJoinHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.CheckJoinHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-checkjoin'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.CheckJoinHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.NewMemberHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.</code><code class="descname">NewMemberHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.NewMemberHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.NewMemberHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.NewMemberHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.NewMemberHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em>, <em>peer_info</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.NewMemberHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.NewMemberHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-new-member'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.NewMemberHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.AckNewMemberHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.</code><code class="descname">AckNewMemberHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.AckNewMemberHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.AckNewMemberHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.AckNewMemberHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.AckNewMemberHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.AckNewMemberHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.AckNewMemberHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-ack-new-memeber'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.AckNewMemberHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.mixin.topology.lan.handler.DisconnectHandler">
+<em class="property">class </em><code class="descclassname">atomic_p2p.mixin.topology.lan.handler.</code><code class="descname">DisconnectHandler</code><span class="sig-paren">(</span><em>peer</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.DisconnectHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="atomic_p2p.communication.html#atomic_p2p.communication.handler.Handler" title="atomic_p2p.communication.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">atomic_p2p.communication.handler.Handler</span></code></a></p>
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.DisconnectHandler.on_recv_pkt">
+<code class="descname">on_recv_pkt</code><span class="sig-paren">(</span><em>src</em>, <em>pkt</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.DisconnectHandler.on_recv_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.DisconnectHandler.on_send_pkt">
+<code class="descname">on_send_pkt</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.DisconnectHandler.on_send_pkt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomic_p2p.mixin.topology.lan.handler.DisconnectHandler.pkt_type">
+<code class="descname">pkt_type</code><em class="property"> = 'peer-disconnect'</em><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.DisconnectHandler.pkt_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.mixin.topology.lan.handler.DisconnectHandler.post_send">
+<code class="descname">post_send</code><span class="sig-paren">(</span><em>pkt</em>, <em>sock</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.mixin.topology.lan.handler.DisconnectHandler.post_send" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.mixin.topology.lan.handler.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

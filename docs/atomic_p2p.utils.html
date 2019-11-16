@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>atomic_p2p.utils package &#8212; AtomicP2P 0.0.6 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="atomic-p2p-utils-package">
+<h1>atomic_p2p.utils package<a class="headerlink" href="#atomic-p2p-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-atomic_p2p.utils.dns_resolver">
+<span id="atomic-p2p-utils-dns-resolver-module"></span><h2>atomic_p2p.utils.dns_resolver module<a class="headerlink" href="#module-atomic_p2p.utils.dns_resolver" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="atomic_p2p.utils.dns_resolver.DNSResolver">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.dns_resolver.</code><code class="descname">DNSResolver</code><span class="sig-paren">(</span><em>ns</em>, <em>role</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.dns_resolver.DNSResolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A object responsible for keep updating peer info pool from DNS
+This object will maintain every records in DNS such as global and self-
+service pool.</p>
+<dl class="method">
+<dt id="atomic_p2p.utils.dns_resolver.DNSResolver.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>ns</em>, <em>role</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.dns_resolver.DNSResolver.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of DNSResolver</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ns</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – All avaiable nameservers.</p></li>
+<li><p><strong>role</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Current peer’s service type.</p></li>
+<li><p><strong>loopDelay</strong> – Update period, default is 300 secs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.dns_resolver.DNSResolver.change_ns">
+<code class="descname">change_ns</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.dns_resolver.DNSResolver.change_ns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change resolver’s namserver host.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ns</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – nameservers to change to.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.dns_resolver.DNSResolver.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>fqdn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.dns_resolver.DNSResolver.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraped function to query A records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fqdn</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – fqdn to be query.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A records of given fqdn in list with str.
+Exceptions occurr will return a empty list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.dns_resolver.DNSResolver.reverse">
+<code class="descname">reverse</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.dns_resolver.DNSResolver.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped function to query PTR records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>address</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – address to be query.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>PTR records of give address in list with str.
+Exceptions occurr will return a empty list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.dns_resolver.DNSResolver.srv">
+<code class="descname">srv</code><span class="sig-paren">(</span><em>fqdn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.dns_resolver.DNSResolver.srv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped function to query SRV records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fqdn</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – fqdn to be query.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>priority, weight, port, and srv_fqdn
+Exceptions occurr will return with (0, 0, -1, None)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Give a tuple with four varialbe with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.dns_resolver.DNSResolver.sync_from_DNS">
+<code class="descname">sync_from_DNS</code><span class="sig-paren">(</span><em>current_host</em>, <em>domain</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.dns_resolver.DNSResolver.sync_from_DNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query from DNS fetch all records and put in pool
+Hard-code with global.[domain] will send to DNS for query. Durring pro-
+cessing each record, if any error occured, then it will be skip.
+The fianl result would be all DNS record been parse to PeerInfo and put
+at each peer pool in class variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>domain</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Whole net’s domain.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_info.PeerInfo" title="atomic_p2p.peer.entity.peer_info.PeerInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeerInfo</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Query results in list with PeerInfo from DNS.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils.security">
+<span id="atomic-p2p-utils-security-module"></span><h2>atomic_p2p.utils.security module<a class="headerlink" href="#module-atomic_p2p.utils.security" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="atomic_p2p.utils.security.create_self_signed_cert">
+<code class="descclassname">atomic_p2p.utils.security.</code><code class="descname">create_self_signed_cert</code><span class="sig-paren">(</span><em>cert_dir</em>, <em>cert_file='myapp.crt'</em>, <em>key_file='myapp.key'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.security.create_self_signed_cert" title="Permalink to this definition">¶</a></dt>
+<dd><p>If datacard.crt and datacard.key don’t exist in cert_dir, create a new
+self-signed cert and keypair and write them into that directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomic_p2p.utils.security.self_hash">
+<code class="descclassname">atomic_p2p.utils.security.</code><code class="descname">self_hash</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.security.self_hash" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-atomic_p2p.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atomic_p2p.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="atomic_p2p.utils.create_self_signed_cert">
+<code class="descclassname">atomic_p2p.utils.</code><code class="descname">create_self_signed_cert</code><span class="sig-paren">(</span><em>cert_dir</em>, <em>cert_file='myapp.crt'</em>, <em>key_file='myapp.key'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.create_self_signed_cert" title="Permalink to this definition">¶</a></dt>
+<dd><p>If datacard.crt and datacard.key don’t exist in cert_dir, create a new
+self-signed cert and keypair and write them into that directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomic_p2p.utils.self_hash">
+<code class="descclassname">atomic_p2p.utils.</code><code class="descname">self_hash</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.self_hash" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomic_p2p.utils.host_valid">
+<code class="descclassname">atomic_p2p.utils.</code><code class="descname">host_valid</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.host_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="atomic_p2p.utils.DNSResolver">
+<em class="property">class </em><code class="descclassname">atomic_p2p.utils.</code><code class="descname">DNSResolver</code><span class="sig-paren">(</span><em>ns</em>, <em>role</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.DNSResolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A object responsible for keep updating peer info pool from DNS
+This object will maintain every records in DNS such as global and self-
+service pool.</p>
+<dl class="method">
+<dt id="atomic_p2p.utils.DNSResolver.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>ns</em>, <em>role</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.DNSResolver.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init of DNSResolver</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ns</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – All avaiable nameservers.</p></li>
+<li><p><strong>role</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Current peer’s service type.</p></li>
+<li><p><strong>loopDelay</strong> – Update period, default is 300 secs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.DNSResolver.change_ns">
+<code class="descname">change_ns</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.DNSResolver.change_ns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change resolver’s namserver host.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ns</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – nameservers to change to.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.DNSResolver.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>fqdn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.DNSResolver.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraped function to query A records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fqdn</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – fqdn to be query.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A records of given fqdn in list with str.
+Exceptions occurr will return a empty list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.DNSResolver.reverse">
+<code class="descname">reverse</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.DNSResolver.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped function to query PTR records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>address</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – address to be query.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>PTR records of give address in list with str.
+Exceptions occurr will return a empty list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.DNSResolver.srv">
+<code class="descname">srv</code><span class="sig-paren">(</span><em>fqdn</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.DNSResolver.srv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped function to query SRV records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fqdn</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – fqdn to be query.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>priority, weight, port, and srv_fqdn
+Exceptions occurr will return with (0, 0, -1, None)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Give a tuple with four varialbe with</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomic_p2p.utils.DNSResolver.sync_from_DNS">
+<code class="descname">sync_from_DNS</code><span class="sig-paren">(</span><em>current_host</em>, <em>domain</em><span class="sig-paren">)</span><a class="headerlink" href="#atomic_p2p.utils.DNSResolver.sync_from_DNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query from DNS fetch all records and put in pool
+Hard-code with global.[domain] will send to DNS for query. Durring pro-
+cessing each record, if any error occured, then it will be skip.
+The fianl result would be all DNS record been parse to PeerInfo and put
+at each peer pool in class variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>domain</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Whole net’s domain.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="atomic_p2p.peer.entity.html#atomic_p2p.peer.entity.peer_info.PeerInfo" title="atomic_p2p.peer.entity.peer_info.PeerInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeerInfo</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Query results in list with PeerInfo from DNS.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtomicP2P</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, clooooode<jackey8616@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/atomic_p2p.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
