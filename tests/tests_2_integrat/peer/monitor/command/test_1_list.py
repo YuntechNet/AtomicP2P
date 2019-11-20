@@ -6,9 +6,9 @@ def test_no_peer(core1):
         "There is no peer's info in current list")
 
 
-def test_one_peer(switch1, switch2):
-    switch1.join_net(host=switch2.server_info.host)
+def test_one_peer(edge1, edge2):
+    edge1.join_net(host=edge2.server_info.host)
     sleep(3)
     
-    assert "Current peers status:" in switch1.monitor._on_command(["list"])
-    assert "Current peers status:" in switch2.monitor._on_command(["list"])
+    assert "Current peers status:" in edge1.monitor._on_command(["list"])
+    assert "Current peers status:" in edge2.monitor._on_command(["list"])

@@ -19,30 +19,30 @@ global.atomic_p2p.unittest.org.  IN  A 192.168.2.106;
 global.atomic_p2p.unittest.org.  IN  A 192.168.2.107;
 global.atomic_p2p.unittest.org.  IN  A 192.168.2.108;
 
-; Switch
-switch.atomic_p2p.unittest.org. IN  A 192.168.2.103;
-switch.atomic_p2p.unittest.org. IN  A 192.168.2.104;
-switch.atomic_p2p.unittest.org. IN  A 192.168.2.105;
+; Core
+core.atomic_p2p.unittest.org. IN  A 192.168.2.103;
+core.atomic_p2p.unittest.org. IN  A 192.168.2.104;
+core.atomic_p2p.unittest.org. IN  A 192.168.2.105;
 
-; Scheduler
-scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.106;
-scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.107;
-scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.108;
+; Edge
+edge.atomic_p2p.unittest.org.  IN  A 192.168.2.106;
+edge.atomic_p2p.unittest.org.  IN  A 192.168.2.107;
+edge.atomic_p2p.unittest.org.  IN  A 192.168.2.108;
 
-; Switch Peer
-peer_1.switch.atomic_p2p.unittest.org. IN  A 192.168.2.103;
-peer_2.switch.atomic_p2p.unittest.org. IN  A 192.168.2.104;
-peer_3.switch.atomic_p2p.unittest.org. IN  A 192.168.2.105;
-;; Switch SRV Record
-_atomic_p2p._tcp.peer_1.switch.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_1.switch.atomic_p2p.unittest.org.
-_atomic_p2p._tcp.peer_2.switch.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_2.switch.atomic_p2p.unittest.org.
-_atomic_p2p._tcp.peer_3.switch.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_3.switch.atomic_p2p.unittest.org.
+; Core Peer
+peer_1.core.atomic_p2p.unittest.org. IN  A 192.168.2.103;
+peer_2.core.atomic_p2p.unittest.org. IN  A 192.168.2.104;
+peer_3.core.atomic_p2p.unittest.org. IN  A 192.168.2.105;
+;; Core SRV Record
+_atomic_p2p._tcp.peer_1.core.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_1.core.atomic_p2p.unittest.org.
+_atomic_p2p._tcp.peer_2.core.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_2.core.atomic_p2p.unittest.org.
+_atomic_p2p._tcp.peer_3.core.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_3.core.atomic_p2p.unittest.org.
 
-; Scheduler Peer
-peer_1.scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.106;
-peer_2.scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.107;
-peer_3.scheduler.atomic_p2p.unittest.org.  IN  A 192.168.2.108;
-;; Scheduler SRV Record
-_atomic_p2p._tcp.peer_1.scheduler.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_1.scheduler.atomic_p2p.unittest.org.
-_atomic_p2p._tcp.peer_2.scheduler.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_2.scheduler.atomic_p2p.unittest.org.
-_atomic_p2p._tcp.peer_3.scheduler.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_3.scheduler.atomic_p2p.unittest.org.
+; Edge Peer
+peer_1.edge.atomic_p2p.unittest.org.  IN  A 192.168.2.106;
+peer_2.edge.atomic_p2p.unittest.org.  IN  A 192.168.2.107;
+peer_3.edge.atomic_p2p.unittest.org.  IN  A 192.168.2.108;
+;; Edge SRV Record
+_atomic_p2p._tcp.peer_1.edge.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_1.edge.atomic_p2p.unittest.org.
+_atomic_p2p._tcp.peer_2.edge.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_2.edge.atomic_p2p.unittest.org.
+_atomic_p2p._tcp.peer_3.edge.atomic_p2p.unittest.org. IN  SRV 0 0 8000  peer_3.edge.atomic_p2p.unittest.org.

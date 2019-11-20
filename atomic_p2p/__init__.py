@@ -15,11 +15,11 @@ class AtomicP2P(object):
     #       Also, whole class should add type hint.
     #                   2019/05/13
     def __init__(
-        self, role: str, addr: str, name: str, cert: str, logger: "logging.Logger"
+        self, role: "enum.Enum", addr: str, name: str, cert: str, logger: "logging.Logger"
     ) -> None:
         """Init of AtomicP2P object
         Args:
-            role: str represents peer's role.
+            role: Enum represents peer's role.
             addr: str with `ip:port` format, peer server will listen on.
             name: str represents peer's name.
             cert: str represents cert file's path, should directly point to

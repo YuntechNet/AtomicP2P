@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 
-from . import AtomicP2P
+from atomic_p2p import AtomicP2P
+from atomic_p2p.peer.entity import PeerRole
 from .logging import getLogger
 from .local_monitor import LocalMonitor
 
@@ -49,7 +50,7 @@ parser.add_argument(
 
 args, left = parser.parse_known_args()
 
-role = "core"
+role = PeerRole.CORE
 address = args.address
 target = args.target
 name = "core"

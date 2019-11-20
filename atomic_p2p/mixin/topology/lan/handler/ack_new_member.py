@@ -1,5 +1,5 @@
 from .....communication import Handler, Packet
-from .....peer.entity import PeerInfo
+from .....peer.entity import PeerInfo, PeerRole
 
 
 class AckNewMemberHandler(Handler):
@@ -11,7 +11,7 @@ class AckNewMemberHandler(Handler):
     def on_send_pkt(self, target):
         data = {
             "name": self.peer.server_info.name,
-            "role": self.peer.server_info.role,
+            "role": self.peer.server_info.role.value,
             "listen_port": int(self.peer.server_info.host[1]),
         }
         return Packet(
@@ -25,7 +25,7 @@ class AckNewMemberHandler(Handler):
     def on_recv_pkt(self, src, pkt, conn):
         data = pkt.data
         name = data["name"]
-        role = data["role"]
+        role = PeerRole(data["role"])
         listen_port = int(data["listen_port"])
 
         peer_info = PeerInfo(

@@ -18,5 +18,4 @@ def test_str(peer_info):
     role = peer_info.role
     host = peer_info.host
     assert str(peer_info) == "PeerInfo<name={0}, role={1}, host={2}>".format(
-                                                                name, role,
-                                                                str(host))
+        name, role.value, str(host))

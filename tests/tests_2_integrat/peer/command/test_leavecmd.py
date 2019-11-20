@@ -2,10 +2,10 @@ import pytest
 from time import sleep
 
 
-def test__on_command(switch1, switch2):
-    switch1.join_net(host=switch2.server_info.host)
+def test__on_command(edge1, edge2):
+    edge1.join_net(host=edge2.server_info.host)
     sleep(3)
-    switch1._on_command(["leavenet"])
+    edge1._on_command(["leavenet"])
     sleep(3)
-    assert switch1.peer_pool == {}
-    assert switch2.peer_pool == {}
+    assert edge1.peer_pool == {}
+    assert edge2.peer_pool == {}

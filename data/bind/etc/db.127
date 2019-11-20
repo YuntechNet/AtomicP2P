@@ -14,9 +14,9 @@ $TTL	604800
 
 1.0.0	IN	PTR peer_1.core.atomic_p2p.integrattest.org.;
 
-1.0.0	IN	PTR peer_1.switch.atomic_p2p.integrattest.org.;
+1.0.0	IN	PTR peer_1.edge.atomic_p2p.integrattest.org.;
 
 
 1.0.0	IN	PTR peer_1.core.atomic_p2p.lalala.org.;
 
-1.0.0	IN	PTR peer_1.switch.atomic_p2p.lalala.org.;
+1.0.0	IN	PTR peer_1.edge.atomic_p2p.lalala.org.;

@@ -4,6 +4,7 @@ from time import sleep
 from pytest import fixture, yield_fixture
 
 from atomic_p2p.peer import ThreadPeer
+from atomic_p2p.peer.entity import PeerRole
 from atomic_p2p.utils import self_hash as sh, create_self_signed_cert
 
 
@@ -20,8 +21,9 @@ def cert():
 @yield_fixture(scope="function")
 def malware_peer(cert):
     malware_hash = sh(join(getcwd(), "atomic_p2p", "peer"))
-    mp = ThreadPeer(role="sw", name="switch_malware", host=("127.0.0.1", 8012),
-              ns=None, cert=cert, program_hash=malware_hash, auto_register=True)
+    mp = ThreadPeer(
+        role=PeerRole.EDGE, name="edge_malware", host=("127.0.0.1", 8012),
+        cert=cert, program_hash=malware_hash, auto_register=True)
     mp.start()
     yield mp
     mp.stop()
@@ -30,8 +32,9 @@ def malware_peer(cert):
 
 @yield_fixture(scope="function")
 def core1(cert, self_hash):
-    core = ThreadPeer(role="core", name="core01", host=("127.0.0.1", 8000),
-                ns=None, cert=cert, program_hash=self_hash, auto_register=True)
+    core = ThreadPeer(
+        role=PeerRole.CORE, name="core01", host=("127.0.0.1", 8000), cert=cert,
+        program_hash=self_hash, auto_register=True)
     core.start()
     yield core
     core.stop()
@@ -39,24 +42,24 @@ def core1(cert, self_hash):
 
 
 @yield_fixture(scope="function")
-def switch1(cert, self_hash):
-    switch = ThreadPeer(role="sw", name="switch01", host=("127.0.0.1", 8010),
-                         ns=None, cert=cert, program_hash=self_hash,
-                         auto_register=True)
-    switch.start()
-    yield switch
-    switch.stop()
+def edge1(cert, self_hash):
+    edge = ThreadPeer(
+        role=PeerRole.EDGE, name="edge01", host=("127.0.0.1", 8010), cert=cert,
+        program_hash=self_hash, auto_register=True)
+    edge.start()
+    yield edge
+    edge.stop()
     sleep(3)
 
 
 @yield_fixture(scope="function")
-def switch2(cert, self_hash):
-    switch = ThreadPeer(role="sw", name="switch02", host=("127.0.0.1", 8011),
-                         ns=None, cert=cert, program_hash=self_hash,
-                         auto_register=True)
-    switch.start()
-    yield switch
-    switch.stop()
+def edge2(cert, self_hash):
+    edge = ThreadPeer(
+        role=PeerRole.EDGE, name="edge02", host=("127.0.0.1", 8011), cert=cert,
+        program_hash=self_hash, auto_register=True)
+    edge.start()
+    yield edge
+    edge.stop()
     sleep(3)
 
 
@@ -64,21 +67,21 @@ def switch2(cert, self_hash):
 def net(cert, self_hash):
     nodes = {
         "core_1": ThreadPeer(
-            role="core", name="core01", host=("127.0.0.1", 8000), ns=None,
-            cert=cert, program_hash=self_hash, auto_register=True),
-        "switch_1": ThreadPeer(
-            role="sw", name="switch01", host=("127.0.0.1", 8010), ns=None,
-            cert=cert, program_hash=self_hash, auto_register=True),
-        "switch_2": ThreadPeer(
-            role="sw", name="switch02", host=("127.0.0.1", 8011), ns=None,
-            cert=cert, program_hash=self_hash, auto_register=True)
+            role=PeerRole.CORE, name="core01", host=("127.0.0.1", 8000), cert=cert,
+            program_hash=self_hash, auto_register=True),
+        "edge_1": ThreadPeer(
+            role=PeerRole.EDGE, name="edge01", host=("127.0.0.1", 8010), cert=cert,
+            program_hash=self_hash, auto_register=True),
+        "edge_2": ThreadPeer(
+            role=PeerRole.EDGE, name="edge02", host=("127.0.0.1", 8011), cert=cert,
+            program_hash=self_hash, auto_register=True)
     }
 
     for (_, val) in nodes.items():
         val.start()
 
-    nodes["switch_1"].join_net(host=("127.0.0.1", 8000))
-    nodes["switch_2"].join_net(host=("127.0.0.1", 8000))
+    nodes["edge_1"].join_net(host=("127.0.0.1", 8000))
+    nodes["edge_2"].join_net(host=("127.0.0.1", 8000))
 
     sleep(12)
     yield nodes

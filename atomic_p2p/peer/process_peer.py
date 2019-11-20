@@ -11,7 +11,7 @@ class ProcessPeer(Peer, Process):
         self,
         host: Tuple[str, int],
         name: str,
-        role: str,
+        role: "enum.Enum",
         cert: Tuple[str, str],
         program_hash: str,
         ns: str = None,

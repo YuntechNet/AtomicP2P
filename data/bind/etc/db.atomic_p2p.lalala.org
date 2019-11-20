@@ -21,9 +21,9 @@ peer_1.core.atomic_p2p.lalala.org. IN A 127.0.0.1;
 ;; Core SRV Record
 _atomic_p2p._tcp.peer_1.core.atomic_p2p.lalala.org. IN  SRV 0 0 8000  peer_1.core.atomic_p2p.lalala.org.
 
-; Switch
-switch.atomic_p2p.lalala.org. IN  A 127.0.0.1;
-; Switch Peer
-peer_1.switch.atomic_p2p.lalala.org. IN  A 127.0.0.1;
-;; Switch SRV Record
-_atomic_p2p._tcp.peer_1.switch.atomic_p2p.lalala.org. IN  SRV 0 0 8001  peer_1.switch.atomic_p2p.lalala.org.
+; Edge
+edge.atomic_p2p.lalala.org. IN  A 127.0.0.1;
+; Edge Peer
+peer_1.edge.atomic_p2p.lalala.org. IN  A 127.0.0.1;
+;; Edge SRV Record
+_atomic_p2p._tcp.peer_1.edge.atomic_p2p.lalala.org. IN  SRV 0 0 8001  peer_1.edge.atomic_p2p.lalala.org.

@@ -3,7 +3,7 @@ from dns.reversename import from_address
 from dns.resolver import Resolver, query
 
 from ..manager import ThreadManager
-from ..peer.entity.peer_info import PeerInfo
+from ..peer.entity import PeerInfo, PeerRole
 
 
 class DNSResolver(object):
@@ -12,7 +12,7 @@ class DNSResolver(object):
     service pool.
     """
 
-    def __init__(self, ns: Union[str, List[str]], role: str) -> None:
+    def __init__(self, ns: Union[str, List[str]], role: "enum.Enum") -> None:
         """Init of DNSResolver
 
         Args:
@@ -63,7 +63,7 @@ class DNSResolver(object):
                 #       will produce N+1 querys to DNS.
                 _, _, port, srv_fqdn = self.srv(fqdn=fqdn)
                 if name is not None and srv_fqdn is not None:
-                    peer_info = PeerInfo(name=name, role=role, host=(addr, int(port)))
+                    peer_info = PeerInfo(name=name, role=PeerRole(role.upper()), host=(addr, int(port)))
                     if peer_info not in peers and peer_info.host != current_host:
                         peers.append(peer_info)
         return peers

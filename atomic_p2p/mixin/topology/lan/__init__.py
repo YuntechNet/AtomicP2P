@@ -176,7 +176,7 @@ class LanTopologyMixin(TopologyABC):
             self.logger.info("Unknow handler pkt_type")
         else:
             for (_, value) in self.peer_pool.items():
-                if host[1] == "all" or host[1] == value.role:
+                if host[1] == "all" or host[1].upper() == value.role.value:
                     pkt = handler.on_send(target=value.host, **kwargs)
                     self.pend_packet(sock=value.conn, pkt=pkt)
 
