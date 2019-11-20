@@ -1,5 +1,5 @@
 from .....communication import Handler, Packet
-from .....peer.entity import PeerInfo, PeerRole
+from .....peer.entity import PeerInfo
 
 
 class CheckJoinHandler(Handler):
@@ -26,7 +26,7 @@ class CheckJoinHandler(Handler):
         data = pkt.data
         name = data["name"]
         listen_port = int(data["listen_port"])
-        role = PeerRole(data["role"])
+        role = self.peer.PeerRole(data["role"])
         peer_info = PeerInfo(
             name=name, role=role, host=(src[0], listen_port), conn=conn
         )

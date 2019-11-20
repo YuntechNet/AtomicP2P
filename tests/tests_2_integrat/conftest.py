@@ -22,8 +22,8 @@ def cert():
 def malware_peer(cert):
     malware_hash = sh(join(getcwd(), "atomic_p2p", "peer"))
     mp = ThreadPeer(
-        role=PeerRole.EDGE, name="edge_malware", host=("127.0.0.1", 8012),
-        cert=cert, program_hash=malware_hash, auto_register=True)
+        role=PeerRole.EDGE, name="edge_malware", host=("127.0.0.1", 8012), cert=cert,
+        program_hash=malware_hash, auto_register=True)
     mp.start()
     yield mp
     mp.stop()

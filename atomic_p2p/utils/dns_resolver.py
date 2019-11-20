@@ -3,7 +3,7 @@ from dns.reversename import from_address
 from dns.resolver import Resolver, query
 
 from ..manager import ThreadManager
-from ..peer.entity import PeerInfo, PeerRole
+from ..peer.entity import PeerInfo
 
 
 class DNSResolver(object):
@@ -12,7 +12,9 @@ class DNSResolver(object):
     service pool.
     """
 
-    def __init__(self, ns: Union[str, List[str]], role: "enum.Enum") -> None:
+    def __init__(
+        self, peer: "Peer", ns: Union[str, List[str]], role: "enum.Enum"
+    ) -> None:
         """Init of DNSResolver
 
         Args:
@@ -20,6 +22,7 @@ class DNSResolver(object):
             role: Current peer's service type.
             loopDelay: Update period, default is 300 secs.
         """
+        self._peer = peer
         self._ns = ns if type(ns) is list else [ns]
         self._role = role
         self._resolver = Resolver(configure=False)
@@ -63,7 +66,11 @@ class DNSResolver(object):
                 #       will produce N+1 querys to DNS.
                 _, _, port, srv_fqdn = self.srv(fqdn=fqdn)
                 if name is not None and srv_fqdn is not None:
-                    peer_info = PeerInfo(name=name, role=PeerRole(role.upper()), host=(addr, int(port)))
+                    peer_info = PeerInfo(
+                        name=name,
+                        role=self._peer.PeerRole(role.upper()),
+                        host=(addr, int(port)),
+                    )
                     if peer_info not in peers and peer_info.host != current_host:
                         peers.append(peer_info)
         return peers

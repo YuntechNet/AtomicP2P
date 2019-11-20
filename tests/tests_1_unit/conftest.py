@@ -10,11 +10,6 @@ from atomic_p2p.peer.entity import PeerRole
 
 
 @pytest.fixture(scope="session")
-def dns_resolver():
-    return DNSResolver(ns="127.0.0.1", role=PeerRole.CORE)
-
-
-@pytest.fixture(scope="session")
 def self_hash():
     return sh(join(os.getcwd(), "atomic_p2p"))
 
@@ -43,3 +38,9 @@ def default_peer2(cert, self_hash):
     yield p
     time.sleep(1)
     p.stop()
+
+
+@pytest.fixture(scope="module")
+def dns_resolver(default_peer):
+    return DNSResolver(peer=default_peer, ns="127.0.0.1", role=PeerRole.CORE)
+

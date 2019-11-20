@@ -17,7 +17,7 @@ from ..mixin import (
     DefaultAuthenticatorMixin,
     LanTopologyMixin,
 )
-from .entity import PeerInfo, StatusType
+from .entity import PeerInfo, StatusType, PeerRole as DefaultPeerRole
 from .command import HelpCmd, JoinCmd, SendCmd, ListCmd, LeaveNetCmd
 from .communication import MessageHandler
 from .monitor import Monitor
@@ -34,6 +34,10 @@ class Peer(
         peer_pool (Dict[Tuple[str, int], PeerInfo]): All peers currently avai-
             lable in net.
     """
+
+    @property
+    def PeerRole(self):
+        return self.__peer_role_type
 
     @property
     def server_info(self):
@@ -60,6 +64,7 @@ class Peer(
         cert: Tuple[str, str],
         program_hash: str,
         ns: str,
+        peer_role_type: "enum.EnumMeta" = DefaultPeerRole,
         auto_register: bool = False,
         logger: "logging.Logger" = getLogger(__name__),
     ) -> None:
@@ -72,10 +77,15 @@ class Peer(
             cert: Cert file's path.
             program_hash: Program self hash to send in packet.
             ns: Nameserver address for resolve DNS.
+            peer_role_type:
+                A custom role type, should be EnumMeta. 
+                Use inside AtomicP2P in order to properly handle Peer role
+                 type.
             logger: Logger for logging.
         """
         super().__init__()
         self.logger = getLogger(name)
+        self.__peer_role_type = peer_role_type
         self.__auto_register = auto_register
         self.__selector = DefaultSelector()
         self.__packet_queue = {}
@@ -94,7 +104,7 @@ class Peer(
                 self.__program_hash[:6], self.__program_hash[-6:]
             )
         )
-        self.dns_resolver = DNSResolver(ns="127.0.0.1" if ns is None else ns, role=role)
+        self.dns_resolver = DNSResolver(peer=self, ns="127.0.0.1" if ns is None else ns, role=role)
         self.monitor = Monitor(peer=self, logger=getLogger(name + ".MONITOR"))
 
         if self.__auto_register is False:

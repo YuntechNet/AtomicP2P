@@ -4,6 +4,7 @@ from multiprocessing import Process, Event
 
 from ..logging import getLogger
 from .peer import Peer
+from .entity import PeerRole
 
 
 class ProcessPeer(Peer, Process):
@@ -14,6 +15,7 @@ class ProcessPeer(Peer, Process):
         role: "enum.Enum",
         cert: Tuple[str, str],
         program_hash: str,
+        peer_role_type: "enum.EnumMeta" = PeerRole,
         ns: str = None,
         loop_delay: int = 1,
         auto_register: bool = False,
@@ -25,6 +27,7 @@ class ProcessPeer(Peer, Process):
             role=role,
             cert=cert,
             program_hash=program_hash,
+            peer_role_type=peer_role_type,
             ns=ns,
             auto_register=auto_register,
             logger=logger,

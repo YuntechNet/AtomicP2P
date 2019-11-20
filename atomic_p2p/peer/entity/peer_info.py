@@ -1,8 +1,17 @@
+from typing import Tuple
+
 from .peer_status import PeerStatus, StatusType
 
 
 class PeerInfo(object):
-    def __init__(self, name, role: "enum.Enum", host, status=StatusType.PENDING, conn=None):
+    def __init__(
+        self,
+        name: str,
+        role: "enum.Enum",
+        host: Tuple[str, int],
+        status=StatusType.PENDING,
+        conn=None,
+    ):
         self.name = name
         self.role = role
         self.host = (host[0], int(host[1]))

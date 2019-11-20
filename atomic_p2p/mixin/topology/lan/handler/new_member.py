@@ -1,5 +1,5 @@
 from .....communication import Handler, Packet
-from .....peer.entity import PeerInfo, PeerRole
+from .....peer.entity import PeerInfo
 from .ack_new_member import AckNewMemberHandler
 
 
@@ -29,7 +29,7 @@ class NewMemberHandler(Handler):
         name = data["name"]
         addr = data["addr"]
         listen_port = int(data["listen_port"])
-        role = PeerRole(data["role"])
+        role = self.peer.PeerRole(data["role"])
 
         sock = self.peer.new_tcp_long_conn(dst=(addr, listen_port))
         peer_info = PeerInfo(name=name, role=role, host=(addr, listen_port), conn=sock)

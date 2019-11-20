@@ -12,5 +12,6 @@ class PeerRole(Enum):
     >>>     CORE = "CORE"
     >>>     EDGE = "EDGE"
     """
+
     CORE = "CORE"
     EDGE = "EDGE"

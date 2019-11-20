@@ -15,7 +15,12 @@ class AtomicP2P(object):
     #       Also, whole class should add type hint.
     #                   2019/05/13
     def __init__(
-        self, role: "enum.Enum", addr: str, name: str, cert: str, logger: "logging.Logger"
+        self,
+        role: "enum.Enum",
+        addr: str,
+        name: str,
+        cert: str,
+        logger: "logging.Logger",
     ) -> None:
         """Init of AtomicP2P object
         Args:
