@@ -1,5 +1,4 @@
-import socket
-import errno
+from socket import socket, AF_INET, SOCK_DGRAM
 from Crypto.Cipher import AES
 from logging import Handler, StreamHandler as SHandler
 
@@ -18,7 +17,7 @@ class SocketHandler(Handler):
         self.name = name
         self.local_monitor_password = local_monitor_password
         self.local_monitor_bind_port = local_monitor_bind_port
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock = socket(AF_INET, SOCK_DGRAM)
 
     def new_cipher(self, key: str):
         return AES.new(key.encode(), AES.MODE_CBC, "0000000000000000".encode())

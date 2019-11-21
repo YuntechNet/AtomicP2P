@@ -2,7 +2,6 @@ from typing import Tuple
 from os import getcwd
 from os.path import join
 
-from .logging import getLogger
 from .peer import ThreadPeer
 from .utils import create_self_signed_cert as cssc, self_hash
 

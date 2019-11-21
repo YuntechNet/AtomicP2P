@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple
 from time import sleep
 from multiprocessing import Process, Event
 

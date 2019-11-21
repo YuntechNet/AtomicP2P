@@ -12,14 +12,11 @@ class AuthenticatorABC(ABC):
         Actual examine logic is in this function, and after if-statement will
         call _on_pass method or _on_fail method to make flow control.
         """
-        pass
 
     @abstractmethod
     def _on_pass(self, sock: "SSLSocket", pkt: "Packet", **kwargs) -> None:
         """The method will be execute when authentication passed."""
-        pass
 
     @abstractmethod
     def _on_fail(self, sock: "SSLSocket", pkt: "Packet", **kwargs) -> None:
         """The method will be execute when authentication failed."""
-        pass

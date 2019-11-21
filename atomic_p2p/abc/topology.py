@@ -23,7 +23,6 @@ class TopologyABC(ABC):
         Notice that register_handler method is from HandleableMixin &
         each element inside installing_handlers should be a Handler object.
         """
-        pass
 
     @abstractmethod
     def on_packet_to_route(self, sock: "Socket", pkt: "Packet", **kwargs):
@@ -36,21 +35,18 @@ class TopologyABC(ABC):
                 return handler.on_recv(src=pkt.src, pkt=pkt, sock=sock)
         Notice that select_handler method is from HandleableMixin.
         """
-        pass
 
     @abstractmethod
     def get_peer_info_by_host(
         self, host: Tuple[str, int], **kwargs
     ) -> Union[None, "PeerInfo"]:
         """The function get peer info by given host."""
-        pass
 
     @abstractmethod
     def get_peer_info_by_conn(
         self, conn: "Socket", **kwargs
     ) -> Union[None, "PeerInfo"]:
         """The function get peer info by given socket."""
-        pass
 
     @abstractmethod
     def is_peer_in_net(

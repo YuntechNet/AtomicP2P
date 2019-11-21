@@ -1,10 +1,9 @@
-import pytest
 from os import getcwd, remove
 from os.path import join
 from OpenSSL.SSL import Context, TLSv1_METHOD, Error
-from OpenSSL.crypto import (
-    load_privatekey, load_certificate, FILETYPE_PEM as FP
-)
+from OpenSSL.crypto import load_privatekey, load_certificate, FILETYPE_PEM as FP
+from pytest import raises
+
 from atomic_p2p.utils.security import create_self_signed_cert as cssc
 
 
@@ -20,7 +19,7 @@ def test_create_self_signed_cert():
     ctx.use_certificate(cert_a)
     ctx.check_privatekey()
     ctx.use_certificate(cert_b)
-    with pytest.raises(Error):
+    with raises(Error):
         ctx.check_privatekey()
 
     remove(join(getcwd(), "data", "a.pem"))

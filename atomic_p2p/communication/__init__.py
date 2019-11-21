@@ -1,4 +1,4 @@
-from socket import inet_pton, inet_aton, AF_INET, AF_INET6, error, socket
+from socket import inet_pton, inet_aton, AF_INET, AF_INET6, error
 
 from .command import Command
 from .handler import Handler

@@ -1,6 +1,6 @@
 from typing import Dict
 from sys import maxsize
-import time
+from time import time
 from enum import Enum
 
 
@@ -29,7 +29,7 @@ class PeerStatus(object):
         Args:
             status: Peer status, default is StatusType.PENDING when init.
         """
-        self.last_update_ts = time.time()
+        self.last_update_ts = time()
         self.no_response_count = 0
         self.status = status
 
@@ -44,7 +44,7 @@ class PeerStatus(object):
             self.no_response_count += 1
         elif status_type == StatusType.UPDATED:
             self.no_response_count = 0
-            self.last_update_ts = time.time()
+            self.last_update_ts = time()
         elif status_type == StatusType.NO_RESP:
             self.no_response_count = maxsize
         self.status = status_type

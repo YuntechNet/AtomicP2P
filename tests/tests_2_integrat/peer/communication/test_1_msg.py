@@ -4,8 +4,7 @@ from time import sleep
 def test_send(core1, edge1):
     edge1.join_net(host=core1.server_info.host)
     sleep(5)
-    edge1._on_command(["send", "127.0.0.1:{}".format(core1.server_info.host[1]),
-                       "123"])
+    edge1._on_command(["send", "127.0.0.1:{}".format(core1.server_info.host[1]), "123"])
     sleep(8)
     assert "123" in core1.last_output
 

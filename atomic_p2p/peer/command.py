@@ -1,6 +1,5 @@
 from ..communication.command import Command
-from ..mixin.topology.lan.handler import JoinHandler, DisconnectHandler
-from .entity.peer_info import PeerInfo
+from ..mixin.topology.lan.handler import DisconnectHandler
 from .communication import MessageHandler
 
 

@@ -1,11 +1,7 @@
-import argparse
-import socket
-import base64
-from threading import Thread
-from Crypto.Cipher import AES
+from argparse import ArgumentParser
+from socket import socket, AF_INET, SOCK_DGRAM
 
 from atomic_p2p.local_monitor import LocalMonitor
-from atomic_p2p.manager import ThreadManager
 
 
 class LoggerReceiver(LocalMonitor):
@@ -34,7 +30,7 @@ if __name__ == "__main__":
         else:
             return data
 
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser()
     parser.add_argument("password", type=min_length)
     parser.add_argument("-ba", "--bind-address", type=str, default="0.0.0.0")
     parser.add_argument("-bp", "--bind-port", type=int, default=17032)
@@ -46,7 +42,7 @@ if __name__ == "__main__":
     )
     logRecver.start()
 
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock = socket(AF_INET, SOCK_DGRAM)
 
     while True:
         try:

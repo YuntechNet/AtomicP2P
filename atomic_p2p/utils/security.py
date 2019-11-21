@@ -1,6 +1,6 @@
 from typing import Tuple
-import hashlib
-from os import listdir, getcwd
+from hashlib import sha256
+from os import listdir
 from os.path import join, isfile, isdir, exists, join
 from OpenSSL import crypto
 
@@ -49,5 +49,5 @@ def self_hash(path: str) -> str:
             hash_str += self_hash(join(path, each))
         elif isfile(join(path, each)):
             with open(join(path, each), "rb") as f:
-                hash_str += hashlib.sha256(f.read()).hexdigest()
-    return hashlib.sha256(bytes(hash_str, encoding="utf-8")).hexdigest()
+                hash_str += sha256(f.read()).hexdigest()
+    return sha256(bytes(hash_str, encoding="utf-8")).hexdigest()

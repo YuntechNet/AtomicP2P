@@ -1,4 +1,3 @@
-import pytest
 from atomic_p2p.peer.monitor.communication import CheckHandler
 
 
@@ -20,8 +19,9 @@ def test__on_command(default_peer):
         " - leavenet                                       "
         "leave current net.\n"
         " - help [cmd]                                     "
-        "show help msg of sepecific command.")
-    assert "JoinCmd" in default_peer._on_command(['help', 'join'])
+        "show help msg of sepecific command."
+    )
+    assert "JoinCmd" in default_peer._on_command(["help", "join"])
 
 
 def test_select_handler(default_peer):

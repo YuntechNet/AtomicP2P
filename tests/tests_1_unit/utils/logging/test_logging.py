@@ -1,9 +1,9 @@
-import logging
+from logging import getLogger as nativeGetLogger
 
 from atomic_p2p.logging import getLogger
 
 
 def test_getLogger():
-    assert getLogger() == logging.getLogger()
+    assert getLogger() == nativeGetLogger()
     logger = getLogger("test")
-    assert logger == logging.getLogger("test")
+    assert logger == nativeGetLogger("test")

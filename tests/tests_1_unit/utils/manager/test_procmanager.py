@@ -1,6 +1,3 @@
-from atomic_p2p.manager import ProcManager
-
-
 def test_init(proc):
     assert proc.loopDelay == 1
     assert proc.stopped.is_set() is False

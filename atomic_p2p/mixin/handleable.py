@@ -1,5 +1,4 @@
 from typing import Union
-from types import FunctionType, MethodType
 from inspect import currentframe
 
 from ..communication import Handler

@@ -1,6 +1,5 @@
-import os
-import socket
-import base64
+from os import errno
+from socket import socket, AF_INET, SOCK_DGRAM
 from threading import Thread
 from Crypto.Cipher import AES
 
@@ -22,7 +21,7 @@ class LocalMonitor(ThreadManager):
         self.service = service
         self.password = password
         self.__bind_host = (bind_address, int(bind_port))
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock = socket(AF_INET, SOCK_DGRAM)
         self.sock.bind(self.__bind_host)
 
     def registerHandler(self):
@@ -49,7 +48,7 @@ class LocalMonitor(ThreadManager):
                 thread = Thread(target=self.command_recv, args=(data, addr))
                 thread.start()
             except OSError as ose:
-                if ose.errno == os.errno.EINVAL:
+                if ose.errno == errno.EINVAL:
                     break
 
     def stop(self):
@@ -61,6 +60,6 @@ class LocalMonitor(ThreadManager):
             raw_data = self.decrypt(enc_data=enc_data)
             result = self.service._on_command(raw_data.decode())[1]
             enc_result = self.encrypt(raw_data=result)
-            res_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            res_sock = socket(AF_INET, SOCK_DGRAM)
             res_sock.sendto(enc_result, (addr[0], self.__bind_host[1] + 1))
             res_sock.close()

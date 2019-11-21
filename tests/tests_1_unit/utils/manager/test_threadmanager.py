@@ -1,5 +1,3 @@
-
-
 def test_init(thread):
     assert thread.loopDelay == 1
     assert thread.stopped.is_set() is False

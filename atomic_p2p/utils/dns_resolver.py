@@ -1,8 +1,7 @@
-from typing import Union, Dict, List, Tuple
+from typing import Union, List, Tuple
 from dns.reversename import from_address
-from dns.resolver import Resolver, query
+from dns.resolver import Resolver
 
-from ..manager import ThreadManager
 from ..peer.entity import PeerInfo
 
 

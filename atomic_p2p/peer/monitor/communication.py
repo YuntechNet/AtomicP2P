@@ -1,7 +1,6 @@
-import time
+from time import time
 
 from ..communication import Packet, Handler
-from ..entity.peer_status import StatusType
 
 
 class CheckHandler(Handler):
@@ -13,7 +12,7 @@ class CheckHandler(Handler):
 
     def on_send_pkt(self, target):
         self.monitor.peer_status_update_by_host(host=target)
-        data = {"send_ts": time.time()}
+        data = {"send_ts": time()}
         return Packet(
             dst=target,
             src=self.peer.server_info.host,

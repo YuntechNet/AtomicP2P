@@ -1,7 +1,5 @@
 from time import sleep
 
-from atomic_p2p.peer.entity.peer_info import PeerInfo
-
 
 def test_two_link(core1, edge1):
     edge1.join_net(host=core1.server_info.host)

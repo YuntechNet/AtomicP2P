@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_helpCmd(default_peer):
     assert default_peer.monitor._on_command(["help"]) == (
         "monitor [cmd] <options>\n"
@@ -12,7 +9,8 @@ def test_helpCmd(default_peer):
         "list each statuses in list.\n"
         " - reset [peer name/role/all]                     "
         "reset all or specific name or role's peer status t"
-        "o PENDING.")
+        "o PENDING."
+    )
     assert "PauseCmd" in default_peer.monitor._on_command(["help", "pause"])
 
 

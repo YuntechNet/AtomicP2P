@@ -28,4 +28,4 @@ script:
   - travis_retry bash <(curl -s https://codecov.io/bash) -cF integration
 
 after_success:
-  - pycodestyle --statistics atomic_p2p
+  - autoflake -r --remove-all-unused-imports atomic_p2p/ tests/ shell.py

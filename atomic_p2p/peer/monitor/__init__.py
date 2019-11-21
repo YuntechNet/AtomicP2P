@@ -1,4 +1,4 @@
-import traceback
+from traceback import format_exc
 from typing import Tuple, List
 from threading import Thread, Event as tEvent
 
@@ -91,7 +91,7 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
                     ("{} has been remove from " "status list.").format(each)
                 )
             except Exception:
-                self.logger.error(traceback.format_exc())
+                self.logger.error(format_exc())
 
     def _preregister_handler(self) -> None:
         installing_handlers = [CheckHandler(self)]

@@ -1,5 +1,5 @@
 from sys import stdout
-from logging import basicConfig, DEBUG, getLogger as get_logger
+from logging import DEBUG, getLogger as get_logger
 
 from .handlers import StreamHandler, SocketHandler
 from .formatters import StdoutFormatter
