@@ -1,7 +1,7 @@
 from typing import Union, Dict, Tuple
 from json import loads, dumps
 
-from ..utils import host_valid
+from ..utils import valid_host
 
 
 class Packet(object):
@@ -46,8 +46,8 @@ class Packet(object):
             _type: Unique handler key to determine packet made by what handler.
             _data: A dict object to payload on.
         """
-        assert host_valid(dst) is True
-        assert host_valid(src) is True
+        assert valid_host(dst) is True
+        assert valid_host(src) is True
         assert type(program_hash) == str or program_hash is None
         assert type(_type) == str
         assert type(_data) == dict

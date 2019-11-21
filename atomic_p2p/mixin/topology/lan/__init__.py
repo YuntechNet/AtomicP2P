@@ -3,7 +3,7 @@ from errno import ECONNREFUSED
 from socket import error as socket_error
 
 from ....abc import TopologyABC
-from ....utils import host_valid
+from ....utils import valid_host
 from ....peer.entity import PeerInfo
 from .handler import (
     JoinHandler,
@@ -146,7 +146,7 @@ class LanTopologyMixin(TopologyABC):
             AssertionError:
                 If given host variable is not in proper Tuple[str, int] type.
         """
-        assert host_valid(host) is True
+        assert valid_host(host) is True
         handler = self.select_handler(pkt_type=pkt_type)
         if handler is None:
             self.logger.info("Unknow handler pkt_type")
@@ -189,7 +189,7 @@ class LanTopologyMixin(TopologyABC):
             host: A tuple with address in str at position 0 and port in int at
                   positon 1.
         """
-        assert host_valid(host) is True
+        assert valid_host(host) is True
         handler = self.select_handler(pkt_type=JoinHandler.pkt_type)
         pkt = handler.on_send(target=host)
 

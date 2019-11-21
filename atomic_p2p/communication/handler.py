@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from ..utils import host_valid
+from ..utils import valid_host
 from .packet import Packet
 
 
@@ -68,7 +68,7 @@ class Handler(object):
             pkt: A Packet object contains all data which recieved.
             sock: A SSLSocket object who recv this pkt.
         """
-        assert host_valid(src) is True
+        assert valid_host(src) is True
         if pkt.is_reject():
             self.on_recv_reject_pkt(src=src, pkt=pkt, conn=sock, **kwargs)
         else:

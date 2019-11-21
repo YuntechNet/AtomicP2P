@@ -3,7 +3,7 @@ from os.path import join
 from time import sleep
 from pytest import fixture, yield_fixture
 
-from atomic_p2p.utils import self_hash as sh, create_self_signed_cert, DNSResolver
+from atomic_p2p.utils import DNSResolver, self_hash as sh, create_self_signed_cert
 from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.peer.entity import PeerRole
 

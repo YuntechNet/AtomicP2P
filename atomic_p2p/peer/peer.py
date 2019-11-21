@@ -8,7 +8,7 @@ from queue import Queue
 from time import sleep
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR, SO_REUSEPORT
 
-from ..utils import host_valid, DNSResolver
+from ..utils import valid_host, DNSResolver
 from ..logging import getLogger
 from ..communication import Packet
 from ..mixin import (
@@ -194,7 +194,7 @@ class Peer(
             AssertionError:
                 If given dst variable is not in proper Tuple[str, int] type.
         """
-        assert host_valid(dst) is True
+        assert valid_host(dst) is True
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
         sock = wrap_socket(
             unwrap_socket, cert_reqs=CERT_REQUIRED, ca_certs=self.__cert[0]

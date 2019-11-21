@@ -1,13 +1,12 @@
 from .security import create_self_signed_cert, self_hash
 from .dns_resolver import DNSResolver
+from .validator import valid_host, valid_ipv4_format, valid_ipv6_format
 
-__all__ = ["create_self_signed_cert", "self_hash", "host_valid", "DNSResolver"]
-
-
-def host_valid(host):
-    assert type(host) == tuple
-    assert len(host) == 2
-    assert type(host[0]) == str
-    assert type(host[1]) == int
-    assert host[1] > 0 and host[1] < 65535
-    return True
+__all__ = [
+    "create_self_signed_cert",
+    "self_hash",
+    "DNSResolver",
+    "valid_host",
+    "valid_ipv4_format",
+    "valid_ipv6_format",
+]
