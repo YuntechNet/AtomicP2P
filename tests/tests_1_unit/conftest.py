@@ -9,6 +9,11 @@ from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.peer.entity import PeerRole
 
 
+@pytest.fixture(scope="module")
+def dns_resolver():
+    return DNSResolver(ns="127.0.0.1")
+
+
 @pytest.fixture(scope="session")
 def self_hash():
     return sh(join(os.getcwd(), "atomic_p2p"))
@@ -20,9 +25,11 @@ def cert():
 
 
 @pytest.yield_fixture(scope="module")
-def default_peer(cert, self_hash):
-    p = ThreadPeer(host=("0.0.0.0", 8000), name="name", role=PeerRole.CORE,
-                    cert=cert, program_hash=self_hash, auto_register=True)
+def default_peer(dns_resolver, cert, self_hash):
+    p = ThreadPeer(
+            dns_resolver=dns_resolver, host=("0.0.0.0", 8000), name="name",
+            role=PeerRole.CORE, cert=cert, program_hash=self_hash,
+            auto_register=True)
     p.start()
 
     yield p
@@ -31,16 +38,12 @@ def default_peer(cert, self_hash):
 
 
 @pytest.yield_fixture(scope="module")
-def default_peer2(cert, self_hash):
-    p = ThreadPeer(host=("0.0.0.0", 8001), name="name2", role=PeerRole.CORE,
-                    cert=cert, program_hash=self_hash, auto_register=True)
+def default_peer2(dns_resolver, cert, self_hash):
+    p = ThreadPeer(
+        dns_resolver=dns_resolver, host=("0.0.0.0", 8001), name="name2",
+        role=PeerRole.CORE, cert=cert, program_hash=self_hash,
+        auto_register=True)
     p.start()
     yield p
     time.sleep(1)
     p.stop()
-
-
-@pytest.fixture(scope="module")
-def dns_resolver(default_peer):
-    return DNSResolver(peer=default_peer, ns="127.0.0.1", role=PeerRole.CORE)
-

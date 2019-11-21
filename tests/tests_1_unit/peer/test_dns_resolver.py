@@ -1,8 +1,8 @@
 from atomic_p2p.peer.entity import PeerInfo, PeerRole
 
 
-def test_sync_from_DNS(dns_resolver):
-    res = dns_resolver.sync_from_DNS(current_host=("0.0.0.0", 8000), domain="atomic_p2p.unittest.org")
+def test_sync_from_DNS(default_peer, dns_resolver):
+    res = dns_resolver.sync_from_DNS(peer=default_peer, current_host=("0.0.0.0", 8000), domain="atomic_p2p.unittest.org")
     assert PeerInfo(name="peer_1", role=PeerRole.CORE, host=("192.168.2.103", 8000)) in res
     assert PeerInfo(name="peer_2", role=PeerRole.CORE, host=("192.168.2.104", 8000)) in res
     assert PeerInfo(name="peer_3", role=PeerRole.CORE, host=("192.168.2.105", 8000)) in res

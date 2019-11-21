@@ -58,29 +58,31 @@ class Peer(
 
     def __init__(
         self,
+        dns_resolver: "DNSResolver",
         host: Tuple[str, int],
         name: str,
         role: "enum.Enum",
         cert: Tuple[str, str],
         program_hash: str,
-        ns: str,
         peer_role_type: "enum.EnumMeta" = DefaultPeerRole,
+        bind_address: str = "0.0.0.0",
         auto_register: bool = False,
         logger: "logging.Logger" = getLogger(__name__),
     ) -> None:
         """Init of PeerManager
 
         Args:
+            dns_resolver: DNSResolver use for resolve domain.
             host: Binding host.
             name: Peer's name in net.
             role: Peer's role in net.
             cert: Cert file's path.
             program_hash: Program self hash to send in packet.
-            ns: Nameserver address for resolve DNS.
+            bind_address: Address for socket binding.
             peer_role_type:
                 A custom role type, should be EnumMeta. 
                 Use inside AtomicP2P in order to properly handle Peer role
-                 type.
+                type.
             logger: Logger for logging.
         """
         super().__init__()
@@ -93,18 +95,18 @@ class Peer(
         self.__cert = cert
         self.__program_hash = program_hash
         self.__server_info = PeerInfo(host=host, name=name, role=role)
-        self.__tcp_server = self.__bind_socket(cert=self.__cert)
+        self.__bind_host = (bind_address, int(host[1]))
+        self.__tcp_server = self.__bind_socket(host=self.__bind_host, cert=self.__cert)
+        self.logger.info(
+            "Security hash: {{{}...{}}}".format(
+                self.__program_hash[:6], self.__program_hash[-6:]
+            )
+        )
 
         self.peer_pool = {}
         self.pkt_handlers = {}
         self.commands = {}
-
-        self.logger.info(
-            "Program hash: {{{}...{}}}".format(
-                self.__program_hash[:6], self.__program_hash[-6:]
-            )
-        )
-        self.dns_resolver = DNSResolver(peer=self, ns="127.0.0.1" if ns is None else ns, role=role)
+        self.dns_resolver = dns_resolver
         self.monitor = Monitor(peer=self, logger=getLogger(name + ".MONITOR"))
 
         if self.__auto_register is False:
@@ -115,6 +117,7 @@ class Peer(
                     "ethod."
                 )
             )
+        self.logger.info("Peer inited with {}".format(self.__server_info))
 
     def _preregister_handler(self) -> None:
         self.topology_register_handler()
@@ -202,16 +205,16 @@ class Peer(
         return sock
 
     def loop_start(self):
-        self.logger.info(self.__server_info)
         self.__selector.register(self.__tcp_server, EVENT_READ, self.__on_accept)
         if self.__auto_register is True:
             self._preregister_handler()
             self._preregister_command()
+            self.logger.debug("Handler & Command registered.")
 
         if self.monitor.is_start() is False:
             self.monitor.start()
 
-        self.logger.info("Peer started.")
+        self.logger.info("Peer started loop.")
 
     def loop(self):
         return self._loop()
@@ -240,15 +243,17 @@ class Peer(
         self.__tcp_server.close()
         self.__selector.close()
 
-    def __bind_socket(self, cert: Tuple[str, str]) -> "SSLSocket":
+    def __bind_socket(
+        self, host: Tuple[str, int], cert: Tuple[str, str]
+    ) -> "SSLSocket":
         unwrap_socket = socket(AF_INET, SOCK_STREAM)
         unwrap_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         unwrap_socket.setsockopt(SOL_SOCKET, SO_REUSEPORT, 1)
-        unwrap_socket.bind(self.__server_info.host)
+        unwrap_socket.bind(host)
         unwrap_socket.listen(5)
         unwrap_socket.setblocking(False)
+        self.logger.debug("SSL socket binded.")
 
-        self.logger.info("Peer prepared")
         self.logger.info(
             "This peer is running with certificate at path {}".format(cert[0])
         )

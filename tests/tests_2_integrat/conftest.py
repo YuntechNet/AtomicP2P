@@ -5,7 +5,12 @@ from pytest import fixture, yield_fixture
 
 from atomic_p2p.peer import ThreadPeer
 from atomic_p2p.peer.entity import PeerRole
-from atomic_p2p.utils import self_hash as sh, create_self_signed_cert
+from atomic_p2p.utils import DNSResolver, self_hash as sh, create_self_signed_cert
+
+
+@fixture(scope="module")
+def dns_resolver():
+    return DNSResolver(ns="127.0.0.1")
 
 
 @fixture(scope="session")
@@ -19,11 +24,12 @@ def cert():
 
 
 @yield_fixture(scope="function")
-def malware_peer(cert):
+def malware_peer(dns_resolver, cert):
     malware_hash = sh(join(getcwd(), "atomic_p2p", "peer"))
     mp = ThreadPeer(
-        role=PeerRole.EDGE, name="edge_malware", host=("127.0.0.1", 8012), cert=cert,
-        program_hash=malware_hash, auto_register=True)
+        dns_resolver=dns_resolver, role=PeerRole.EDGE, name="edge_malware",
+        host=("127.0.0.1", 8012), cert=cert, program_hash=malware_hash,
+        auto_register=True)
     mp.start()
     yield mp
     mp.stop()
@@ -31,10 +37,11 @@ def malware_peer(cert):
 
 
 @yield_fixture(scope="function")
-def core1(cert, self_hash):
+def core1(dns_resolver, cert, self_hash):
     core = ThreadPeer(
-        role=PeerRole.CORE, name="core01", host=("127.0.0.1", 8000), cert=cert,
-        program_hash=self_hash, auto_register=True)
+        dns_resolver=dns_resolver, role=PeerRole.CORE, name="core01",
+        host=("127.0.0.1", 8000), cert=cert, program_hash=self_hash,
+        auto_register=True)
     core.start()
     yield core
     core.stop()
@@ -42,10 +49,11 @@ def core1(cert, self_hash):
 
 
 @yield_fixture(scope="function")
-def edge1(cert, self_hash):
+def edge1(dns_resolver, cert, self_hash):
     edge = ThreadPeer(
-        role=PeerRole.EDGE, name="edge01", host=("127.0.0.1", 8010), cert=cert,
-        program_hash=self_hash, auto_register=True)
+        dns_resolver=dns_resolver, role=PeerRole.EDGE, name="edge01",
+        host=("127.0.0.1", 8010), cert=cert, program_hash=self_hash,
+        auto_register=True)
     edge.start()
     yield edge
     edge.stop()
@@ -53,10 +61,11 @@ def edge1(cert, self_hash):
 
 
 @yield_fixture(scope="function")
-def edge2(cert, self_hash):
+def edge2(dns_resolver, cert, self_hash):
     edge = ThreadPeer(
-        role=PeerRole.EDGE, name="edge02", host=("127.0.0.1", 8011), cert=cert,
-        program_hash=self_hash, auto_register=True)
+        dns_resolver=dns_resolver, role=PeerRole.EDGE, name="edge02",
+        host=("127.0.0.1", 8011), cert=cert, program_hash=self_hash,
+        auto_register=True)
     edge.start()
     yield edge
     edge.stop()
@@ -64,17 +73,20 @@ def edge2(cert, self_hash):
 
 
 @yield_fixture(scope="session")
-def net(cert, self_hash):
+def net(dns_resolver, cert, self_hash):
     nodes = {
         "core_1": ThreadPeer(
-            role=PeerRole.CORE, name="core01", host=("127.0.0.1", 8000), cert=cert,
-            program_hash=self_hash, auto_register=True),
+            dns_resolver=dns_resolver, role=PeerRole.CORE, name="core01",
+            host=("127.0.0.1", 8000), cert=cert, program_hash=self_hash,
+            auto_register=True),
         "edge_1": ThreadPeer(
-            role=PeerRole.EDGE, name="edge01", host=("127.0.0.1", 8010), cert=cert,
-            program_hash=self_hash, auto_register=True),
+            dns_resolver=dns_resolver, role=PeerRole.EDGE, name="edge01",
+            host=("127.0.0.1", 8010), cert=cert, program_hash=self_hash,
+            auto_register=True),
         "edge_2": ThreadPeer(
-            role=PeerRole.EDGE, name="edge02", host=("127.0.0.1", 8011), cert=cert,
-            program_hash=self_hash, auto_register=True)
+            dns_resolver=dns_resolver, role=PeerRole.EDGE, name="edge02",
+            host=("127.0.0.1", 8011), cert=cert, program_hash=self_hash,
+            auto_register=True)
     }
 
     for (_, val) in nodes.items():

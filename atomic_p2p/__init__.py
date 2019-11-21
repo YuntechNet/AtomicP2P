@@ -1,9 +1,10 @@
+from typing import Tuple
 from os import getcwd
 from os.path import join
 
-from atomic_p2p.logging import getLogger
-from atomic_p2p.peer import ThreadPeer
-from atomic_p2p.utils import create_self_signed_cert as cssc, self_hash
+from .logging import getLogger
+from .peer import ThreadPeer
+from .utils import create_self_signed_cert as cssc, self_hash
 
 
 __version__ = "0.0.6"
@@ -16,8 +17,10 @@ class AtomicP2P(object):
     #                   2019/05/13
     def __init__(
         self,
+        dns_resolver: "DNSResolver",
+        bind_address: str,
         role: "enum.Enum",
-        addr: str,
+        host: Tuple[str, int],
         name: str,
         cert: str,
         logger: "logging.Logger",
@@ -34,19 +37,15 @@ class AtomicP2P(object):
         cert_file, key_file = cssc(
             cert_dir=getcwd(), cert_file=cert, key_file=cert.replace(".pem", ".key")
         )
-
         self.logger = logger
-
-        hash_str = self_hash(path=join(getcwd(), "atomic_p2p"))
-        addr = addr.split(":") if type(addr) is str else addr
-
         self.services = {
             "peer": ThreadPeer(
-                host=addr,
+                dns_resolver=dns_resolver,
+                bind_address=bind_address,
+                host=host,
                 name=name,
                 role=role,
-                program_hash=hash_str,
-                ns=None,
+                program_hash=self_hash(path=join(getcwd(), "atomic_p2p")),
                 cert=(cert_file, key_file),
                 auto_register=True,
                 logger=self.logger,

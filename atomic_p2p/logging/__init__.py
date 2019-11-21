@@ -5,7 +5,9 @@ from .handlers import StreamHandler, SocketHandler
 from .formatters import StdoutFormatter
 
 
-def getLogger(name=None, level=DEBUG, add_monitor_pass=None):
+def getLogger(
+    name=None, level=DEBUG, local_monitor_password=None, local_monitor_bind_port=None
+):
     if name is None:
         logger = get_logger()
     else:
@@ -21,8 +23,12 @@ def getLogger(name=None, level=DEBUG, add_monitor_pass=None):
 
     for (key, value) in toggle.items():
         if value is True:
-            if key == "monitor" and add_monitor_pass is not None:
-                handler = SocketHandler(name="monitor", password=add_monitor_pass)
+            if key == "monitor" and local_monitor_password is not None:
+                handler = SocketHandler(
+                    name="monitor",
+                    local_monitor_password=local_monitor_password,
+                    local_monitor_bind_port=local_monitor_bind_port,
+                )
             elif key == "stdout":
                 handler = StreamHandler(name="stdout", stream=stdout)
             else:

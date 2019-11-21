@@ -3,7 +3,7 @@ from logging import Formatter
 
 class StdoutFormatter(Formatter):
     def __init__(self):
-        fmt = "%(asctime)s - %(name)12s - %(levelname)s - %(message)s"
+        fmt = "%(asctime)s - %(name)12s - %(levelname)5s - %(message)s"
         super().__init__(fmt)
 
     def format(self, record):

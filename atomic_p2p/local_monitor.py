@@ -10,13 +10,20 @@ from .logging import getLogger
 
 class LocalMonitor(ThreadManager):
     def __init__(
-        self, service, password, logger: "logging.Logger" = getLogger(__name__)
+        self,
+        service,
+        password,
+        bind_address: str = "0.0.0.0",
+        bind_port: int = 17031,
+        loopDelay: float = 0.5,
+        logger: "logging.Logger" = getLogger(__name__),
     ):
-        super().__init__(loopDelay=0.5, logger=logger)
+        super().__init__(loopDelay=float(loopDelay), logger=logger)
         self.service = service
         self.password = password
+        self.__bind_host = (bind_address, int(bind_port))
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.bind(("localhost", 17031))
+        self.sock.bind(self.__bind_host)
 
     def registerHandler(self):
         pass
@@ -55,5 +62,5 @@ class LocalMonitor(ThreadManager):
             result = self.service._on_command(raw_data.decode())[1]
             enc_result = self.encrypt(raw_data=result)
             res_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            res_sock.sendto(enc_result, ("localhost", 17032))
+            res_sock.sendto(enc_result, (addr[0], self.__bind_host[1] + 1))
             res_sock.close()

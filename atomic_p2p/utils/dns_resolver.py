@@ -12,9 +12,7 @@ class DNSResolver(object):
     service pool.
     """
 
-    def __init__(
-        self, peer: "Peer", ns: Union[str, List[str]], role: "enum.Enum"
-    ) -> None:
+    def __init__(self, ns: Union[str, List[str]]) -> None:
         """Init of DNSResolver
 
         Args:
@@ -22,9 +20,7 @@ class DNSResolver(object):
             role: Current peer's service type.
             loopDelay: Update period, default is 300 secs.
         """
-        self._peer = peer
         self._ns = ns if type(ns) is list else [ns]
-        self._role = role
         self._resolver = Resolver(configure=False)
         self._resolver.nameservers = self._ns
 
@@ -39,7 +35,7 @@ class DNSResolver(object):
         self._resolver.nameserver = self._ns
 
     def sync_from_DNS(
-        self, current_host: Tuple[str, int], domain: str
+        self, peer: "Peer", current_host: Tuple[str, int], domain: str
     ) -> List["PeerInfo"]:
         """Query from DNS fetch all records and put in pool
         Hard-code with global.[domain] will send to DNS for query. Durring pro-
@@ -68,7 +64,7 @@ class DNSResolver(object):
                 if name is not None and srv_fqdn is not None:
                     peer_info = PeerInfo(
                         name=name,
-                        role=self._peer.PeerRole(role.upper()),
+                        role=peer.PeerRole(role.upper()),
                         host=(addr, int(port)),
                     )
                     if peer_info not in peers and peer_info.host != current_host:

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 from time import sleep
 from multiprocessing import Process, Event
 
@@ -10,25 +10,27 @@ from .entity import PeerRole
 class ProcessPeer(Peer, Process):
     def __init__(
         self,
+        dns_resolver: "DNSResolver",
         host: Tuple[str, int],
         name: str,
         role: "enum.Enum",
         cert: Tuple[str, str],
         program_hash: str,
+        bind_address: str = "0.0.0.0",
         peer_role_type: "enum.EnumMeta" = PeerRole,
-        ns: str = None,
         loop_delay: int = 1,
         auto_register: bool = False,
         logger: "logging.Logger" = getLogger(__name__),
     ):
         super().__init__(
+            dns_resolver=dns_resolver,
             host=host,
             name=name,
             role=role,
             cert=cert,
             program_hash=program_hash,
             peer_role_type=peer_role_type,
-            ns=ns,
+            bind_address=bind_address,
             auto_register=auto_register,
             logger=logger,
         )

@@ -214,7 +214,7 @@ class LanTopologyMixin(TopologyABC):
         if ns is not None and type(ns) is list:
             self.dns_resolver.change_ns(ns=ns)
         records = self.dns_resolver.sync_from_DNS(
-            current_host=self.server_info.host, domain=domain
+            peer=self, current_host=self.server_info.host, domain=domain
         )
         for each in records:
             try:

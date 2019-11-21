@@ -39,12 +39,14 @@ class Monitor(Thread, CommandableMixin, HandleableMixin):
 
         self.pkt_handlers = {}
         self.commands = {}
+        self.logger.info("Monitor inited")
 
     def start(self) -> None:
         super().start()
         self._preregister_handler()
         self._preregister_command()
         self.started.set()
+        self.logger.info("Monitor started loop.")
 
     def stop(self) -> None:
         self.stopped.set()
