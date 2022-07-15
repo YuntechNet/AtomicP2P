@@ -1,4 +1,4 @@
-codecov==2.0.15
+codecov==2.0.16
 coverage==4.5.1
 dnspython==1.16.0
 pycodestyle==2.5.0
