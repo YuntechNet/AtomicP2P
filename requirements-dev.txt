@@ -2,7 +2,7 @@ codecov==2.0.15
 coverage==4.5.1
 dnspython==1.16.0
 pycodestyle==2.5.0
-pycryptodome==3.8.1
+pycryptodome==3.19.1
 pyOpenSSL==19.0.0
 pytest==4.4.0
 pytest-cov==2.6.1
