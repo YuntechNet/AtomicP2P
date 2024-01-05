@@ -30,7 +30,7 @@ setup(
     keywords = ["peer-to-peer", "P2P", "p2p", "distribute", "HA", "High-Availability"],
     install_requires = [
         "dnspython==1.16.0",
-        "pycryptodome==3.8.1",
+        "pycryptodome==3.19.1",
         "pyOpenSSL==19.0.0"
     ],
     classifiers = [
